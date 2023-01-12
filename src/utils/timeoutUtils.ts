@@ -1,7 +1,6 @@
 export const TIMEOUT = Symbol()
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-type Rejecter = (reason?: any) => void
+type Rejecter = (reason?: unknown) => void
 
 class CancelToken {
   timeoutId?: NodeJS.Timeout

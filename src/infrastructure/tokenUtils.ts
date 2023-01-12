@@ -23,11 +23,9 @@ export function generateJwtToken(
 const hasCode = (error: unknown): error is { code: unknown } =>
   typeof error === 'object' && error !== null && 'code' in error
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function decodeJwtToken(jwt: JWT, encodedToken: string): Promise<any> {
+export function decodeJwtToken(jwt: JWT, encodedToken: string): Promise<unknown> {
   return new Promise((resolve, reject) => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    jwt.verify(encodedToken, (err: Error | null, decoded: any) => {
+    jwt.verify(encodedToken, (err: Error | null, decoded: unknown) => {
       if (err) {
         return reject(err)
       }
