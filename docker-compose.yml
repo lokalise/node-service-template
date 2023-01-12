@@ -1,0 +1,37 @@
+services:
+  mysql:
+    image: mysql:8.0.28-oracle
+    ports:
+      - 3306:3306
+    volumes:
+      - mysql_data:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=rootpass
+      - MYSQL_PASSWORD=pass
+      - MYSQL_USER=serviceuser
+      - MYSQL_DATABASE=service_db
+
+  waitmysql:
+    image: mysql:8.0.28-oracle
+    links:
+      - mysql
+    depends_on:
+      - mysql
+    entrypoint:
+      - bash
+      - -c
+      - 'until /usr/bin/mysql -hmysql -userviceuser -ppass -e "SELECT 1"; do sleep 5; done'
+
+  redis:
+    image: redis:6.2.7-alpine
+    command: redis-server --requirepass sOmE_sEcUrE_pAsS
+    ports:
+      - 6379:6379
+    volumes:
+      - redis_data:/redis/data:cached
+
+volumes:
+  mysql_data:
+    driver: local
+  redis_data:
+    driver: local

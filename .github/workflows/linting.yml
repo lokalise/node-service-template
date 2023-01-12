@@ -1,0 +1,35 @@
+---
+name: linting
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    name: linting
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 1
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          always-auth: false
+          node-version: 18.x
+
+      - name: Install
+        run: |
+          npm install --ignore-scripts
+          npx prisma generate
+
+      - name: Run lint
+        run: npm run lint

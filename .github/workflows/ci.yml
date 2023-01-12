@@ -1,0 +1,62 @@
+name: ci
+
+on:
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18.x
+
+      - name: Install
+        run: |
+          npm install --ignore-scripts
+          npx prisma generate
+
+      - name: DB start
+        run: |
+          docker compose up waitmysql
+          docker compose up -d redis
+
+      - name: Build TS
+        run: |
+          npm run build
+
+      - name: Schema preparation
+        run: |
+          npm run copy:config
+          npm run db:migration:run
+
+      - name: Generate client
+        run: |
+          npm run db:update-client
+
+      - name: Run Tests
+        run: |
+          npm run test:ci
+
+      - name: DB stop
+        run: |
+          docker compose down
+
+      - name: Generate and validate OpenAPI schema
+        run: |
+          npm run spec:generate
+
+  automerge:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+      contents: write
+    steps:
+      - uses: fastify/github-action-merge-dependabot@v3
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
