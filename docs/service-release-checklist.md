@@ -100,5 +100,6 @@ Legend: `M` - Mandatory, `R` - Recommended, `O` - Optional
 
 [readiness and liveness endpoints]: https://cloud.google.com/blog/products/containers-kubernetes/kubernetes-best-practices-setting-up-health-checks-with-readiness-and-liveness-probes
 [Graceful shutdown]: https://cloud.google.com/blog/products/containers-kubernetes/kubernetes-best-practices-terminating-with-grace
+[^metrics-4gs]: For HTTP-based web applications (rest api/web apps/etc) which are going to be deployed to k8s, 4 golden signals will be collected automatically from the underlying platform; therefore no custom implementation is necessary, instead the application can expose business metrics only.
 
 This document is based on a Lokalise Service Release Checklist, prepared by the Lokalise Platform Squad.
