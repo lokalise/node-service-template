@@ -2,9 +2,9 @@
 
 This document aims to provide a checklist for determining whether service is mature enough for general availability.
 
-Legend: `M` - Mandatory, `R` - Recommended, `O` - Optional
+## Checklist
 
-## For product and developers
+Legend: `M` - Mandatory, `R` - Recommended, `O` - Optional
 
 ### Documentation
 
