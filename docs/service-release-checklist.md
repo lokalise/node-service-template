@@ -69,7 +69,7 @@ Legend: `M` - Mandatory, `R` - Recommended, `O` - Optional
   * include app version and commit hash in the response
   * recommended: [readiness and liveness endpoints]
 - `M`: Implements metrics:
-  * 4 golden signals: latency/traffic/errors/saturation[^metrics-4gs]
+  * 4 golden signals: latency/traffic/errors/saturation
   * endpoint (preferably `/metrics`) in Prometheus format on a separate port (eg `9090`)
   * availability, authentication status, and latency for all backend services
   * Node.js metrics
@@ -100,6 +100,5 @@ Legend: `M` - Mandatory, `R` - Recommended, `O` - Optional
 
 [readiness and liveness endpoints]: https://cloud.google.com/blog/products/containers-kubernetes/kubernetes-best-practices-setting-up-health-checks-with-readiness-and-liveness-probes
 [Graceful shutdown]: https://cloud.google.com/blog/products/containers-kubernetes/kubernetes-best-practices-terminating-with-grace
-[^metrics-4gs]: For HTTP-based web applications (rest api/web apps/etc) which are going to be deployed to k8s, 4 golden signals will be collected automatically from the underlying platform; therefore no custom implementation is necessary, instead the application can expose business metrics only.
 
 This document is based on a Lokalise Service Release Checklist, prepared by the Lokalise Platform Squad.
