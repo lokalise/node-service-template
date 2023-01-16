@@ -21,10 +21,15 @@ import { UserService } from '../modules/users/services/UserService'
 import type { Config } from './config'
 import { getConfig } from './config'
 import type { ErrorReporter } from './errors/errorReporter'
+import { Connection } from 'amqplib'
+import { InternalError } from '@lokalise/node-core'
+import { ErrorProcessor } from './errors/ErrorProcessor'
+import { ConsumerErrorProcessor } from './amqp/ConsumerErrorProcessor'
 
 export type ExternalDependencies = {
   app?: FastifyInstance
   logger?: P.Logger
+  amqpConnection?: Connection
 }
 export const SINGLETON_CONFIG = { lifetime: Lifetime.SINGLETON }
 
@@ -87,6 +92,24 @@ export function registerDependencies(
       },
     ),
 
+    amqpConnection: asFunction(
+      () => {
+        if (!dependencies.amqpConnection) {
+          throw new InternalError({
+            message: 'amqp connection is a mandatory dependency',
+            errorCode: 'MISSING_DEPENDENCY',
+          })
+        }
+        return dependencies.amqpConnection
+      },
+      {
+        lifetime: Lifetime.SINGLETON,
+      },
+    ),
+    consumerErrorProcessor: asFunction(() => {
+      return new ConsumerErrorProcessor()
+    }),
+
     config: asFunction(() => {
       return getConfig()
     }, SINGLETON_CONFIG),
@@ -128,6 +151,8 @@ export interface Dependencies {
   redis: Redis
   prisma: PrismaClient
 
+  amqpConnection: Connection
+
   deleteOldUsersJob: DeleteOldUsersJob
   processLogFilesJob: ProcessLogFilesJob
   sendEmailsJob: SendEmailsJob
@@ -142,6 +167,7 @@ export interface Dependencies {
   newRelicBackgroundTransactionManager: NewRelicTransactionManager
 
   errorReporter: ErrorReporter
+  consumerErrorProcessor: ErrorProcessor
 }
 
 declare module '@fastify/awilix' {

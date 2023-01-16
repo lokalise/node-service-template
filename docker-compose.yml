@@ -30,8 +30,18 @@ services:
     volumes:
       - redis_data:/redis/data:cached
 
+  rabbitmq:
+    image: rabbitmq:3.11.5
+    ports:
+      - 5672:5672
+      - 15672:15672
+    volumes:
+      - rabbit_data:/var/lib/rabbitmq
+
 volumes:
   mysql_data:
     driver: local
   redis_data:
+    driver: local
+  rabbit_data:
     driver: local

@@ -10,6 +10,7 @@ export type Config = {
   db: DbConfig
   redis: RedisConfig
   scheduler: RedisConfig
+  amqp: AmqpConfig
   integrations: {
     fakeStore: {
       baseUrl: string
@@ -45,6 +46,14 @@ export type DbConfig = {
   databaseUrl: string
 }
 
+export type AmqpConfig = {
+  hostname: string
+  port: number
+  username: string
+  password: string
+  vhost: string
+}
+
 export type AppConfig = {
   port: number
   bindAddress: string
@@ -60,6 +69,7 @@ export function getConfig(): Config {
     app: getAppConfig(),
     db: getDbConfig(),
     redis: getRedisConfig(),
+    amqp: getAmqpConfig(),
     scheduler: getSchedulerConfig(),
     integrations: {
       fakeStore: {
@@ -87,6 +97,16 @@ export function getConfig(): Config {
         apiKey: configScope.getOptionalNullable('BUGSNAG_KEY', undefined),
       },
     },
+  }
+}
+
+export function getAmqpConfig(): AmqpConfig {
+  return {
+    hostname: configScope.getMandatory('AMQP_HOSTNAME'),
+    port: configScope.getMandatoryInteger('AMQP_PORT'),
+    username: configScope.getMandatory('AMQP_USERNAME'),
+    password: configScope.getMandatory('AMQP_PASSWORD'),
+    vhost: configScope.getOptionalNullable('AMQP_VHOST', ''),
   }
 }
 

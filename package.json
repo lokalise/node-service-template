@@ -37,6 +37,7 @@
     "@lokalise/node-core": "^2.4.0",
     "@lokalise/zod-extras": "^1.3.2",
     "@prisma/client": "^4.8.1",
+    "amqplib": "^0.10.3",
     "awilix": "^8.0.0",
     "croner": "^5.3.5",
     "dotenv": "^16.0.3",
@@ -58,6 +59,7 @@
     "zod": "^3.20.2"
   },
   "devDependencies": {
+    "@types/amqplib": "^0.10.1",
     "@types/jest": "^29.2.5",
     "@types/jsonwebtoken": "^9.0.1",
     "@types/newrelic": "^9.4.0",
