@@ -1,35 +1,51 @@
+# ---- Base Node ----
 FROM node:18.13.0-bullseye-slim as base
 
-RUN set -ex; \
-    apt update -y; \
-    apt install ca-certificates -y; \
-    update-ca-certificates
+RUN mkdir -p /home/node/app
+RUN chown -R node:node /home/node && chmod -R 770 /home/node
+WORKDIR /home/node/app
 
-FROM base as build
+# ---- Dependencies ----
+FROM base AS dependencies
 
-WORKDIR /app
+COPY --chown=node:node ./package.json ./package.json prisma ./
+COPY --chown=node:node ./package-lock.json ./package-lock.json
+RUN apt-get update -y && \
+    apt-get install -y --no-install-recommends \
+      ca-certificates \
+      dumb-init \
+      make \
+      gcc \
+      g++ \
+      python3 \
+      git \
+      openssl
+USER node
+# install production dependencies
+RUN npm ci
+# separate production node_modules
+RUN cp -R node_modules prod_node_modules
+# install ALL node_modules, including 'devDependencies'
+RUN npm install
 
-RUN apt install make gcc g++ python3 git openssl -y;
-
-COPY --chown=node:node package.json package-lock.json prisma ./
-RUN set -ex; \
-    npm install --ignore-scripts; \
-    npx prisma generate
+# ---- Build ----
+FROM dependencies as build
 
 COPY --chown=node:node . .
-RUN set -ex; \
-    npm run build; \
-    NODE_ENV=production npm prune
+RUN npx prisma generate && \
+    npm run build
 
-FROM base as app
+# ---- Release ----
+FROM base as release
 
-WORKDIR /app
+COPY --from=build /usr/bin/dumb-init /usr/bin/dumb-init
+COPY --from=build /home/node/app/dist ./
+COPY --from=build /home/node/app/prisma ./prisma
+COPY --from=build /home/node/app/prod_node_modules ./node_modules
+COPY --from=build /home/node/app/src ./src
 
-COPY --from=build /app/dist ./
-COPY --from=build /app/prisma ./prisma
-COPY --from=build /app/node_modules ./node_modules
-
+ENV NODE_ENV=production
 ENV NODE_PATH=.
 
 USER node
-CMD [ "node", "/app/src/server.js" ]
+CMD [ "dumb-init", "node", "/home/node/app/src/server.js" ]
