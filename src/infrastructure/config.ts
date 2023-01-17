@@ -53,6 +53,8 @@ export type AppConfig = {
   passwordSalt: string
   nodeEnv: 'production' | 'development' | 'test'
   appEnv: 'production' | 'development' | 'staging'
+  appVersion: string
+  gitCommitSha: string
 }
 
 export function getConfig(): Config {
@@ -135,6 +137,8 @@ export function getAppConfig(): AppConfig {
     ]),
     nodeEnv: configScope.getMandatoryOneOf('NODE_ENV', ['production', 'development', 'test']),
     appEnv: configScope.getMandatoryOneOf('APP_ENV', ['production', 'development', 'staging']),
+    appVersion: configScope.getMandatory('APP_VERSION'),
+    gitCommitSha: configScope.getMandatory('GIT_COMMIT_SHA'),
   }
 }
 

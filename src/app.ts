@@ -169,6 +169,8 @@ export async function getApp(
     logLevel: 'warn',
     info: {
       env: appConfig.nodeEnv,
+      app_version: appConfig.appVersion,
+      git_commit_sha: appConfig.gitCommitSha,
     },
     schema: false,
     exposeFailure: false,
