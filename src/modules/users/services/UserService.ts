@@ -36,6 +36,12 @@ export class UserService {
     return getUserResult.result
   }
 
+  async getUsers(userIds: number[]): Promise<User[]> {
+    const users = await this.userRepository.getUsers(userIds)
+
+    return users
+  }
+
   async findUserById(id: number): Promise<User | null> {
     const getUserResult = await this.userRepository.getUser(id)
 

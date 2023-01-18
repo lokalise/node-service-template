@@ -1,6 +1,6 @@
 import { isStandardizedError } from '../typeUtils'
 
-import { AmqpMessageInvalidFormat } from './amqpErrors'
+import { AmqpMessageInvalidFormat, AmqpValidationError } from './amqpErrors'
 import { ErrorResolver } from '../errors/ErrorResolver'
 import { InternalError } from '@lokalise/node-core'
 import { ZodError } from 'zod'
@@ -13,9 +13,8 @@ export class ConsumerErrorResolver implements ErrorResolver {
       })
     }
     if (error instanceof ZodError) {
-      return new InternalError({
+      return new AmqpValidationError({
         message: error.message,
-        errorCode: 'VALIDATION_ERROR',
         details: {
           error: error.issues,
         },
