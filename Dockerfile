@@ -8,8 +8,6 @@ WORKDIR /home/node/app
 # ---- Dependencies ----
 FROM base AS dependencies
 
-COPY --chown=node:node ./package.json ./package.json prisma ./
-COPY --chown=node:node ./package-lock.json ./package-lock.json
 RUN apt-get update -y && \
     apt-get install -y --no-install-recommends \
       ca-certificates \
@@ -20,29 +18,31 @@ RUN apt-get update -y && \
       python3 \
       git \
       openssl
+COPY --chown=node:node ./package.json ./package.json prisma ./
+COPY --chown=node:node ./package-lock.json ./package-lock.json
 USER node
 # install production dependencies
-RUN npm ci
+RUN npm ci --ignore-scripts && \
+    npx prisma generate
 # separate production node_modules
 RUN cp -R node_modules prod_node_modules
 # install ALL node_modules, including 'devDependencies'
-RUN npm install
+RUN npm install --ignore-scripts && \
+    npx prisma generate
 
 # ---- Build ----
 FROM dependencies as build
 
 COPY --chown=node:node . .
-RUN npx prisma generate && \
-    npm run build
+RUN npm run build
 
 # ---- Release ----
 FROM base as release
 
 COPY --from=build /usr/bin/dumb-init /usr/bin/dumb-init
-COPY --from=build /home/node/app/dist ./
-COPY --from=build /home/node/app/prisma ./prisma
-COPY --from=build /home/node/app/prod_node_modules ./node_modules
-COPY --from=build /home/node/app/src ./src
+COPY --chown=node:node --from=build /home/node/app/dist .
+COPY --chown=node:node --from=build /home/node/app/prisma prisma
+COPY --chown=node:node --from=build /home/node/app/prod_node_modules node_modules
 
 ENV NODE_ENV=production
 ENV NODE_PATH=.
