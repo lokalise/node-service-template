@@ -57,7 +57,9 @@ describe('PermissionsConsumer', () => {
     let channel: Channel
     beforeAll(async () => {
       app = await getApp(
-        {},
+        {
+          amqpEnabled: true,
+        },
         {
           consumerErrorResolver: asClass(FakeConsumerErrorResolver, SINGLETON_CONFIG),
         },

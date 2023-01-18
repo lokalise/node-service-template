@@ -58,6 +58,7 @@ export type ConfigOverrides = {
     public: Secret
     private: Secret
   }
+  amqpEnabled?: boolean
 }
 
 export type RequestContext = {
@@ -163,7 +164,7 @@ export async function getApp(
 
   app.setErrorHandler(errorHandler)
 
-  const isAmqpEnabled = true
+  const isAmqpEnabled = isProduction() || configOverrides.amqpEnabled
   const amqpConfig = getAmqpConfig()
   const amqpConnection = isAmqpEnabled ? await resolveAmqpConnection(amqpConfig) : undefined
 
