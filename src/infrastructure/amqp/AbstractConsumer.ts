@@ -1,7 +1,7 @@
 import type { Channel, Connection, Message } from 'amqplib'
 
 import type { Dependencies } from '../diConfig'
-import type { ConsumerErrorProcessor } from './ConsumerErrorProcessor'
+import type { ConsumerErrorResolver } from './ConsumerErrorResolver'
 import { globalLogger, resolveGlobalErrorLogObject } from '../errors/globalErrorHandler'
 
 export interface Consumer {
@@ -13,7 +13,7 @@ export abstract class AbstractConsumer implements Consumer {
   protected readonly queueName: string
   protected readonly connection: Connection
   protected channel: Channel | undefined
-  protected readonly errorHandler: ConsumerErrorProcessor
+  protected readonly errorHandler: ConsumerErrorResolver
   private isShuttingDown: boolean
 
   constructor({ amqpConnection, consumerErrorProcessor }: Dependencies) {
