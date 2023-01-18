@@ -1,35 +1,54 @@
+# ---- Base Node ----
 FROM node:18.13.0-bullseye-slim as base
 
+RUN mkdir -p /home/node/app
+RUN chown -R node:node /home/node && chmod -R 770 /home/node
+WORKDIR /home/node/app
+
+# ---- Dependencies ----
+FROM base AS dependencies
+
 RUN set -ex; \
-    apt update -y; \
-    apt install ca-certificates -y; \
-    update-ca-certificates
-
-FROM base as build
-
-WORKDIR /app
-
-RUN apt install make gcc g++ python3 git openssl -y;
-
-COPY --chown=node:node package.json package-lock.json prisma ./
+    apt-get update -y ; \
+    apt-get install -y --no-install-recommends \
+      ca-certificates \
+      dumb-init \
+      make \
+      gcc \
+      g++ \
+      python3 \
+      git \
+      openssl
+COPY --chown=node:node ./package.json ./package.json prisma ./
+COPY --chown=node:node ./package-lock.json ./package-lock.json
+USER node
+# install production dependencies
 RUN set -ex; \
-    npm install --ignore-scripts; \
+    npm ci --ignore-scripts; \
+    npx prisma generate
+# separate production node_modules
+RUN cp -R node_modules prod_node_modules
+# install ALL node_modules, including 'devDependencies'
+RUN set -ex; \
+    npm install --ignore-scripts ; \
     npx prisma generate
 
+# ---- Build ----
+FROM dependencies as build
+
 COPY --chown=node:node . .
-RUN set -ex; \
-    npm run build; \
-    NODE_ENV=production npm prune
+RUN npm run build
 
-FROM base as app
+# ---- Release ----
+FROM base as release
 
-WORKDIR /app
+COPY --from=build /usr/bin/dumb-init /usr/bin/dumb-init
+COPY --chown=node:node --from=build /home/node/app/dist .
+COPY --chown=node:node --from=build /home/node/app/prisma prisma
+COPY --chown=node:node --from=build /home/node/app/prod_node_modules node_modules
 
-COPY --from=build /app/dist ./
-COPY --from=build /app/prisma ./prisma
-COPY --from=build /app/node_modules ./node_modules
-
+ENV NODE_ENV=production
 ENV NODE_PATH=.
 
 USER node
-CMD [ "node", "/app/src/server.js" ]
+CMD [ "dumb-init", "node", "/home/node/app/src/server.js" ]
