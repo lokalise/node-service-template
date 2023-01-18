@@ -26,6 +26,7 @@ import { InternalError } from '@lokalise/node-core'
 import { ErrorResolver } from './errors/ErrorResolver'
 import { ConsumerErrorResolver } from './amqp/ConsumerErrorResolver'
 import { PermissionsService } from '../modules/users/services/PermissionsService'
+import { PermissionConsumer } from "../modules/users/consumers/PermissionConsumer";
 
 export type ExternalDependencies = {
   app?: FastifyInstance
@@ -122,6 +123,7 @@ export function registerDependencies(
     configStore: asClass(ConfigStore, SINGLETON_CONFIG),
 
     permissionsService: asClass(PermissionsService, SINGLETON_CONFIG),
+    permissionConsumer: asClass(PermissionConsumer, SINGLETON_CONFIG),
 
     processLogFilesJob: asClass(ProcessLogFilesJob, SINGLETON_CONFIG),
     deleteOldUsersJob: asClass(DeleteOldUsersJob, SINGLETON_CONFIG),
@@ -173,6 +175,7 @@ export interface Dependencies {
 
   errorReporter: ErrorReporter
   consumerErrorResolver: ErrorResolver
+  permissionConsumer: PermissionConsumer
 }
 
 declare module '@fastify/awilix' {

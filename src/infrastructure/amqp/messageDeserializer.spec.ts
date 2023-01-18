@@ -1,15 +1,16 @@
 import { deserializeMessage } from './messageDeserializer'
 import { Message } from 'amqplib'
 import {
-  SET_PERMISSIONS_MESSAGE_SCHEMA,
-  SET_PERMISSIONS_MESSAGE_TYPE,
+  PERMISSIONS_MESSAGE_SCHEMA,
+  PERMISSIONS_MESSAGE_TYPE,
 } from '../../modules/users/consumers/userConsumerSchemas'
 import { ConsumerErrorResolver } from './ConsumerErrorResolver'
 
 describe('messageDeserializer', () => {
   it('deserializes valid JSON', () => {
-    const messagePayload: SET_PERMISSIONS_MESSAGE_TYPE = {
-      userId: 1,
+    const messagePayload: PERMISSIONS_MESSAGE_TYPE = {
+      operation: 'add',
+      userIds: [1],
       permissions: ['perm'],
     }
     const message: Message = {
@@ -20,7 +21,7 @@ describe('messageDeserializer', () => {
 
     const deserializedPayload = deserializeMessage(
       message,
-      SET_PERMISSIONS_MESSAGE_SCHEMA,
+      PERMISSIONS_MESSAGE_SCHEMA,
       errorProcessor,
     )
 
@@ -28,8 +29,8 @@ describe('messageDeserializer', () => {
   })
 
   it('throws an error on invalid JSON', () => {
-    const messagePayload: Partial<SET_PERMISSIONS_MESSAGE_TYPE> = {
-      userId: 1,
+    const messagePayload: Partial<PERMISSIONS_MESSAGE_TYPE> = {
+      userIds: [1],
     }
     const message: Message = {
       content: Buffer.from(JSON.stringify(messagePayload)),
@@ -39,7 +40,7 @@ describe('messageDeserializer', () => {
 
     const deserializedPayload = deserializeMessage(
       message,
-      SET_PERMISSIONS_MESSAGE_SCHEMA,
+      PERMISSIONS_MESSAGE_SCHEMA,
       errorProcessor,
     )
 
@@ -57,7 +58,7 @@ describe('messageDeserializer', () => {
 
     const deserializedPayload = deserializeMessage(
       message,
-      SET_PERMISSIONS_MESSAGE_SCHEMA,
+      PERMISSIONS_MESSAGE_SCHEMA,
       errorProcessor,
     )
 

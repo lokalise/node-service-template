@@ -34,8 +34,10 @@ export class PermissionConsumer extends AbstractConsumer<PERMISSIONS_MESSAGE_TYP
       }
     }
 
-    // do something with permissions
-    await this.permissionsService.setPermissions()
+    // Do not do this in production, some kind of bulk insertion is needed here
+    for (const user of projectUsers) {
+      await this.permissionsService.setPermissions(user.id, message.permissions)
+    }
 
     return {
       result: 'success',

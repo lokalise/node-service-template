@@ -16,6 +16,8 @@
     "format": "prettier --write . && npx prisma format",
     "start:dev": "cross-env NODE_ENV=development ts-node src/server.ts",
     "start:prod": "tsc && cross-env NODE_ENV=production node dist/src/server.js",
+    "docker:start:dev": "docker compose up -d",
+    "docker:stop:dev": "docker compose down",
     "db:start:dev": "docker compose up -d mysql redis",
     "db:stop:dev": "docker compose down",
     "db:migration:dev": "npx prisma migrate dev",

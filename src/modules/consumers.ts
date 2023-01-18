@@ -1,5 +1,7 @@
-import {FastifyInstance} from "fastify";
+import { FastifyInstance } from 'fastify'
 
-export function registerConsumers(app: FastifyInstance) {
+export function getConsumers(app: FastifyInstance) {
+  const { permissionConsumer } = app.diContainer.cradle
 
+  return [ permissionConsumer ]
 }

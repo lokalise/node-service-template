@@ -31,7 +31,7 @@ import {
 import type { ZodTypeProvider } from 'fastify-type-provider-zod'
 import type pino from 'pino'
 
-import { getConfig, isDevelopment, isProduction, isTest } from './infrastructure/config'
+import { getAmqpConfig, getConfig, isDevelopment, isProduction, isTest } from "./infrastructure/config";
 import type { DependencyOverrides } from './infrastructure/diConfig'
 import { registerDependencies } from './infrastructure/diConfig'
 import { errorHandler } from './infrastructure/errors/errorHandler'
@@ -41,6 +41,8 @@ import { registerJobs } from './modules/jobs'
 import { getRoutes } from './modules/routes'
 import { healthcheckPlugin } from './plugins/healthcheckPlugin'
 import { jwtTokenPlugin } from './plugins/jwtTokenPlugin'
+import { resolveRabbitConnection } from "./infrastructure/amqp/rabbitConnectionResolver";
+import { getConsumers } from "./modules/consumers";
 
 const GRACEFUL_SHUTDOWN_TIMEOUT_IN_MSECS = 10000
 
@@ -155,10 +157,15 @@ export async function getApp(
 
   app.setErrorHandler(errorHandler)
 
+  const isAmqpEnabled = true
+  const amqpConfig = getAmqpConfig()
+  const amqpConnection = isAmqpEnabled ? await resolveRabbitConnection(amqpConfig) : undefined
+
   registerDependencies(
     configOverrides.diContainer ?? diContainer,
     {
       app: app,
+      amqpConnection: amqpConnection,
       logger: app.log,
     },
     dependencyOverrides,
@@ -218,6 +225,13 @@ export async function getApp(
       app.log.info('Background jobs registered')
     } else {
       app.log.info('Skip registering background jobs, test environment')
+    }
+
+    if (isAmqpEnabled) {
+      const consumers = getConsumers(app)
+      for (const consumer of consumers) {
+        void consumer.consume()
+      }
     }
   })
 
