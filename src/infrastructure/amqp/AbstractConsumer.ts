@@ -1,12 +1,13 @@
+import type { Either } from '@lokalise/node-core'
 import type { Channel, Connection, Message } from 'amqplib'
+import type { ZodSchema } from 'zod'
 
 import type { Dependencies } from '../diConfig'
-import type { ConsumerErrorResolver } from './ConsumerErrorResolver'
 import { globalLogger, resolveGlobalErrorLogObject } from '../errors/globalErrorHandler'
-import { ZodSchema } from 'zod'
-import { deserializeMessage } from './messageDeserializer'
+
+import type { ConsumerErrorResolver } from './ConsumerErrorResolver'
 import { AmqpMessageInvalidFormat, AmqpValidationError } from './amqpErrors'
-import { Either } from '@lokalise/node-core'
+import { deserializeMessage } from './messageDeserializer'
 
 export interface Consumer {
   consume(): void
@@ -43,8 +44,16 @@ export abstract class AbstractConsumer<MessagePayloadType> implements Consumer {
     this.messageSchema = params.messageSchema
   }
 
-  async init() {
+  private async init() {
     this.isShuttingDown = false
+
+    // If channel exists, recreate it
+    if (this.channel) {
+      this.isShuttingDown = true
+      await this.destroyConnection()
+      this.isShuttingDown = false
+    }
+
     this.channel = await this.connection.createChannel()
     this.channel.on('close', () => {
       if (!this.isShuttingDown) {
@@ -58,6 +67,12 @@ export abstract class AbstractConsumer<MessagePayloadType> implements Consumer {
     this.channel.on('error', (err) => {
       const logObject = resolveGlobalErrorLogObject(err)
       globalLogger.error(logObject)
+    })
+
+    await this.channel.assertQueue(this.queueName, {
+      exclusive: false,
+      durable: true,
+      autoDelete: false,
     })
   }
 
@@ -94,12 +109,6 @@ export abstract class AbstractConsumer<MessagePayloadType> implements Consumer {
     if (!this.channel) {
       throw new Error('Channel is not set')
     }
-
-    await this.channel.assertQueue(this.queueName, {
-      exclusive: false,
-      durable: true,
-      autoDelete: false,
-    })
 
     await this.channel.consume(this.queueName, (message) => {
       if (message === null) {

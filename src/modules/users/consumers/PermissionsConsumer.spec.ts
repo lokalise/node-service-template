@@ -1,20 +1,55 @@
 import { diContainer } from '@fastify/awilix'
+import type { PrismaClient } from '@prisma/client'
 import type { Channel } from 'amqplib'
 import { asClass } from 'awilix'
 import type { FastifyInstance } from 'fastify'
 
+import { cleanTables, DB_MODEL } from '../../../../test/DbCleaner'
 import { FakeConsumerErrorResolver } from '../../../../test/fakes/FakeConsumerErrorResolver'
+import { waitAndRetry } from '../../../../test/utils/waitUtils'
 import { getApp } from '../../../app'
 import { SINGLETON_CONFIG } from '../../../infrastructure/diConfig'
+import { buildQueueMessage } from '../../../utils/queueUtils'
+import type { PermissionsService } from '../services/PermissionsService'
 
 import { PermissionConsumer } from './PermissionConsumer'
-import { cleanTables, DB_MODEL } from '../../../../test/DbCleaner'
-import { PERMISSIONS_MESSAGE_TYPE } from './userConsumerSchemas'
-import { buildQueueMessage } from '../../../utils/queueUtils'
-import { waitAndRetry } from '../../../../test/utils/waitUtils'
+import type { PERMISSIONS_MESSAGE_TYPE } from './userConsumerSchemas'
 
 const userIds = [100, 200, 300]
 const perms: [string, ...string[]] = ['perm1', 'perm2']
+
+async function createUsers(prisma: PrismaClient, userIdsToCreate: number[]) {
+  await prisma.user.createMany({
+    data: userIdsToCreate.map((userId) => {
+      return {
+        id: userId,
+        name: userId.toString(),
+        email: `test${userId}@email.lt`,
+      }
+    }),
+  })
+}
+
+async function waitForPermissions(permissionsService: PermissionsService, userIds: number[]) {
+  return await waitAndRetry(
+    async () => {
+      const usersPerms = await permissionsService.getUserPermissionsBulk(userIds)
+
+      if (usersPerms && usersPerms.length !== userIds.length) {
+        return null
+      }
+
+      for (const userPerms of usersPerms)
+        if (userPerms.length !== perms.length) {
+          return null
+        }
+
+      return usersPerms
+    },
+    500,
+    5,
+  )
+}
 
 describe('PermissionsConsumer', () => {
   describe('consume', () => {
@@ -27,15 +62,21 @@ describe('PermissionsConsumer', () => {
           consumerErrorResolver: asClass(FakeConsumerErrorResolver, SINGLETON_CONFIG),
         },
       )
+    })
 
+    beforeEach(async () => {
       await cleanTables(diContainer.cradle.prisma, [DB_MODEL.User])
+      await app.diContainer.cradle.permissionsService.deleteAll()
       channel = await app.diContainer.cradle.amqpConnection.createChannel()
+      await app.diContainer.cradle.permissionConsumer.consume()
+    })
+
+    afterEach(async () => {
+      await channel.deleteQueue(PermissionConsumer.QUEUE_NAME)
+      await channel.close()
     })
 
     afterAll(async () => {
-      await channel.deleteQueue(PermissionConsumer.QUEUE_NAME)
-      await channel.close()
-
       await app.close()
     })
 
@@ -44,15 +85,7 @@ describe('PermissionsConsumer', () => {
       const users = await userService.getUsers(userIds)
       expect(users).toHaveLength(0)
 
-      await prisma.user.createMany({
-        data: userIds.map((userId) => {
-          return {
-            id: userId,
-            name: userId.toString(),
-            email: `test${userId}@email.lt`,
-          }
-        }),
-      })
+      await createUsers(prisma, userIds)
 
       void channel.sendToQueue(
         PermissionConsumer.QUEUE_NAME,
@@ -63,27 +96,7 @@ describe('PermissionsConsumer', () => {
         } satisfies PERMISSIONS_MESSAGE_TYPE),
       )
 
-      const createdUsersArray = await userService.getUsers(userIds)
-      const usersPermissions = await waitAndRetry(
-        async () => {
-          const usersPerms = await permissionsService.getUserPermissionsBulk(
-            createdUsersArray.map((user) => user.id),
-          )
-
-          if (usersPerms && usersPerms.length !== createdUsersArray.length) {
-            return null
-          }
-
-          for (const userPerms of usersPerms)
-            if (userPerms.length !== perms.length) {
-              return null
-            }
-
-          return usersPerms
-        },
-        500,
-        5,
-      )
+      const usersPermissions = await waitForPermissions(permissionsService, userIds)
 
       if (null === usersPermissions) {
         throw new Error('Users permissions unexpectedly null')
@@ -92,174 +105,97 @@ describe('PermissionsConsumer', () => {
       expect(usersPermissions).toBeDefined()
       expect(usersPermissions[0]).toHaveLength(2)
     })
-    /*
+
     it('Wait for users to be created and then create permissions', async () => {
-      const { userService, permissionService } = diContainer.cradle
-      const users = await userService.getUsers(userIds, projectId)
+      const { userService, permissionsService, prisma } = diContainer.cradle
+      const users = await userService.getUsers(userIds)
       expect(users).toHaveLength(0)
 
       channel.sendToQueue(
         PermissionConsumer.QUEUE_NAME,
         buildQueueMessage({
-          task: 'new_task',
-          created: 12345,
-          params: {
-            projectId,
-            userIds,
-            keyIds,
-            langIds,
-          },
-        } satisfies MESSAGE_SET_PERMISSIONS_TYPE),
+          userIds,
+          operation: 'add',
+          permissions: perms,
+        } satisfies PERMISSIONS_MESSAGE_TYPE),
       )
 
       // no users in the database, so message will go back to the queue
-      const usersFromDb = await waitAndRetry(
-        async () => {
-          const users = await userService.getUsers(userIds, projectId)
-          if (!users.length) {
-            return null
-          }
+      const usersFromDb = await waitForPermissions(permissionsService, userIds)
+      expect(usersFromDb).toBeNull()
 
-          return users
-        },
-        200,
-        5,
-      )
-      expect(usersFromDb).toBeFalsy()
+      await createUsers(prisma, userIds)
 
-      // let's create users
-      const usersToCreate = userIds.map((userId: number) => {
-        return {
-          lokaliseUserId: userId,
-          lokaliseProjectId: projectId,
-        }
-      })
-
-      await userService.createUsers(usersToCreate)
-      const createdUsersArray = await userService.getUsers(userIds, projectId)
-      const usersPermissions = await waitAndRetry(
-        async () => {
-          const users = await permissionService.getUserPermissionsBulk(
-            createdUsersArray.map((user) => user.id),
-          )
-
-          if (users && users.length !== createdUsersArray.length) {
-            return null
-          }
-
-          for (const user of users)
-            if (
-              user.ProjectUserKey.length !== keyIds.length ||
-              user.UserProjectLanguage.length !== langIds.length
-            ) {
-              return null
-            }
-
-          return users
-        },
-        500,
-        5,
-      )
+      const usersPermissions = await waitForPermissions(permissionsService, userIds)
 
       if (null === usersPermissions) {
         throw new Error('Users permissions unexpectedly null')
       }
 
       expect(usersPermissions).toBeDefined()
-      expect(usersPermissions[0].ProjectUserKey).toHaveLength(3)
-      expect(usersPermissions[0].UserProjectLanguage).toHaveLength(2)
+      expect(usersPermissions[0]).toHaveLength(2)
     })
 
-    it.skip('Not all users exist, no permissions were created', async () => {
-      const { userService, permissionService } = diContainer.cradle
-      const users = await userService.getUsers(userIds, projectId)
+    it('Not all users exist, no permissions were created', async () => {
+      const { userService, permissionsService, prisma } = diContainer.cradle
+      const users = await userService.getUsers(userIds)
       expect(users).toHaveLength(0)
 
-      // let's create just one user
-      const userToCreate = {
-        lokaliseUserId: userIds[0],
-        lokaliseProjectId: projectId,
+      const partialUsers = [...userIds]
+      const missingUser = partialUsers.pop()
+      await createUsers(prisma, partialUsers)
+
+      channel.sendToQueue(
+        PermissionConsumer.QUEUE_NAME,
+        buildQueueMessage({
+          userIds,
+          operation: 'add',
+          permissions: perms,
+        } satisfies PERMISSIONS_MESSAGE_TYPE),
+      )
+
+      // not all users are in the database, so message will go back to the queue
+      const usersFromDb = await waitForPermissions(permissionsService, userIds)
+      expect(usersFromDb).toBeNull()
+
+      await createUsers(prisma, [missingUser!])
+
+      const usersPermissions = await waitForPermissions(permissionsService, userIds)
+
+      if (null === usersPermissions) {
+        throw new Error('Users permissions unexpectedly null')
       }
 
-      await userService.createUser(userToCreate)
+      expect(usersPermissions).toBeDefined()
+      expect(usersPermissions[0]).toHaveLength(2)
+    })
+
+    it('Invalid message in the queue', async () => {
+      const { consumerErrorResolver } = diContainer.cradle
 
       channel.sendToQueue(
         PermissionConsumer.QUEUE_NAME,
         buildQueueMessage({
-          task: 'new_task',
-          created: 12345,
-          params: {
-            projectId,
-            userIds,
-            keyIds,
-            langIds,
-          },
-        } satisfies MESSAGE_SET_PERMISSIONS_TYPE),
+          operation: 'add',
+          permissions: perms,
+        } as PERMISSIONS_MESSAGE_TYPE),
       )
 
-      const createdUsersArray = await userService.getUsers(userIds, projectId)
-      const usersPermissions = await waitAndRetry(
-        async () => {
-          const users = await permissionService.getUserPermissionsBulk(
-            createdUsersArray.map((user) => user.id),
-          )
+      const fakeResolver = consumerErrorResolver as FakeConsumerErrorResolver
+      await waitAndRetry(() => fakeResolver.handleErrorCallsCount, 500, 5)
 
-          if (users && users.length !== createdUsersArray.length) {
-            return null
-          }
-
-          for (const user of users)
-            if (
-              user.ProjectUserKey.length !== keyIds.length ||
-              user.UserProjectLanguage.length !== langIds.length
-            ) {
-              return null
-            }
-
-          return users
-        },
-        500,
-        5,
-      )
-
-      expect(usersPermissions).toBeFalsy()
+      expect(fakeResolver.handleErrorCallsCount).toBe(1)
     })
 
-    it('Wrong message in the queue', async () => {
-      const { userService, consumerErrorHandler } = diContainer.cradle
+    it('Non-JSON message in the queue', async () => {
+      const { consumerErrorResolver } = diContainer.cradle
 
-      const usersToCreate = userIds.map((userId: number) => {
-        return {
-          lokaliseUserId: userId,
-          lokaliseProjectId: projectId,
-        }
-      })
+      channel.sendToQueue(PermissionConsumer.QUEUE_NAME, Buffer.from('dummy'))
 
-      await userService.createUsers(usersToCreate)
+      const fakeResolver = consumerErrorResolver as FakeConsumerErrorResolver
+      await waitAndRetry(() => fakeResolver.handleErrorCallsCount, 500, 5)
 
-      channel.sendToQueue(
-        PermissionConsumer.QUEUE_NAME,
-        buildQueueMessage({
-          task: 'new_task',
-          created: 12345,
-          params: {
-            userIds,
-            langIds: [],
-            projectId,
-            keyIds,
-          },
-        }),
-      )
-
-      await waitAndRetry(
-        () => (consumerErrorHandler as FakeConsumerErrorResolver).handleErrorCallsCount,
-        500,
-        5,
-      )
-
-      expect((consumerErrorHandler as FakeConsumerErrorResolver).handleErrorCallsCount).toBe(1)
+      expect(fakeResolver.handleErrorCallsCount).toBe(1)
     })
-
- */
   })
 })

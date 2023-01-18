@@ -1,4 +1,4 @@
-import { InternalError } from '@lokalise/node-core'
+import type { InternalError } from '@lokalise/node-core'
 
 /**
  * Generic interface for resolving specific kind of errors based on something that was thrown during execution

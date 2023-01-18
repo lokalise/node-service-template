@@ -1,7 +1,7 @@
-import { FastifyInstance } from 'fastify'
+import type { Dependencies } from '../infrastructure/diConfig'
 
-export function getConsumers(app: FastifyInstance) {
-  const { permissionConsumer } = app.diContainer.cradle
+export function getConsumers(dependencies: Dependencies) {
+  const { permissionConsumer } = dependencies
 
-  return [ permissionConsumer ]
+  return [permissionConsumer]
 }

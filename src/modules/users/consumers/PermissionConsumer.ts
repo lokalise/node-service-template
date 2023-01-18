@@ -1,9 +1,12 @@
-import type { Dependencies } from '../../../infrastructure/diConfig'
-import type { UserService } from '../services/UserService'
+import type { Either } from '@lokalise/node-core'
+
 import { AbstractConsumer } from '../../../infrastructure/amqp/AbstractConsumer'
-import { PERMISSIONS_MESSAGE_SCHEMA, PERMISSIONS_MESSAGE_TYPE } from './userConsumerSchemas'
-import { PermissionsService } from '../services/PermissionsService'
-import { Either } from '@lokalise/node-core'
+import type { Dependencies } from '../../../infrastructure/diConfig'
+import type { PermissionsService } from '../services/PermissionsService'
+import type { UserService } from '../services/UserService'
+
+import type { PERMISSIONS_MESSAGE_TYPE } from './userConsumerSchemas'
+import { PERMISSIONS_MESSAGE_SCHEMA } from './userConsumerSchemas'
 
 export class PermissionConsumer extends AbstractConsumer<PERMISSIONS_MESSAGE_TYPE> {
   public static QUEUE_NAME = 'user_permissions'

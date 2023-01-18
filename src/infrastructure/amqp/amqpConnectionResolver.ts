@@ -8,7 +8,7 @@ import { globalLogger } from '../errors/globalErrorHandler'
 const CONNECT_RETRY_SECONDS = 10
 const MAX_RETRY_ATTEMPTS = 5
 
-export async function resolveRabbitConnection(config: AmqpConfig) {
+export async function resolveAmqpConnection(config: AmqpConfig) {
   let counter = 0
   // eslint-disable-next-line no-constant-condition
   while (true) {

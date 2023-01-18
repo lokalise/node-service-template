@@ -1,7 +1,9 @@
 import type { JWT } from '@fastify/jwt'
 import type { NewRelicTransactionManager } from '@lokalise/fastify-extras'
 import { reportErrorToBugsnag } from '@lokalise/fastify-extras'
+import { InternalError } from '@lokalise/node-core'
 import { PrismaClient } from '@prisma/client'
+import type { Connection } from 'amqplib'
 import type { AwilixContainer, Resolver } from 'awilix'
 import { asClass, asFunction, Lifetime } from 'awilix'
 import type { FastifyInstance, FastifyLoggerInstance } from 'fastify'
@@ -9,6 +11,7 @@ import Redis from 'ioredis'
 import type P from 'pino'
 import { pino } from 'pino'
 
+import { PermissionConsumer } from '../modules/users/consumers/PermissionConsumer'
 import { DeleteOldUsersJob } from '../modules/users/jobs/DeleteOldUsersJob'
 import { ProcessLogFilesJob } from '../modules/users/jobs/ProcessLogFilesJob'
 import { SendEmailsJob } from '../modules/users/jobs/SendEmailsJob'
@@ -16,17 +19,15 @@ import { ConfigStore } from '../modules/users/repositories/ConfigStore'
 import { UrlCache } from '../modules/users/repositories/UrlCache'
 import { UserCache } from '../modules/users/repositories/UserCache'
 import { UserRepository } from '../modules/users/repositories/UserRepository'
+import { PermissionsService } from '../modules/users/services/PermissionsService'
 import { UserService } from '../modules/users/services/UserService'
 
+import { AmqpConnectionDisposer } from './amqp/AmqpConnectionDisposer'
+import { ConsumerErrorResolver } from './amqp/ConsumerErrorResolver'
 import type { Config } from './config'
 import { getConfig } from './config'
+import type { ErrorResolver } from './errors/ErrorResolver'
 import type { ErrorReporter } from './errors/errorReporter'
-import { Connection } from 'amqplib'
-import { InternalError } from '@lokalise/node-core'
-import { ErrorResolver } from './errors/ErrorResolver'
-import { ConsumerErrorResolver } from './amqp/ConsumerErrorResolver'
-import { PermissionsService } from '../modules/users/services/PermissionsService'
-import { PermissionConsumer } from "../modules/users/consumers/PermissionConsumer";
 
 export type ExternalDependencies = {
   app?: FastifyInstance
@@ -111,6 +112,12 @@ export function registerDependencies(
     consumerErrorResolver: asFunction(() => {
       return new ConsumerErrorResolver()
     }),
+    amqpConnectionDisposer: asClass(AmqpConnectionDisposer, {
+      dispose: (rabbitMqDisposer) => {
+        return rabbitMqDisposer.close()
+      },
+      lifetime: Lifetime.SINGLETON,
+    }),
 
     config: asFunction(() => {
       return getConfig()
@@ -176,6 +183,7 @@ export interface Dependencies {
   errorReporter: ErrorReporter
   consumerErrorResolver: ErrorResolver
   permissionConsumer: PermissionConsumer
+  amqpConnectionDisposer: AmqpConnectionDisposer
 }
 
 declare module '@fastify/awilix' {

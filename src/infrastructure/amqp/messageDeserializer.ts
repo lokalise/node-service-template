@@ -1,9 +1,9 @@
+import type { Either } from '@lokalise/node-core'
 import type { Message } from 'amqplib'
 import type { ZodType } from 'zod'
 
 import type { ConsumerErrorResolver } from './ConsumerErrorResolver'
-import { Either } from '@lokalise/node-core'
-import { AmqpMessageInvalidFormat, AmqpValidationError } from './amqpErrors'
+import type { AmqpMessageInvalidFormat, AmqpValidationError } from './amqpErrors'
 
 export const deserializeMessage = <T>(
   message: Message,

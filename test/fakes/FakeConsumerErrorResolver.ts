@@ -1,5 +1,4 @@
 import { ConsumerErrorResolver } from '../../src/infrastructure/amqp/ConsumerErrorResolver'
-import { InternalError } from '@lokalise/node-core'
 
 export class FakeConsumerErrorResolver extends ConsumerErrorResolver {
   public handleErrorCallsCount: number

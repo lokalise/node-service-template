@@ -1,10 +1,10 @@
-import { deserializeMessage } from './messageDeserializer'
-import { Message } from 'amqplib'
-import {
-  PERMISSIONS_MESSAGE_SCHEMA,
-  PERMISSIONS_MESSAGE_TYPE,
-} from '../../modules/users/consumers/userConsumerSchemas'
+import type { Message } from 'amqplib'
+
+import type { PERMISSIONS_MESSAGE_TYPE } from '../../modules/users/consumers/userConsumerSchemas'
+import { PERMISSIONS_MESSAGE_SCHEMA } from '../../modules/users/consumers/userConsumerSchemas'
+
 import { ConsumerErrorResolver } from './ConsumerErrorResolver'
+import { deserializeMessage } from './messageDeserializer'
 
 describe('messageDeserializer', () => {
   it('deserializes valid JSON', () => {

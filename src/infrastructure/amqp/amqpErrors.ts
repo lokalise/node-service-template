@@ -1,5 +1,6 @@
 import { InternalError } from '@lokalise/node-core'
-import { CommonErrorParams } from '../errors/publicErrors'
+
+import type { CommonErrorParams } from '../errors/publicErrors'
 
 export class AmqpMessageInvalidFormat extends InternalError {
   constructor(params: CommonErrorParams) {

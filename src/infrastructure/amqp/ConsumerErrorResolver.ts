@@ -1,9 +1,10 @@
+import { InternalError } from '@lokalise/node-core'
+import { ZodError } from 'zod'
+
+import type { ErrorResolver } from '../errors/ErrorResolver'
 import { isStandardizedError } from '../typeUtils'
 
 import { AmqpMessageInvalidFormat, AmqpValidationError } from './amqpErrors'
-import { ErrorResolver } from '../errors/ErrorResolver'
-import { InternalError } from '@lokalise/node-core'
-import { ZodError } from 'zod'
 
 export class ConsumerErrorResolver implements ErrorResolver {
   public processError(error: unknown): InternalError {
