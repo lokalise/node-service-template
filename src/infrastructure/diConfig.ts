@@ -23,8 +23,9 @@ import { getConfig } from './config'
 import type { ErrorReporter } from './errors/errorReporter'
 import { Connection } from 'amqplib'
 import { InternalError } from '@lokalise/node-core'
-import { ErrorProcessor } from './errors/ErrorProcessor'
-import { ConsumerErrorProcessor } from './amqp/ConsumerErrorProcessor'
+import { ErrorResolver } from './errors/ErrorResolver'
+import { ConsumerErrorResolver } from './amqp/ConsumerErrorResolver'
+import { PermissionsService } from '../modules/users/services/PermissionsService'
 
 export type ExternalDependencies = {
   app?: FastifyInstance
@@ -106,8 +107,8 @@ export function registerDependencies(
         lifetime: Lifetime.SINGLETON,
       },
     ),
-    consumerErrorProcessor: asFunction(() => {
-      return new ConsumerErrorProcessor()
+    consumerErrorResolver: asFunction(() => {
+      return new ConsumerErrorResolver()
     }),
 
     config: asFunction(() => {
@@ -119,6 +120,8 @@ export function registerDependencies(
     userCache: asClass(UserCache, SINGLETON_CONFIG),
     urlCache: asClass(UrlCache, SINGLETON_CONFIG),
     configStore: asClass(ConfigStore, SINGLETON_CONFIG),
+
+    permissionsService: asClass(PermissionsService, SINGLETON_CONFIG),
 
     processLogFilesJob: asClass(ProcessLogFilesJob, SINGLETON_CONFIG),
     deleteOldUsersJob: asClass(DeleteOldUsersJob, SINGLETON_CONFIG),
@@ -163,11 +166,13 @@ export interface Dependencies {
   urlCache: UrlCache
   configStore: ConfigStore
 
+  permissionsService: PermissionsService
+
   // vendor-specific dependencies
   newRelicBackgroundTransactionManager: NewRelicTransactionManager
 
   errorReporter: ErrorReporter
-  consumerErrorProcessor: ErrorProcessor
+  consumerErrorResolver: ErrorResolver
 }
 
 declare module '@fastify/awilix' {

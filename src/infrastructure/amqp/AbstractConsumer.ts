@@ -34,10 +34,10 @@ export abstract class AbstractConsumer<MessagePayloadType> implements Consumer {
 
   constructor(
     params: ConsumerParams<MessagePayloadType>,
-    { amqpConnection, consumerErrorProcessor }: Dependencies,
+    { amqpConnection, consumerErrorResolver }: Dependencies,
   ) {
     this.connection = amqpConnection
-    this.errorHandler = consumerErrorProcessor
+    this.errorHandler = consumerErrorResolver
     this.isShuttingDown = false
     this.queueName = params.queueName
     this.messageSchema = params.messageSchema
