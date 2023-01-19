@@ -31,12 +31,20 @@ import {
 import type { ZodTypeProvider } from 'fastify-type-provider-zod'
 import type pino from 'pino'
 
-import { getConfig, isDevelopment, isProduction, isTest } from './infrastructure/config'
+import { resolveAmqpConnection } from './infrastructure/amqp/amqpConnectionResolver'
+import {
+  getAmqpConfig,
+  getConfig,
+  isDevelopment,
+  isProduction,
+  isTest,
+} from './infrastructure/config'
 import type { DependencyOverrides } from './infrastructure/diConfig'
 import { registerDependencies } from './infrastructure/diConfig'
 import { errorHandler } from './infrastructure/errors/errorHandler'
 import { resolveGlobalErrorLogObject } from './infrastructure/errors/globalErrorHandler'
 import { resolveLoggerConfiguration } from './infrastructure/logger'
+import { getConsumers } from './modules/consumers'
 import { registerJobs } from './modules/jobs'
 import { getRoutes } from './modules/routes'
 import { healthcheckPlugin } from './plugins/healthcheckPlugin'
@@ -50,6 +58,7 @@ export type ConfigOverrides = {
     public: Secret
     private: Secret
   }
+  amqpEnabled?: boolean
 }
 
 export type RequestContext = {
@@ -155,10 +164,19 @@ export async function getApp(
 
   app.setErrorHandler(errorHandler)
 
+  /**
+   * Running consumers introduces additional overhead and fragility when running tests,
+   * so we avoid doing that unless we intend to actually use them
+   */
+  const isAmqpEnabled = isProduction() || configOverrides.amqpEnabled
+  const amqpConfig = getAmqpConfig()
+  const amqpConnection = isAmqpEnabled ? await resolveAmqpConnection(amqpConfig) : undefined
+
   registerDependencies(
     configOverrides.diContainer ?? diContainer,
     {
       app: app,
+      amqpConnection: amqpConnection,
       logger: app.log,
     },
     dependencyOverrides,
@@ -220,6 +238,16 @@ export async function getApp(
       app.log.info('Background jobs registered')
     } else {
       app.log.info('Skip registering background jobs, test environment')
+    }
+
+    if (isAmqpEnabled) {
+      // This is needed to ensure it gets initialized
+      app.diContainer.cradle.amqpConnectionDisposer
+
+      const consumers = getConsumers(app.diContainer.cradle)
+      for (const consumer of consumers) {
+        void consumer.consume()
+      }
     }
   })
 

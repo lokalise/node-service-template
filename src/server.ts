@@ -14,7 +14,7 @@ import {
 
 async function start() {
   const config = executeAndHandleGlobalErrors<Config>(getConfig)
-  const app = await getApp()
+  const app = await getApp({ amqpEnabled: true })
 
   try {
     await app.listen({

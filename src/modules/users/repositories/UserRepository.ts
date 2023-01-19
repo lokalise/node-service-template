@@ -26,6 +26,17 @@ export class UserRepository {
     return { result: user }
   }
 
+  async getUsers(userIds: number[]): Promise<User[]> {
+    const result = await this.prisma.user.findMany({
+      where: {
+        id: {
+          in: userIds,
+        },
+      },
+    })
+    return result
+  }
+
   async createUser(user: CreateUserRow): Promise<User> {
     const createdUser = await this.prisma.user.create({
       data: user,

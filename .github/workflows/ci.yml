@@ -20,10 +20,10 @@ jobs:
           npm install --ignore-scripts
           npx prisma generate
 
-      - name: DB start
+      - name: Docker start
         run: |
           docker compose up waitmysql
-          docker compose up -d redis
+          docker compose up -d redis rabbitmq
 
       - name: Build TS
         run: |
