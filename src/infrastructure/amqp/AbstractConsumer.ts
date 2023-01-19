@@ -31,7 +31,7 @@ export abstract class AbstractConsumer<MessagePayloadType extends CommonMessage>
   protected readonly connection: Connection
   // @ts-ignore
   protected channel: Channel
-  protected readonly errorHandler: ConsumerErrorResolver
+  protected readonly errorResolver: ConsumerErrorResolver
   private readonly newRelicBackgroundTransactionManager
   private isShuttingDown: boolean
 
@@ -42,7 +42,7 @@ export abstract class AbstractConsumer<MessagePayloadType extends CommonMessage>
     { amqpConnection, consumerErrorResolver, newRelicBackgroundTransactionManager }: Dependencies,
   ) {
     this.connection = amqpConnection
-    this.errorHandler = consumerErrorResolver
+    this.errorResolver = consumerErrorResolver
     this.isShuttingDown = false
     this.queueName = params.queueName
     this.messageSchema = params.messageSchema
@@ -90,7 +90,11 @@ export abstract class AbstractConsumer<MessagePayloadType extends CommonMessage>
       return ABORT_EARLY_EITHER
     }
 
-    const deserializationResult = deserializeMessage(message, this.messageSchema, this.errorHandler)
+    const deserializationResult = deserializeMessage(
+      message,
+      this.messageSchema,
+      this.errorResolver,
+    )
 
     if (
       deserializationResult.error instanceof AmqpValidationError ||
