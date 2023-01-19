@@ -6,6 +6,7 @@ import type { Dependencies } from '../diConfig'
 import { globalLogger, resolveGlobalErrorLogObject } from '../errors/globalErrorHandler'
 
 import type { ConsumerErrorResolver } from './ConsumerErrorResolver'
+import type { CommonMessage } from './MessageTypes'
 import { AmqpMessageInvalidFormat, AmqpValidationError } from './amqpErrors'
 import { deserializeMessage } from './messageDeserializer'
 
@@ -18,30 +19,34 @@ const ABORT_EARLY_EITHER: Either<'abort', never> = {
   error: 'abort',
 }
 
-export type ConsumerParams<MessagePayloadType> = {
+export type ConsumerParams<MessagePayloadType extends CommonMessage> = {
   queueName: string
   messageSchema: ZodSchema<MessagePayloadType>
 }
 
-export abstract class AbstractConsumer<MessagePayloadType> implements Consumer {
+export abstract class AbstractConsumer<MessagePayloadType extends CommonMessage>
+  implements Consumer
+{
   protected readonly queueName: string
   protected readonly connection: Connection
   // @ts-ignore
   protected channel: Channel
   protected readonly errorHandler: ConsumerErrorResolver
+  private readonly newRelicBackgroundTransactionManager
   private isShuttingDown: boolean
 
   private messageSchema: ZodSchema<MessagePayloadType>
 
   constructor(
     params: ConsumerParams<MessagePayloadType>,
-    { amqpConnection, consumerErrorResolver }: Dependencies,
+    { amqpConnection, consumerErrorResolver, newRelicBackgroundTransactionManager }: Dependencies,
   ) {
     this.connection = amqpConnection
     this.errorHandler = consumerErrorResolver
     this.isShuttingDown = false
     this.queueName = params.queueName
     this.messageSchema = params.messageSchema
+    this.newRelicBackgroundTransactionManager = newRelicBackgroundTransactionManager
   }
 
   private async init() {
@@ -115,13 +120,15 @@ export abstract class AbstractConsumer<MessagePayloadType> implements Consumer {
         return
       }
 
-      const messagePayload = this.deserializeMessage(message)
-      if (messagePayload.error === 'abort') {
+      const deserializedMessage = this.deserializeMessage(message)
+      if (deserializedMessage.error === 'abort') {
         this.channel.nack(message, false, false)
         return
       }
+      const transactionSpanId = `queue_${this.queueName}:${deserializedMessage.result.messageType}`
 
-      this.processMessage(messagePayload.result)
+      this.newRelicBackgroundTransactionManager.start(transactionSpanId)
+      this.processMessage(deserializedMessage.result)
         .then((result) => {
           if (result.error === 'retryLater') {
             this.channel.nack(message, false, true)
@@ -136,6 +143,9 @@ export abstract class AbstractConsumer<MessagePayloadType> implements Consumer {
           this.channel.nack(message, false, true)
           const logObject = resolveGlobalErrorLogObject(err)
           globalLogger.error(logObject)
+        })
+        .finally(() => {
+          this.newRelicBackgroundTransactionManager.stop(transactionSpanId)
         })
     })
   }

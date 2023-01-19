@@ -9,7 +9,7 @@ import { deserializeMessage } from './messageDeserializer'
 describe('messageDeserializer', () => {
   it('deserializes valid JSON', () => {
     const messagePayload: PERMISSIONS_MESSAGE_TYPE = {
-      operation: 'add',
+      messageType: 'add',
       userIds: [1],
       permissions: ['perm'],
     }

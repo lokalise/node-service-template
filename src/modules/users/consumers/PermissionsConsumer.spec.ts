@@ -92,7 +92,7 @@ describe('PermissionsConsumer', () => {
       void channel.sendToQueue(
         PermissionConsumer.QUEUE_NAME,
         buildQueueMessage({
-          operation: 'add',
+          messageType: 'add',
           userIds,
           permissions: perms,
         } satisfies PERMISSIONS_MESSAGE_TYPE),
@@ -117,7 +117,7 @@ describe('PermissionsConsumer', () => {
         PermissionConsumer.QUEUE_NAME,
         buildQueueMessage({
           userIds,
-          operation: 'add',
+          messageType: 'add',
           permissions: perms,
         } satisfies PERMISSIONS_MESSAGE_TYPE),
       )
@@ -151,7 +151,7 @@ describe('PermissionsConsumer', () => {
         PermissionConsumer.QUEUE_NAME,
         buildQueueMessage({
           userIds,
-          operation: 'add',
+          messageType: 'add',
           permissions: perms,
         } satisfies PERMISSIONS_MESSAGE_TYPE),
       )
@@ -178,7 +178,7 @@ describe('PermissionsConsumer', () => {
       channel.sendToQueue(
         PermissionConsumer.QUEUE_NAME,
         buildQueueMessage({
-          operation: 'add',
+          messageType: 'add',
           permissions: perms,
         } as PERMISSIONS_MESSAGE_TYPE),
       )
