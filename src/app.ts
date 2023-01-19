@@ -164,6 +164,10 @@ export async function getApp(
 
   app.setErrorHandler(errorHandler)
 
+  /**
+   * Running consumers introduces additional overhead and fragility when running tests,
+   * so we avoid doing that unless we intend to actually use them
+   */
   const isAmqpEnabled = isProduction() || configOverrides.amqpEnabled
   const amqpConfig = getAmqpConfig()
   const amqpConnection = isAmqpEnabled ? await resolveAmqpConnection(amqpConfig) : undefined
