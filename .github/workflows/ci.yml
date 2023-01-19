@@ -22,7 +22,8 @@ jobs:
 
       - name: Docker start
         run: |
-          npm run docker:start:dev        
+          docker compose up waitmysql
+          docker compose up -d redis rabbitmq
 
       - name: Build TS
         run: |
