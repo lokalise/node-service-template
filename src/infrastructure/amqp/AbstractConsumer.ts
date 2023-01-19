@@ -49,6 +49,10 @@ export abstract class AbstractConsumer<MessagePayloadType extends CommonMessage>
     this.newRelicBackgroundTransactionManager = newRelicBackgroundTransactionManager
   }
 
+  abstract processMessage(
+    messagePayload: MessagePayloadType,
+  ): Promise<Either<'retryLater', 'success'>>
+
   private async init() {
     this.isShuttingDown = false
 
@@ -81,7 +85,7 @@ export abstract class AbstractConsumer<MessagePayloadType extends CommonMessage>
     })
   }
 
-  protected deserializeMessage(message: Message | null): Either<'abort', MessagePayloadType> {
+  private deserializeMessage(message: Message | null): Either<'abort', MessagePayloadType> {
     if (message === null) {
       return ABORT_EARLY_EITHER
     }
@@ -104,10 +108,6 @@ export abstract class AbstractConsumer<MessagePayloadType extends CommonMessage>
       result: deserializationResult.result,
     }
   }
-
-  abstract processMessage(
-    messagePayload: MessagePayloadType,
-  ): Promise<Either<'retryLater', 'success'>>
 
   async consume() {
     await this.init()
