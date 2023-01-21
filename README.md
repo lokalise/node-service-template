@@ -102,8 +102,8 @@ npm run db:update-client
 docker compose up -d
 ```
 
-6. To register local dev requests in newrelic please use:
+6. To run application:
 
 ```shell
-NEW_RELIC_APP_NAME=dev.yourapp.yourdomain.com NEW_RELIC_LICENSE_KEY=<license_key> npm run start:dev
+npm run start:dev
 ```

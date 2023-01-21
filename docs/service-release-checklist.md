@@ -4,15 +4,15 @@ This document aims to provide a checklist for determining whether service is mat
 
 ## Checklist
 
-Legend: `M` - Mandatory, `R` - Recommended, `O` - Optional
+Legend: `M` - Mandatory, `R` - Recommended
 
 ### Documentation
 
-- `R`: README.md in the repository:
+- `M`: README.md in the repository:
   * service description, ownership, links to documentation,
     build and deployment instructions, configuration variables, healthchecks, etc
 - `R`: Architectural diagram for the service
-- `O`: SLI/SLO/SLA definitions (at least service criticality level: P1/2/3)
+- `R`: SLI/SLO/SLA definitions (at least service criticality level: P1/2/3)
 
 ### Build and release pipeline
 
