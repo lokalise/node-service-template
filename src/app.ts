@@ -59,6 +59,7 @@ export type ConfigOverrides = {
     private: Secret
   }
   amqpEnabled?: boolean
+  healthchecksEnabled?: boolean
 }
 
 export type RequestContext = {
@@ -253,7 +254,7 @@ export async function getApp(
 
   try {
     await app.ready()
-    if (!isTest()) {
+    if (!isTest() && configOverrides.healthchecksEnabled !== false) {
       await runAllHealthchecks(app.diContainer.cradle)
     }
   } catch (err) {
