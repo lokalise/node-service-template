@@ -1,6 +1,6 @@
 import type { Redis } from 'ioredis'
 
-import { testRedisHealth } from './plugins/healthcheckPlugin'
+import { testRedisHealth } from './infrastructure/healthchecks'
 
 const createRedisMock = (pingLatency: number, response = 'PONG') =>
   ({
