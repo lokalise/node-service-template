@@ -1,4 +1,3 @@
-/* istanbul ignore file */
 import type http from 'http'
 
 import fastifyAuth from '@fastify/auth'
@@ -43,6 +42,7 @@ import type { DependencyOverrides } from './infrastructure/diConfig'
 import { registerDependencies } from './infrastructure/diConfig'
 import { errorHandler } from './infrastructure/errors/errorHandler'
 import { resolveGlobalErrorLogObject } from './infrastructure/errors/globalErrorHandler'
+import { runAllHealthchecks } from './infrastructure/healthchecks'
 import { resolveLoggerConfiguration } from './infrastructure/logger'
 import { getConsumers } from './modules/consumers'
 import { registerJobs } from './modules/jobs'
@@ -59,6 +59,7 @@ export type ConfigOverrides = {
     private: Secret
   }
   amqpEnabled?: boolean
+  healthchecksEnabled?: boolean
 }
 
 export type RequestContext = {
@@ -253,6 +254,9 @@ export async function getApp(
 
   try {
     await app.ready()
+    if (!isTest() && configOverrides.healthchecksEnabled !== false) {
+      await runAllHealthchecks(app.diContainer.cradle)
+    }
   } catch (err) {
     app.log.error('Error while initializing app: ', err)
     throw err
