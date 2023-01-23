@@ -6,12 +6,12 @@
 
 It comes with the following out-of-the-box:
 
-* fastify-based general application skeleton;
+* [fastify](https://www.fastify.io/docs/latest/) as a basis for the general web application skeleton;
 * Modular, domain-driven structure that encourages separation of concerns;
 * Server/app separation, for convenient bootstrapping in e2e tests;
 * [Global error handler](./src/infrastructure/errors/errorHandler.ts);
 * JSON-based, single line standardized [logging](./src/infrastructure/logger.ts);
-* Populates `req.id` for incoming requests based on `x-request-id` header, or generates new UUID if none is set.
+* Automatic population of `req.id` for incoming requests based on `x-request-id` header, or generation of new UUID if none is set, for the purposes of distributed tracing.
 
 Mechanisms:
 
@@ -102,8 +102,8 @@ npm run db:update-client
 docker compose up -d
 ```
 
-6. To register local dev requests in newrelic please use:
+6. To run application:
 
 ```shell
-NEW_RELIC_APP_NAME=dev.yourapp.yourdomain.com NEW_RELIC_LICENSE_KEY=<license_key> npm run start:dev
+npm run start:dev
 ```
