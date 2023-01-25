@@ -52,6 +52,7 @@ export type AmqpConfig = {
   username: string
   password: string
   vhost: string
+  useTls: boolean
 }
 
 export type AppConfig = {
@@ -109,6 +110,7 @@ export function getAmqpConfig(): AmqpConfig {
     username: configScope.getMandatory('AMQP_USERNAME'),
     password: configScope.getMandatory('AMQP_PASSWORD'),
     vhost: configScope.getOptionalNullable('AMQP_VHOST', ''),
+    useTls: configScope.getOptionalBoolean('AMQP_USE_TLS', true),
   }
 }
 
