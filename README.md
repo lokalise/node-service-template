@@ -107,3 +107,13 @@ docker compose up -d
 ```shell
 npm run start:dev
 ```
+
+7. Before opening a PR, remember to check for vulnerabitilies and address them before merging :pray:
+
+```shell
+npm run audit 
+```
+
+- To get more information, and then `npm audit fix --force` to attempt resolution.
+
+
