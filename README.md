@@ -108,7 +108,7 @@ docker compose up -d
 npm run start:dev
 ```
 
-7. Before opening a PR, remember to check for vulnerabitilies and address them before merging :pray:
+7. Check that current dependencies don't have recent vulnerabilities, otherwise address them before merging :pray: :thank-you:
 
 ```shell
 npm run audit 
