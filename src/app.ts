@@ -59,6 +59,7 @@ export type ConfigOverrides = {
     private: Secret
   }
   amqpEnabled?: boolean
+  jobsEnabled?: boolean
   healthchecksEnabled?: boolean
 }
 
@@ -233,12 +234,12 @@ export async function getApp(
     })
 
     // Register background jobs
-    if (!isTest()) {
+    if (configOverrides.jobsEnabled !== false && !isTest()) {
       app.log.info('Start registering background jobs')
       registerJobs(app)
       app.log.info('Background jobs registered')
     } else {
-      app.log.info('Skip registering background jobs, test environment')
+      app.log.info('Skip registering background jobs')
     }
 
     if (isAmqpEnabled) {
