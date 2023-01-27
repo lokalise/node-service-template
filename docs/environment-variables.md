@@ -46,7 +46,7 @@ Legend:
 - (M) `AMQP_USERNAME` - AMQP broker username
 - (M) `AMQP_PASSWORD` - AMQP broker password
 - (O) `AMQP_VHOST` - AMQP broker vhost
-- (O) `AMQP_USE_TLS` - whether to use https connection for AMQP broker (`true)
+- (O) `AMQP_USE_TLS` - whether to use https connection for AMQP broker (`true`)
 
 ## new relic
 
