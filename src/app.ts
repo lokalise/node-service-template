@@ -74,11 +74,12 @@ export async function getApp(
   const config = getConfig()
   const appConfig = config.app
   const loggerConfig = resolveLoggerConfiguration(appConfig)
+  const enableRequestLogging = ['debug', 'trace'].includes(appConfig.logLevel)
 
   const app = fastify<http.Server, http.IncomingMessage, http.ServerResponse, pino.Logger>({
     ...getRequestIdFastifyAppConfig(),
     logger: loggerConfig,
-    disableRequestLogging: !isDevelopment(),
+    disableRequestLogging: !enableRequestLogging,
   })
 
   app.setValidatorCompiler(validatorCompiler)
