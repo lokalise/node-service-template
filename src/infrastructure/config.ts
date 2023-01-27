@@ -126,7 +126,7 @@ export function getRedisConfig(): RedisConfig {
     port: configScope.getMandatoryInteger('REDIS_PORT'),
     username: configScope.getOptionalNullable('REDIS_USERNAME', undefined),
     password: configScope.getOptionalNullable('REDIS_PASSWORD', undefined),
-    useTls: configScope.getOptionalBoolean('REDIS_USE_TLS', false),
+    useTls: configScope.getOptionalBoolean('REDIS_USE_TLS', true),
   }
 }
 
@@ -137,7 +137,7 @@ export function getSchedulerConfig(): RedisConfig {
     port: configScope.getMandatoryInteger('SCHEDULER_REDIS_PORT'),
     username: configScope.getOptionalNullable('SCHEDULER_REDIS_USERNAME', undefined),
     password: configScope.getOptionalNullable('SCHEDULER_REDIS_PASSWORD', undefined),
-    useTls: configScope.getOptionalBoolean('REDIS_USE_TLS', false),
+    useTls: configScope.getOptionalBoolean('REDIS_USE_TLS', true),
   }
 }
 
