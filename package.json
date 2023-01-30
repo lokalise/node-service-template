@@ -62,7 +62,7 @@
   },
   "devDependencies": {
     "@types/amqplib": "^0.10.1",
-    "@types/jest": "^29.2.6",
+    "@types/jest": "^29.4.0",
     "@types/jsonwebtoken": "^9.0.1",
     "@types/newrelic": "^9.4.0",
     "@types/node": "^18.11.18",
@@ -75,7 +75,7 @@
     "eslint-plugin-import": "^2.27.5",
     "eslint-plugin-jest": "^27.2.1",
     "eslint-plugin-prettier": "^4.2.1",
-    "jest": "^29.3.1",
+    "jest": "^29.4.1",
     "oas-validator": "^5.0.8",
     "prettier": "^2.8.3",
     "prisma": "^4.9.0",
