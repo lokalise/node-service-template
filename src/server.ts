@@ -7,10 +7,12 @@ import type { Config } from './infrastructure/config'
 import { getConfig } from './infrastructure/config'
 import {
   executeAndHandleGlobalErrors,
+  globalLogger,
   resolveGlobalErrorLogObject,
 } from './infrastructure/errors/globalErrorHandler'
 
 async function start() {
+  globalLogger.info('Starting application...')
   const config = executeAndHandleGlobalErrors<Config>(getConfig)
   const app = await getApp({ amqpEnabled: true })
 

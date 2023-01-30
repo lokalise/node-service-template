@@ -31,3 +31,19 @@ export function executeAndHandleGlobalErrors<T>(operation: () => T) {
     process.exit(1)
   }
 }
+
+export async function executeAsyncAndHandleGlobalErrors<T>(
+  operation: () => Promise<T>,
+  stopOnError = true,
+) {
+  try {
+    const result = await operation()
+    return result
+  } catch (err) {
+    const logObject = resolveGlobalErrorLogObject(err)
+    globalLogger.error(logObject)
+    if (stopOnError) {
+      process.exit(1)
+    }
+  }
+}

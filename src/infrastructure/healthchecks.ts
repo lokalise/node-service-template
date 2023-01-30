@@ -5,6 +5,7 @@ import type { Redis } from 'ioredis'
 import { runWithTimeout, TIMEOUT } from '../utils/timeoutUtils'
 
 import type { Dependencies } from './diConfig'
+import { executeAsyncAndHandleGlobalErrors } from './errors/globalErrorHandler'
 
 const HEALTHCHECK_ERROR_CODE = 'HEALTHCHECK_ERROR'
 const REDIS_HEALTHCHECK_TIMEOUT = 10 * 1000
@@ -35,5 +36,8 @@ export async function testDbHealth(prisma: PrismaClient) {
 }
 
 export async function runAllHealthchecks(dependencies: Dependencies) {
-  await Promise.all([testDbHealth(dependencies.prisma), testRedisHealth(dependencies.redis)])
+  return executeAsyncAndHandleGlobalErrors(
+    () => Promise.all([testDbHealth(dependencies.prisma), testRedisHealth(dependencies.redis)]),
+    false,
+  )
 }
