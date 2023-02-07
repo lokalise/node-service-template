@@ -14,8 +14,8 @@
     "lint": "eslint . --ext .ts",
     "lint:fix": "eslint .  --ext .ts --fix",
     "format": "prettier --write . && npx prisma format",
-    "start:dev": "cross-env NODE_ENV=development NEW_RELIC_ENABLED=false ts-node src/server.ts",
-    "start:prod": "tsc && cross-env NODE_ENV=production node dist/src/server.js",
+    "start:dev": "cross-env NODE_ENV=development ts-node -r dotenv/config -r newrelic src/server.ts",
+    "start:prod": "tsc && cross-env NODE_ENV=production node -r newrelic dist/src/server.js",
     "docker:start:dev": "docker compose up -d",
     "docker:stop:dev": "docker compose down",
     "db:start:dev": "docker compose up -d mysql redis",
@@ -23,8 +23,8 @@
     "db:migration:dev": "npx prisma migrate dev",
     "db:migration:run": "npx prisma migrate deploy",
     "db:update-client": "npx prisma generate",
-    "spec:generate": "cross-env NODE_ENV=development ts-node scripts/generateOpenApi.ts && npm run spec:validate",
-    "spec:validate": "cross-env NODE_ENV=development ts-node scripts/validateOpenApi.ts",
+    "spec:generate": "cross-env NODE_ENV=development ts-node -r dotenv/config scripts/generateOpenApi.ts && npm run spec:validate",
+    "spec:validate": "cross-env NODE_ENV=development ts-node -r dotenv/config scripts/validateOpenApi.ts",
     "prepublishOnly": "npm run build"
   },
   "dependencies": {
