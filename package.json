@@ -46,7 +46,7 @@
     "fastify": "^4.12.0",
     "fastify-custom-healthcheck": "^3.1.0",
     "fastify-graceful-shutdown": "^3.4.0",
-    "fastify-metrics": "^10.0.2",
+    "fastify-metrics": "^10.0.3",
     "fastify-no-icon": "^6.0.0",
     "fastify-type-provider-zod": "^1.1.9",
     "ioredis": "^5.3.1",
