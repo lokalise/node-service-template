@@ -25,7 +25,9 @@
     "db:update-client": "npx prisma generate",
     "spec:generate": "cross-env NODE_ENV=development ts-node scripts/generateOpenApi.ts && npm run spec:validate",
     "spec:validate": "cross-env NODE_ENV=development ts-node scripts/validateOpenApi.ts",
-    "prepublishOnly": "npm run build"
+    "prepublishOnly": "npm run build",
+    "prepush": "npm run lint && npm run audit",
+    "audit": "better-npm-audit audit"
   },
   "dependencies": {
     "@fastify/auth": "^4.2.0",
@@ -61,6 +63,7 @@
     "zod": "^3.20.6"
   },
   "devDependencies": {
+    "better-npm-audit": "^3.7.3",
     "@types/amqplib": "^0.10.1",
     "@types/jest": "^29.4.0",
     "@types/jsonwebtoken": "^9.0.1",

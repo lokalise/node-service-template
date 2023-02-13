@@ -107,3 +107,13 @@ docker compose up -d
 ```shell
 npm run start:dev
 ```
+
+7. Check that current dependencies don't have recent vulnerabilities, otherwise address them before merging :pray: :thank-you:
+
+```shell
+npm run audit 
+```
+
+- To get more information, and then `npm audit fix --force` to attempt resolution.
+
+
