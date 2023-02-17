@@ -11,6 +11,7 @@ import Redis from 'ioredis'
 import type P from 'pino'
 import { pino } from 'pino'
 
+import { FakeStoreApiClient } from '../integrations/FakeStoreApiClient'
 import { PermissionConsumer } from '../modules/users/consumers/PermissionConsumer'
 import { DeleteOldUsersJob } from '../modules/users/jobs/DeleteOldUsersJob'
 import { ProcessLogFilesJob } from '../modules/users/jobs/ProcessLogFilesJob'
@@ -145,6 +146,8 @@ export function registerDependencies(
         report: (report) => reportErrorToBugsnag(report),
       } satisfies ErrorReporter
     }),
+
+    fakeStoreApiClient: asClass(FakeStoreApiClient, SINGLETON_CONFIG),
   }
   diContainer.register(diConfig)
 
@@ -184,6 +187,8 @@ export interface Dependencies {
   consumerErrorResolver: ErrorResolver
   permissionConsumer: PermissionConsumer
   amqpConnectionDisposer: AmqpConnectionDisposer
+
+  fakeStoreApiClient: FakeStoreApiClient
 }
 
 declare module '@fastify/awilix' {
