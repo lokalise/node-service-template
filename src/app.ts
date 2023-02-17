@@ -1,4 +1,3 @@
-/* istanbul ignore file */
 import type http from 'http'
 
 import fastifyAuth from '@fastify/auth'
@@ -43,6 +42,7 @@ import type { DependencyOverrides } from './infrastructure/diConfig'
 import { registerDependencies } from './infrastructure/diConfig'
 import { errorHandler } from './infrastructure/errors/errorHandler'
 import { resolveGlobalErrorLogObject } from './infrastructure/errors/globalErrorHandler'
+import { runAllHealthchecks } from './infrastructure/healthchecks'
 import { resolveLoggerConfiguration } from './infrastructure/logger'
 import { getConsumers } from './modules/consumers'
 import { registerJobs } from './modules/jobs'
@@ -59,6 +59,8 @@ export type ConfigOverrides = {
     private: Secret
   }
   amqpEnabled?: boolean
+  jobsEnabled?: boolean
+  healthchecksEnabled?: boolean
 }
 
 export type RequestContext = {
@@ -73,11 +75,12 @@ export async function getApp(
   const config = getConfig()
   const appConfig = config.app
   const loggerConfig = resolveLoggerConfiguration(appConfig)
+  const enableRequestLogging = ['debug', 'trace'].includes(appConfig.logLevel)
 
   const app = fastify<http.Server, http.IncomingMessage, http.ServerResponse, pino.Logger>({
     ...getRequestIdFastifyAppConfig(),
     logger: loggerConfig,
-    disableRequestLogging: !isDevelopment(),
+    disableRequestLogging: !enableRequestLogging,
   })
 
   app.setValidatorCompiler(validatorCompiler)
@@ -232,12 +235,12 @@ export async function getApp(
     })
 
     // Register background jobs
-    if (!isTest()) {
+    if (configOverrides.jobsEnabled !== false && !isTest()) {
       app.log.info('Start registering background jobs')
       registerJobs(app)
       app.log.info('Background jobs registered')
     } else {
-      app.log.info('Skip registering background jobs, test environment')
+      app.log.info('Skip registering background jobs')
     }
 
     if (isAmqpEnabled) {
@@ -253,6 +256,9 @@ export async function getApp(
 
   try {
     await app.ready()
+    if (!isTest() && configOverrides.healthchecksEnabled !== false) {
+      await runAllHealthchecks(app.diContainer.cradle)
+    }
   } catch (err) {
     app.log.error('Error while initializing app: ', err)
     throw err

@@ -52,6 +52,7 @@ export type AmqpConfig = {
   username: string
   password: string
   vhost: string
+  useTls: boolean
 }
 
 export type AppConfig = {
@@ -59,7 +60,6 @@ export type AppConfig = {
   bindAddress: string
   jwtPublicKey: string
   logLevel: 'fatal' | 'error' | 'warn' | 'info' | 'debug' | 'trace' | 'silent'
-  passwordSalt: string
   nodeEnv: 'production' | 'development' | 'test'
   appEnv: 'production' | 'development' | 'staging'
   appVersion: string
@@ -108,7 +108,8 @@ export function getAmqpConfig(): AmqpConfig {
     port: configScope.getMandatoryInteger('AMQP_PORT'),
     username: configScope.getMandatory('AMQP_USERNAME'),
     password: configScope.getMandatory('AMQP_PASSWORD'),
-    vhost: configScope.getOptionalNullable('AMQP_VHOST', ''),
+    vhost: configScope.getOptional('AMQP_VHOST', ''),
+    useTls: configScope.getOptionalBoolean('AMQP_USE_TLS', true),
   }
 }
 
@@ -125,7 +126,7 @@ export function getRedisConfig(): RedisConfig {
     port: configScope.getMandatoryInteger('REDIS_PORT'),
     username: configScope.getOptionalNullable('REDIS_USERNAME', undefined),
     password: configScope.getOptionalNullable('REDIS_PASSWORD', undefined),
-    useTls: configScope.getOptionalBoolean('REDIS_USE_TLS', false),
+    useTls: configScope.getOptionalBoolean('REDIS_USE_TLS', true),
   }
 }
 
@@ -136,16 +137,15 @@ export function getSchedulerConfig(): RedisConfig {
     port: configScope.getMandatoryInteger('SCHEDULER_REDIS_PORT'),
     username: configScope.getOptionalNullable('SCHEDULER_REDIS_USERNAME', undefined),
     password: configScope.getOptionalNullable('SCHEDULER_REDIS_PASSWORD', undefined),
-    useTls: configScope.getOptionalBoolean('REDIS_USE_TLS', false),
+    useTls: configScope.getOptionalBoolean('REDIS_USE_TLS', true),
   }
 }
 
 export function getAppConfig(): AppConfig {
   return {
-    port: configScope.getMandatoryInteger('APP_PORT'),
+    port: configScope.getOptionalInteger('APP_PORT', 3000),
     bindAddress: configScope.getMandatory('APP_BIND_ADDRESS'),
     jwtPublicKey: configScope.getMandatory('JWT_PUBLIC_KEY').replaceAll('||', '\n'),
-    passwordSalt: configScope.getMandatory('PASSWORD_SALT'),
     logLevel: configScope.getMandatoryOneOf('LOG_LEVEL', [
       'fatal',
       'error',
@@ -157,8 +157,8 @@ export function getAppConfig(): AppConfig {
     ]),
     nodeEnv: configScope.getMandatoryOneOf('NODE_ENV', ['production', 'development', 'test']),
     appEnv: configScope.getMandatoryOneOf('APP_ENV', ['production', 'development', 'staging']),
-    appVersion: configScope.getMandatory('APP_VERSION'),
-    gitCommitSha: configScope.getMandatory('GIT_COMMIT_SHA'),
+    appVersion: configScope.getOptional('APP_VERSION', 'VERSION_NOT_SET'),
+    gitCommitSha: configScope.getOptional('GIT_COMMIT_SHA', 'COMMIT_SHA_NOT_SET'),
   }
 }
 
