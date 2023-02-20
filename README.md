@@ -44,6 +44,7 @@ Scripts:
 
 * [Generate](./scripts/generateOpenApi.ts) OpenAPI specification from your route definitions;
 * [Validate](./scripts/validateOpenApi.ts) your OpenAPI specification.
+* [GenerateJwt](./scripts/generateJwt.ts) generate jwt for dev usage.
 
 Service template also comes with a curated set of plugins [installed](./src/app.ts):
 
@@ -107,3 +108,25 @@ docker compose up -d
 ```shell
 npm run start:dev
 ```
+
+### Create jwt for dev usage
+
+By default, all calls to the `node-template` app will require a valid JWT token.
+
+You have multiple options to ease your development:
+1. Comment `onRequest` hook for JWT verification [here](./src/plugins/jwtTokenPlugin.ts)
+2. Generate a valid JWT with provided [generateJwt](./scripts/generateJwt.ts) script
+
+#### Generate JWT script
+
+- Script requires public-private key pair encrypted with `RS256` algorithm.
+- Put generated keys [here](./scripts/keys), default file names are `jwtRS256.key` for private key and `jwtRS256.key.pub` 
+for public key
+- Copy your public key to `.env` file as a one line string
+- Run script script
+```schell
+npm run generateJwt
+```
+- Use token from the console in your requests
+
+- **Remember to not commit your keys to repository**
