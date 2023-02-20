@@ -49,6 +49,7 @@ import { registerJobs } from './modules/jobs'
 import { getRoutes } from './modules/routes'
 import { healthcheckPlugin } from './plugins/healthcheckPlugin'
 import { jwtTokenPlugin } from './plugins/jwtTokenPlugin'
+import { fastifyCors } from '@fastify/cors'
 
 const GRACEFUL_SHUTDOWN_TIMEOUT_IN_MSECS = 10000
 
@@ -85,6 +86,24 @@ export async function getApp(
 
   app.setValidatorCompiler(validatorCompiler)
   app.setSerializerCompiler(serializerCompiler)
+
+  // In production this should ideally be handled outside of application, e. g.
+  // on nginx or kubernetes level, but for local development it is convenient
+  // to have these headers set by application.
+  // If this service is never called from the browser, this entire block can be removed.
+  if (isDevelopment()) {
+    void app.register(fastifyCors, {
+      origin: '*',
+      credentials: true,
+      methods: ['GET', 'PUT', 'PATCH', 'POST', 'DELETE', 'OPTIONS'],
+      allowedHeaders: ['Origin', 'X-Requested-With', 'Accept', 'Content-Type', 'Authorization'],
+      exposedHeaders: [
+        'Access-Control-Allow-Origin',
+        'Access-Control-Allow-Methods',
+        'Access-Control-Allow-Headers',
+      ],
+    })
+  }
 
   void app.register(
     fastifyHelmet,
