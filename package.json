@@ -26,7 +26,7 @@
     "spec:generate": "cross-env NODE_ENV=development ts-node -r dotenv/config scripts/generateOpenApi.ts && npm run spec:validate",
     "spec:validate": "cross-env NODE_ENV=development ts-node -r dotenv/config scripts/validateOpenApi.ts",
     "prepublishOnly": "npm run build",
-    "generateJwt": "cross-env NODE_ENV=development ts-node scripts/generateJwt.ts"
+    "jwt:generate": "cross-env NODE_ENV=development ts-node scripts/generateJwt.ts"
   },
   "dependencies": {
     "@fastify/auth": "^4.2.0",

@@ -10,6 +10,7 @@ const sign = createSigner({ algorithm: 'RS256', key: privateKey })
 const verify = createVerifier({ key: publicKey })
 
 const token = sign({ claim: 'value' })
-console.log(`The token is: ${token}`)
+console.log(`Public key: \n${publicKey.replaceAll('\n', '||')}`)
+console.log(`JWT: \n${token}`)
 const payload = verify(token) as string
-console.log(`The verified payload is: ${JSON.stringify(payload)}`)
+console.log(`Verified payload: \n${JSON.stringify(payload)}`)
