@@ -124,7 +124,7 @@ You have multiple options to ease your development:
 for public key
 - Copy your public key to `.env` file as a one line string
 - Run script script
-```schell
+```shell
 npm run generateJwt
 ```
 - Use token from the console in your requests
