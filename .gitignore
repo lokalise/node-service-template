@@ -63,3 +63,6 @@ typings/
 /.idea/
 /.fleet/
 /serviceSpec.yaml
+
+# jwt key pair
+/scripts/keys/
