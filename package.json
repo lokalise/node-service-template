@@ -55,7 +55,7 @@
     "jsonwebtoken": "^9.0.0",
     "newrelic": "^9.10.2",
     "pino": "^8.11.0",
-    "pino-pretty": "^9.3.0",
+    "pino-pretty": "^9.4.0",
     "redis-semaphore": "^5.3.0",
     "toad-scheduler": "^2.2.0",
     "undici": "^5.20.0",
