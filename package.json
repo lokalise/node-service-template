@@ -53,7 +53,7 @@
     "fastify-type-provider-zod": "^1.1.9",
     "ioredis": "^5.3.1",
     "jsonwebtoken": "^9.0.0",
-    "newrelic": "^9.10.1",
+    "newrelic": "^9.10.2",
     "pino": "^8.10.0",
     "pino-pretty": "^9.3.0",
     "redis-semaphore": "^5.3.0",
