@@ -2,7 +2,7 @@ services:
   mysql:
     image: mysql:8.0.28-oracle
     ports:
-      - 3306:3306
+      - ${DOCKER_MYSQL_PORT:-3306}:3306
     volumes:
       - mysql_data:/var/lib/mysql
     environment:
@@ -26,15 +26,15 @@ services:
     image: redis:6.2.7-alpine
     command: redis-server --requirepass sOmE_sEcUrE_pAsS
     ports:
-      - 6379:6379
+      - ${DOCKER_REDIS_PORT:-6379}:6379
     volumes:
       - redis_data:/redis/data:cached
 
   rabbitmq:
     image: rabbitmq:3.11.5
     ports:
-      - 5672:5672
-      - 15672:15672
+      - ${DOCKER_RABBITMQ_CLIENT_PORT:-5672}:5672
+      - ${DOCKER_RABBITMQ_MANAGEMENT_PORT:-15672}:15672
     volumes:
       - rabbit_data:/var/lib/rabbitmq
 
