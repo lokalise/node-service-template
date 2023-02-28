@@ -53,3 +53,10 @@ In production you are expected to set environment variables during deployment (e
 
 - (OPTIONAL) `BUGSNAG_KEY` - BugSnag API key
 - (OPTIONAL) `BUGSNAG_ENABLED` - whether to send errors to BugSnag (`true`)
+
+### docker compose
+
+- (OPTIONAL) `DOCKER_MYSQL_PORT` - Docker `mysql` service port, for development purposes only (`3306`)
+- (OPTIONAL) `DOCKER_REDIS_PORT` - Docker `redis` service port, for development purposes only (`6379`)
+- (OPTIONAL) `DOCKER_RABBITMQ_CLIENT_PORT` - Docker `rabbitmq` service client port, for development purposes only (`5672`)
+- (OPTIONAL) `DOCKER_RABBITMQ_MANAGEMENT_PORT` - Docker `rabbitmq` service management port, for development purposes only (`15672`)
