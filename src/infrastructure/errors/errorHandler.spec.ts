@@ -138,7 +138,7 @@ describe('errorHandler', () => {
     expect(response.statusCode).toBe(401)
     expect(response.json()).toEqual({
       errorCode: 'AUTH_FAILED',
-      message: 'The token is malformed.',
+      message: 'Authorization token is invalid',
     })
   })
 

@@ -7,7 +7,6 @@ import type { FreeformRecord } from '../../schemas/commonTypes'
 import { isObject, isStandardizedError } from '../typeUtils'
 
 const knownErrors = new Set([
-  'FAST_JWT_MALFORMED',
   'FST_JWT_NO_AUTHORIZATION_IN_HEADER',
   'FST_JWT_AUTHORIZATION_TOKEN_EXPIRED',
   'FST_JWT_AUTHORIZATION_TOKEN_INVALID',
