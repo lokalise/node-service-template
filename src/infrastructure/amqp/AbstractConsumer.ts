@@ -3,6 +3,7 @@ import type { Channel, Connection, Message } from 'amqplib'
 import type { ZodSchema } from 'zod'
 
 import type { Dependencies } from '../diConfig'
+import type { ErrorReporter } from '../errors/errorReporter'
 import { globalLogger, resolveGlobalErrorLogObject } from '../errors/globalErrorHandler'
 
 import type { ConsumerErrorResolver } from './ConsumerErrorResolver'
@@ -36,10 +37,16 @@ export abstract class AbstractConsumer<MessagePayloadType extends CommonMessage>
   private isShuttingDown: boolean
 
   private messageSchema: ZodSchema<MessagePayloadType>
+  private errorReporter: ErrorReporter
 
   constructor(
     params: ConsumerParams<MessagePayloadType>,
-    { amqpConnection, consumerErrorResolver, newRelicBackgroundTransactionManager }: Dependencies,
+    {
+      amqpConnection,
+      consumerErrorResolver,
+      newRelicBackgroundTransactionManager,
+      errorReporter,
+    }: Dependencies,
   ) {
     this.connection = amqpConnection
     this.errorResolver = consumerErrorResolver
@@ -47,6 +54,7 @@ export abstract class AbstractConsumer<MessagePayloadType extends CommonMessage>
     this.queueName = params.queueName
     this.messageSchema = params.messageSchema
     this.newRelicBackgroundTransactionManager = newRelicBackgroundTransactionManager
+    this.errorReporter = errorReporter
   }
 
   abstract processMessage(
@@ -100,6 +108,9 @@ export abstract class AbstractConsumer<MessagePayloadType extends CommonMessage>
       deserializationResult.error instanceof AmqpValidationError ||
       deserializationResult.error instanceof AmqpMessageInvalidFormat
     ) {
+      const logObject = resolveGlobalErrorLogObject(deserializationResult.error)
+      globalLogger.error(logObject)
+      this.errorReporter.report({ error: deserializationResult.error })
       return ABORT_EARLY_EITHER
     }
 
@@ -147,6 +158,8 @@ export abstract class AbstractConsumer<MessagePayloadType extends CommonMessage>
           this.channel.nack(message, false, true)
           const logObject = resolveGlobalErrorLogObject(err)
           globalLogger.error(logObject)
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+          this.errorReporter.report({ error: err })
         })
         .finally(() => {
           this.newRelicBackgroundTransactionManager.stop(transactionSpanId)
