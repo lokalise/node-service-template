@@ -5,6 +5,7 @@ import type { ZodSchema } from 'zod'
 import type { Dependencies } from '../diConfig'
 import type { ErrorReporter } from '../errors/errorReporter'
 import { globalLogger, resolveGlobalErrorLogObject } from '../errors/globalErrorHandler'
+import { isError } from '../typeUtils'
 
 import type { ConsumerErrorResolver } from './ConsumerErrorResolver'
 import type { CommonMessage } from './MessageTypes'
@@ -158,8 +159,9 @@ export abstract class AbstractConsumer<MessagePayloadType extends CommonMessage>
           this.channel.nack(message, false, true)
           const logObject = resolveGlobalErrorLogObject(err)
           globalLogger.error(logObject)
-          // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-          this.errorReporter.report({ error: err })
+          if (isError(err)) {
+            this.errorReporter.report({ error: err })
+          }
         })
         .finally(() => {
           this.newRelicBackgroundTransactionManager.stop(transactionSpanId)
