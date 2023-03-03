@@ -109,6 +109,10 @@ docker compose up -d
 npm run start:dev
 ```
 
+### OpenAPI specification
+
+You can access OpenAPI specification of your application, while it is running, by opening [SwaggerUI](http://localhost:3000/documentation) 
+
 ### Create jwt for dev usage
 
 By default, all calls to the `node-template` app will require a valid JWT token.
