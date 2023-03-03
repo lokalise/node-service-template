@@ -2,6 +2,7 @@ import type http from 'http'
 
 import fastifyAuth from '@fastify/auth'
 import { diContainer, fastifyAwilixPlugin } from '@fastify/awilix'
+import { fastifyCors } from '@fastify/cors'
 import fastifyHelmet from '@fastify/helmet'
 import type { Secret } from '@fastify/jwt'
 import fastifyJWT from '@fastify/jwt'
@@ -49,7 +50,6 @@ import { registerJobs } from './modules/jobs'
 import { getRoutes } from './modules/routes'
 import { healthcheckPlugin } from './plugins/healthcheckPlugin'
 import { jwtTokenPlugin } from './plugins/jwtTokenPlugin'
-import { fastifyCors } from '@fastify/cors'
 
 const GRACEFUL_SHUTDOWN_TIMEOUT_IN_MSECS = 10000
 
