@@ -40,7 +40,7 @@
     "@lokalise/fastify-extras": "^5.3.0",
     "@lokalise/node-core": "^4.0.0",
     "@lokalise/zod-extras": "^2.0.0",
-    "@prisma/client": "^4.10.1",
+    "@prisma/client": "^4.11.0",
     "amqplib": "^0.10.3",
     "awilix": "^8.0.0",
     "croner": "^6.0.2",
