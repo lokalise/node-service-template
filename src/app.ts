@@ -220,12 +220,14 @@ export async function getApp(
   void app.register(requestContextProviderPlugin)
 
   // Vendor-specific plugins
-  void app.register(metricsPlugin, {
-    bindAddress: appConfig.bindAddress,
-    errorObjectResolver: resolveGlobalErrorLogObject,
-    loggerOptions: loggerConfig,
-    disablePrometheusRequestLogging: true,
-  })
+  if (appConfig.metrics.isEnabled) {
+    void app.register(metricsPlugin, {
+      bindAddress: appConfig.bindAddress,
+      errorObjectResolver: resolveGlobalErrorLogObject,
+      loggerOptions: loggerConfig,
+      disablePrometheusRequestLogging: true,
+    })
+  }
   void app.register(newrelicTransactionManagerPlugin, {
     isEnabled: config.vendors.newrelic.isEnabled,
   })
