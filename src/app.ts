@@ -220,7 +220,7 @@ export async function getApp(
   void app.register(requestContextProviderPlugin)
 
   // Vendor-specific plugins
-  if (appConfig.metricsEnabled) {
+  if (appConfig.metrics.isEnabled) {
     void app.register(metricsPlugin, {
       bindAddress: appConfig.bindAddress,
       errorObjectResolver: resolveGlobalErrorLogObject,

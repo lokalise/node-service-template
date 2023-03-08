@@ -62,7 +62,9 @@ export type AppConfig = {
   appEnv: 'production' | 'development' | 'staging'
   appVersion: string
   gitCommitSha: string
-  metricsEnabled: boolean
+  metrics: {
+    isEnabled: boolean
+  }
 }
 
 export function getConfig(): Config {
@@ -158,7 +160,9 @@ export function getAppConfig(): AppConfig {
     appEnv: configScope.getMandatoryOneOf('APP_ENV', ['production', 'development', 'staging']),
     appVersion: configScope.getOptional('APP_VERSION', 'VERSION_NOT_SET'),
     gitCommitSha: configScope.getOptional('GIT_COMMIT_SHA', 'COMMIT_SHA_NOT_SET'),
-    metricsEnabled: configScope.getOptionalBoolean('METRICS_ENABLED', true),
+    metrics: {
+      isEnabled: configScope.getOptionalBoolean('METRICS_ENABLED', true),
+    },
   }
 }
 
