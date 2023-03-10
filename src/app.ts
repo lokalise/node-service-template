@@ -92,7 +92,7 @@ export async function getApp(
   // to have these headers set by application.
   // If this service is never called from the browser, this entire block can be removed.
   if (isDevelopment()) {
-    void app.register(fastifyCors, {
+    await app.register(fastifyCors, {
       origin: '*',
       credentials: true,
       methods: ['GET', 'PUT', 'PATCH', 'POST', 'DELETE', 'OPTIONS'],
@@ -105,7 +105,7 @@ export async function getApp(
     })
   }
 
-  void app.register(
+  await app.register(
     fastifyHelmet,
     isDevelopment()
       ? {
@@ -114,15 +114,17 @@ export async function getApp(
       : {},
   )
 
-  void app.register(fastifyGracefulShutdown, {
-    resetHandlersOnInit: true,
-    timeout: GRACEFUL_SHUTDOWN_TIMEOUT_IN_MSECS,
-  })
+  if (!isDevelopment()) {
+    await app.register(fastifyGracefulShutdown, {
+      resetHandlersOnInit: true,
+      timeout: GRACEFUL_SHUTDOWN_TIMEOUT_IN_MSECS,
+    })
+  }
 
-  void app.register(fastifyNoIcon)
+  await app.register(fastifyNoIcon)
 
-  void app.register(fastifyAuth)
-  void app.register(fastifySwagger, {
+  await app.register(fastifyAuth)
+  await app.register(fastifySwagger, {
     transform: createJsonSchemaTransform({
       skipList: [
         '/documentation/',
@@ -160,18 +162,18 @@ export async function getApp(
     },
   })
 
-  void app.register(fastifySwaggerUi)
-  void app.register(fastifyAwilixPlugin, { disposeOnClose: true })
-  void app.register(fastifySchedule)
+  await app.register(fastifySwaggerUi)
+  await app.register(fastifyAwilixPlugin, { disposeOnClose: true })
+  await app.register(fastifySchedule)
 
-  void app.register(fastifyJWT, {
+  await app.register(fastifyJWT, {
     secret: configOverrides.jwtKeys ?? {
       private: '-', // Private key blank, as this service won't create JWT tokens, only verify them
       public: appConfig.jwtPublicKey,
     },
   })
 
-  void app.register(jwtTokenPlugin, {
+  await app.register(jwtTokenPlugin, {
     skipList: new Set([
       '/login',
       '/access-token',
@@ -205,7 +207,7 @@ export async function getApp(
     dependencyOverrides,
   )
 
-  void app.register(customHealthCheck, {
+  await app.register(customHealthCheck, {
     path: '/health',
     logLevel: 'warn',
     info: {
@@ -216,29 +218,29 @@ export async function getApp(
     schema: false,
     exposeFailure: false,
   })
-  void app.register(healthcheckPlugin)
-  void app.register(requestContextProviderPlugin)
+  await app.register(healthcheckPlugin)
+  await app.register(requestContextProviderPlugin)
 
   // Vendor-specific plugins
   if (appConfig.metrics.isEnabled) {
-    void app.register(metricsPlugin, {
+    await app.register(metricsPlugin, {
       bindAddress: appConfig.bindAddress,
       errorObjectResolver: resolveGlobalErrorLogObject,
       loggerOptions: loggerConfig,
       disablePrometheusRequestLogging: true,
     })
   }
-  void app.register(newrelicTransactionManagerPlugin, {
+  await app.register(newrelicTransactionManagerPlugin, {
     isEnabled: config.vendors.newrelic.isEnabled,
   })
-  void app.register(bugsnagPlugin, {
+  await app.register(bugsnagPlugin, {
     isEnabled: config.vendors.bugsnag.isEnabled,
     bugsnag: {
       apiKey: config.vendors.bugsnag.apiKey ?? '',
       releaseStage: appConfig.appEnv,
     },
   })
-  void app.register(prismaOtelTracingPlugin, {
+  await app.register(prismaOtelTracingPlugin, {
     isEnabled: config.vendors.newrelic.isEnabled,
     samplingRatio: isProduction() ? 0.1 : 1.0,
     serviceName: config.vendors.newrelic.appName,
@@ -251,10 +253,12 @@ export async function getApp(
     routes.forEach((route) => app.withTypeProvider<ZodTypeProvider>().route(route))
 
     // Graceful shutdown hook
-    app.gracefulShutdown((signal, next) => {
-      app.log.info('Starting graceful shutdown')
-      next()
-    })
+    if (!isDevelopment()) {
+      app.gracefulShutdown((signal, next) => {
+        app.log.info('Starting graceful shutdown')
+        next()
+      })
+    }
 
     // Register background jobs
     if (configOverrides.jobsEnabled !== false && !isTest()) {

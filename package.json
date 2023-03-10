@@ -15,6 +15,7 @@
     "lint:fix": "eslint .  --ext .ts --fix",
     "format": "prettier --write . && npx prisma format",
     "start:dev": "cross-env NODE_ENV=development ts-node -r dotenv/config src/server.ts",
+    "start:dev:watch": "cross-env NODE_ENV=development ts-node-dev -r dotenv/config src/server.ts",
     "start:prod": "tsc && cross-env NODE_ENV=production node dist/src/server.js",
     "docker:start:dev": "docker compose up -d",
     "docker:stop:dev": "docker compose down",
