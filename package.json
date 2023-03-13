@@ -37,7 +37,7 @@
     "@fastify/jwt": "^6.7.0",
     "@fastify/schedule": "^4.1.0",
     "@fastify/swagger": "^8.3.1",
-    "@fastify/swagger-ui": "^1.4.0",
+    "@fastify/swagger-ui": "^1.5.0",
     "@lokalise/fastify-extras": "^5.3.0",
     "@lokalise/node-core": "^4.0.0",
     "@lokalise/zod-extras": "^2.0.0",
