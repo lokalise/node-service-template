@@ -181,6 +181,7 @@ export async function getApp(
       '/documentation',
       '/documentation/json',
       '/documentation/static/*',
+      '/documentation/static/index.html',
       '/documentation/static/swagger-initializer.js',
       '/health',
       '/metrics',
