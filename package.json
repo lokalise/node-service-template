@@ -37,7 +37,7 @@
     "@fastify/jwt": "^6.7.0",
     "@fastify/schedule": "^4.1.0",
     "@fastify/swagger": "^8.3.1",
-    "@fastify/swagger-ui": "^1.4.0",
+    "@fastify/swagger-ui": "^1.5.0",
     "@lokalise/fastify-extras": "^5.3.0",
     "@lokalise/node-core": "^4.0.0",
     "@lokalise/zod-extras": "^2.0.0",
@@ -46,7 +46,7 @@
     "awilix": "^8.0.0",
     "croner": "^6.0.2",
     "dotenv": "^16.0.3",
-    "fastify": "^4.13.0",
+    "fastify": "^4.14.1",
     "fastify-custom-healthcheck": "^3.1.0",
     "fastify-graceful-shutdown": "^3.4.0",
     "fastify-metrics": "^10.0.4",
@@ -86,7 +86,7 @@
     "ts-jest": "^29.0.5",
     "ts-node": "^10.9.1",
     "ts-node-dev": "^2.0.0",
-    "typescript": "4.9.5",
+    "typescript": "5.0.2",
     "yaml": "^2.2.1"
   }
 }
