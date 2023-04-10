@@ -39,7 +39,7 @@
     "@fastify/swagger": "^8.3.1",
     "@fastify/swagger-ui": "^1.6.0",
     "@lokalise/fastify-extras": "^5.3.1",
-    "@lokalise/node-core": "^4.1.1",
+    "@lokalise/node-core": "^5.0.0",
     "@lokalise/zod-extras": "^2.0.0",
     "@prisma/client": "^4.12.0",
     "amqplib": "^0.10.3",
