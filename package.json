@@ -43,7 +43,7 @@
     "@lokalise/zod-extras": "^2.0.0",
     "@prisma/client": "^4.12.0",
     "amqplib": "^0.10.3",
-    "awilix": "^8.0.0",
+    "awilix": "^8.0.1",
     "croner": "^5.7.0",
     "dotenv": "^16.0.3",
     "fastify": "^4.15.0",
