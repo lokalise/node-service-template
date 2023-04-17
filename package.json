@@ -52,7 +52,7 @@
     "fastify-metrics": "^10.3.0",
     "fastify-no-icon": "^6.0.0",
     "fastify-type-provider-zod": "^1.1.9",
-    "ioredis": "^5.3.1",
+    "ioredis": "^5.3.2",
     "jsonwebtoken": "^9.0.0",
     "newrelic": "^9.15.0",
     "pino": "^8.11.0",
