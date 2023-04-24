@@ -19,7 +19,7 @@ const createPrismaMock = (shouldSucceed: boolean) =>
         return Promise.resolve([{ 1: 1n }])
       }
       throw new Error(
-        "Can't reach database server at `ota-service.amazonaws.test`:`1234`\n\nPlease make sure your database server is running at `ota-service.amazonaws.test`:`1234`.",
+        "Can't reach database server at `test-service.server.test`:`1234`\n\nPlease make sure your database server is running at `test-service.server.test`:`1234`.",
       )
     },
   } as Pick<PrismaClient, '$queryRaw'>)
