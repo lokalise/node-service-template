@@ -16,6 +16,7 @@ import { PermissionConsumer } from '../modules/users/consumers/PermissionConsume
 import { DeleteOldUsersJob } from '../modules/users/jobs/DeleteOldUsersJob'
 import { ProcessLogFilesJob } from '../modules/users/jobs/ProcessLogFilesJob'
 import { SendEmailsJob } from '../modules/users/jobs/SendEmailsJob'
+import { PermissionPublisher } from '../modules/users/publishers/PermissionPublisher'
 import { ConfigStore } from '../modules/users/repositories/ConfigStore'
 import { UrlCache } from '../modules/users/repositories/UrlCache'
 import { UserCache } from '../modules/users/repositories/UserCache'
@@ -132,6 +133,7 @@ export function registerDependencies(
 
     permissionsService: asClass(PermissionsService, SINGLETON_CONFIG),
     permissionConsumer: asClass(PermissionConsumer, SINGLETON_CONFIG),
+    permissionPublisher: asClass(PermissionPublisher, SINGLETON_CONFIG),
 
     processLogFilesJob: asClass(ProcessLogFilesJob, SINGLETON_CONFIG),
     deleteOldUsersJob: asClass(DeleteOldUsersJob, SINGLETON_CONFIG),
@@ -186,6 +188,7 @@ export interface Dependencies {
   errorReporter: ErrorReporter
   consumerErrorResolver: ErrorResolver
   permissionConsumer: PermissionConsumer
+  permissionPublisher: PermissionPublisher
   amqpConnectionDisposer: AmqpConnectionDisposer
 
   fakeStoreApiClient: FakeStoreApiClient

@@ -47,6 +47,7 @@ import { runAllHealthchecks } from './infrastructure/healthchecks'
 import { resolveLoggerConfiguration } from './infrastructure/logger'
 import { getConsumers } from './modules/consumers'
 import { registerJobs } from './modules/jobs'
+import { getPublishers } from './modules/publishers'
 import { getRoutes } from './modules/routes'
 import { healthcheckPlugin } from './plugins/healthcheckPlugin'
 import { jwtTokenPlugin } from './plugins/jwtTokenPlugin'
@@ -278,6 +279,11 @@ export async function getApp(
       const consumers = getConsumers(app.diContainer.cradle)
       for (const consumer of consumers) {
         void consumer.consume()
+      }
+
+      const publishers = getPublishers(app.diContainer.cradle)
+      for (const publisher of publishers) {
+        void publisher.init()
       }
     }
   })
