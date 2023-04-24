@@ -16,6 +16,7 @@ import {
   newrelicTransactionManagerPlugin,
   prismaOtelTracingPlugin,
   requestContextProviderPlugin,
+  publicHealthcheckPlugin,
 } from '@lokalise/fastify-extras'
 import type { AwilixContainer } from 'awilix'
 import fastify from 'fastify'
@@ -43,12 +44,16 @@ import type { DependencyOverrides } from './infrastructure/diConfig'
 import { registerDependencies } from './infrastructure/diConfig'
 import { errorHandler } from './infrastructure/errors/errorHandler'
 import { resolveGlobalErrorLogObject } from './infrastructure/errors/globalErrorHandler'
-import { runAllHealthchecks } from './infrastructure/healthchecks'
+import {
+  dbHealthCheck,
+  redisHealthCheck,
+  registerHealthChecks,
+  runAllHealthchecks,
+} from './infrastructure/healthchecks'
 import { resolveLoggerConfiguration } from './infrastructure/logger'
 import { getConsumers } from './modules/consumers'
 import { registerJobs } from './modules/jobs'
 import { getRoutes } from './modules/routes'
-import { healthcheckPlugin } from './plugins/healthcheckPlugin'
 import { jwtTokenPlugin } from './plugins/jwtTokenPlugin'
 
 const GRACEFUL_SHUTDOWN_TIMEOUT_IN_MSECS = 10000
@@ -208,18 +213,27 @@ export async function getApp(
     dependencyOverrides,
   )
 
-  await app.register(customHealthCheck, {
-    path: '/health',
-    logLevel: 'warn',
-    info: {
-      env: appConfig.nodeEnv,
-      app_version: appConfig.appVersion,
-      git_commit_sha: appConfig.gitCommitSha,
-    },
-    schema: false,
-    exposeFailure: false,
-  })
-  await app.register(healthcheckPlugin)
+  if (configOverrides.healthchecksEnabled !== false) {
+    await app.register(customHealthCheck, {
+      path: '/health',
+      logLevel: 'warn',
+      info: {
+        env: appConfig.nodeEnv,
+        app_version: appConfig.appVersion,
+        git_commit_sha: appConfig.gitCommitSha,
+      },
+      schema: false,
+      exposeFailure: false,
+    })
+    await app.register(publicHealthcheckPlugin, {
+      healthChecks: [dbHealthCheck, redisHealthCheck],
+      responsePayload: {
+        version: appConfig.appVersion,
+        gitCommitSha: appConfig.gitCommitSha,
+        status: 'OK',
+      },
+    })
+  }
   await app.register(requestContextProviderPlugin)
 
   // Vendor-specific plugins
@@ -280,12 +294,16 @@ export async function getApp(
         void consumer.consume()
       }
     }
+
+    if (configOverrides.healthchecksEnabled !== false) {
+      registerHealthChecks(app)
+    }
   })
 
   try {
     await app.ready()
     if (!isTest() && configOverrides.healthchecksEnabled !== false) {
-      await runAllHealthchecks(app.diContainer.cradle)
+      await runAllHealthchecks(app)
     }
   } catch (err) {
     app.log.error('Error while initializing app: ', err)
