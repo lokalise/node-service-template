@@ -38,7 +38,7 @@
     "@fastify/schedule": "^4.1.0",
     "@fastify/swagger": "^8.3.1",
     "@fastify/swagger-ui": "^1.8.0",
-    "@lokalise/fastify-extras": "^5.5.0",
+    "@lokalise/fastify-extras": "^6.0.1",
     "@lokalise/node-core": "^5.0.1",
     "@lokalise/zod-extras": "^2.0.0",
     "@prisma/client": "^4.13.0",
