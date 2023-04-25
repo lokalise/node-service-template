@@ -1,43 +1,72 @@
-import { InternalError } from '@lokalise/node-core'
-import type { PrismaClient } from '@prisma/client'
-import type { Redis } from 'ioredis'
+import type { HealthCheck } from '@lokalise/fastify-extras'
+import type { Either } from '@lokalise/node-core'
+import type { FastifyInstance } from 'fastify'
 
 import { runWithTimeout, TIMEOUT } from '../utils/timeoutUtils'
 
-import type { Dependencies } from './diConfig'
 import { executeAsyncAndHandleGlobalErrors } from './errors/globalErrorHandler'
+import { isError } from './typeUtils'
 
-const HEALTHCHECK_ERROR_CODE = 'HEALTHCHECK_ERROR'
 const REDIS_HEALTHCHECK_TIMEOUT = 10 * 1000
 
-export async function testRedisHealth(redis: Redis) {
+export const wrapHealthCheck = (app: FastifyInstance, healthCheck: HealthCheck) => {
+  return async () => {
+    const response = await healthCheck(app)
+    if (response.error) {
+      throw response.error
+    }
+  }
+}
+
+export const redisHealthCheck: HealthCheck = async (app): Promise<Either<Error, true>> => {
+  const redis = app.diContainer.cradle.redis
   const result = await runWithTimeout(redis.ping(), REDIS_HEALTHCHECK_TIMEOUT)
 
   if (result === TIMEOUT) {
-    throw new Error('Redis connection timed out')
+    return { error: new Error('Redis connection timed out') }
   }
 
   if (result !== 'PONG') {
-    throw new InternalError({
-      message: 'Redis did not respond with PONG',
-      errorCode: HEALTHCHECK_ERROR_CODE,
-    })
+    return { error: new Error('Redis did not respond with PONG') }
   }
+
+  return { result: true }
+}
+export const dbHealthCheck: HealthCheck = async (app): Promise<Either<Error, true>> => {
+  const prisma = app.diContainer.cradle.prisma
+  try {
+    const response = await prisma.$queryRaw`SELECT 1`
+    if (!response) {
+      return {
+        error: new Error('DB healthcheck got an unexpected response'),
+      }
+    }
+  } catch (error) {
+    if (isError(error)) {
+      return {
+        error: new Error(`An error occurred during DB healthcheck: ${error.message}`),
+      }
+    }
+    return {
+      error: new Error('An unexpected error occurred during DB healthcheck'),
+    }
+  }
+  return { result: true }
 }
 
-export async function testDbHealth(prisma: PrismaClient) {
-  const response = await prisma.$queryRaw`SELECT 1`
-  if (!response) {
-    throw new InternalError({
-      message: 'Database did not respond correctly',
-      errorCode: HEALTHCHECK_ERROR_CODE,
-    })
-  }
+export function registerHealthChecks(app: FastifyInstance) {
+  app.addHealthCheck('heartbeat', () => true)
+  app.addHealthCheck('redis', wrapHealthCheck(app, redisHealthCheck))
+  app.addHealthCheck('mysql', wrapHealthCheck(app, dbHealthCheck))
 }
 
-export async function runAllHealthchecks(dependencies: Dependencies) {
+export async function runAllHealthchecks(app: FastifyInstance) {
   return executeAsyncAndHandleGlobalErrors(
-    () => Promise.all([testDbHealth(dependencies.prisma), testRedisHealth(dependencies.redis)]),
+    () =>
+      Promise.all([
+        wrapHealthCheck(app, dbHealthCheck)(),
+        wrapHealthCheck(app, redisHealthCheck)(),
+      ]),
     false,
   )
 }
