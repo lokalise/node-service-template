@@ -1,7 +1,7 @@
 import type { Routes } from 'src/modules/routes'
 
-import { CREATE_USER_SCHEMA } from '../../../schemas/userSchemas'
 import { postCreateUser } from '../controllers/UserController'
+import { CREATE_USER_SCHEMA } from '../schemas/userSchemas'
 
 export const getUserRoutes = (): {
   routes: Routes

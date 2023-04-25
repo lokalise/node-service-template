@@ -1,6 +1,6 @@
 import type { FastifyReply, FastifyRequest } from 'fastify'
 
-import type { CREATE_USER_SCHEMA_TYPE } from '../../../schemas/userSchemas'
+import type { CREATE_USER_SCHEMA_TYPE } from '../schemas/userSchemas'
 
 export const postCreateUser = async (
   req: FastifyRequest<{ Body: CREATE_USER_SCHEMA_TYPE }>,
