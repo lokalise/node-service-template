@@ -3,7 +3,7 @@ import type { FastifyInstance } from 'fastify'
 import { getTestConfigurationOverrides } from '../../../../test/jwtUtils'
 import { getApp } from '../../../app'
 import { generateJwtToken } from '../../../infrastructure/tokenUtils'
-import type { CREATE_USER_SCHEMA_TYPE } from '../../../schemas/userSchemas'
+import type { CREATE_USER_SCHEMA_TYPE } from '../schemas/userSchemas'
 
 describe('UserController', () => {
   describe('POST /users', () => {
