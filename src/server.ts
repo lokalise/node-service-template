@@ -4,6 +4,8 @@ if (process.env.NEW_RELIC_ENABLED !== 'false') {
   require('newrelic')
 }
 
+import { name } from '../package.json'
+
 import { getApp } from './app'
 import type { Config } from './infrastructure/config'
 import { getConfig } from './infrastructure/config'
@@ -22,6 +24,9 @@ async function start() {
     await app.listen({
       host: config.app.bindAddress,
       port: config.app.port,
+      listenTextResolver: (address) => {
+        return `${name} listening at ${address}`
+      },
     })
   } catch (err) {
     app.log.error(resolveGlobalErrorLogObject(err))
