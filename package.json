@@ -38,8 +38,8 @@
     "@fastify/schedule": "^4.1.0",
     "@fastify/swagger": "^8.3.1",
     "@fastify/swagger-ui": "^1.8.0",
-    "@lokalise/fastify-extras": "^6.0.1",
-    "@lokalise/node-core": "^5.1.0",
+    "@lokalise/fastify-extras": "^7.0.0",
+    "@lokalise/node-core": "^5.5.0",
     "@lokalise/zod-extras": "^2.0.0",
     "@prisma/client": "^4.13.0",
     "@prisma/instrumentation": "^4.13.0",
@@ -47,7 +47,7 @@
     "awilix": "^8.0.1",
     "croner": "^5.7.0",
     "dotenv": "^16.0.3",
-    "fastify": "^4.15.0",
+    "fastify": "^4.16.3",
     "fastify-custom-healthcheck": "^3.1.0",
     "fastify-graceful-shutdown": "^3.4.0",
     "fastify-metrics": "^10.3.0",
@@ -69,9 +69,9 @@
     "@types/jest": "^29.5.1",
     "@types/jsonwebtoken": "^9.0.1",
     "@types/newrelic": "^9.13.0",
-    "@types/node": "^18.15.11",
-    "@typescript-eslint/eslint-plugin": "^5.59.0",
-    "@typescript-eslint/parser": "^5.59.0",
+    "@types/node": "^18.16.1",
+    "@typescript-eslint/eslint-plugin": "^5.59.1",
+    "@typescript-eslint/parser": "^5.59.1",
     "cpy-cli": "^4.2.0",
     "cross-env": "^7.0.3",
     "eslint": "^8.39.0",
@@ -88,6 +88,6 @@
     "ts-node": "^10.9.1",
     "ts-node-dev": "^2.0.0",
     "typescript": "5.0.4",
-    "yaml": "^2.2.1"
+    "yaml": "^2.2.2"
   }
 }
