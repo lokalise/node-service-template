@@ -6,8 +6,8 @@ import type { Dependencies } from '../diConfig'
 import { globalLogger, resolveGlobalErrorLogObject } from '../errors/globalErrorHandler'
 import { isError } from '../typeUtils'
 
-import type { QueueParams } from './AbstractQueueUser'
-import { AbstractQueueUser } from './AbstractQueueUser'
+import type { QueueParams } from './AbstractQueueService'
+import { AbstractQueueService } from './AbstractQueueService'
 import type { CommonMessage } from './MessageTypes'
 import { AmqpMessageInvalidFormat, AmqpValidationError } from './amqpErrors'
 import { deserializeMessage } from './messageDeserializer'
@@ -22,7 +22,7 @@ const ABORT_EARLY_EITHER: Either<'abort', never> = {
 }
 
 export abstract class AbstractConsumer<MessagePayloadType extends CommonMessage>
-  extends AbstractQueueUser<MessagePayloadType>
+  extends AbstractQueueService<MessagePayloadType>
   implements Consumer
 {
   private readonly newRelicBackgroundTransactionManager: NewRelicTransactionManager

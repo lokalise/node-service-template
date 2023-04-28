@@ -13,7 +13,7 @@ export type QueueParams<MessagePayloadType extends CommonMessage> = {
   messageSchema: ZodSchema<MessagePayloadType>
 }
 
-export class AbstractQueueUser<MessagePayloadType extends CommonMessage> {
+export class AbstractQueueService<MessagePayloadType extends CommonMessage> {
   protected readonly queueName: string
   protected readonly connection: Connection
   // @ts-ignore
