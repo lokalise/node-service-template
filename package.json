@@ -47,7 +47,7 @@
     "awilix": "^8.0.1",
     "croner": "^5.7.0",
     "dotenv": "^16.0.3",
-    "fastify": "^4.16.3",
+    "fastify": "^4.17.0",
     "fastify-custom-healthcheck": "^3.1.0",
     "fastify-graceful-shutdown": "^3.4.0",
     "fastify-metrics": "^10.3.0",
