@@ -83,7 +83,7 @@
     "mockttp": "^3.7.4",
     "oas-validator": "^5.0.8",
     "prettier": "^2.8.8",
-    "prisma": "^4.13.0",
+    "prisma": "^4.14.0",
     "ts-jest": "^29.1.0",
     "ts-node": "^10.9.1",
     "ts-node-dev": "^2.0.0",
