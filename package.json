@@ -42,7 +42,7 @@
     "@lokalise/node-core": "^5.5.0",
     "@lokalise/zod-extras": "^2.0.0",
     "@prisma/client": "^4.13.0",
-    "@prisma/instrumentation": "^4.13.0",
+    "@prisma/instrumentation": "^4.14.0",
     "amqplib": "^0.10.3",
     "awilix": "^8.0.1",
     "croner": "^5.7.0",
