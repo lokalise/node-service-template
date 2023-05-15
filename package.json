@@ -33,7 +33,7 @@
     "@fastify/auth": "^4.2.0",
     "@fastify/awilix": "^3.0.2",
     "@fastify/cors": "^8.2.1",
-    "@fastify/helmet": "^10.1.0",
+    "@fastify/helmet": "^10.1.1",
     "@fastify/jwt": "^6.7.1",
     "@fastify/schedule": "^4.1.0",
     "@fastify/swagger": "^8.3.1",
