@@ -161,7 +161,7 @@ export function getAppConfig(): AppConfig {
     appVersion: configScope.getOptional('APP_VERSION', 'VERSION_NOT_SET'),
     gitCommitSha: configScope.getOptional('GIT_COMMIT_SHA', 'COMMIT_SHA_NOT_SET'),
     metrics: {
-      isEnabled: configScope.getOptionalBoolean('METRICS_ENABLED', true),
+      isEnabled: configScope.getOptionalBoolean('METRICS_ENABLED', !configScope.isDevelopment()),
     },
   }
 }
