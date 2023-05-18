@@ -6,7 +6,9 @@ import { getApp } from './app'
 describe('app', () => {
   let app: FastifyInstance
   beforeAll(async () => {
-    app = await getApp()
+    app = await getApp({
+      monitoringEnabled: true,
+    })
   })
 
   afterAll(async () => {
