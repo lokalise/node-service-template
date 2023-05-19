@@ -18,7 +18,10 @@ import {
 async function start() {
   globalLogger.info('Starting application...')
   const config = executeAndHandleGlobalErrors<Config>(getConfig)
-  const app = await getApp({ amqpEnabled: true })
+  const app = await getApp({
+    monitoringEnabled: config.app.metrics.isEnabled,
+    amqpEnabled: true,
+  })
 
   try {
     await app.listen({

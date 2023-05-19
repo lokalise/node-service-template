@@ -68,6 +68,7 @@ export type ConfigOverrides = {
   amqpEnabled?: boolean
   jobsEnabled?: boolean
   healthchecksEnabled?: boolean
+  monitoringEnabled?: boolean
 }
 
 export type RequestContext = {
@@ -238,7 +239,7 @@ export async function getApp(
   await app.register(requestContextProviderPlugin)
 
   // Vendor-specific plugins
-  if (appConfig.metrics.isEnabled) {
+  if (configOverrides.monitoringEnabled) {
     await app.register(metricsPlugin, {
       bindAddress: appConfig.bindAddress,
       errorObjectResolver: resolveGlobalErrorLogObject,
