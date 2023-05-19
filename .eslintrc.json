@@ -20,6 +20,7 @@
   "rules": {
     "prettier/prettier": "error",
     "@typescript-eslint/no-empty-interface": "warn",
+    "import/no-default-export": "error",
     "@typescript-eslint/ban-ts-comment": "off",
     "@typescript-eslint/no-use-before-define": "off",
     "@typescript-eslint/no-non-null-assertion": "warn",
