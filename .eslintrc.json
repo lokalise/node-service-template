@@ -30,7 +30,7 @@
     "@typescript-eslint/explicit-function-return-type": "off",
     "@typescript-eslint/consistent-type-imports": "warn",
     "@typescript-eslint/no-unused-vars": [
-      "warn", // or "error"
+      "warn",
       {
         "argsIgnorePattern": "^_",
         "varsIgnorePattern": "^_",
@@ -56,7 +56,11 @@
         "alphabetize": { "order": "asc" },
         "newlines-between": "always"
       }
-    ]
+    ],
+    "max-lines": ["error", { "max": 500 }],
+    "max-params": ["error", { "max": 4 }],
+    "max-statements": ["error", { "max": 15 }],
+    "complexity": ["error", { "max": 20 }]
   },
   "overrides": [
     {
@@ -64,7 +68,8 @@
       "rules": {
         "@typescript-eslint/no-non-null-assertion": "off",
         "@typescript-eslint/no-unsafe-return": "off",
-        "@typescript-eslint/no-unsafe-call": "off"
+        "@typescript-eslint/no-unsafe-call": "off",
+        "max-statements": ["off"]
       }
     }
   ]
