@@ -6,16 +6,15 @@
     "project": "./tsconfig.json"
   },
   "ignorePatterns": ["node_modules"],
-  "plugins": ["@typescript-eslint", "prettier", "jest", "import"],
+  "plugins": ["@typescript-eslint", "prettier", "vitest", "import"],
   "extends": [
     "eslint:recommended",
     "plugin:@typescript-eslint/recommended",
     "plugin:@typescript-eslint/recommended-requiring-type-checking",
     "plugin:prettier/recommended",
-    "plugin:jest/recommended",
-    "plugin:jest/style",
     "plugin:import/recommended",
-    "plugin:import/typescript"
+    "plugin:import/typescript",
+    "plugin:vitest/recommended"
   ],
   "rules": {
     "prettier/prettier": "error",

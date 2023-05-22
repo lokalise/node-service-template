@@ -2,6 +2,7 @@ import type { PrismaClient } from '@prisma/client'
 import { asFunction } from 'awilix'
 import type { FastifyInstance } from 'fastify'
 import type Redis from 'ioredis'
+import { vitest } from 'vitest'
 
 import { getApp } from '../app'
 
@@ -78,17 +79,17 @@ describe('healthcheck', () => {
       )
 
       expect.assertions(1)
-      jest.useFakeTimers()
+      vitest.useFakeTimers()
 
       const promise = redisHealthCheck(app)
 
-      jest.advanceTimersByTime(10_000)
+      vitest.advanceTimersByTime(10_000)
 
       await expect(promise).resolves.toMatchObject({
         error: new Error('Redis connection timed out'),
       })
 
-      jest.useRealTimers()
+      vitest.useRealTimers()
     })
 
     it('Does not fail on successful Redis ping', async () => {
