@@ -50,6 +50,7 @@
         }
       }
     ],
+    "import/no-default-export": "error",
     "import/order": [
       "warn",
       {
