@@ -1,3 +1,5 @@
+/* eslint-disable max-statements */
+
 import type http from 'http'
 
 import fastifyAuth from '@fastify/auth'

@@ -6,16 +6,15 @@
     "project": "./tsconfig.json"
   },
   "ignorePatterns": ["node_modules"],
-  "plugins": ["@typescript-eslint", "prettier", "jest", "import"],
+  "plugins": ["@typescript-eslint", "prettier", "vitest", "import"],
   "extends": [
     "eslint:recommended",
     "plugin:@typescript-eslint/recommended",
     "plugin:@typescript-eslint/recommended-requiring-type-checking",
     "plugin:prettier/recommended",
-    "plugin:jest/recommended",
-    "plugin:jest/style",
     "plugin:import/recommended",
-    "plugin:import/typescript"
+    "plugin:import/typescript",
+    "plugin:vitest/recommended"
   ],
   "rules": {
     "prettier/prettier": "error",
@@ -30,7 +29,7 @@
     "@typescript-eslint/explicit-function-return-type": "off",
     "@typescript-eslint/consistent-type-imports": "warn",
     "@typescript-eslint/no-unused-vars": [
-      "warn", // or "error"
+      "warn",
       {
         "argsIgnorePattern": "^_",
         "varsIgnorePattern": "^_",
@@ -50,13 +49,18 @@
         }
       }
     ],
+    "import/no-default-export": "error",
     "import/order": [
       "warn",
       {
         "alphabetize": { "order": "asc" },
         "newlines-between": "always"
       }
-    ]
+    ],
+    "max-lines": ["error", { "max": 600 }],
+    "max-params": ["error", { "max": 4 }],
+    "max-statements": ["error", { "max": 15 }],
+    "complexity": ["error", { "max": 20 }]
   },
   "overrides": [
     {
@@ -64,7 +68,8 @@
       "rules": {
         "@typescript-eslint/no-non-null-assertion": "off",
         "@typescript-eslint/no-unsafe-return": "off",
-        "@typescript-eslint/no-unsafe-call": "off"
+        "@typescript-eslint/no-unsafe-call": "off",
+        "max-statements": ["off"]
       }
     }
   ]
