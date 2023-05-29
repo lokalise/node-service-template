@@ -32,7 +32,7 @@
   "dependencies": {
     "@fastify/auth": "^4.3.0",
     "@fastify/awilix": "^3.0.2",
-    "@fastify/cors": "^8.2.1",
+    "@fastify/cors": "^8.3.0",
     "@fastify/helmet": "^10.1.1",
     "@fastify/jwt": "^7.0.0",
     "@fastify/schedule": "^4.1.0",
