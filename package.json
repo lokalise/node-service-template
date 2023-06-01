@@ -32,11 +32,11 @@
   "dependencies": {
     "@fastify/auth": "^4.3.0",
     "@fastify/awilix": "^3.0.2",
-    "@fastify/cors": "^8.2.1",
+    "@fastify/cors": "^8.3.0",
     "@fastify/helmet": "^10.1.1",
-    "@fastify/jwt": "^6.7.1",
+    "@fastify/jwt": "^7.0.0",
     "@fastify/schedule": "^4.1.0",
-    "@fastify/swagger": "^8.4.0",
+    "@fastify/swagger": "^8.5.1",
     "@fastify/swagger-ui": "^1.8.1",
     "@lokalise/fastify-extras": "^8.0.0",
     "@lokalise/node-core": "^5.5.0",
@@ -55,7 +55,7 @@
     "fastify-type-provider-zod": "^1.1.9",
     "ioredis": "^5.3.2",
     "jsonwebtoken": "^9.0.0",
-    "newrelic": "^10.1.1",
+    "newrelic": "^10.1.2",
     "pino": "^8.14.1",
     "pino-pretty": "^10.0.0",
     "redis-semaphore": "^5.3.0",
@@ -78,7 +78,7 @@
     "eslint-config-prettier": "^8.8.0",
     "eslint-plugin-import": "^2.27.5",
     "eslint-plugin-prettier": "^4.2.1",
-    "eslint-plugin-vitest": "^0.2.2",
+    "eslint-plugin-vitest": "^0.2.5",
     "mockttp": "^3.7.5",
     "oas-validator": "^5.0.8",
     "prettier": "^2.8.8",
@@ -87,6 +87,6 @@
     "ts-node-dev": "^2.0.0",
     "typescript": "5.0.4",
     "vitest": "^0.31.1",
-    "yaml": "^2.2.2"
+    "yaml": "^2.3.1"
   }
 }
