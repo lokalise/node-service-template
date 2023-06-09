@@ -1,14 +1,14 @@
 import { randomUUID } from 'crypto'
 
 import type { NewRelicTransactionManager } from '@lokalise/fastify-extras'
+import type { ErrorReporter } from '@lokalise/node-core'
+import { globalLogger, resolveGlobalErrorLogObject } from '@lokalise/node-core'
 import type { FastifyLoggerInstance } from 'fastify'
 import type Redis from 'ioredis'
 import { Mutex } from 'redis-semaphore'
 import type { LockOptions } from 'redis-semaphore'
 
 import type { Dependencies } from './diConfig'
-import type { ErrorReporter } from './errors/errorReporter'
-import { globalLogger, resolveGlobalErrorLogObject } from './errors/globalErrorHandler'
 
 const DEFAULT_LOCK_NAME = 'exclusive'
 

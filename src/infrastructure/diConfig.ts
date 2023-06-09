@@ -1,6 +1,7 @@
 import type { JWT } from '@fastify/jwt'
 import type { NewRelicTransactionManager } from '@lokalise/fastify-extras'
 import { reportErrorToBugsnag } from '@lokalise/fastify-extras'
+import type { ErrorReporter, ErrorResolver } from '@lokalise/node-core'
 import { InternalError } from '@lokalise/node-core'
 import { PrismaClient } from '@prisma/client'
 import type { Connection } from 'amqplib'
@@ -28,8 +29,6 @@ import { AmqpConnectionDisposer } from './amqp/AmqpConnectionDisposer'
 import { ConsumerErrorResolver } from './amqp/ConsumerErrorResolver'
 import type { Config } from './config'
 import { getConfig } from './config'
-import type { ErrorResolver } from './errors/ErrorResolver'
-import type { ErrorReporter } from './errors/errorReporter'
 
 export type ExternalDependencies = {
   app?: FastifyInstance

@@ -1,14 +1,14 @@
-import { InternalError } from '@lokalise/node-core'
-import { ZodError } from 'zod'
+import { types } from 'node:util'
 
-import type { ErrorResolver } from '../errors/ErrorResolver'
-import { isStandardizedError } from '../typeUtils'
+import type { ErrorResolver } from '@lokalise/node-core'
+import { InternalError, isStandardizedError } from '@lokalise/node-core'
+import { ZodError } from 'zod'
 
 import { AmqpMessageInvalidFormat, AmqpValidationError } from './amqpErrors'
 
 export class ConsumerErrorResolver implements ErrorResolver {
   public processError(error: unknown): InternalError {
-    if (error instanceof Error && error?.name === 'SyntaxError') {
+    if (types.isNativeError(error) && error?.name === 'SyntaxError') {
       return new AmqpMessageInvalidFormat({
         message: error.message,
       })

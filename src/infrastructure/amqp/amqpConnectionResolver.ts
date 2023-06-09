@@ -1,9 +1,9 @@
 import { setTimeout } from 'timers/promises'
 
+import { globalLogger } from '@lokalise/node-core'
 import { connect } from 'amqplib'
 
 import type { AmqpConfig } from '../config'
-import { globalLogger } from '../errors/globalErrorHandler'
 
 const CONNECT_RETRY_SECONDS = 10
 const MAX_RETRY_ATTEMPTS = 5
