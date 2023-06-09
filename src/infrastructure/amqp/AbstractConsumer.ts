@@ -2,7 +2,7 @@ import { types } from 'node:util'
 
 import type { NewRelicTransactionManager } from '@lokalise/fastify-extras'
 import type { Either } from '@lokalise/node-core'
-import { globalLogger, resolveGlobalErrorLogObject } from '@lokalise/node-core'
+import { resolveGlobalErrorLogObject } from '@lokalise/node-core'
 import type { Message } from 'amqplib'
 
 import type { Dependencies } from '../diConfig'
@@ -53,7 +53,7 @@ export abstract class AbstractConsumer<MessagePayloadType extends CommonMessage>
       deserializationResult.error instanceof AmqpMessageInvalidFormat
     ) {
       const logObject = resolveGlobalErrorLogObject(deserializationResult.error)
-      globalLogger.error(logObject)
+      this.logger.error(logObject)
       this.errorReporter.report({ error: deserializationResult.error })
       return ABORT_EARLY_EITHER
     }
@@ -101,7 +101,7 @@ export abstract class AbstractConsumer<MessagePayloadType extends CommonMessage>
           // If we fail due to unknown reason, let's retry
           this.channel.nack(message, false, true)
           const logObject = resolveGlobalErrorLogObject(err)
-          globalLogger.error(logObject)
+          this.logger.error(logObject)
           if (types.isNativeError(err)) {
             this.errorReporter.report({ error: err })
           }

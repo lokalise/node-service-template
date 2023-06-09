@@ -2,12 +2,12 @@ import type { JWT } from '@fastify/jwt'
 import type { NewRelicTransactionManager } from '@lokalise/fastify-extras'
 import { reportErrorToBugsnag } from '@lokalise/fastify-extras'
 import type { ErrorReporter, ErrorResolver } from '@lokalise/node-core'
-import { InternalError } from '@lokalise/node-core'
+import { globalLogger, InternalError } from '@lokalise/node-core'
 import { PrismaClient } from '@prisma/client'
 import type { Connection } from 'amqplib'
 import type { AwilixContainer, Resolver } from 'awilix'
 import { asClass, asFunction, Lifetime } from 'awilix'
-import type { FastifyInstance, FastifyLoggerInstance } from 'fastify'
+import type { FastifyInstance, FastifyBaseLogger } from 'fastify'
 import Redis from 'ioredis'
 import type P from 'pino'
 import { pino } from 'pino'
@@ -32,7 +32,7 @@ import { getConfig } from './config'
 
 export type ExternalDependencies = {
   app?: FastifyInstance
-  logger?: P.Logger
+  logger: P.Logger
   amqpConnection?: Connection
 }
 export const SINGLETON_CONFIG = { lifetime: Lifetime.SINGLETON }
@@ -41,7 +41,7 @@ export type DependencyOverrides = Partial<DiConfig>
 
 export function registerDependencies(
   diContainer: AwilixContainer,
-  dependencies: ExternalDependencies = {},
+  dependencies: ExternalDependencies = { logger: globalLogger },
   dependencyOverrides: DependencyOverrides = {},
 ): void {
   const diConfig: DiConfig = {
@@ -162,7 +162,7 @@ type DiConfig = Record<keyof Dependencies, Resolver<unknown>>
 export interface Dependencies {
   jwt: JWT
   config: Config
-  logger: FastifyLoggerInstance & P.Logger
+  logger: FastifyBaseLogger & P.Logger
 
   redis: Redis
   prisma: PrismaClient
