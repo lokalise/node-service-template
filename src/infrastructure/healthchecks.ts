@@ -1,11 +1,11 @@
+import { types } from 'node:util'
+
 import type { HealthCheck } from '@lokalise/fastify-extras'
 import type { Either } from '@lokalise/node-core'
+import { executeAsyncAndHandleGlobalErrors } from '@lokalise/node-core'
 import type { FastifyInstance } from 'fastify'
 
 import { runWithTimeout, TIMEOUT } from '../utils/timeoutUtils'
-
-import { executeAsyncAndHandleGlobalErrors } from './errors/globalErrorHandler'
-import { isError } from './typeUtils'
 
 const REDIS_HEALTHCHECK_TIMEOUT = 10 * 1000
 
@@ -42,7 +42,7 @@ export const dbHealthCheck: HealthCheck = async (app): Promise<Either<Error, tru
       }
     }
   } catch (error) {
-    if (isError(error)) {
+    if (types.isNativeError(error)) {
       return {
         error: new Error(`An error occurred during DB healthcheck: ${error.message}`),
       }

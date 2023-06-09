@@ -1,10 +1,11 @@
+import { types } from 'node:util'
+
 import type { NewRelicTransactionManager } from '@lokalise/fastify-extras'
 import type { Either } from '@lokalise/node-core'
+import { globalLogger, resolveGlobalErrorLogObject } from '@lokalise/node-core'
 import type { Message } from 'amqplib'
 
 import type { Dependencies } from '../diConfig'
-import { globalLogger, resolveGlobalErrorLogObject } from '../errors/globalErrorHandler'
-import { isError } from '../typeUtils'
 
 import type { QueueParams } from './AbstractQueueService'
 import { AbstractQueueService } from './AbstractQueueService'
@@ -101,7 +102,7 @@ export abstract class AbstractConsumer<MessagePayloadType extends CommonMessage>
           this.channel.nack(message, false, true)
           const logObject = resolveGlobalErrorLogObject(err)
           globalLogger.error(logObject)
-          if (isError(err)) {
+          if (types.isNativeError(err)) {
             this.errorReporter.report({ error: err })
           }
         })

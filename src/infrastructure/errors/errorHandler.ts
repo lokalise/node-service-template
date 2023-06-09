@@ -1,12 +1,16 @@
-import { InternalError, PublicNonRecoverableError } from '@lokalise/node-core'
+import {
+  InternalError,
+  isObject,
+  isStandardizedError,
+  PublicNonRecoverableError,
+} from '@lokalise/node-core'
 import type { FastifyRequest, FastifyReply, FastifyInstance } from 'fastify'
 import pino from 'pino'
 import { ZodError } from 'zod'
 
 import type { FreeformRecord } from '../../schemas/commonTypes'
-import { isObject, isStandardizedError } from '../typeUtils'
 
-const knownErrors = new Set([
+const knownAuthErrors = new Set([
   'FST_JWT_NO_AUTHORIZATION_IN_HEADER',
   'FST_JWT_AUTHORIZATION_TOKEN_EXPIRED',
   'FST_JWT_AUTHORIZATION_TOKEN_INVALID',
@@ -68,7 +72,7 @@ function resolveResponseObject(error: FreeformRecord): ResponseObject {
   }
 
   if (isStandardizedError(error)) {
-    if (knownErrors.has(error.code)) {
+    if (knownAuthErrors.has(error.code)) {
       const message =
         error.code === 'FST_JWT_AUTHORIZATION_TOKEN_INVALID'
           ? 'Authorization token is invalid'

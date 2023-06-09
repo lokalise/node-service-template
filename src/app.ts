@@ -20,6 +20,7 @@ import {
   requestContextProviderPlugin,
   publicHealthcheckPlugin,
 } from '@lokalise/fastify-extras'
+import { resolveGlobalErrorLogObject } from '@lokalise/node-core'
 import type { AwilixContainer } from 'awilix'
 import fastify from 'fastify'
 import type { FastifyInstance, FastifyBaseLogger } from 'fastify'
@@ -45,7 +46,6 @@ import {
 import type { DependencyOverrides } from './infrastructure/diConfig'
 import { registerDependencies } from './infrastructure/diConfig'
 import { errorHandler } from './infrastructure/errors/errorHandler'
-import { resolveGlobalErrorLogObject } from './infrastructure/errors/globalErrorHandler'
 import {
   dbHealthCheck,
   redisHealthCheck,

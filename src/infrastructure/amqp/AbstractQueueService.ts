@@ -1,9 +1,9 @@
+import type { ErrorReporter } from '@lokalise/node-core'
+import { globalLogger, resolveGlobalErrorLogObject } from '@lokalise/node-core'
 import type { Channel, Connection } from 'amqplib'
 import type { ZodSchema } from 'zod'
 
 import type { Dependencies } from '../diConfig'
-import type { ErrorReporter } from '../errors/errorReporter'
-import { globalLogger, resolveGlobalErrorLogObject } from '../errors/globalErrorHandler'
 
 import type { ConsumerErrorResolver } from './ConsumerErrorResolver'
 import type { CommonMessage } from './MessageTypes'
