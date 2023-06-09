@@ -1,6 +1,7 @@
 import type { ErrorReporter } from '@lokalise/node-core'
-import { globalLogger, resolveGlobalErrorLogObject } from '@lokalise/node-core'
+import { resolveGlobalErrorLogObject } from '@lokalise/node-core'
 import type { Channel, Connection } from 'amqplib'
+import type { FastifyBaseLogger } from 'fastify'
 import type { ZodSchema } from 'zod'
 
 import type { Dependencies } from '../diConfig'
@@ -22,10 +23,11 @@ export class AbstractQueueService<MessagePayloadType extends CommonMessage> {
   private isShuttingDown: boolean
   protected errorReporter: ErrorReporter
   protected messageSchema: ZodSchema<MessagePayloadType>
+  protected readonly logger: FastifyBaseLogger
 
   constructor(
     params: QueueParams<MessagePayloadType>,
-    { amqpConnection, consumerErrorResolver, errorReporter }: Dependencies,
+    { amqpConnection, consumerErrorResolver, errorReporter, logger }: Dependencies,
   ) {
     this.connection = amqpConnection
     this.errorResolver = consumerErrorResolver
@@ -33,6 +35,7 @@ export class AbstractQueueService<MessagePayloadType extends CommonMessage> {
     this.queueName = params.queueName
     this.messageSchema = params.messageSchema
     this.errorReporter = errorReporter
+    this.logger = logger
   }
 
   private async destroyConnection(): Promise<void> {
@@ -59,16 +62,16 @@ export class AbstractQueueService<MessagePayloadType extends CommonMessage> {
     this.channel = await this.connection.createChannel()
     this.channel.on('close', () => {
       if (!this.isShuttingDown) {
-        globalLogger.error(`AMQP connection lost!`)
+        this.logger.error(`AMQP connection lost!`)
         this.init().catch((err) => {
-          globalLogger.error(err)
+          this.logger.error(err)
           throw err
         })
       }
     })
     this.channel.on('error', (err) => {
       const logObject = resolveGlobalErrorLogObject(err)
-      globalLogger.error(logObject)
+      this.logger.error(logObject)
     })
 
     await this.channel.assertQueue(this.queueName, {
