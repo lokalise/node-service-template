@@ -25,7 +25,6 @@ import { UserRepository } from '../modules/users/repositories/UserRepository'
 import { PermissionsService } from '../modules/users/services/PermissionsService'
 import { UserService } from '../modules/users/services/UserService'
 
-import { AmqpConnectionDisposer } from './amqp/AmqpConnectionDisposer'
 import { ConsumerErrorResolver } from './amqp/ConsumerErrorResolver'
 import type { Config } from './config'
 import { getConfig } from './config'
@@ -44,6 +43,8 @@ export function registerDependencies(
   dependencies: ExternalDependencies = { logger: globalLogger },
   dependencyOverrides: DependencyOverrides = {},
 ): void {
+  const isAmqpEnabled = dependencies.amqpConnection !== undefined
+
   const diConfig: DiConfig = {
     jwt: asFunction(() => {
       return dependencies.app?.jwt
@@ -108,16 +109,13 @@ export function registerDependencies(
       },
       {
         lifetime: Lifetime.SINGLETON,
+        dispose: (connection) => {
+          return connection.close()
+        },
       },
     ),
     consumerErrorResolver: asFunction(() => {
       return new ConsumerErrorResolver()
-    }),
-    amqpConnectionDisposer: asClass(AmqpConnectionDisposer, {
-      dispose: (rabbitMqDisposer) => {
-        return rabbitMqDisposer.close()
-      },
-      lifetime: Lifetime.SINGLETON,
     }),
 
     config: asFunction(() => {
@@ -131,8 +129,20 @@ export function registerDependencies(
     configStore: asClass(ConfigStore, SINGLETON_CONFIG),
 
     permissionsService: asClass(PermissionsService, SINGLETON_CONFIG),
-    permissionConsumer: asClass(PermissionConsumer, SINGLETON_CONFIG),
-    permissionPublisher: asClass(PermissionPublisher, SINGLETON_CONFIG),
+    permissionConsumer: asClass(PermissionConsumer, {
+      lifetime: Lifetime.SINGLETON,
+      asyncInit: 'consume',
+      asyncDispose: 'close',
+      asyncDisposePriority: 10,
+      eagerInject: isAmqpEnabled,
+    }),
+    permissionPublisher: asClass(PermissionPublisher, {
+      lifetime: Lifetime.SINGLETON,
+      asyncInit: 'init',
+      asyncDispose: 'close',
+      asyncDisposePriority: 20,
+      eagerInject: isAmqpEnabled,
+    }),
 
     processLogFilesJob: asClass(ProcessLogFilesJob, SINGLETON_CONFIG),
     deleteOldUsersJob: asClass(DeleteOldUsersJob, SINGLETON_CONFIG),
@@ -188,7 +198,6 @@ export interface Dependencies {
   consumerErrorResolver: ErrorResolver
   permissionConsumer: PermissionConsumer
   permissionPublisher: PermissionPublisher
-  amqpConnectionDisposer: AmqpConnectionDisposer
 
   fakeStoreApiClient: FakeStoreApiClient
 }

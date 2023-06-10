@@ -53,9 +53,7 @@ import {
   runAllHealthchecks,
 } from './infrastructure/healthchecks'
 import { resolveLoggerConfiguration } from './infrastructure/logger'
-import { getConsumers } from './modules/consumers'
 import { registerJobs } from './modules/jobs'
-import { getPublishers } from './modules/publishers'
 import { getRoutes } from './modules/routes'
 import { jwtTokenPlugin } from './plugins/jwtTokenPlugin'
 
@@ -172,7 +170,12 @@ export async function getApp(
   })
 
   await app.register(fastifySwaggerUi)
-  await app.register(fastifyAwilixPlugin, { disposeOnClose: true })
+  await app.register(fastifyAwilixPlugin, {
+    disposeOnClose: true,
+    asyncDispose: true,
+    asyncInit: true,
+    eagerInject: true,
+  })
   await app.register(fastifySchedule)
 
   await app.register(fastifyJWT, {
@@ -287,21 +290,6 @@ export async function getApp(
       app.log.info('Background jobs registered')
     } else {
       app.log.info('Skip registering background jobs')
-    }
-
-    if (isAmqpEnabled) {
-      // This is needed to ensure it gets initialized
-      app.diContainer.cradle.amqpConnectionDisposer
-
-      const consumers = getConsumers(app.diContainer.cradle)
-      for (const consumer of consumers) {
-        void consumer.consume()
-      }
-
-      const publishers = getPublishers(app.diContainer.cradle)
-      for (const publisher of publishers) {
-        void publisher.init()
-      }
     }
 
     if (configOverrides.healthchecksEnabled !== false) {
