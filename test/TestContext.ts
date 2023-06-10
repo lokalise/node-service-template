@@ -1,5 +1,6 @@
 import type { Cradle } from '@fastify/awilix'
 import { NewRelicTransactionManager } from '@lokalise/fastify-extras'
+import { globalLogger } from '@lokalise/node-core'
 import type { AwilixContainer } from 'awilix'
 import { createContainer } from 'awilix'
 import type { FastifyInstance } from 'fastify'
@@ -22,6 +23,7 @@ export function createTestContext(dependencyOverrides: DependencyOverrides = {})
     diContainer,
     {
       app: fakeApp as FastifyInstance,
+      logger: globalLogger,
     },
     dependencyOverrides,
   )
