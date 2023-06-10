@@ -128,6 +128,8 @@ export function getRedisConfig(): RedisConfig {
     username: configScope.getOptionalNullable('REDIS_USERNAME', undefined),
     password: configScope.getOptionalNullable('REDIS_PASSWORD', undefined),
     useTls: configScope.getOptionalBoolean('REDIS_USE_TLS', true),
+    commandTimeout: configScope.getOptionalNullableInteger('REDIS_COMMAND_TIMEOUT', undefined),
+    connectTimeout: configScope.getOptionalNullableInteger('REDIS_CONNECT_TIMEOUT', undefined),
   }
 }
 
@@ -139,6 +141,14 @@ export function getSchedulerConfig(): RedisConfig {
     username: configScope.getOptionalNullable('SCHEDULER_REDIS_USERNAME', undefined),
     password: configScope.getOptionalNullable('SCHEDULER_REDIS_PASSWORD', undefined),
     useTls: configScope.getOptionalBoolean('REDIS_USE_TLS', true),
+    commandTimeout: configScope.getOptionalNullableInteger(
+      'SCHEDULER_REDIS_COMMAND_TIMEOUT',
+      undefined,
+    ),
+    connectTimeout: configScope.getOptionalNullableInteger(
+      'SCHEDULER_REDIS_CONNECT_TIMEOUT',
+      undefined,
+    ),
   }
 }
 

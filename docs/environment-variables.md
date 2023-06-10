@@ -26,12 +26,16 @@ In production you are expected to set environment variables during deployment (e
 - `REDIS_PASSWORD` - Redis DB password
 - `REDIS_DB` - Redis DB database (number in 0-15 range)
 - (OPTIONAL) `REDIS_USE_TLS` - whether to use https connection (`true`)
+- (OPTIONAL) `REDIS_CONNECT_TIMEOUT` - if set, the milliseconds before a timeout occurs during the initial connection to the Redis server.
+- (OPTIONAL) `REDIS_COMMAND_TIMEOUT` - if set, and a command does not return a reply within a set number of milliseconds, a "Command timed out" error will be thrown.
 - `SCHEDULER_REDIS_HOST` - scheduling Redis instance host
 - `SCHEDULER_REDIS_PORT` - scheduling Redis instance port
 - `SCHEDULER_REDIS_USERNAME` - scheduling Redis instance username
 - `SCHEDULER_REDIS_PASSWORD` - scheduling Redis instance password
 - `SCHEDULER_REDIS_DB` - scheduling Redis instance database (number in 0-15 range)
 - (OPTIONAL) `SCHEDULER_REDIS_USE_TLS` - whether to use https connection for scheduling Redis instance (`true`)
+- (OPTIONAL) `SCHEDULER_REDIS_CONNECT_TIMEOUT` - if set, the milliseconds before a timeout occurs during the initial connection to the Redis server.
+- (OPTIONAL) `SCHEDULER_REDIS_COMMAND_TIMEOUT` - if set, and a command does not return a reply within a set number of milliseconds, a "Command timed out" error will be thrown.
 
 ### amqp
 

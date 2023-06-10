@@ -61,15 +61,18 @@ export function registerDependencies(
           port: redisConfig.port,
           username: redisConfig.username,
           password: redisConfig.password,
+          connectTimeout: redisConfig.connectTimeout,
+          commandTimeout: redisConfig.commandTimeout,
           tls: redisConfig.useTls ? {} : undefined,
         })
       },
       {
         dispose: (redis) => {
-          return new Promise((resolve, reject) => {
+          return new Promise((resolve) => {
             void redis.quit((err, result) => {
               if (err) {
-                return reject(err)
+                globalLogger.error(`Error while closing redis: ${err.message}`)
+                return resolve(err)
               }
               return resolve(result)
             })
