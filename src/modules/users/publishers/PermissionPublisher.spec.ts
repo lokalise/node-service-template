@@ -35,7 +35,6 @@ describe('PermissionPublisher', () => {
             asyncInit: 'consume',
             asyncDispose: 'close',
             asyncDisposePriority: 10,
-            eagerInject: true,
           }),
         },
       )

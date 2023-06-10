@@ -137,14 +137,12 @@ export function registerDependencies(
       asyncInit: isAmqpEnabled ? 'consume' : false,
       asyncDispose: isAmqpEnabled ? 'close' : false,
       asyncDisposePriority: 10,
-      eagerInject: isAmqpEnabled,
     }),
     permissionPublisher: asClass(PermissionPublisher, {
       lifetime: Lifetime.SINGLETON,
       asyncInit: isAmqpEnabled ? 'init' : false,
       asyncDispose: isAmqpEnabled ? 'close' : false,
       asyncDisposePriority: 20,
-      eagerInject: isAmqpEnabled,
     }),
 
     processLogFilesJob: asClass(ProcessLogFilesJob, SINGLETON_CONFIG),

@@ -174,7 +174,6 @@ export async function getApp(
     disposeOnClose: true,
     asyncDispose: true,
     asyncInit: true,
-    eagerInject: true,
   })
   await app.register(fastifySchedule)
 
