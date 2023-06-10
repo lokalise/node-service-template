@@ -5,10 +5,6 @@ import type { Either } from '@lokalise/node-core'
 import { executeAsyncAndHandleGlobalErrors } from '@lokalise/node-core'
 import type { FastifyInstance } from 'fastify'
 
-import { runWithTimeout, TIMEOUT } from '../utils/timeoutUtils'
-
-const REDIS_HEALTHCHECK_TIMEOUT = 10 * 1000
-
 export const wrapHealthCheck = (app: FastifyInstance, healthCheck: HealthCheck) => {
   return async () => {
     const response = await healthCheck(app)
@@ -20,13 +16,13 @@ export const wrapHealthCheck = (app: FastifyInstance, healthCheck: HealthCheck) 
 
 export const redisHealthCheck: HealthCheck = async (app): Promise<Either<Error, true>> => {
   const redis = app.diContainer.cradle.redis
-  const result = await runWithTimeout(redis.ping(), REDIS_HEALTHCHECK_TIMEOUT)
 
-  if (result === TIMEOUT) {
-    return { error: new Error('Redis connection timed out') }
-  }
-
-  if (result !== 'PONG') {
+  try {
+    const result = await redis.ping()
+    if (result !== 'PONG') {
+      return { error: new Error('Redis did not respond with PONG') }
+    }
+  } catch (err) {
     return { error: new Error('Redis did not respond with PONG') }
   }
 
