@@ -1,6 +1,6 @@
 import { diContainer } from '@fastify/awilix'
 import type { Channel } from 'amqplib'
-import { asClass } from 'awilix'
+import { asClass, Lifetime } from 'awilix'
 import type { FastifyInstance } from 'fastify'
 
 import { cleanTables, DB_MODEL } from '../../../../test/DbCleaner'
@@ -30,7 +30,13 @@ describe('PermissionPublisher', () => {
         },
         {
           consumerErrorResolver: asClass(FakeConsumerErrorResolver, SINGLETON_CONFIG),
-          permissionConsumer: asClass(FakeConsumer, SINGLETON_CONFIG),
+          permissionConsumer: asClass(FakeConsumer, {
+            lifetime: Lifetime.SINGLETON,
+            asyncInit: 'consume',
+            asyncDispose: 'close',
+            asyncDisposePriority: 10,
+            eagerInject: true,
+          }),
         },
       )
     })
@@ -39,7 +45,6 @@ describe('PermissionPublisher', () => {
       await cleanTables(diContainer.cradle.prisma, [DB_MODEL.User])
       await app.diContainer.cradle.permissionsService.deleteAll()
       channel = await app.diContainer.cradle.amqpConnection.createChannel()
-      await app.diContainer.cradle.permissionConsumer.consume()
     })
 
     afterEach(async () => {
