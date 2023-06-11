@@ -21,7 +21,7 @@ export default defineConfig({
       reporter: ['text'],
       all: true,
       lines: 87,
-      functions: 87,
+      functions: 90,
       branches: 84,
       statements: 87,
     },
