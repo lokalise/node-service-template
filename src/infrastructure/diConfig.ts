@@ -25,7 +25,6 @@ import { UserRepository } from '../modules/users/repositories/UserRepository'
 import { PermissionsService } from '../modules/users/services/PermissionsService'
 import { UserService } from '../modules/users/services/UserService'
 
-import { AmqpConnectionDisposer } from './amqp/AmqpConnectionDisposer'
 import { ConsumerErrorResolver } from './amqp/ConsumerErrorResolver'
 import type { Config } from './config'
 import { getConfig } from './config'
@@ -44,6 +43,8 @@ export function registerDependencies(
   dependencies: ExternalDependencies = { logger: globalLogger },
   dependencyOverrides: DependencyOverrides = {},
 ): void {
+  const isAmqpEnabled = dependencies.amqpConnection !== undefined
+
   const diConfig: DiConfig = {
     jwt: asFunction(() => {
       return dependencies.app?.jwt
@@ -60,15 +61,18 @@ export function registerDependencies(
           port: redisConfig.port,
           username: redisConfig.username,
           password: redisConfig.password,
+          connectTimeout: redisConfig.connectTimeout,
+          commandTimeout: redisConfig.commandTimeout,
           tls: redisConfig.useTls ? {} : undefined,
         })
       },
       {
         dispose: (redis) => {
-          return new Promise((resolve, reject) => {
+          return new Promise((resolve) => {
             void redis.quit((err, result) => {
               if (err) {
-                return reject(err)
+                globalLogger.error(`Error while closing redis: ${err.message}`)
+                return resolve(err)
               }
               return resolve(result)
             })
@@ -108,16 +112,13 @@ export function registerDependencies(
       },
       {
         lifetime: Lifetime.SINGLETON,
+        dispose: (connection) => {
+          return connection.close()
+        },
       },
     ),
     consumerErrorResolver: asFunction(() => {
       return new ConsumerErrorResolver()
-    }),
-    amqpConnectionDisposer: asClass(AmqpConnectionDisposer, {
-      dispose: (rabbitMqDisposer) => {
-        return rabbitMqDisposer.close()
-      },
-      lifetime: Lifetime.SINGLETON,
     }),
 
     config: asFunction(() => {
@@ -131,8 +132,18 @@ export function registerDependencies(
     configStore: asClass(ConfigStore, SINGLETON_CONFIG),
 
     permissionsService: asClass(PermissionsService, SINGLETON_CONFIG),
-    permissionConsumer: asClass(PermissionConsumer, SINGLETON_CONFIG),
-    permissionPublisher: asClass(PermissionPublisher, SINGLETON_CONFIG),
+    permissionConsumer: asClass(PermissionConsumer, {
+      lifetime: Lifetime.SINGLETON,
+      asyncInit: isAmqpEnabled ? 'consume' : false,
+      asyncDispose: isAmqpEnabled ? 'close' : false,
+      asyncDisposePriority: 10,
+    }),
+    permissionPublisher: asClass(PermissionPublisher, {
+      lifetime: Lifetime.SINGLETON,
+      asyncInit: isAmqpEnabled ? 'init' : false,
+      asyncDispose: isAmqpEnabled ? 'close' : false,
+      asyncDisposePriority: 20,
+    }),
 
     processLogFilesJob: asClass(ProcessLogFilesJob, SINGLETON_CONFIG),
     deleteOldUsersJob: asClass(DeleteOldUsersJob, SINGLETON_CONFIG),
@@ -188,7 +199,6 @@ export interface Dependencies {
   consumerErrorResolver: ErrorResolver
   permissionConsumer: PermissionConsumer
   permissionPublisher: PermissionPublisher
-  amqpConnectionDisposer: AmqpConnectionDisposer
 
   fakeStoreApiClient: FakeStoreApiClient
 }
