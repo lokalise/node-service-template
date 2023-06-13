@@ -16,8 +16,7 @@ In our experience, manual management of concurrency via obtaining and releasing 
 
 [AbstractBackgroundJob](../src/infrastructure/AbstractBackgroundJob.ts) is the base class that you should extend when implementing your background jobs.
 
-You should register all of your jobs to `app.scheduler` in [jobs.ts](../src/modules/jobs.ts) to ensure that they are launched when application starts.
-If you choose to do your own job registration instead of using `jobs.ts`, note that it needs to happen within the `app.after(() => {})` block.
+You should use `eagerInject: 'register` in DI configuration all of your jobs in [diConfig.ts](../src/infrastructure/diConfig.ts) to ensure that they are launched when application starts.
 
 Both period ("run job every X hours/minutes/seconds") and cron ("0 \* \* \* \*") configuration styles are supported. Check [jobs.ts](../src/modules/jobs.ts) for examples.
 
@@ -65,6 +64,6 @@ await this.updateMutex(lock, LOCK_ON_SUCCESS_IN_MSECS)
 
 - All jobs are automatically stopped when fastify instance is stopped
 
-- Default template implementation disables background scheduling of jobs when running tests (see `// Register background jobs` block in [app.ts](../src/app.ts) if you would like to change this behaviour)
+- Default template implementation disables background scheduling of jobs when running tests (see `jobsEnabled: configOverrides.jobsEnabled !== false && !isTest(),` block in [app.ts](../src/app.ts) if you would like to change this behaviour)
 
 - If you are not using cron expressions for scheduling your jobs, you can drop the optional dependency `croner` from `package.json`.
