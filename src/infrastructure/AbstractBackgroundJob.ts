@@ -7,6 +7,7 @@ import type { FastifyBaseLogger } from 'fastify'
 import type Redis from 'ioredis'
 import { Mutex } from 'redis-semaphore'
 import type { LockOptions } from 'redis-semaphore'
+import type { ToadScheduler } from 'toad-scheduler'
 
 import type { Dependencies } from './diConfig'
 
@@ -28,19 +29,22 @@ export abstract class AbstractBackgroundJob {
   protected readonly newRelicBackgroundTransactionManager: NewRelicTransactionManager
   protected readonly logger: FastifyBaseLogger
   protected readonly errorReporter: ErrorReporter
+  protected readonly scheduler: ToadScheduler
 
   protected constructor(
     options: BackgroundJobConfiguration,
-    { redis, logger, newRelicBackgroundTransactionManager, errorReporter }: Dependencies,
+    { redis, logger, newRelicBackgroundTransactionManager, errorReporter, scheduler }: Dependencies,
   ) {
     this.jobId = options.jobId
     this.logger = logger
     this.redis = redis
     this.newRelicBackgroundTransactionManager = newRelicBackgroundTransactionManager
     this.errorReporter = errorReporter
+    this.scheduler = scheduler
   }
 
   protected abstract processInternal(executionUuid: string): Promise<void>
+  protected abstract register(): void
 
   async process() {
     const uuid = randomUUID()

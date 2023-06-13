@@ -1,17 +1,34 @@
+import { CronJob } from 'toad-scheduler'
+
 import { AbstractBackgroundJob } from '../../../infrastructure/AbstractBackgroundJob'
+import type { CronJobConfig } from '../../../infrastructure/config'
 import type { Dependencies } from '../../../infrastructure/diConfig'
+import { createTask } from '../../../infrastructure/jobs/jobUtils'
 
 const LOCK_TIMEOUT_IN_MSECS = 60 * 1000
 const LOCK_REFRESH_IN_MSECS = 10 * 1000
 const LOCK_ON_SUCCESS_IN_MSECS = 60 * 1000 * 60
 
 export class SendEmailsJob extends AbstractBackgroundJob {
+  private readonly config: CronJobConfig
   constructor(dependencies: Dependencies) {
     super(
       {
         jobId: 'SendEmailsJob',
       },
       dependencies,
+    )
+
+    this.config = dependencies.config.jobs.sendEmailsJob
+  }
+
+  public register() {
+    const task = createTask(this.logger, this)
+    this.scheduler.addCronJob(
+      new CronJob({ cronExpression: this.config.cronExpression }, task, {
+        id: this.jobId,
+        preventOverrun: true,
+      }),
     )
   }
 
