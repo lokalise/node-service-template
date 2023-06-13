@@ -11,6 +11,7 @@ import type { FastifyInstance, FastifyBaseLogger } from 'fastify'
 import Redis from 'ioredis'
 import type P from 'pino'
 import { pino } from 'pino'
+import { ToadScheduler } from 'toad-scheduler'
 
 import { FakeStoreApiClient } from '../integrations/FakeStoreApiClient'
 import { PermissionConsumer } from '../modules/users/consumers/PermissionConsumer'
@@ -38,18 +39,29 @@ export const SINGLETON_CONFIG = { lifetime: Lifetime.SINGLETON }
 
 export type DependencyOverrides = Partial<DiConfig>
 
+export type DIOptions = {
+  jobsEnabled?: boolean
+  amqpEnabled?: boolean
+}
+
 export function registerDependencies(
   diContainer: AwilixContainer,
   dependencies: ExternalDependencies = { logger: globalLogger },
   dependencyOverrides: DependencyOverrides = {},
+  options: DIOptions = {},
 ): void {
   const isAmqpEnabled = dependencies.amqpConnection !== undefined
+  const areJobsEnabled = options.jobsEnabled
 
   const diConfig: DiConfig = {
     jwt: asFunction(() => {
       return dependencies.app?.jwt
     }, SINGLETON_CONFIG),
     logger: asFunction(() => dependencies.logger ?? pino(), SINGLETON_CONFIG),
+
+    scheduler: asFunction(() => {
+      return dependencies.app?.scheduler ?? new ToadScheduler()
+    }, SINGLETON_CONFIG),
 
     redis: asFunction(
       ({ config }: Dependencies) => {
@@ -134,20 +146,34 @@ export function registerDependencies(
     permissionsService: asClass(PermissionsService, SINGLETON_CONFIG),
     permissionConsumer: asClass(PermissionConsumer, {
       lifetime: Lifetime.SINGLETON,
-      asyncInit: isAmqpEnabled ? 'consume' : false,
-      asyncDispose: isAmqpEnabled ? 'close' : false,
+      asyncInit: 'consume',
+      asyncDispose: 'close',
       asyncDisposePriority: 10,
+      enabled: isAmqpEnabled,
     }),
     permissionPublisher: asClass(PermissionPublisher, {
       lifetime: Lifetime.SINGLETON,
-      asyncInit: isAmqpEnabled ? 'init' : false,
-      asyncDispose: isAmqpEnabled ? 'close' : false,
+      asyncInit: 'init',
+      asyncDispose: 'close',
       asyncDisposePriority: 20,
+      enabled: isAmqpEnabled,
     }),
 
-    processLogFilesJob: asClass(ProcessLogFilesJob, SINGLETON_CONFIG),
-    deleteOldUsersJob: asClass(DeleteOldUsersJob, SINGLETON_CONFIG),
-    sendEmailsJob: asClass(SendEmailsJob, SINGLETON_CONFIG),
+    processLogFilesJob: asClass(ProcessLogFilesJob, {
+      lifetime: Lifetime.SINGLETON,
+      eagerInject: 'register',
+      enabled: areJobsEnabled,
+    }),
+    deleteOldUsersJob: asClass(DeleteOldUsersJob, {
+      lifetime: Lifetime.SINGLETON,
+      eagerInject: 'register',
+      enabled: areJobsEnabled,
+    }),
+    sendEmailsJob: asClass(SendEmailsJob, {
+      lifetime: Lifetime.SINGLETON,
+      eagerInject: 'register',
+      enabled: areJobsEnabled,
+    }),
 
     // vendor-specific dependencies
     newRelicBackgroundTransactionManager: asFunction(() => {
@@ -174,6 +200,7 @@ export interface Dependencies {
   jwt: JWT
   config: Config
   logger: FastifyBaseLogger & P.Logger
+  scheduler: ToadScheduler
 
   redis: Redis
   prisma: PrismaClient

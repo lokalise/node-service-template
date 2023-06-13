@@ -53,7 +53,6 @@ import {
   runAllHealthchecks,
 } from './infrastructure/healthchecks'
 import { resolveLoggerConfiguration } from './infrastructure/logger'
-import { registerJobs } from './modules/jobs'
 import { getRoutes } from './modules/routes'
 import { jwtTokenPlugin } from './plugins/jwtTokenPlugin'
 
@@ -217,6 +216,10 @@ export async function getApp(
       logger: app.log,
     },
     dependencyOverrides,
+    {
+      amqpEnabled: isAmqpEnabled,
+      jobsEnabled: configOverrides.jobsEnabled !== false && !isTest(),
+    },
   )
 
   if (configOverrides.healthchecksEnabled !== false) {
@@ -280,15 +283,6 @@ export async function getApp(
         app.log.info('Starting graceful shutdown')
         next()
       })
-    }
-
-    // Register background jobs
-    if (configOverrides.jobsEnabled !== false && !isTest()) {
-      app.log.info('Start registering background jobs')
-      registerJobs(app)
-      app.log.info('Background jobs registered')
-    } else {
-      app.log.info('Skip registering background jobs')
     }
 
     if (configOverrides.healthchecksEnabled !== false) {

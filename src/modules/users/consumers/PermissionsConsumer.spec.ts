@@ -1,6 +1,7 @@
-import { diContainer } from '@fastify/awilix'
+import type { Cradle } from '@fastify/awilix'
 import type { PrismaClient } from '@prisma/client'
 import type { Channel } from 'amqplib'
+import type { AwilixContainer } from 'awilix'
 import { asClass } from 'awilix'
 import type { FastifyInstance } from 'fastify'
 
@@ -54,8 +55,9 @@ async function waitForPermissions(permissionsService: PermissionsService, userId
 describe('PermissionsConsumer', () => {
   describe('consume', () => {
     let app: FastifyInstance
+    let diContainer: AwilixContainer<Cradle>
     let channel: Channel
-    beforeAll(async () => {
+    beforeEach(async () => {
       app = await getApp(
         {
           amqpEnabled: true,
@@ -64,9 +66,8 @@ describe('PermissionsConsumer', () => {
           consumerErrorResolver: asClass(FakeConsumerErrorResolver, SINGLETON_CONFIG),
         },
       )
-    })
+      diContainer = app.diContainer
 
-    beforeEach(async () => {
       await cleanTables(diContainer.cradle.prisma, [DB_MODEL.User])
       await app.diContainer.cradle.permissionsService.deleteAll()
       channel = await app.diContainer.cradle.amqpConnection.createChannel()
@@ -76,9 +77,6 @@ describe('PermissionsConsumer', () => {
     afterEach(async () => {
       await channel.deleteQueue(PermissionConsumer.QUEUE_NAME)
       await channel.close()
-    })
-
-    afterAll(async () => {
       await app.close()
     })
 
