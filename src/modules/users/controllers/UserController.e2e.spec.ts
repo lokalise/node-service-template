@@ -185,6 +185,7 @@ describe('UserController', () => {
       expect(response2.json()).toEqual({
         data: {
           email: 'email@test.com',
+          age: null,
           id: response1.json().data.id,
           name: 'updated',
         },

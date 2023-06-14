@@ -1,9 +1,6 @@
-import type { UserUpdateInput } from '.prisma/client'
-import type { PrismaClient, User } from '@prisma/client'
+import type { Prisma, PrismaClient, User } from '@prisma/client'
 
 import type { Dependencies } from '../../../infrastructure/diConfig'
-
-export type CreateUserRow = Omit<User, 'id'>
 
 export class UserRepository {
   private readonly prisma: PrismaClient
@@ -28,7 +25,7 @@ export class UserRepository {
     })
   }
 
-  updateUser(id: number, updatedUser: UserUpdateInput): Promise<User | null> {
+  updateUser(id: number, updatedUser: Prisma.UserUpdateInput): Promise<User | null> {
     return this.prisma.user.update({
       data: updatedUser,
       where: {
@@ -48,7 +45,7 @@ export class UserRepository {
     return result
   }
 
-  async createUser(user: CreateUserRow): Promise<User> {
+  async createUser(user: Prisma.UserCreateInput): Promise<User> {
     const createdUser = await this.prisma.user.create({
       data: user,
     })

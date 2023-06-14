@@ -30,8 +30,9 @@ model Profile {
 
 model User {
   id      Int      @id @default(autoincrement())
+  age     Int?
   email   String   @unique
-  name    String?
+  name    String
   posts   Post[]
   profile Profile?
 }
