@@ -96,6 +96,8 @@ describe('UserController', () => {
 
       expect(response1.statusCode).toBe(200)
       expect(response2.statusCode).toBe(200)
+      expect(response1.json()).toEqual(response.json())
+      expect(response2.json()).toEqual(response.json())
     })
   })
 })
