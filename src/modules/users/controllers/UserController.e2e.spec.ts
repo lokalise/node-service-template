@@ -1,26 +1,29 @@
 import type { FastifyInstance } from 'fastify'
-import { beforeEach } from 'vitest'
+import { beforeEach, expect } from 'vitest'
 
 import { cleanTables, DB_MODEL } from '../../../../test/DbCleaner'
 import { getTestConfigurationOverrides } from '../../../../test/jwtUtils'
 import { getApp } from '../../../app'
 import { generateJwtToken } from '../../../infrastructure/tokenUtils'
 import type {
-  CREATE_USER_SCHEMA_TYPE,
+  CREATE_USER_BODY_SCHEMA_TYPE,
   GET_USER_SCHEMA_RESPONSE_SCHEMA_TYPE,
+  UPDATE_USER_BODY_SCHEMA_TYPE,
 } from '../schemas/userSchemas'
 
 describe('UserController', () => {
+  let app: FastifyInstance
+  beforeAll(async () => {
+    app = await getApp(getTestConfigurationOverrides())
+  })
+  beforeEach(async () => {
+    await cleanTables(app.diContainer.cradle.prisma, [DB_MODEL.User])
+  })
+  afterAll(async () => {
+    await app.close()
+  })
+
   describe('POST /users', () => {
-    let app: FastifyInstance
-    beforeAll(async () => {
-      app = await getApp(getTestConfigurationOverrides())
-    })
-
-    afterAll(async () => {
-      await app.close()
-    })
-
     it('validates email format', async () => {
       const token = await generateJwtToken(app.jwt, { userId: 1 }, 9999)
       const response = await app
@@ -29,7 +32,7 @@ describe('UserController', () => {
         .headers({
           authorization: `Bearer ${token}`,
         })
-        .body({ name: 'dummy', email: 'test' } as CREATE_USER_SCHEMA_TYPE)
+        .body({ name: 'dummy', email: 'test' } as CREATE_USER_BODY_SCHEMA_TYPE)
         .end()
 
       expect(response.statusCode).toBe(400)
@@ -51,19 +54,7 @@ describe('UserController', () => {
     })
   })
 
-  describe('GET /users', () => {
-    let app: FastifyInstance
-    beforeAll(async () => {
-      app = await getApp(getTestConfigurationOverrides())
-    })
-    beforeEach(async () => {
-      await cleanTables(app.diContainer.cradle.prisma, [DB_MODEL.User])
-    })
-
-    afterAll(async () => {
-      await app.close()
-    })
-
+  describe('GET /users/:userId', () => {
     it('returns user when requested twice', async () => {
       const token = await generateJwtToken(app.jwt, { userId: 1 }, 9999)
 
@@ -73,7 +64,7 @@ describe('UserController', () => {
         .headers({
           authorization: `Bearer ${token}`,
         })
-        .body({ name: 'dummy', email: 'email@test.com' } as CREATE_USER_SCHEMA_TYPE)
+        .body({ name: 'dummy', email: 'email@test.com' } as CREATE_USER_BODY_SCHEMA_TYPE)
         .end()
       expect(response.statusCode).toBe(201)
       const { id } = response.json<GET_USER_SCHEMA_RESPONSE_SCHEMA_TYPE>().data
@@ -98,6 +89,106 @@ describe('UserController', () => {
       expect(response2.statusCode).toBe(200)
       expect(response1.json()).toEqual(response.json())
       expect(response2.json()).toEqual(response.json())
+    })
+  })
+
+  describe('DELETE /users/:userId', () => {
+    it('resets cache after deletion', async () => {
+      const token = await generateJwtToken(app.jwt, { userId: 1 }, 9999)
+
+      const response = await app
+        .inject()
+        .post('/users')
+        .headers({
+          authorization: `Bearer ${token}`,
+        })
+        .body({ name: 'dummy', email: 'email@test.com' } as CREATE_USER_BODY_SCHEMA_TYPE)
+        .end()
+      expect(response.statusCode).toBe(201)
+      const { id } = response.json<GET_USER_SCHEMA_RESPONSE_SCHEMA_TYPE>().data
+
+      const response1 = await app
+        .inject()
+        .get(`/users/${id}`)
+        .headers({
+          authorization: `Bearer ${token}`,
+        })
+        .end()
+
+      await app
+        .inject()
+        .delete(`/users/${id}`)
+        .headers({
+          authorization: `Bearer ${token}`,
+        })
+        .end()
+
+      const response2 = await app
+        .inject()
+        .get(`/users/${id}`)
+        .headers({
+          authorization: `Bearer ${token}`,
+        })
+        .end()
+
+      expect(response1.statusCode).toBe(200)
+      expect(response2.statusCode).toBe(404)
+      expect(response1.json()).toEqual(response.json())
+    })
+  })
+
+  describe('PATCH /users/:userId', () => {
+    it('resets cache after update', async () => {
+      const token = await generateJwtToken(app.jwt, { userId: 1 }, 9999)
+
+      const response = await app
+        .inject()
+        .post('/users')
+        .headers({
+          authorization: `Bearer ${token}`,
+        })
+        .body({ name: 'dummy', email: 'email@test.com' } as CREATE_USER_BODY_SCHEMA_TYPE)
+        .end()
+      expect(response.statusCode).toBe(201)
+      const { id } = response.json<GET_USER_SCHEMA_RESPONSE_SCHEMA_TYPE>().data
+
+      const response1 = await app
+        .inject()
+        .get(`/users/${id}`)
+        .headers({
+          authorization: `Bearer ${token}`,
+        })
+        .end()
+
+      const updateResponse = await app
+        .inject()
+        .patch(`/users/${id}`)
+        .body({
+          name: 'updated',
+        } satisfies UPDATE_USER_BODY_SCHEMA_TYPE)
+        .headers({
+          authorization: `Bearer ${token}`,
+        })
+        .end()
+
+      const response2 = await app
+        .inject()
+        .get(`/users/${id}`)
+        .headers({
+          authorization: `Bearer ${token}`,
+        })
+        .end()
+
+      expect(updateResponse.statusCode).toBe(204)
+      expect(response1.statusCode).toBe(200)
+      expect(response2.statusCode).toBe(200)
+      expect(response2.json()).toEqual({
+        data: {
+          email: 'email@test.com',
+          id: response1.json().data.id,
+          name: 'updated',
+        },
+      })
     })
   })
 })

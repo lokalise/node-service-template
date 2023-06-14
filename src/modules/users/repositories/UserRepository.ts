@@ -1,3 +1,4 @@
+import type { UserUpdateInput } from '.prisma/client'
 import type { PrismaClient, User } from '@prisma/client'
 
 import type { Dependencies } from '../../../infrastructure/diConfig'
@@ -11,8 +12,25 @@ export class UserRepository {
     this.prisma = prisma
   }
 
-  async getUser(id: number): Promise<User | null> {
+  getUser(id: number): Promise<User | null> {
     return this.prisma.user.findUnique({
+      where: {
+        id,
+      },
+    })
+  }
+
+  deleteUser(id: number): Promise<User | null> {
+    return this.prisma.user.delete({
+      where: {
+        id,
+      },
+    })
+  }
+
+  updateUser(id: number, updatedUser: UserUpdateInput): Promise<User | null> {
+    return this.prisma.user.update({
+      data: updatedUser,
       where: {
         id,
       },

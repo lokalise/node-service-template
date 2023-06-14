@@ -23,10 +23,12 @@ export class UserService {
   }
 
   async createUser(user: NewUserDTO) {
-    return await this.userRepository.createUser({
+    const newUser = await this.userRepository.createUser({
       name: user.name ?? null,
       email: user.email,
     })
+    await this.userLoader.invalidateCacheFor(newUser.id.toString())
+    return newUser
   }
 
   async getUser(id: number): Promise<User> {
@@ -38,6 +40,16 @@ export class UserService {
     }
 
     return getUserResult
+  }
+
+  async deleteUser(id: number): Promise<void> {
+    await this.userRepository.deleteUser(id)
+    await this.userLoader.invalidateCacheFor(id.toString())
+  }
+
+  async updateUser(id: number, updatedData: Partial<Pick<User, 'id'>>) {
+    await this.userRepository.updateUser(id, updatedData)
+    await this.userLoader.invalidateCacheFor(id.toString())
   }
 
   async getUsers(userIds: number[]): Promise<User[]> {

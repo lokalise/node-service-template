@@ -11,7 +11,7 @@ import { asClass, asFunction, Lifetime } from 'awilix'
 import type { FastifyInstance, FastifyBaseLogger } from 'fastify'
 import Redis from 'ioredis'
 import type { InMemoryCacheConfiguration, LoaderConfig } from 'layered-loader'
-import { Loader, RedisCache } from 'layered-loader'
+import { createNotificationPair, Loader, RedisCache } from 'layered-loader'
 import type P from 'pino'
 import { pino } from 'pino'
 import { ToadScheduler } from 'toad-scheduler'
@@ -104,6 +104,68 @@ export function registerDependencies(
       },
     ),
 
+    redisPublisher: asFunction(
+      ({ config }: Dependencies) => {
+        const redisConfig = config.redis
+
+        return new Redis({
+          host: redisConfig.host,
+          db: redisConfig.db,
+          port: redisConfig.port,
+          username: redisConfig.username,
+          password: redisConfig.password,
+          connectTimeout: redisConfig.connectTimeout,
+          commandTimeout: redisConfig.commandTimeout,
+          tls: redisConfig.useTls ? {} : undefined,
+        })
+      },
+      {
+        dispose: (redis) => {
+          return new Promise((resolve) => {
+            void redis.quit((err, result) => {
+              if (err) {
+                globalLogger.error(`Error while closing redis: ${err.message}`)
+                return resolve(err)
+              }
+              return resolve(result)
+            })
+          })
+        },
+        lifetime: Lifetime.SINGLETON,
+      },
+    ),
+
+    redisConsumer: asFunction(
+      ({ config }: Dependencies) => {
+        const redisConfig = config.redis
+
+        return new Redis({
+          host: redisConfig.host,
+          db: redisConfig.db,
+          port: redisConfig.port,
+          username: redisConfig.username,
+          password: redisConfig.password,
+          connectTimeout: redisConfig.connectTimeout,
+          commandTimeout: redisConfig.commandTimeout,
+          tls: redisConfig.useTls ? {} : undefined,
+        })
+      },
+      {
+        dispose: (redis) => {
+          return new Promise((resolve) => {
+            void redis.quit((err, result) => {
+              if (err) {
+                globalLogger.error(`Error while closing redis: ${err.message}`)
+                return resolve(err)
+              }
+              return resolve(result)
+            })
+          })
+        },
+        lifetime: Lifetime.SINGLETON,
+      },
+    ),
+
     prisma: asFunction(
       ({ config }: Dependencies) => {
         return new PrismaClient({
@@ -152,6 +214,13 @@ export function registerDependencies(
 
     userLoader: asFunction(
       (deps: Dependencies) => {
+        const { publisher: notificationPublisher, consumer: notificationConsumer } =
+          createNotificationPair<User>({
+            channel: 'user-cache-notifications',
+            consumerRedis: deps.redisConsumer,
+            publisherRedis: deps.redisPublisher,
+          })
+
         const config: LoaderConfig<User> = {
           inMemoryCache: {
             ...IN_MEMORY_CONFIGURATION_BASE,
@@ -159,10 +228,12 @@ export function registerDependencies(
           },
           asyncCache: new RedisCache<User>(deps.redis, {
             json: true,
-            prefix: 'layered-loader:projects:',
+            prefix: 'layered-loader:users:',
             ttlInMsecs: 1000 * 60 * 60,
           }),
           dataSources: [new UserLoader(deps)],
+          notificationConsumer,
+          notificationPublisher,
           logger: deps.logger,
         }
         return new Loader(config)
@@ -232,6 +303,8 @@ export interface Dependencies {
   scheduler: ToadScheduler
 
   redis: Redis
+  redisPublisher: Redis
+  redisConsumer: Redis
   prisma: PrismaClient
 
   amqpConnection: Connection
