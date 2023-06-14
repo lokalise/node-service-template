@@ -24,9 +24,7 @@ describe('UserRepository', () => {
 
       const result = await userRepository.getUser(0)
 
-      expect(result).toMatchObject({
-        error: 'NOT_FOUND',
-      })
+      expect(result).toBeNull()
     })
 
     it('Returns value for existing user', async () => {
@@ -37,9 +35,7 @@ describe('UserRepository', () => {
 
       const result = await userRepository.getUser(user.id)
 
-      expect(result).toMatchObject({
-        result: user,
-      })
+      expect(result).toMatchObject(user)
     })
   })
 

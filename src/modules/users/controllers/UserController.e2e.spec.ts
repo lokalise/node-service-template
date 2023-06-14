@@ -1,9 +1,14 @@
 import type { FastifyInstance } from 'fastify'
+import { beforeEach } from 'vitest'
 
+import { cleanTables, DB_MODEL } from '../../../../test/DbCleaner'
 import { getTestConfigurationOverrides } from '../../../../test/jwtUtils'
 import { getApp } from '../../../app'
 import { generateJwtToken } from '../../../infrastructure/tokenUtils'
-import type { CREATE_USER_SCHEMA_TYPE } from '../schemas/userSchemas'
+import type {
+  CREATE_USER_SCHEMA_TYPE,
+  GET_USER_SCHEMA_RESPONSE_SCHEMA_TYPE,
+} from '../schemas/userSchemas'
 
 describe('UserController', () => {
   describe('POST /users', () => {
@@ -43,6 +48,54 @@ describe('UserController', () => {
           message: 'Invalid params',
         }),
       )
+    })
+  })
+
+  describe('GET /users', () => {
+    let app: FastifyInstance
+    beforeAll(async () => {
+      app = await getApp(getTestConfigurationOverrides())
+    })
+    beforeEach(async () => {
+      await cleanTables(app.diContainer.cradle.prisma, [DB_MODEL.User])
+    })
+
+    afterAll(async () => {
+      await app.close()
+    })
+
+    it('returns user when requested twice', async () => {
+      const token = await generateJwtToken(app.jwt, { userId: 1 }, 9999)
+
+      const response = await app
+        .inject()
+        .post('/users')
+        .headers({
+          authorization: `Bearer ${token}`,
+        })
+        .body({ name: 'dummy', email: 'email@test.com' } as CREATE_USER_SCHEMA_TYPE)
+        .end()
+      expect(response.statusCode).toBe(201)
+      const { id } = response.json<GET_USER_SCHEMA_RESPONSE_SCHEMA_TYPE>().data
+
+      const response1 = await app
+        .inject()
+        .get(`/users/${id}`)
+        .headers({
+          authorization: `Bearer ${token}`,
+        })
+        .end()
+
+      const response2 = await app
+        .inject()
+        .get(`/users/${id}`)
+        .headers({
+          authorization: `Bearer ${token}`,
+        })
+        .end()
+
+      expect(response1.statusCode).toBe(200)
+      expect(response2.statusCode).toBe(200)
     })
   })
 })

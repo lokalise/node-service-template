@@ -1,4 +1,3 @@
-import type { Either } from '@lokalise/node-core'
 import type { PrismaClient, User } from '@prisma/client'
 
 import type { Dependencies } from '../../../infrastructure/diConfig'
@@ -12,18 +11,12 @@ export class UserRepository {
     this.prisma = prisma
   }
 
-  async getUser(id: number): Promise<Either<'NOT_FOUND', User>> {
-    const user = await this.prisma.user.findUnique({
+  async getUser(id: number): Promise<User | null> {
+    return this.prisma.user.findUnique({
       where: {
         id,
       },
     })
-
-    if (user === null) {
-      return { error: 'NOT_FOUND' }
-    }
-
-    return { result: user }
   }
 
   async getUsers(userIds: number[]): Promise<User[]> {

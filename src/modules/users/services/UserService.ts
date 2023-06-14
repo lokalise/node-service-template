@@ -1,4 +1,5 @@
 import type { User } from '@prisma/client'
+import type { Loader } from 'layered-loader'
 
 import type { Dependencies } from '../../../infrastructure/diConfig'
 import { EntityNotFoundError } from '../../../infrastructure/errors/publicErrors'
@@ -14,9 +15,11 @@ export type UserDTO = {
 
 export class UserService {
   private readonly userRepository: UserRepository
+  private readonly userLoader: Loader<User>
 
-  constructor({ userRepository }: Dependencies) {
+  constructor({ userRepository, userLoader }: Dependencies) {
     this.userRepository = userRepository
+    this.userLoader = userLoader
   }
 
   async createUser(user: NewUserDTO) {
@@ -27,13 +30,14 @@ export class UserService {
   }
 
   async getUser(id: number): Promise<User> {
-    const getUserResult = await this.userRepository.getUser(id)
+    const getUserResult =
+      this.userLoader.getInMemoryOnly(id.toString()) ?? (await this.userLoader.get(id.toString()))
 
-    if (getUserResult.error) {
+    if (!getUserResult) {
       throw new EntityNotFoundError({ message: 'User not found', details: { id } })
     }
 
-    return getUserResult.result
+    return getUserResult
   }
 
   async getUsers(userIds: number[]): Promise<User[]> {
@@ -43,12 +47,9 @@ export class UserService {
   }
 
   async findUserById(id: number): Promise<User | null> {
-    const getUserResult = await this.userRepository.getUser(id)
+    const getUserResult =
+      this.userLoader.getInMemoryOnly(id.toString()) ?? (await this.userLoader.get(id.toString()))
 
-    if (getUserResult.error) {
-      return null
-    }
-
-    return getUserResult.result
+    return getUserResult ?? null
   }
 }

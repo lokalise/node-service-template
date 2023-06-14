@@ -22,10 +22,10 @@ export default defineConfig({
       ],
       reporter: ['text'],
       all: true,
-      lines: 87,
+      lines: 90,
       functions: 90,
       branches: 84,
-      statements: 87,
+      statements: 90,
     },
   },
 })
