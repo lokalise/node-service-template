@@ -1,16 +1,33 @@
+import { SimpleIntervalJob } from 'toad-scheduler'
+
 import { AbstractBackgroundJob } from '../../../infrastructure/AbstractBackgroundJob'
+import type { IntervalJobConfig } from '../../../infrastructure/config'
 import type { Dependencies } from '../../../infrastructure/diConfig'
+import { createTask } from '../../../infrastructure/jobs/jobUtils'
 
 const LOCK_TIMEOUT_IN_MSECS = 60 * 1000
 const LOCK_REFRESH_IN_MSECS = 10 * 1000
 
 export class DeleteOldUsersJob extends AbstractBackgroundJob {
+  private readonly config: IntervalJobConfig
   constructor(dependencies: Dependencies) {
     super(
       {
         jobId: 'DeleteOldUsersJob',
       },
       dependencies,
+    )
+
+    this.config = dependencies.config.jobs.deleteOldUsersJob
+  }
+
+  public register() {
+    const task = createTask(this.logger, this)
+    this.scheduler.addSimpleIntervalJob(
+      new SimpleIntervalJob({ seconds: this.config.periodInSeconds }, task, {
+        id: this.jobId,
+        preventOverrun: true,
+      }),
     )
   }
 

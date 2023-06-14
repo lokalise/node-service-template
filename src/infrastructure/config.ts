@@ -4,6 +4,14 @@ import type { RedisConfig } from '@lokalise/node-core'
 const configScope: ConfigScope = new ConfigScope()
 const redisDbValidator = createRangeValidator(0, 15)
 
+export type IntervalJobConfig = {
+  periodInSeconds: number
+}
+
+export type CronJobConfig = {
+  cronExpression: string
+}
+
 export type Config = {
   db: DbConfig
   redis: RedisConfig
@@ -29,15 +37,9 @@ export type Config = {
 }
 
 export type JobConfig = {
-  processLogFilesJob: {
-    periodInSeconds: number
-  }
-  deleteOldUsersJob: {
-    periodInSeconds: number
-  }
-  sendEmailsJob: {
-    cronExpression: string
-  }
+  processLogFilesJob: IntervalJobConfig
+  deleteOldUsersJob: IntervalJobConfig
+  sendEmailsJob: CronJobConfig
 }
 
 export type DbConfig = {

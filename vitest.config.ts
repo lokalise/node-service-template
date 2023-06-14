@@ -12,9 +12,11 @@ export default defineConfig({
       include: ['src/**/*.ts'],
       exclude: [
         'src/infrastructure/diConfig.ts',
+        'src/infrastructure/errors/publicErrors.ts',
+        'src/infrastructure/errors/internalErrors.ts',
+        'src/schemas/commonTypes.ts',
         'src/server.ts',
         'src/app.ts',
-        'src/modules/jobs.ts',
         'src/**/*.spec.ts',
         'src/**/*.test.ts',
       ],
