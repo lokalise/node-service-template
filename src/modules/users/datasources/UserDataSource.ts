@@ -4,7 +4,7 @@ import type { DataSource } from 'layered-loader'
 import type { Dependencies } from '../../../infrastructure/diConfig'
 import type { UserRepository } from '../repositories/UserRepository'
 
-export class UserLoader implements DataSource<User> {
+export class UserDataSource implements DataSource<User> {
   name = 'User loader'
   private userRepository: UserRepository
 

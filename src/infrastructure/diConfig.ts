@@ -21,7 +21,7 @@ import { PermissionConsumer } from '../modules/users/consumers/PermissionConsume
 import { DeleteOldUsersJob } from '../modules/users/jobs/DeleteOldUsersJob'
 import { ProcessLogFilesJob } from '../modules/users/jobs/ProcessLogFilesJob'
 import { SendEmailsJob } from '../modules/users/jobs/SendEmailsJob'
-import { UserLoader } from '../modules/users/loaders/UserLoader'
+import { UserDataSource } from '../modules/users/datasources/UserDataSource'
 import { PermissionPublisher } from '../modules/users/publishers/PermissionPublisher'
 import { UserRepository } from '../modules/users/repositories/UserRepository'
 import { PermissionsService } from '../modules/users/services/PermissionsService'
@@ -231,7 +231,7 @@ export function registerDependencies(
             prefix: 'layered-loader:users:',
             ttlInMsecs: 1000 * 60 * 60,
           }),
-          dataSources: [new UserLoader(deps)],
+          dataSources: [new UserDataSource(deps)],
           notificationConsumer,
           notificationPublisher,
           logger: deps.logger,
