@@ -15,4 +15,3 @@ updates:
       - dependency-name: '@typescript-eslint/eslint-plugin'
       - dependency-name: '@typescript-eslint/parser'
       - dependency-name: '@types/node'
-      - dependency-name: 'croner'
