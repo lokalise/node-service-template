@@ -3,25 +3,26 @@ import type { NewRelicTransactionManager } from '@lokalise/fastify-extras'
 import { reportErrorToBugsnag } from '@lokalise/fastify-extras'
 import type { ErrorReporter, ErrorResolver } from '@lokalise/node-core'
 import { globalLogger, InternalError } from '@lokalise/node-core'
+import type { User } from '@prisma/client'
 import { PrismaClient } from '@prisma/client'
 import type { Connection } from 'amqplib'
 import type { AwilixContainer, Resolver } from 'awilix'
 import { asClass, asFunction, Lifetime } from 'awilix'
 import type { FastifyInstance, FastifyBaseLogger } from 'fastify'
 import Redis from 'ioredis'
+import type { InMemoryCacheConfiguration, LoaderConfig } from 'layered-loader'
+import { createNotificationPair, Loader, RedisCache } from 'layered-loader'
 import type P from 'pino'
 import { pino } from 'pino'
 import { ToadScheduler } from 'toad-scheduler'
 
 import { FakeStoreApiClient } from '../integrations/FakeStoreApiClient'
 import { PermissionConsumer } from '../modules/users/consumers/PermissionConsumer'
+import { UserDataSource } from '../modules/users/datasources/UserDataSource'
 import { DeleteOldUsersJob } from '../modules/users/jobs/DeleteOldUsersJob'
 import { ProcessLogFilesJob } from '../modules/users/jobs/ProcessLogFilesJob'
 import { SendEmailsJob } from '../modules/users/jobs/SendEmailsJob'
 import { PermissionPublisher } from '../modules/users/publishers/PermissionPublisher'
-import { ConfigStore } from '../modules/users/repositories/ConfigStore'
-import { UrlCache } from '../modules/users/repositories/UrlCache'
-import { UserCache } from '../modules/users/repositories/UserCache'
 import { UserRepository } from '../modules/users/repositories/UserRepository'
 import { PermissionsService } from '../modules/users/services/PermissionsService'
 import { UserService } from '../modules/users/services/UserService'
@@ -44,6 +45,15 @@ export type DIOptions = {
   amqpEnabled?: boolean
 }
 
+const IN_MEMORY_CACHE_TTL = 1000 * 60 * 5
+const IN_MEMORY_TTL_BEFORE_REFRESH = 1000 * 25
+
+const IN_MEMORY_CONFIGURATION_BASE: InMemoryCacheConfiguration = {
+  ttlInMsecs: IN_MEMORY_CACHE_TTL,
+  ttlLeftBeforeRefreshInMsecs: IN_MEMORY_TTL_BEFORE_REFRESH,
+  cacheType: 'fifo-object',
+}
+
 export function registerDependencies(
   diContainer: AwilixContainer,
   dependencies: ExternalDependencies = { logger: globalLogger },
@@ -64,6 +74,68 @@ export function registerDependencies(
     }, SINGLETON_CONFIG),
 
     redis: asFunction(
+      ({ config }: Dependencies) => {
+        const redisConfig = config.redis
+
+        return new Redis({
+          host: redisConfig.host,
+          db: redisConfig.db,
+          port: redisConfig.port,
+          username: redisConfig.username,
+          password: redisConfig.password,
+          connectTimeout: redisConfig.connectTimeout,
+          commandTimeout: redisConfig.commandTimeout,
+          tls: redisConfig.useTls ? {} : undefined,
+        })
+      },
+      {
+        dispose: (redis) => {
+          return new Promise((resolve) => {
+            void redis.quit((err, result) => {
+              if (err) {
+                globalLogger.error(`Error while closing redis: ${err.message}`)
+                return resolve(err)
+              }
+              return resolve(result)
+            })
+          })
+        },
+        lifetime: Lifetime.SINGLETON,
+      },
+    ),
+
+    redisPublisher: asFunction(
+      ({ config }: Dependencies) => {
+        const redisConfig = config.redis
+
+        return new Redis({
+          host: redisConfig.host,
+          db: redisConfig.db,
+          port: redisConfig.port,
+          username: redisConfig.username,
+          password: redisConfig.password,
+          connectTimeout: redisConfig.connectTimeout,
+          commandTimeout: redisConfig.commandTimeout,
+          tls: redisConfig.useTls ? {} : undefined,
+        })
+      },
+      {
+        dispose: (redis) => {
+          return new Promise((resolve) => {
+            void redis.quit((err, result) => {
+              if (err) {
+                globalLogger.error(`Error while closing redis: ${err.message}`)
+                return resolve(err)
+              }
+              return resolve(result)
+            })
+          })
+        },
+        lifetime: Lifetime.SINGLETON,
+      },
+    ),
+
+    redisConsumer: asFunction(
       ({ config }: Dependencies) => {
         const redisConfig = config.redis
 
@@ -139,9 +211,37 @@ export function registerDependencies(
 
     userRepository: asClass(UserRepository, SINGLETON_CONFIG),
     userService: asClass(UserService, SINGLETON_CONFIG),
-    userCache: asClass(UserCache, SINGLETON_CONFIG),
-    urlCache: asClass(UrlCache, SINGLETON_CONFIG),
-    configStore: asClass(ConfigStore, SINGLETON_CONFIG),
+
+    userLoader: asFunction(
+      (deps: Dependencies) => {
+        const { publisher: notificationPublisher, consumer: notificationConsumer } =
+          createNotificationPair<User>({
+            channel: 'user-cache-notifications',
+            consumerRedis: deps.redisConsumer,
+            publisherRedis: deps.redisPublisher,
+          })
+
+        const config: LoaderConfig<User> = {
+          inMemoryCache: {
+            ...IN_MEMORY_CONFIGURATION_BASE,
+            maxItems: 1000,
+          },
+          asyncCache: new RedisCache<User>(deps.redis, {
+            json: true,
+            prefix: 'layered-loader:users:',
+            ttlInMsecs: 1000 * 60 * 60,
+          }),
+          dataSources: [new UserDataSource(deps)],
+          notificationConsumer,
+          notificationPublisher,
+          logger: deps.logger,
+        }
+        return new Loader(config)
+      },
+      {
+        lifetime: Lifetime.SINGLETON,
+      },
+    ),
 
     permissionsService: asClass(PermissionsService, SINGLETON_CONFIG),
     permissionConsumer: asClass(PermissionConsumer, {
@@ -203,6 +303,8 @@ export interface Dependencies {
   scheduler: ToadScheduler
 
   redis: Redis
+  redisPublisher: Redis
+  redisConsumer: Redis
   prisma: PrismaClient
 
   amqpConnection: Connection
@@ -213,9 +315,7 @@ export interface Dependencies {
 
   userRepository: UserRepository
   userService: UserService
-  userCache: UserCache
-  urlCache: UrlCache
-  configStore: ConfigStore
+  userLoader: Loader<User>
 
   permissionsService: PermissionsService
 
