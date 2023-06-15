@@ -15,6 +15,7 @@ class FakeUserService extends UserService {
   async getUser(): Promise<User> {
     return Promise.resolve({
       id: -1,
+      age: null,
       email: 'dummy',
       name: 'dummy',
     })
