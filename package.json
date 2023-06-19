@@ -36,7 +36,7 @@
     "@fastify/helmet": "^10.1.1",
     "@fastify/jwt": "^7.0.0",
     "@fastify/schedule": "^4.1.1",
-    "@fastify/swagger": "^8.5.1",
+    "@fastify/swagger": "^8.6.0",
     "@fastify/swagger-ui": "^1.9.0",
     "@lokalise/fastify-extras": "^8.0.0",
     "@lokalise/node-core": "^5.8.1",
