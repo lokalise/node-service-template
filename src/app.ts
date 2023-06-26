@@ -21,6 +21,7 @@ import {
   publicHealthcheckPlugin,
 } from '@lokalise/fastify-extras'
 import { resolveGlobalErrorLogObject } from '@lokalise/node-core'
+import { resolveAmqpConnection } from '@message-queue-toolkit/amqp'
 import type { AwilixContainer } from 'awilix'
 import fastify from 'fastify'
 import type { FastifyInstance, FastifyBaseLogger } from 'fastify'
@@ -35,7 +36,6 @@ import {
 import type { ZodTypeProvider } from 'fastify-type-provider-zod'
 import type pino from 'pino'
 
-import { resolveAmqpConnection } from './infrastructure/amqp/amqpConnectionResolver'
 import {
   getAmqpConfig,
   getConfig,
