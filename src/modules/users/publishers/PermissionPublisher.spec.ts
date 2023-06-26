@@ -32,7 +32,7 @@ describe('PermissionPublisher', () => {
           consumerErrorResolver: asClass(FakeConsumerErrorResolver, SINGLETON_CONFIG),
           permissionConsumer: asClass(FakeConsumer, {
             lifetime: Lifetime.SINGLETON,
-            asyncInit: 'consume',
+            asyncInit: 'start',
             asyncDispose: 'close',
             asyncDisposePriority: 10,
           }),
