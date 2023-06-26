@@ -1,4 +1,5 @@
 import { diContainer } from '@fastify/awilix'
+import { deserializeMessage } from '@message-queue-toolkit/amqp'
 import type { Channel } from 'amqplib'
 import { asClass, Lifetime } from 'awilix'
 import type { FastifyInstance } from 'fastify'
@@ -8,7 +9,6 @@ import { FakeConsumer } from '../../../../test/fakes/FakeConsumer'
 import { FakeConsumerErrorResolver } from '../../../../test/fakes/FakeConsumerErrorResolver'
 import { waitAndRetry } from '../../../../test/utils/waitUtils'
 import { getApp } from '../../../app'
-import { deserializeMessage } from '../../../infrastructure/amqp/messageDeserializer'
 import { SINGLETON_CONFIG } from '../../../infrastructure/diConfig'
 import { PermissionConsumer } from '../consumers/PermissionConsumer'
 import type { PERMISSIONS_MESSAGE_TYPE } from '../consumers/userConsumerSchemas'
@@ -32,7 +32,7 @@ describe('PermissionPublisher', () => {
           consumerErrorResolver: asClass(FakeConsumerErrorResolver, SINGLETON_CONFIG),
           permissionConsumer: asClass(FakeConsumer, {
             lifetime: Lifetime.SINGLETON,
-            asyncInit: 'consume',
+            asyncInit: 'start',
             asyncDispose: 'close',
             asyncDisposePriority: 10,
           }),

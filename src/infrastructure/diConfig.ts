@@ -3,6 +3,7 @@ import type { NewRelicTransactionManager } from '@lokalise/fastify-extras'
 import { reportErrorToBugsnag } from '@lokalise/fastify-extras'
 import type { ErrorReporter, ErrorResolver } from '@lokalise/node-core'
 import { globalLogger, InternalError } from '@lokalise/node-core'
+import { AmqpConsumerErrorResolver } from '@message-queue-toolkit/amqp'
 import type { User } from '@prisma/client'
 import { PrismaClient } from '@prisma/client'
 import type { Connection } from 'amqplib'
@@ -27,7 +28,6 @@ import { UserRepository } from '../modules/users/repositories/UserRepository'
 import { PermissionsService } from '../modules/users/services/PermissionsService'
 import { UserService } from '../modules/users/services/UserService'
 
-import { ConsumerErrorResolver } from './amqp/ConsumerErrorResolver'
 import type { Config } from './config'
 import { getConfig } from './config'
 
@@ -202,7 +202,7 @@ export function registerDependencies(
       },
     ),
     consumerErrorResolver: asFunction(() => {
-      return new ConsumerErrorResolver()
+      return new AmqpConsumerErrorResolver()
     }),
 
     config: asFunction(() => {
@@ -246,7 +246,7 @@ export function registerDependencies(
     permissionsService: asClass(PermissionsService, SINGLETON_CONFIG),
     permissionConsumer: asClass(PermissionConsumer, {
       lifetime: Lifetime.SINGLETON,
-      asyncInit: 'consume',
+      asyncInit: 'start',
       asyncDispose: 'close',
       asyncDisposePriority: 10,
       enabled: isAmqpEnabled,

@@ -1,6 +1,6 @@
 import type { Either } from '@lokalise/node-core'
+import { AbstractAmqpConsumer } from '@message-queue-toolkit/amqp'
 
-import { AbstractConsumer } from '../../../infrastructure/amqp/AbstractConsumer'
 import type { Dependencies } from '../../../infrastructure/diConfig'
 import type { PermissionsService } from '../services/PermissionsService'
 import type { UserService } from '../services/UserService'
@@ -8,7 +8,7 @@ import type { UserService } from '../services/UserService'
 import type { PERMISSIONS_MESSAGE_TYPE } from './userConsumerSchemas'
 import { PERMISSIONS_MESSAGE_SCHEMA } from './userConsumerSchemas'
 
-export class PermissionConsumer extends AbstractConsumer<PERMISSIONS_MESSAGE_TYPE> {
+export class PermissionConsumer extends AbstractAmqpConsumer<PERMISSIONS_MESSAGE_TYPE> {
   public static QUEUE_NAME = 'user_permissions'
   private readonly userService: UserService
   private readonly permissionsService: PermissionsService
@@ -16,10 +16,22 @@ export class PermissionConsumer extends AbstractConsumer<PERMISSIONS_MESSAGE_TYP
   constructor(dependencies: Dependencies) {
     super(
       {
+        amqpConnection: dependencies.amqpConnection,
+        consumerErrorResolver: dependencies.consumerErrorResolver,
+        errorReporter: dependencies.errorReporter,
+        logger: dependencies.logger,
+        transactionObservabilityManager: dependencies.newRelicBackgroundTransactionManager,
+      },
+      {
         queueName: PermissionConsumer.QUEUE_NAME,
         messageSchema: PERMISSIONS_MESSAGE_SCHEMA,
+        messageTypeField: 'messageType',
+        queueConfiguration: {
+          autoDelete: false,
+          durable: true,
+          exclusive: false,
+        },
       },
-      dependencies,
     )
     this.userService = dependencies.userService
     this.permissionsService = dependencies.permissionsService
