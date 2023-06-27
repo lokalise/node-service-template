@@ -85,22 +85,22 @@ npm install
 npm run copy:config
 ```
 
-3. Run migrations to synchronize your database schema with defined models.
+3. Launch all the infrastructural dependencies locally:
+
+```shell
+docker compose up -d
+```
+
+4. Run migrations to synchronize your database schema with defined models.
 
 ```shell
 npm run db:migration:dev
 ```
 
-4. Generate Prisma client for type-safe DB operations:
+5. Generate Prisma client for type-safe DB operations:
 
 ```shell
 npm run db:update-client
-```
-
-5. You can use Docker Compose for launching all the infrastructural dependencies locally:
-
-```shell
-docker compose up -d
 ```
 
 6. To run application:
