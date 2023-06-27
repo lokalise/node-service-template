@@ -1,5 +1,5 @@
 # ---- Base Node ----
-FROM node:20.3.1-bookworm-slim as base
+FROM node:20.3.1-bullseye-slim as base
 
 RUN mkdir -p /home/node/app
 RUN chown -R node:node /home/node && chmod -R 770 /home/node
