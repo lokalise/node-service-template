@@ -134,7 +134,7 @@ You have multiple options to ease your development:
 
 - Default file names are `jwtRS256.key` for private key and `jwtRS256.key.pub`
   for public key
-- Run JWT generate script
+- Run JWT generate script:
 
   ```shell
   npm run jwt:generate
@@ -151,5 +151,11 @@ You have multiple options to ease your development:
   ```
 
 - Copy your public key to `JWT_PUBLIC_KEY` in your `.env` file as a one line string
+
+- Restart the application to load the new public key: 
+
+  ```shell
+  npm run start:dev
+  ```
 
 - Use your token to authenticate through bearer authentication in your requests
