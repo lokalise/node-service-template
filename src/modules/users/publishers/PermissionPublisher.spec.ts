@@ -1,5 +1,5 @@
 import { diContainer } from '@fastify/awilix'
-import { deserializeMessage } from '@message-queue-toolkit/amqp'
+import { deserializeAmqpMessage } from '@message-queue-toolkit/amqp'
 import type { Channel } from 'amqplib'
 import { asClass, Lifetime } from 'awilix'
 import type { FastifyInstance } from 'fastify'
@@ -69,7 +69,7 @@ describe('PermissionPublisher', () => {
         if (message === null) {
           return
         }
-        const decodedMessage = deserializeMessage(
+        const decodedMessage = deserializeAmqpMessage(
           message,
           PERMISSIONS_MESSAGE_SCHEMA,
           new FakeConsumerErrorResolver(),
