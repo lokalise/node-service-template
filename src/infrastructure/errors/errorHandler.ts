@@ -111,7 +111,5 @@ export const errorHandler = function (
   }
 
   const responseObject = resolveResponseObject(error)
-  // See https://github.com/fastify/fastify/pull/4823#issuecomment-1616088607
-  // @ts-ignore
   void reply.status(responseObject.statusCode).send(responseObject.payload)
 }
