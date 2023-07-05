@@ -1,3 +1,4 @@
+import type { ServerZoneType } from '@amplitude/analytics-types'
 import { ConfigScope, createRangeValidator } from '@lokalise/node-core'
 import type { RedisConfig } from '@lokalise/node-core'
 
@@ -32,6 +33,14 @@ export type Config = {
     bugsnag: {
       isEnabled: boolean
       apiKey?: string
+    }
+    amplitude: {
+      isEnabled: boolean
+      apiKey?: string
+      serverZone: string
+      flushIntervalMillis?: number
+      flushMaxRetries?: number
+      flushQueueSize?: number
     }
   }
 }
@@ -100,6 +109,21 @@ export function getConfig(): Config {
       bugsnag: {
         isEnabled: configScope.getOptionalBoolean('BUGSNAG_ENABLED', true),
         apiKey: configScope.getOptionalNullable('BUGSNAG_KEY', undefined),
+      },
+      amplitude: {
+        isEnabled: configScope.getOptionalBoolean('AMPLITUDE_ENABLED', false),
+        apiKey: configScope.getOptionalNullable('AMPLITUDE_KEY', undefined),
+        serverZone: configScope.getOptionalValidated(
+          'AMPLITUDE_SERVER_ZONE',
+          'EU',
+          (value): value is ServerZoneType => value === 'US' || value === 'EU',
+        ),
+        flushIntervalMillis: configScope.getOptionalInteger(
+          'AMPLITUDE_FLUSH_INTERVAL_MILLIS',
+          10_000,
+        ),
+        flushQueueSize: configScope.getOptionalInteger('AMPLITUDE_FLUSH_QUEUE_SIZE', 300),
+        flushMaxRetries: configScope.getOptionalInteger('AMPLITUDE_FLUSH_MAX_RETRIES', 12),
       },
     },
   }
