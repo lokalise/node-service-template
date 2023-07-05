@@ -63,3 +63,12 @@ In production you are expected to set environment variables during deployment (e
 - (OPTIONAL) `DOCKER_REDIS_PORT` - Docker `redis` service port, for development purposes only (`6379`)
 - (OPTIONAL) `DOCKER_RABBITMQ_CLIENT_PORT` - Docker `rabbitmq` service client port, for development purposes only (`5672`)
 - (OPTIONAL) `DOCKER_RABBITMQ_MANAGEMENT_PORT` - Docker `rabbitmq` service management port, for development purposes only (`15672`)
+
+### amplitude
+
+- (OPTIONAL) `AMPLITUDE_ENABLED` - Amplitude enabled (`false`)
+- (OPTIONAL) `AMPLITUDE_KEY` - Amplitude source API key
+- (OPTIONAL) `AMPLITUDE_SERVER_ZONE` - Amplitude server zone (`EU`). Supported values: `EU` | `US`
+- (OPTIONAL) `AMPLITUDE_FLUSH_INTERVAL_MILLIS` - Sets the interval of uploading events to Amplitude in milliseconds. (`10000`)
+- (OPTIONAL) `AMPLITUDE_FLUSH_QUEUE_SIZE` - Sets the maximum number of events that are batched in a single upload attempt. (`300`)
+- (OPTIONAL) `AMPLITUDE_FLUSH_MAX_RETRIES` - Sets the maximum number of retries for failed upload attempts. This is only applicable to retry-able errors. (`12`)
