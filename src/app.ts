@@ -273,7 +273,6 @@ export async function getApp(
     serviceName: config.vendors.newrelic.appName,
     useBatchSpans: isProduction(),
   })
-
   await app.register(amplitudePlugin, {
     isEnabled: config.vendors.amplitude.isEnabled,
     apiKey: config.vendors.amplitude.apiKey,

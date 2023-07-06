@@ -1,4 +1,3 @@
-import type { ServerZoneType } from '@amplitude/analytics-types'
 import { ConfigScope, createRangeValidator } from '@lokalise/node-core'
 import type { RedisConfig } from '@lokalise/node-core'
 
@@ -113,11 +112,7 @@ export function getConfig(): Config {
       amplitude: {
         isEnabled: configScope.getOptionalBoolean('AMPLITUDE_ENABLED', false),
         apiKey: configScope.getOptionalNullable('AMPLITUDE_KEY', undefined),
-        serverZone: configScope.getOptionalValidated(
-          'AMPLITUDE_SERVER_ZONE',
-          'EU',
-          (value): value is ServerZoneType => value === 'US' || value === 'EU',
-        ),
+        serverZone: configScope.getOptionalOneOf('AMPLITUDE_SERVER_ZONE', 'EU', ['EU', 'US']),
         flushIntervalMillis: configScope.getOptionalInteger(
           'AMPLITUDE_FLUSH_INTERVAL_MILLIS',
           10_000,
