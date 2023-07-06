@@ -263,6 +263,7 @@ export async function getApp(
       apiKey: config.vendors.bugsnag.apiKey ?? '',
       releaseStage: appConfig.appEnv,
       appVersion: appConfig.appVersion,
+      ...(config.vendors.bugsnag.appType && { appType: config.vendors.bugsnag.appType }),
     },
   })
   await app.register(prismaOtelTracingPlugin, {
