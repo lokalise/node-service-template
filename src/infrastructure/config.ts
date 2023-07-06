@@ -34,6 +34,14 @@ export type Config = {
       apiKey?: string
       appType?: string
     }
+    amplitude: {
+      isEnabled: boolean
+      apiKey?: string
+      serverZone: string
+      flushIntervalMillis?: number
+      flushMaxRetries?: number
+      flushQueueSize?: number
+    }
   }
 }
 
@@ -102,6 +110,17 @@ export function getConfig(): Config {
         isEnabled: configScope.getOptionalBoolean('BUGSNAG_ENABLED', true),
         apiKey: configScope.getOptionalNullable('BUGSNAG_KEY', undefined),
         appType: configScope.getOptionalNullable('BUGSNAG_APP_TYPE', undefined),
+      },
+      amplitude: {
+        isEnabled: configScope.getOptionalBoolean('AMPLITUDE_ENABLED', false),
+        apiKey: configScope.getOptionalNullable('AMPLITUDE_KEY', undefined),
+        serverZone: configScope.getOptionalOneOf('AMPLITUDE_SERVER_ZONE', 'EU', ['EU', 'US']),
+        flushIntervalMillis: configScope.getOptionalInteger(
+          'AMPLITUDE_FLUSH_INTERVAL_MILLIS',
+          10_000,
+        ),
+        flushQueueSize: configScope.getOptionalInteger('AMPLITUDE_FLUSH_QUEUE_SIZE', 300),
+        flushMaxRetries: configScope.getOptionalInteger('AMPLITUDE_FLUSH_MAX_RETRIES', 12),
       },
     },
   }

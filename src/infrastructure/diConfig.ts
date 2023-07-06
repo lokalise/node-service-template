@@ -1,5 +1,5 @@
 import type { JWT } from '@fastify/jwt'
-import type { NewRelicTransactionManager } from '@lokalise/fastify-extras'
+import type { NewRelicTransactionManager, Amplitude } from '@lokalise/fastify-extras'
 import { reportErrorToBugsnag } from '@lokalise/fastify-extras'
 import type { ErrorReporter, ErrorResolver } from '@lokalise/node-core'
 import { globalLogger, InternalError } from '@lokalise/node-core'
@@ -279,6 +279,9 @@ export function registerDependencies(
     newRelicBackgroundTransactionManager: asFunction(() => {
       return dependencies.app?.newrelicTransactionManager
     }, SINGLETON_CONFIG),
+    amplitude: asFunction(() => {
+      return dependencies.app?.amplitude
+    }, SINGLETON_CONFIG),
     errorReporter: asFunction(() => {
       return {
         report: (report) => reportErrorToBugsnag(report),
@@ -321,6 +324,7 @@ export interface Dependencies {
 
   // vendor-specific dependencies
   newRelicBackgroundTransactionManager: NewRelicTransactionManager
+  amplitude: Amplitude
 
   errorReporter: ErrorReporter
   consumerErrorResolver: ErrorResolver
