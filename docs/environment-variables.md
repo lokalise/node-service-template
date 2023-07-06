@@ -56,6 +56,7 @@ In production you are expected to set environment variables during deployment (e
 
 - (OPTIONAL) `BUGSNAG_KEY` - BugSnag API key
 - (OPTIONAL) `BUGSNAG_ENABLED` - whether to send errors to BugSnag (`true`)
+- (OPTIONAL) `BUGSNAG_APP_TYPE` - type of app process running
 
 ### docker compose
 

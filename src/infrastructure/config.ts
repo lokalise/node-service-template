@@ -32,6 +32,7 @@ export type Config = {
     bugsnag: {
       isEnabled: boolean
       apiKey?: string
+      appType?: string
     }
     amplitude: {
       isEnabled: boolean
@@ -108,6 +109,7 @@ export function getConfig(): Config {
       bugsnag: {
         isEnabled: configScope.getOptionalBoolean('BUGSNAG_ENABLED', true),
         apiKey: configScope.getOptionalNullable('BUGSNAG_KEY', undefined),
+        appType: configScope.getOptionalNullable('BUGSNAG_APP_TYPE', undefined),
       },
       amplitude: {
         isEnabled: configScope.getOptionalBoolean('AMPLITUDE_ENABLED', false),
