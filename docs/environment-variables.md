@@ -51,6 +51,7 @@ In production you are expected to set environment variables during deployment (e
 - (OPTIONAL) `NEW_RELIC_LICENSE_KEY` - New Relic API key
 - (OPTIONAL) `NEW_RELIC_APP_NAME` - instrumented application name for New Relic grouping purposes
 - (OPTIONAL) `NEW_RELIC_ENABLED` - whether to use New Relic instrumentation (`true`)
+- (OPTIONAL) `NEW_RELIC_LABELS` - tags/labels to apply to your reporting in the format key:value
 
 ### bugsnag
 

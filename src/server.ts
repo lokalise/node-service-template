@@ -7,6 +7,8 @@ import {
 } from '@lokalise/node-core'
 
 if (process.env.NEW_RELIC_ENABLED !== 'false') {
+  // NewRelic performs magic by importing environment variables automatically
+  // https://docs.newrelic.com/docs/apm/agents/nodejs-agent/installation-configuration/nodejs-agent-configuration/#environment
   require('newrelic')
 }
 
