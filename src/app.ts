@@ -2,6 +2,7 @@
 
 import type http from 'http'
 
+import type { ServerZoneType } from '@amplitude/analytics-types'
 import fastifyAuth from '@fastify/auth'
 import { diContainer, fastifyAwilixPlugin } from '@fastify/awilix'
 import { fastifyCors } from '@fastify/cors'
@@ -19,6 +20,7 @@ import {
   prismaOtelTracingPlugin,
   requestContextProviderPlugin,
   publicHealthcheckPlugin,
+  amplitudePlugin,
 } from '@lokalise/fastify-extras'
 import { resolveGlobalErrorLogObject } from '@lokalise/node-core'
 import { resolveAmqpConnection } from '@message-queue-toolkit/amqp'
@@ -263,6 +265,7 @@ export async function getApp(
       apiKey: config.vendors.bugsnag.apiKey ?? '',
       releaseStage: appConfig.appEnv,
       appVersion: appConfig.appVersion,
+      ...(config.vendors.bugsnag.appType && { appType: config.vendors.bugsnag.appType }),
     },
   })
   await app.register(prismaOtelTracingPlugin, {
@@ -270,6 +273,16 @@ export async function getApp(
     samplingRatio: isProduction() ? 0.1 : 1.0,
     serviceName: config.vendors.newrelic.appName,
     useBatchSpans: isProduction(),
+  })
+  await app.register(amplitudePlugin, {
+    isEnabled: config.vendors.amplitude.isEnabled,
+    apiKey: config.vendors.amplitude.apiKey,
+    options: {
+      serverZone: config.vendors.amplitude.serverZone as ServerZoneType,
+      flushIntervalMillis: config.vendors.amplitude.flushIntervalMillis,
+      flushMaxRetries: config.vendors.amplitude.flushMaxRetries,
+      flushQueueSize: config.vendors.amplitude.flushQueueSize,
+    },
   })
 
   app.after(() => {
