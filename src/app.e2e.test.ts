@@ -28,6 +28,18 @@ describe('app', () => {
       })
       expect(response.statusCode).toBe(200)
     })
+
+    it('Returns public health check information', async () => {
+      const response = await app.inject().get('/').end()
+
+      expect(response.json()).toMatchObject({
+        gitCommitSha: 'sha',
+        heartbeat: 'HEALTHY',
+        status: 'OK',
+        version: '1',
+      })
+      expect(response.statusCode).toBe(200)
+    })
   })
 
   describe('metrics', () => {
