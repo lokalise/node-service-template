@@ -82,7 +82,7 @@
     "eslint": "^8.44.0",
     "eslint-config-prettier": "^8.8.0",
     "eslint-plugin-import": "^2.27.5",
-    "eslint-plugin-prettier": "^4.2.1",
+    "eslint-plugin-prettier": "^5.0.0-alpha.2",
     "eslint-plugin-vitest": "^0.2.6",
     "mockttp": "^3.7.6",
     "oas-validator": "^5.0.8",
