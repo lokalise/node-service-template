@@ -61,7 +61,7 @@ export function registerDependencies(
   options: DIOptions = {},
 ): void {
   const isAmqpEnabled = dependencies.amqpConnection !== undefined
-  const areJobsEnabled = options.jobsEnabled
+  const areJobsEnabled = !!options.jobsEnabled
 
   const diConfig: DiConfig = {
     jwt: asFunction(() => {
