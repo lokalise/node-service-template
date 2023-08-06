@@ -1,4 +1,5 @@
 import type { Cradle } from '@fastify/awilix'
+import { waitAndRetry } from '@message-queue-toolkit/core'
 import type { PrismaClient } from '@prisma/client'
 import type { Channel } from 'amqplib'
 import type { AwilixContainer } from 'awilix'
@@ -7,14 +8,13 @@ import type { FastifyInstance } from 'fastify'
 
 import { cleanTables, DB_MODEL } from '../../../../test/DbCleaner'
 import { FakeConsumerErrorResolver } from '../../../../test/fakes/FakeConsumerErrorResolver'
-import { waitAndRetry } from '../../../../test/utils/waitUtils'
 import { getApp } from '../../../app'
 import { SINGLETON_CONFIG } from '../../../infrastructure/diConfig'
 import { buildQueueMessage } from '../../../utils/queueUtils'
 import type { PermissionsService } from '../services/PermissionsService'
 
 import { PermissionConsumer } from './PermissionConsumer'
-import type { PERMISSIONS_MESSAGE_TYPE } from './userConsumerSchemas'
+import type { PERMISSIONS_ADD_MESSAGE_TYPE } from './userConsumerSchemas'
 
 const userIds = [100, 200, 300]
 const perms: [string, ...string[]] = ['perm1', 'perm2']
@@ -32,24 +32,20 @@ async function createUsers(prisma: PrismaClient, userIdsToCreate: number[]) {
 }
 
 async function waitForPermissions(permissionsService: PermissionsService, userIds: number[]) {
-  return await waitAndRetry(
-    async () => {
-      const usersPerms = await permissionsService.getUserPermissionsBulk(userIds)
+  return await waitAndRetry(async () => {
+    const usersPerms = await permissionsService.getUserPermissionsBulk(userIds)
 
-      if (usersPerms && usersPerms.length !== userIds.length) {
+    if (usersPerms && usersPerms.length !== userIds.length) {
+      return null
+    }
+
+    for (const userPerms of usersPerms)
+      if (userPerms.length !== perms.length) {
         return null
       }
 
-      for (const userPerms of usersPerms)
-        if (userPerms.length !== perms.length) {
-          return null
-        }
-
-      return usersPerms
-    },
-    500,
-    5,
-  )
+    return usersPerms
+  })
 }
 
 describe('PermissionsConsumer', () => {
@@ -68,14 +64,12 @@ describe('PermissionsConsumer', () => {
       )
       diContainer = app.diContainer
 
+      channel = await app.diContainer.cradle.amqpConnection.createChannel()
       await cleanTables(diContainer.cradle.prisma, [DB_MODEL.User])
       await app.diContainer.cradle.permissionsService.deleteAll()
-      channel = await app.diContainer.cradle.amqpConnection.createChannel()
-      await app.diContainer.cradle.permissionConsumer.start()
     })
 
     afterEach(async () => {
-      await channel.deleteQueue(PermissionConsumer.QUEUE_NAME)
       await channel.close()
       await app.close()
     })
@@ -93,7 +87,7 @@ describe('PermissionsConsumer', () => {
           messageType: 'add',
           userIds,
           permissions: perms,
-        } satisfies PERMISSIONS_MESSAGE_TYPE),
+        } satisfies PERMISSIONS_ADD_MESSAGE_TYPE),
       )
 
       const usersPermissions = await waitForPermissions(permissionsService, userIds)
@@ -117,7 +111,7 @@ describe('PermissionsConsumer', () => {
           userIds,
           messageType: 'add',
           permissions: perms,
-        } satisfies PERMISSIONS_MESSAGE_TYPE),
+        } satisfies PERMISSIONS_ADD_MESSAGE_TYPE),
       )
 
       // no users in the database, so message will go back to the queue
@@ -151,7 +145,7 @@ describe('PermissionsConsumer', () => {
           userIds,
           messageType: 'add',
           permissions: perms,
-        } satisfies PERMISSIONS_MESSAGE_TYPE),
+        } satisfies PERMISSIONS_ADD_MESSAGE_TYPE),
       )
 
       // not all users are in the database, so message will go back to the queue
@@ -178,11 +172,11 @@ describe('PermissionsConsumer', () => {
         buildQueueMessage({
           messageType: 'add',
           permissions: perms,
-        } as PERMISSIONS_MESSAGE_TYPE),
+        }),
       )
 
       const fakeResolver = consumerErrorResolver as FakeConsumerErrorResolver
-      await waitAndRetry(() => fakeResolver.handleErrorCallsCount, 500, 5)
+      await waitAndRetry(() => fakeResolver.handleErrorCallsCount)
 
       expect(fakeResolver.handleErrorCallsCount).toBe(1)
     })
@@ -193,7 +187,7 @@ describe('PermissionsConsumer', () => {
       channel.sendToQueue(PermissionConsumer.QUEUE_NAME, Buffer.from('dummy'))
 
       const fakeResolver = consumerErrorResolver as FakeConsumerErrorResolver
-      await waitAndRetry(() => fakeResolver.handleErrorCallsCount, 500, 5)
+      await waitAndRetry(() => fakeResolver.handleErrorCallsCount)
 
       expect(fakeResolver.handleErrorCallsCount).toBe(1)
     })
