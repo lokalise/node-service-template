@@ -60,7 +60,7 @@
     "jsonwebtoken": "^9.0.1",
     "layered-loader": "^11.0.1",
     "newrelic": "10.6.1",
-    "pino": "^8.14.2",
+    "pino": "^8.15.0",
     "pino-pretty": "^10.2.0",
     "redis-semaphore": "^5.4.0",
     "toad-scheduler": "^3.0.0",
