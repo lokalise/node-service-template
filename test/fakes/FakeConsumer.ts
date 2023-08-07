@@ -4,13 +4,13 @@ import type { ZodType } from 'zod'
 
 import type { CommonMessage } from '../../src/infrastructure/amqp/MessageTypes'
 import type { Dependencies } from '../../src/infrastructure/diConfig'
-import { PERMISSIONS_MESSAGE_SCHEMA } from '../../src/modules/users/consumers/userConsumerSchemas'
+import { PERMISSIONS_ADD_MESSAGE_SCHEMA } from '../../src/modules/users/consumers/userConsumerSchemas'
 
 export class FakeConsumer extends AbstractAmqpConsumer<CommonMessage> {
   constructor(
     dependencies: Dependencies,
     queueName = 'dummy',
-    messageSchema: ZodType = PERMISSIONS_MESSAGE_SCHEMA,
+    messageSchema: ZodType = PERMISSIONS_ADD_MESSAGE_SCHEMA,
   ) {
     super(
       {
@@ -21,14 +21,16 @@ export class FakeConsumer extends AbstractAmqpConsumer<CommonMessage> {
         transactionObservabilityManager: dependencies.newRelicBackgroundTransactionManager,
       },
       {
-        queueName,
+        creationConfig: {
+          queueName,
+          queueOptions: {
+            autoDelete: false,
+            durable: true,
+            exclusive: false,
+          },
+        },
         messageSchema,
         messageTypeField: 'messageType',
-        queueConfiguration: {
-          autoDelete: false,
-          durable: true,
-          exclusive: false,
-        },
       },
     )
   }

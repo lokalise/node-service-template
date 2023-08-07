@@ -33,7 +33,7 @@ import { getConfig } from './config'
 
 export type ExternalDependencies = {
   app?: FastifyInstance
-  logger: P.Logger
+  logger: FastifyBaseLogger
   amqpConnection?: Connection
 }
 export const SINGLETON_CONFIG = { lifetime: Lifetime.SINGLETON }
@@ -247,6 +247,7 @@ export function registerDependencies(
     permissionConsumer: asClass(PermissionConsumer, {
       lifetime: Lifetime.SINGLETON,
       asyncInit: 'start',
+      asyncInitPriority: 10,
       asyncDispose: 'close',
       asyncDisposePriority: 10,
       enabled: isAmqpEnabled,
@@ -254,6 +255,7 @@ export function registerDependencies(
     permissionPublisher: asClass(PermissionPublisher, {
       lifetime: Lifetime.SINGLETON,
       asyncInit: 'init',
+      asyncInitPriority: 20,
       asyncDispose: 'close',
       asyncDisposePriority: 20,
       enabled: isAmqpEnabled,
