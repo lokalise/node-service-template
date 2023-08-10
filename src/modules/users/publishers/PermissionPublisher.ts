@@ -1,10 +1,18 @@
-import { AbstractAmqpPublisher } from '@message-queue-toolkit/amqp'
+import { AbstractAmqpPublisherMultiSchema } from '@message-queue-toolkit/amqp'
 
 import type { Dependencies } from '../../../infrastructure/diConfig'
-import type { PERMISSIONS_MESSAGE_TYPE } from '../consumers/userConsumerSchemas'
-import { PERMISSIONS_MESSAGE_SCHEMA } from '../consumers/userConsumerSchemas'
+import type {
+  PERMISSIONS_ADD_MESSAGE_TYPE,
+  PERMISSIONS_REMOVE_MESSAGE_TYPE,
+} from '../consumers/userConsumerSchemas'
+import {
+  PERMISSIONS_ADD_MESSAGE_SCHEMA,
+  PERMISSIONS_REMOVE_MESSAGE_SCHEMA,
+} from '../consumers/userConsumerSchemas'
 
-export class PermissionPublisher extends AbstractAmqpPublisher<PERMISSIONS_MESSAGE_TYPE> {
+type SupportedMessages = PERMISSIONS_REMOVE_MESSAGE_TYPE | PERMISSIONS_ADD_MESSAGE_TYPE
+
+export class PermissionPublisher extends AbstractAmqpPublisherMultiSchema<SupportedMessages> {
   public static QUEUE_NAME = 'user_permissions'
 
   constructor(dependencies: Dependencies) {
@@ -15,14 +23,16 @@ export class PermissionPublisher extends AbstractAmqpPublisher<PERMISSIONS_MESSA
         logger: dependencies.logger,
       },
       {
-        queueName: PermissionPublisher.QUEUE_NAME,
-        messageSchema: PERMISSIONS_MESSAGE_SCHEMA,
-        messageTypeField: 'messageType',
-        queueConfiguration: {
-          autoDelete: false,
-          durable: true,
-          exclusive: false,
+        creationConfig: {
+          queueName: PermissionPublisher.QUEUE_NAME,
+          queueOptions: {
+            autoDelete: false,
+            durable: true,
+            exclusive: false,
+          },
         },
+        messageSchemas: [PERMISSIONS_ADD_MESSAGE_SCHEMA, PERMISSIONS_REMOVE_MESSAGE_SCHEMA],
+        messageTypeField: 'messageType',
       },
     )
   }
