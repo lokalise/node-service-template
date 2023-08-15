@@ -1,5 +1,10 @@
 # ---- Base Node ----
-FROM node:20.4.0-bullseye-slim as base
+FROM node:20.5.1-bookworm-slim as base
+
+RUN set -ex;\
+    apt-get update -y; \
+    apt-get install -y --no-install-recommends libssl3; \
+    rm -rf /var/lib/apt/lists/*;
 
 RUN mkdir -p /home/node/app
 RUN chown -R node:node /home/node && chmod -R 770 /home/node
@@ -39,13 +44,18 @@ FROM dependencies as build
 COPY --chown=node:node . .
 RUN npm run build
 
-# ---- Release ----
-FROM base as release
+# ---- App ----
+FROM base as app
 
-COPY --from=build /usr/bin/dumb-init /usr/bin/dumb-init
 COPY --chown=node:node --from=build /home/node/app/dist .
 COPY --chown=node:node --from=build /home/node/app/prisma prisma
 COPY --chown=node:node --from=build /home/node/app/prod_node_modules node_modules
+
+# ---- Rrelase ----
+FROM base as release
+
+COPY --from=build /usr/bin/dumb-init /usr/bin/dumb-init
+COPY --chown=node:node --from=app /home/node/app /home/node/app
 
 ARG GIT_COMMIT_SHA=""
 ARG APP_VERSION=""
