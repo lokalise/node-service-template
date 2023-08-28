@@ -62,7 +62,7 @@
     "newrelic": "10.6.2",
     "pino": "^8.15.0",
     "pino-pretty": "^10.2.0",
-    "redis-semaphore": "^5.4.0",
+    "redis-semaphore": "^5.5.0",
     "toad-scheduler": "^3.0.0",
     "undici": "^5.23.0",
     "validation-utils": "^9.0.0",
