@@ -1,6 +1,5 @@
 import { AbstractAmqpPublisherMultiSchema } from '@message-queue-toolkit/amqp'
 
-import type { Dependencies } from '../../../infrastructure/diConfig'
 import type {
   PERMISSIONS_ADD_MESSAGE_TYPE,
   PERMISSIONS_REMOVE_MESSAGE_TYPE,
@@ -9,13 +8,14 @@ import {
   PERMISSIONS_ADD_MESSAGE_SCHEMA,
   PERMISSIONS_REMOVE_MESSAGE_SCHEMA,
 } from '../consumers/userConsumerSchemas'
+import type { UsersInjectableDependencies } from '../diConfig'
 
 type SupportedMessages = PERMISSIONS_REMOVE_MESSAGE_TYPE | PERMISSIONS_ADD_MESSAGE_TYPE
 
 export class PermissionPublisher extends AbstractAmqpPublisherMultiSchema<SupportedMessages> {
   public static QUEUE_NAME = 'user_permissions'
 
-  constructor(dependencies: Dependencies) {
+  constructor(dependencies: UsersInjectableDependencies) {
     super(
       {
         amqpConnection: dependencies.amqpConnection,

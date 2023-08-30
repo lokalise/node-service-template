@@ -5,7 +5,7 @@ import type { InMemoryCacheConfiguration, LoaderConfig } from 'layered-loader'
 import { Loader, createNotificationPair, RedisCache } from 'layered-loader'
 
 import type { CommonDependencies } from '../../infrastructure/commonDiConfig'
-import type { Dependencies, DIOptions } from '../../infrastructure/diConfig'
+import type { DIOptions } from '../../infrastructure/diConfig'
 import { SINGLETON_CONFIG } from '../../infrastructure/diConfig'
 
 import { PermissionConsumer } from './consumers/PermissionConsumer'
@@ -56,7 +56,7 @@ export function resolveUsersConfig(options: DIOptions): UsersDiConfig {
     userService: asClass(UserService, SINGLETON_CONFIG),
 
     userLoader: asFunction(
-      (deps: Dependencies) => {
+      (deps: UsersInjectableDependencies) => {
         const { publisher: notificationPublisher, consumer: notificationConsumer } =
           createNotificationPair<User>({
             channel: 'user-cache-notifications',

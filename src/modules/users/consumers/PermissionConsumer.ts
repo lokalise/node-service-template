@@ -2,7 +2,7 @@ import { AbstractAmqpConsumerMultiSchema } from '@message-queue-toolkit/amqp'
 import { MessageHandlerConfigBuilder } from '@message-queue-toolkit/core'
 
 import { isTest } from '../../../infrastructure/config'
-import type { Dependencies } from '../../../infrastructure/diConfig'
+import type { UsersInjectableDependencies } from '../diConfig'
 import type { PermissionsService } from '../services/PermissionsService'
 import type { UserService } from '../services/UserService'
 
@@ -25,7 +25,7 @@ export class PermissionConsumer extends AbstractAmqpConsumerMultiSchema<
   private readonly userService: UserService
   private readonly permissionsService: PermissionsService
 
-  constructor(dependencies: Dependencies) {
+  constructor(dependencies: UsersInjectableDependencies) {
     super(
       {
         amqpConnection: dependencies.amqpConnection,
