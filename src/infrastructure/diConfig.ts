@@ -1,31 +1,14 @@
-import type { JWT } from '@fastify/jwt'
-import type { NewRelicTransactionManager, Amplitude } from '@lokalise/fastify-extras'
-import { reportErrorToBugsnag } from '@lokalise/fastify-extras'
-import type { ErrorReporter, ErrorResolver } from '@lokalise/node-core'
-import { globalLogger, InternalError } from '@lokalise/node-core'
-import { AmqpConsumerErrorResolver } from '@message-queue-toolkit/amqp'
-import { PrismaClient } from '@prisma/client'
+import { globalLogger } from '@lokalise/node-core'
 import type { Connection } from 'amqplib'
 import type { AwilixContainer, Resolver } from 'awilix'
-import { asClass, asFunction, Lifetime } from 'awilix'
+import { Lifetime } from 'awilix'
 import type { FastifyInstance, FastifyBaseLogger } from 'fastify'
-import Redis from 'ioredis'
-import type P from 'pino'
-import { pino } from 'pino'
-import { ToadScheduler } from 'toad-scheduler'
 
-import { FakeStoreApiClient } from '../integrations/FakeStoreApiClient'
-import { PermissionConsumer } from '../modules/users/consumers/PermissionConsumer'
-import type { UsersDependencies } from '../modules/users/diConfig'
-import { usersConfig } from '../modules/users/diConfig'
-import { DeleteOldUsersJob } from '../modules/users/jobs/DeleteOldUsersJob'
-import { ProcessLogFilesJob } from '../modules/users/jobs/ProcessLogFilesJob'
-import { SendEmailsJob } from '../modules/users/jobs/SendEmailsJob'
-import { PermissionPublisher } from '../modules/users/publishers/PermissionPublisher'
-import { PermissionsService } from '../modules/users/services/PermissionsService'
+import type { UsersModuleDependencies } from '../modules/users/diConfig'
+import { resolveUsersConfig } from '../modules/users/diConfig'
 
-import type { Config } from './config'
-import { getConfig } from './config'
+import type { CommonDependencies } from './commonDiConfig'
+import { resolveCommonDiConfig } from './commonDiConfig'
 
 export type ExternalDependencies = {
   app?: FastifyInstance
@@ -51,200 +34,11 @@ export function registerDependencies(
   const areJobsEnabled = !!options.jobsEnabled
 
   const diConfig: DiConfig = {
-    jwt: asFunction(() => {
-      return dependencies.app?.jwt
-    }, SINGLETON_CONFIG),
-    logger: asFunction(() => dependencies.logger ?? pino(), SINGLETON_CONFIG),
-
-    scheduler: asFunction(() => {
-      return dependencies.app?.scheduler ?? new ToadScheduler()
-    }, SINGLETON_CONFIG),
-
-    redis: asFunction(
-      ({ config }: Dependencies) => {
-        const redisConfig = config.redis
-
-        return new Redis({
-          host: redisConfig.host,
-          db: redisConfig.db,
-          port: redisConfig.port,
-          username: redisConfig.username,
-          password: redisConfig.password,
-          connectTimeout: redisConfig.connectTimeout,
-          commandTimeout: redisConfig.commandTimeout,
-          tls: redisConfig.useTls ? {} : undefined,
-        })
-      },
-      {
-        dispose: (redis) => {
-          return new Promise((resolve) => {
-            void redis.quit((err, result) => {
-              if (err) {
-                globalLogger.error(`Error while closing redis: ${err.message}`)
-                return resolve(err)
-              }
-              return resolve(result)
-            })
-          })
-        },
-        lifetime: Lifetime.SINGLETON,
-      },
-    ),
-
-    redisPublisher: asFunction(
-      ({ config }: Dependencies) => {
-        const redisConfig = config.redis
-
-        return new Redis({
-          host: redisConfig.host,
-          db: redisConfig.db,
-          port: redisConfig.port,
-          username: redisConfig.username,
-          password: redisConfig.password,
-          connectTimeout: redisConfig.connectTimeout,
-          commandTimeout: redisConfig.commandTimeout,
-          tls: redisConfig.useTls ? {} : undefined,
-        })
-      },
-      {
-        dispose: (redis) => {
-          return new Promise((resolve) => {
-            void redis.quit((err, result) => {
-              if (err) {
-                globalLogger.error(`Error while closing redis: ${err.message}`)
-                return resolve(err)
-              }
-              return resolve(result)
-            })
-          })
-        },
-        lifetime: Lifetime.SINGLETON,
-      },
-    ),
-
-    redisConsumer: asFunction(
-      ({ config }: Dependencies) => {
-        const redisConfig = config.redis
-
-        return new Redis({
-          host: redisConfig.host,
-          db: redisConfig.db,
-          port: redisConfig.port,
-          username: redisConfig.username,
-          password: redisConfig.password,
-          connectTimeout: redisConfig.connectTimeout,
-          commandTimeout: redisConfig.commandTimeout,
-          tls: redisConfig.useTls ? {} : undefined,
-        })
-      },
-      {
-        dispose: (redis) => {
-          return new Promise((resolve) => {
-            void redis.quit((err, result) => {
-              if (err) {
-                globalLogger.error(`Error while closing redis: ${err.message}`)
-                return resolve(err)
-              }
-              return resolve(result)
-            })
-          })
-        },
-        lifetime: Lifetime.SINGLETON,
-      },
-    ),
-
-    prisma: asFunction(
-      ({ config }: Dependencies) => {
-        return new PrismaClient({
-          datasources: {
-            db: {
-              url: config.db.databaseUrl,
-            },
-          },
-        })
-      },
-      {
-        dispose: (prisma) => {
-          return prisma.$disconnect()
-        },
-        lifetime: Lifetime.SINGLETON,
-      },
-    ),
-
-    amqpConnection: asFunction(
-      () => {
-        if (!dependencies.amqpConnection) {
-          throw new InternalError({
-            message: 'amqp connection is a mandatory dependency',
-            errorCode: 'MISSING_DEPENDENCY',
-          })
-        }
-        return dependencies.amqpConnection
-      },
-      {
-        lifetime: Lifetime.SINGLETON,
-        dispose: (connection) => {
-          return connection.close()
-        },
-      },
-    ),
-    consumerErrorResolver: asFunction(() => {
-      return new AmqpConsumerErrorResolver()
+    ...resolveCommonDiConfig(dependencies),
+    ...resolveUsersConfig({
+      jobsEnabled: areJobsEnabled,
+      amqpEnabled: isAmqpEnabled,
     }),
-
-    config: asFunction(() => {
-      return getConfig()
-    }, SINGLETON_CONFIG),
-
-    permissionsService: asClass(PermissionsService, SINGLETON_CONFIG),
-    permissionConsumer: asClass(PermissionConsumer, {
-      lifetime: Lifetime.SINGLETON,
-      asyncInit: 'start',
-      asyncInitPriority: 10,
-      asyncDispose: 'close',
-      asyncDisposePriority: 10,
-      enabled: isAmqpEnabled,
-    }),
-    permissionPublisher: asClass(PermissionPublisher, {
-      lifetime: Lifetime.SINGLETON,
-      asyncInit: 'init',
-      asyncInitPriority: 20,
-      asyncDispose: 'close',
-      asyncDisposePriority: 20,
-      enabled: isAmqpEnabled,
-    }),
-
-    processLogFilesJob: asClass(ProcessLogFilesJob, {
-      lifetime: Lifetime.SINGLETON,
-      eagerInject: 'register',
-      enabled: areJobsEnabled,
-    }),
-    deleteOldUsersJob: asClass(DeleteOldUsersJob, {
-      lifetime: Lifetime.SINGLETON,
-      eagerInject: 'register',
-      enabled: areJobsEnabled,
-    }),
-    sendEmailsJob: asClass(SendEmailsJob, {
-      lifetime: Lifetime.SINGLETON,
-      eagerInject: 'register',
-      enabled: areJobsEnabled,
-    }),
-
-    // vendor-specific dependencies
-    newRelicBackgroundTransactionManager: asFunction(() => {
-      return dependencies.app?.newrelicTransactionManager
-    }, SINGLETON_CONFIG),
-    amplitude: asFunction(() => {
-      return dependencies.app?.amplitude
-    }, SINGLETON_CONFIG),
-    errorReporter: asFunction(() => {
-      return {
-        report: (report) => reportErrorToBugsnag(report),
-      } satisfies ErrorReporter
-    }),
-
-    fakeStoreApiClient: asClass(FakeStoreApiClient, SINGLETON_CONFIG),
-    ...usersConfig,
   }
   diContainer.register(diConfig)
 
@@ -255,36 +49,7 @@ export function registerDependencies(
 
 type DiConfig = Record<keyof Dependencies, Resolver<unknown>>
 
-export type Dependencies = {
-  jwt: JWT
-  config: Config
-  logger: FastifyBaseLogger & P.Logger
-  scheduler: ToadScheduler
-
-  redis: Redis
-  redisPublisher: Redis
-  redisConsumer: Redis
-  prisma: PrismaClient
-
-  amqpConnection: Connection
-
-  deleteOldUsersJob: DeleteOldUsersJob
-  processLogFilesJob: ProcessLogFilesJob
-  sendEmailsJob: SendEmailsJob
-
-  permissionsService: PermissionsService
-
-  // vendor-specific dependencies
-  newRelicBackgroundTransactionManager: NewRelicTransactionManager
-  amplitude: Amplitude
-
-  errorReporter: ErrorReporter
-  consumerErrorResolver: ErrorResolver
-  permissionConsumer: PermissionConsumer
-  permissionPublisher: PermissionPublisher
-
-  fakeStoreApiClient: FakeStoreApiClient
-} & UsersDependencies
+export type Dependencies = CommonDependencies & UsersModuleDependencies
 
 declare module '@fastify/awilix' {
   // eslint-disable-next-line @typescript-eslint/no-empty-interface
