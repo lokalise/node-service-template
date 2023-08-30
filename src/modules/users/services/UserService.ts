@@ -1,8 +1,8 @@
 import type { User } from '@prisma/client'
 import type { Loader } from 'layered-loader'
 
-import type { Dependencies } from '../../../infrastructure/diConfig'
 import { EntityNotFoundError } from '../../../infrastructure/errors/publicErrors'
+import type { UsersDependencies } from '../diConfig'
 import type { UserRepository } from '../repositories/UserRepository'
 import type {
   CREATE_USER_BODY_SCHEMA_TYPE,
@@ -18,7 +18,7 @@ export class UserService {
   private readonly userRepository: UserRepository
   private readonly userLoader: Loader<User>
 
-  constructor({ userRepository, userLoader }: Dependencies) {
+  constructor({ userRepository, userLoader }: UsersDependencies) {
     this.userRepository = userRepository
     this.userLoader = userLoader
   }

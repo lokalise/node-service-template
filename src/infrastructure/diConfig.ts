@@ -4,29 +4,25 @@ import { reportErrorToBugsnag } from '@lokalise/fastify-extras'
 import type { ErrorReporter, ErrorResolver } from '@lokalise/node-core'
 import { globalLogger, InternalError } from '@lokalise/node-core'
 import { AmqpConsumerErrorResolver } from '@message-queue-toolkit/amqp'
-import type { User } from '@prisma/client'
 import { PrismaClient } from '@prisma/client'
 import type { Connection } from 'amqplib'
 import type { AwilixContainer, Resolver } from 'awilix'
 import { asClass, asFunction, Lifetime } from 'awilix'
 import type { FastifyInstance, FastifyBaseLogger } from 'fastify'
 import Redis from 'ioredis'
-import type { InMemoryCacheConfiguration, LoaderConfig } from 'layered-loader'
-import { createNotificationPair, Loader, RedisCache } from 'layered-loader'
 import type P from 'pino'
 import { pino } from 'pino'
 import { ToadScheduler } from 'toad-scheduler'
 
 import { FakeStoreApiClient } from '../integrations/FakeStoreApiClient'
 import { PermissionConsumer } from '../modules/users/consumers/PermissionConsumer'
-import { UserDataSource } from '../modules/users/datasources/UserDataSource'
+import type { UsersDependencies } from '../modules/users/diConfig'
+import { usersConfig } from '../modules/users/diConfig'
 import { DeleteOldUsersJob } from '../modules/users/jobs/DeleteOldUsersJob'
 import { ProcessLogFilesJob } from '../modules/users/jobs/ProcessLogFilesJob'
 import { SendEmailsJob } from '../modules/users/jobs/SendEmailsJob'
 import { PermissionPublisher } from '../modules/users/publishers/PermissionPublisher'
-import { UserRepository } from '../modules/users/repositories/UserRepository'
 import { PermissionsService } from '../modules/users/services/PermissionsService'
-import { UserService } from '../modules/users/services/UserService'
 
 import type { Config } from './config'
 import { getConfig } from './config'
@@ -43,15 +39,6 @@ export type DependencyOverrides = Partial<DiConfig>
 export type DIOptions = {
   jobsEnabled?: boolean
   amqpEnabled?: boolean
-}
-
-const IN_MEMORY_CACHE_TTL = 1000 * 60 * 5
-const IN_MEMORY_TTL_BEFORE_REFRESH = 1000 * 25
-
-const IN_MEMORY_CONFIGURATION_BASE: InMemoryCacheConfiguration = {
-  ttlInMsecs: IN_MEMORY_CACHE_TTL,
-  ttlLeftBeforeRefreshInMsecs: IN_MEMORY_TTL_BEFORE_REFRESH,
-  cacheType: 'fifo-object',
 }
 
 export function registerDependencies(
@@ -209,40 +196,6 @@ export function registerDependencies(
       return getConfig()
     }, SINGLETON_CONFIG),
 
-    userRepository: asClass(UserRepository, SINGLETON_CONFIG),
-    userService: asClass(UserService, SINGLETON_CONFIG),
-
-    userLoader: asFunction(
-      (deps: Dependencies) => {
-        const { publisher: notificationPublisher, consumer: notificationConsumer } =
-          createNotificationPair<User>({
-            channel: 'user-cache-notifications',
-            consumerRedis: deps.redisConsumer,
-            publisherRedis: deps.redisPublisher,
-          })
-
-        const config: LoaderConfig<User> = {
-          inMemoryCache: {
-            ...IN_MEMORY_CONFIGURATION_BASE,
-            maxItems: 1000,
-          },
-          asyncCache: new RedisCache<User>(deps.redis, {
-            json: true,
-            prefix: 'layered-loader:users:',
-            ttlInMsecs: 1000 * 60 * 60,
-          }),
-          dataSources: [new UserDataSource(deps)],
-          notificationConsumer,
-          notificationPublisher,
-          logger: deps.logger,
-        }
-        return new Loader(config)
-      },
-      {
-        lifetime: Lifetime.SINGLETON,
-      },
-    ),
-
     permissionsService: asClass(PermissionsService, SINGLETON_CONFIG),
     permissionConsumer: asClass(PermissionConsumer, {
       lifetime: Lifetime.SINGLETON,
@@ -291,6 +244,7 @@ export function registerDependencies(
     }),
 
     fakeStoreApiClient: asClass(FakeStoreApiClient, SINGLETON_CONFIG),
+    ...usersConfig,
   }
   diContainer.register(diConfig)
 
@@ -301,7 +255,7 @@ export function registerDependencies(
 
 type DiConfig = Record<keyof Dependencies, Resolver<unknown>>
 
-export interface Dependencies {
+export type Dependencies = {
   jwt: JWT
   config: Config
   logger: FastifyBaseLogger & P.Logger
@@ -318,10 +272,6 @@ export interface Dependencies {
   processLogFilesJob: ProcessLogFilesJob
   sendEmailsJob: SendEmailsJob
 
-  userRepository: UserRepository
-  userService: UserService
-  userLoader: Loader<User>
-
   permissionsService: PermissionsService
 
   // vendor-specific dependencies
@@ -334,7 +284,7 @@ export interface Dependencies {
   permissionPublisher: PermissionPublisher
 
   fakeStoreApiClient: FakeStoreApiClient
-}
+} & UsersDependencies
 
 declare module '@fastify/awilix' {
   // eslint-disable-next-line @typescript-eslint/no-empty-interface
