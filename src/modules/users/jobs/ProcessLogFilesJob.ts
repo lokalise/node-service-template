@@ -2,8 +2,8 @@ import { SimpleIntervalJob } from 'toad-scheduler'
 
 import { AbstractBackgroundJob } from '../../../infrastructure/AbstractBackgroundJob'
 import type { IntervalJobConfig } from '../../../infrastructure/config'
-import type { Dependencies } from '../../../infrastructure/diConfig'
 import { createTask } from '../../../infrastructure/jobs/jobUtils'
+import type { UsersInjectableDependencies } from '../diConfig'
 
 const LOCK_TIMEOUT_IN_MSECS = 60 * 1000
 const LOCK_REFRESH_IN_MSECS = 10 * 1000
@@ -11,7 +11,7 @@ const FILE_PROCESSING_BATCH_SIZE = 20
 
 export class ProcessLogFilesJob extends AbstractBackgroundJob {
   private readonly config: IntervalJobConfig
-  constructor(dependencies: Dependencies) {
+  constructor(dependencies: UsersInjectableDependencies) {
     super(
       {
         jobId: 'ProcessLogFilesJob',

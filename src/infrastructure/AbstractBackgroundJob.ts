@@ -9,7 +9,7 @@ import { Mutex } from 'redis-semaphore'
 import type { LockOptions } from 'redis-semaphore'
 import type { ToadScheduler } from 'toad-scheduler'
 
-import type { Dependencies } from './diConfig'
+import type { CommonDependencies } from './commonDiConfig'
 
 const DEFAULT_LOCK_NAME = 'exclusive'
 
@@ -33,7 +33,13 @@ export abstract class AbstractBackgroundJob {
 
   protected constructor(
     options: BackgroundJobConfiguration,
-    { redis, logger, newRelicBackgroundTransactionManager, errorReporter, scheduler }: Dependencies,
+    {
+      redis,
+      logger,
+      newRelicBackgroundTransactionManager,
+      errorReporter,
+      scheduler,
+    }: CommonDependencies,
   ) {
     this.jobId = options.jobId
     this.logger = logger

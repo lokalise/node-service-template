@@ -1,11 +1,11 @@
 import type { Prisma, PrismaClient, User } from '@prisma/client'
 
-import type { Dependencies } from '../../../infrastructure/diConfig'
+import type { UsersInjectableDependencies } from '../diConfig'
 
 export class UserRepository {
   private readonly prisma: PrismaClient
 
-  constructor({ prisma }: Dependencies) {
+  constructor({ prisma }: UsersInjectableDependencies) {
     this.prisma = prisma
   }
 

@@ -1,13 +1,13 @@
 import { buildClient, sendGet } from '@lokalise/node-core'
 import type { Client } from 'undici'
 
-import type { Dependencies } from '../infrastructure/diConfig'
+import type { CommonDependencies } from '../infrastructure/commonDiConfig'
 import type { FreeformRecord } from '../schemas/commonTypes'
 
 export class FakeStoreApiClient {
   private readonly client: Client
 
-  constructor({ config }: Dependencies) {
+  constructor({ config }: CommonDependencies) {
     this.client = buildClient(config.integrations.fakeStore.baseUrl)
   }
 
