@@ -11,7 +11,39 @@ updates:
     schedule:
       interval: 'weekly'
     open-pull-requests-limit: 10
-    ignore:
-      - dependency-name: '@typescript-eslint/eslint-plugin'
-      - dependency-name: '@typescript-eslint/parser'
-      - dependency-name: '@types/node'
+    groups:
+      lint:
+        patterns:
+          - "@typescript-eslint/*"
+          - "eslint"
+          - "eslint-*"
+          - "prettier"
+      types:
+        patterns:
+          - "@types/*"
+      vitest:
+        patterns:
+          - "vitest"
+          - "@vitest/*"
+      typescript:
+        patterns:
+          - "ts-node"
+          - "ts-node-dev"
+          - "typescript"
+      fastify:
+        patterns:
+          - "@fastify/*"
+          - "fastify"
+          - "fastify-*"
+      message-queue-toolkit:
+        patterns:
+          - "@message-queue-toolkit/*"
+      prisma:
+        patterns:
+          - "prisma"
+          - "@prisma/*"
+      awilix:
+        patterns:
+          - "awilix"
+          - "awilix-*"
+
