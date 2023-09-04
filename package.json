@@ -57,7 +57,7 @@
     "fastify-no-icon": "^6.0.0",
     "fastify-type-provider-zod": "^1.1.9",
     "ioredis": "^5.3.2",
-    "jsonwebtoken": "^9.0.1",
+    "jsonwebtoken": "^9.0.2",
     "layered-loader": "^11.0.1",
     "newrelic": "10.6.2",
     "pino": "^8.15.0",
