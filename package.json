@@ -43,7 +43,7 @@
     "@lokalise/zod-extras": "^2.0.0",
     "@message-queue-toolkit/amqp": "^3.5.0",
     "@message-queue-toolkit/core": "^3.5.0",
-    "@prisma/client": "^5.1.1",
+    "@prisma/client": "^5.2.0",
     "@prisma/instrumentation": "^5.2.0",
     "amqplib": "^0.10.3",
     "awilix": "^8.0.1",
