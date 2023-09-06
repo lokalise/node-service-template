@@ -2,7 +2,7 @@
   "name": "node-service-template",
   "version": "1.0.0",
   "engines": {
-    "node": ">=18"
+    "node": ">=20.6.0"
   },
   "scripts": {
     "build": "tsc",
@@ -14,9 +14,9 @@
     "lint": "eslint . --ext .ts",
     "lint:fix": "eslint .  --ext .ts --fix",
     "format": "prettier --write . && npx prisma format",
-    "start:dev": "cross-env NODE_ENV=development ts-node -r dotenv/config src/server.ts",
+    "start:dev": "cross-env NODE_ENV=development node --env-file=.env -r ts-node/register src/server.ts",
     "start:dev:watch": "cross-env NODE_ENV=development ts-node-dev --clear --exit-child --watch src -r dotenv/config src/server.ts",
-    "start:prod": "tsc && cross-env NODE_ENV=production node -r dotenv/config dist/src/server.js",
+    "start:prod": "tsc && cross-env NODE_ENV=production node --env-file=.env dist/src/server.js",
     "docker:start:dev": "docker compose up -d",
     "docker:stop:dev": "docker compose down",
     "db:start:dev": "docker compose up -d mysql redis",
@@ -24,8 +24,8 @@
     "db:migration:dev": "npx prisma migrate dev",
     "db:migration:run": "npx prisma migrate deploy",
     "db:update-client": "npx prisma generate",
-    "spec:generate": "cross-env NODE_ENV=development ts-node -r dotenv/config scripts/generateOpenApi.ts && npm run spec:validate",
-    "spec:validate": "cross-env NODE_ENV=development ts-node -r dotenv/config scripts/validateOpenApi.ts",
+    "spec:generate": "cross-env NODE_ENV=development node --env-file=.env -r ts-node/register scripts/generateOpenApi.ts && npm run spec:validate",
+    "spec:validate": "cross-env NODE_ENV=development node --env-file=.env -r ts-node/register scripts/validateOpenApi.ts",
     "prepublishOnly": "npm run build",
     "jwt:generate": "cross-env NODE_ENV=development ts-node scripts/generateJwt.ts"
   },
@@ -49,7 +49,6 @@
     "awilix": "^8.0.1",
     "awilix-manager": "^3.1.0",
     "croner": "^7.0.1",
-    "dotenv": "^16.3.1",
     "fastify": "^4.22.2",
     "fastify-custom-healthcheck": "^3.1.0",
     "fastify-graceful-shutdown": "^3.5.1",
@@ -79,6 +78,7 @@
     "@vitest/coverage-v8": "^0.34.3",
     "cpy-cli": "^5.0.0",
     "cross-env": "^7.0.3",
+    "dotenv": "^16.3.1",
     "eslint": "^8.48.0",
     "eslint-config-prettier": "^9.0.0",
     "eslint-plugin-import": "^2.28.1",
