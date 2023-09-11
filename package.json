@@ -73,7 +73,7 @@
     "@types/jsonwebtoken": "^9.0.2",
     "@types/newrelic": "^9.14.0",
     "@amplitude/analytics-types": "^2.1.2",
-    "@types/node": "^20.5.9",
+    "@types/node": "^20.6.0",
     "@typescript-eslint/eslint-plugin": "^6.5.0",
     "@typescript-eslint/parser": "^6.5.0",
     "@vitest/coverage-v8": "^0.34.3",
