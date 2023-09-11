@@ -65,7 +65,7 @@
     "redis-semaphore": "^5.5.0",
     "toad-scheduler": "^3.0.0",
     "undici": "^5.24.0",
-    "validation-utils": "^9.0.0",
+    "validation-utils": "^9.1.0",
     "zod": "^3.22.2"
   },
   "devDependencies": {
