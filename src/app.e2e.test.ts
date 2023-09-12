@@ -70,12 +70,13 @@ describe('app', () => {
 
   describe('config overrides in tests', () => {
     describe('when not overwritten', () => {
-      let testContext: TestContext
       let config: Config
+
       beforeEach(() => {
-        testContext = createTestContext({}, {})
+        const testContext = createTestContext({}, {})
         config = testContext.diContainer.cradle.config
       })
+
       it('resolves to default value', () => {
         expect(config.vendors.amplitude.isEnabled).toBe(false)
         expect(config.vendors.amplitude.serverZone).toBe('EU')
@@ -84,12 +85,13 @@ describe('app', () => {
     })
 
     describe('when overwritten', () => {
-      let testContext: TestContext
       let config: Config
+
       beforeEach(() => {
-        testContext = createTestContext({}, { vendors: { amplitude: { serverZone: 'US' } } })
+        const testContext = createTestContext({}, { vendors: { amplitude: { serverZone: 'US' } } })
         config = testContext.diContainer.cradle.config
       })
+
       it('resolves to override value', () => {
         expect(config.vendors.amplitude.isEnabled).toBe(false)
         expect(config.vendors.amplitude.serverZone).toBe('US')
