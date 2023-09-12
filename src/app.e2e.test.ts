@@ -77,8 +77,9 @@ describe('app', () => {
         config = testContext.diContainer.cradle.config
       })
       it('resolves to default value', () => {
-        expect(config.iAmHereForTestingConfigOverrideInTests.firstValue).toBe(true)
-        expect(config.iAmHereForTestingConfigOverrideInTests.secondValue).toBe(true)
+        expect(config.vendors.amplitude.isEnabled).toBe(false)
+        expect(config.vendors.amplitude.serverZone).toBe('EU')
+        expect(config.vendors.amplitude.flushIntervalMillis).toBe(10000)
       })
     })
 
@@ -86,15 +87,13 @@ describe('app', () => {
       let testContext: TestContext
       let config: Config
       beforeEach(() => {
-        testContext = createTestContext(
-          {},
-          { iAmHereForTestingConfigOverrideInTests: { firstValue: false } },
-        )
+        testContext = createTestContext({}, { vendors: { amplitude: { serverZone: 'US' } } })
         config = testContext.diContainer.cradle.config
       })
       it('resolves to override value', () => {
-        expect(config.iAmHereForTestingConfigOverrideInTests.firstValue).toBe(false)
-        expect(config.iAmHereForTestingConfigOverrideInTests.secondValue).toBe(true)
+        expect(config.vendors.amplitude.isEnabled).toBe(false)
+        expect(config.vendors.amplitude.serverZone).toBe('US')
+        expect(config.vendors.amplitude.flushIntervalMillis).toBe(10000)
       })
     })
   })

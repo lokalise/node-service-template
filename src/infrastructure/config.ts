@@ -13,10 +13,6 @@ export type CronJobConfig = {
 }
 
 export type Config = {
-  iAmHereForTestingConfigOverrideInTests: {
-    firstValue: boolean
-    secondValue: boolean
-  }
   db: DbConfig
   redis: RedisConfig
   scheduler: RedisConfig
@@ -84,10 +80,6 @@ export type AppConfig = {
 
 export function getConfig(): Config {
   return {
-    iAmHereForTestingConfigOverrideInTests: {
-      firstValue: true,
-      secondValue: true,
-    },
     app: getAppConfig(),
     db: getDbConfig(),
     redis: getRedisConfig(),
