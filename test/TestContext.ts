@@ -6,9 +6,16 @@ import { asFunction, createContainer } from 'awilix'
 import type { FastifyInstance } from 'fastify'
 import merge from 'ts-deepmerge'
 
-import { getConfig, type ConfigOverrides } from '../src/infrastructure/config'
+import type { Config } from '../src/infrastructure/config'
+import { getConfig } from '../src/infrastructure/config'
 import type { DependencyOverrides } from '../src/infrastructure/diConfig'
 import { registerDependencies } from '../src/infrastructure/diConfig'
+
+type NestedPartial<T> = {
+  [P in keyof T]?: NestedPartial<T[P]>
+}
+
+export type ConfigOverrides = NestedPartial<Config>
 
 export type TestContext = {
   diContainer: AwilixContainer<Cradle>

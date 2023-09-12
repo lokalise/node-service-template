@@ -4,12 +4,6 @@ import type { RedisConfig } from '@lokalise/node-core'
 const configScope: ConfigScope = new ConfigScope()
 const redisDbValidator = createRangeValidator(0, 15)
 
-type NestedPartial<T> = {
-  [P in keyof T]?: NestedPartial<T[P]>
-}
-
-export type ConfigOverrides = NestedPartial<Config>
-
 export type IntervalJobConfig = {
   periodInSeconds: number
 }
