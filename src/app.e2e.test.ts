@@ -1,7 +1,11 @@
 import { buildClient, sendGet } from '@lokalise/node-core'
 import type { FastifyInstance } from 'fastify'
 
+import type { TestContext } from '../test/TestContext'
+import { createTestContext } from '../test/TestContext'
+
 import { getApp } from './app'
+import type { Config } from './infrastructure/config'
 
 describe('app', () => {
   let app: FastifyInstance
@@ -61,6 +65,38 @@ describe('app', () => {
       const response = await app.inject().get('/documentation/static/index.html').end()
 
       expect(response.statusCode).toBe(200)
+    })
+  })
+
+  describe('config overrides in tests', () => {
+    describe('when not overwritten', () => {
+      let config: Config
+
+      beforeEach(() => {
+        const testContext = createTestContext({}, {})
+        config = testContext.diContainer.cradle.config
+      })
+
+      it('resolves to default value', () => {
+        expect(config.vendors.amplitude.isEnabled).toBe(false)
+        expect(config.vendors.amplitude.serverZone).toBe('EU')
+        expect(config.vendors.amplitude.flushIntervalMillis).toBe(10000)
+      })
+    })
+
+    describe('when overwritten', () => {
+      let config: Config
+
+      beforeEach(() => {
+        const testContext = createTestContext({}, { vendors: { amplitude: { serverZone: 'US' } } })
+        config = testContext.diContainer.cradle.config
+      })
+
+      it('resolves to override value', () => {
+        expect(config.vendors.amplitude.isEnabled).toBe(false)
+        expect(config.vendors.amplitude.serverZone).toBe('US')
+        expect(config.vendors.amplitude.flushIntervalMillis).toBe(10000)
+      })
     })
   })
 })
