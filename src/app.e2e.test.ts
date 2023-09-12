@@ -2,6 +2,8 @@ import { buildClient, sendGet } from '@lokalise/node-core'
 import type { FastifyInstance } from 'fastify'
 
 import { getApp } from './app'
+import { TestContext, createTestContext } from 'test/TestContext'
+import { Config } from './infrastructure/config'
 
 describe('app', () => {
   let app: FastifyInstance
@@ -61,6 +63,37 @@ describe('app', () => {
       const response = await app.inject().get('/documentation/static/index.html').end()
 
       expect(response.statusCode).toBe(200)
+    })
+  })
+
+  describe('config overrides in tests', () => {
+    describe('when not overwritten', () => {
+      let testContext: TestContext
+      let config: Config
+      beforeEach(() => {
+        testContext = createTestContext({}, {})
+        config = testContext.diContainer.cradle.config
+      })
+      it('resolves to default value', () => {
+        expect(config.iAmHereForTestingConfigOverrideInTests.firstValue).toBe(true)
+        expect(config.iAmHereForTestingConfigOverrideInTests.secondValue).toBe(true)
+      })
+    })
+
+    describe('when overwritten', () => {
+      let testContext: TestContext
+      let config: Config
+      beforeEach(() => {
+        testContext = createTestContext(
+          {},
+          { iAmHereForTestingConfigOverrideInTests: { firstValue: false } },
+        )
+        config = testContext.diContainer.cradle.config
+      })
+      it('resolves to override value', () => {
+        expect(config.iAmHereForTestingConfigOverrideInTests.firstValue).toBe(false)
+        expect(config.iAmHereForTestingConfigOverrideInTests.secondValue).toBe(true)
+      })
     })
   })
 })

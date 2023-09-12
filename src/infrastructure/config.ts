@@ -4,6 +4,12 @@ import type { RedisConfig } from '@lokalise/node-core'
 const configScope: ConfigScope = new ConfigScope()
 const redisDbValidator = createRangeValidator(0, 15)
 
+type NestedPartial<T> = {
+  [P in keyof T]?: NestedPartial<T[P]>
+}
+
+export type ConfigOverrides = NestedPartial<Config>
+
 export type IntervalJobConfig = {
   periodInSeconds: number
 }
@@ -13,6 +19,10 @@ export type CronJobConfig = {
 }
 
 export type Config = {
+  iAmHereForTestingConfigOverrideInTests: {
+    firstValue: boolean
+    secondValue: boolean
+  }
   db: DbConfig
   redis: RedisConfig
   scheduler: RedisConfig
@@ -80,6 +90,10 @@ export type AppConfig = {
 
 export function getConfig(): Config {
   return {
+    iAmHereForTestingConfigOverrideInTests: {
+      firstValue: true,
+      secondValue: true,
+    },
     app: getAppConfig(),
     db: getDbConfig(),
     redis: getRedisConfig(),
