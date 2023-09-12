@@ -23,7 +23,7 @@ export type TestContext = {
 
 export function createTestContext(
   dependencyOverrides: DependencyOverrides = {},
-  configOVerrides: ConfigOverrides = {},
+  configOverrides: ConfigOverrides,
 ): TestContext {
   const diContainer = createContainer({
     injectionMode: 'PROXY',
@@ -33,12 +33,14 @@ export function createTestContext(
     newrelicTransactionManager: new NewRelicTransactionManager(false),
   }
 
-  const dependencies = {
-    ...dependencyOverrides,
-    config: asFunction(() => {
-      return merge(getConfig(), configOVerrides)
-    }),
-  }
+  const dependencies = configOverrides
+    ? {
+        ...dependencyOverrides,
+        config: asFunction(() => {
+          return merge(getConfig(), configOverrides)
+        }),
+      }
+    : dependencyOverrides
 
   registerDependencies(
     diContainer,
