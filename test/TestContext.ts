@@ -23,7 +23,7 @@ export type TestContext = {
 
 export function createTestContext(
   dependencyOverrides: DependencyOverrides = {},
-  configOverrides: ConfigOverrides,
+  configOverrides?: ConfigOverrides,
 ): TestContext {
   const diContainer = createContainer({
     injectionMode: 'PROXY',
