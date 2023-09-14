@@ -21,6 +21,7 @@ import {
   requestContextProviderPlugin,
   publicHealthcheckPlugin,
   amplitudePlugin,
+  healthcheckMetricsPlugin,
 } from '@lokalise/fastify-extras'
 import { resolveGlobalErrorLogObject } from '@lokalise/node-core'
 import { resolveAmqpConnection } from '@message-queue-toolkit/amqp'
@@ -52,6 +53,7 @@ import {
   redisHealthCheck,
   registerHealthChecks,
   runAllHealthchecks,
+  wrapHealthCheckForPrometheus,
 } from './infrastructure/healthchecks'
 import { resolveLoggerConfiguration } from './infrastructure/logger'
 import { getRoutes } from './modules/routes'
@@ -226,9 +228,18 @@ export async function getApp(
     },
   )
 
+  if (configOverrides.monitoringEnabled) {
+    await app.register(metricsPlugin, {
+      bindAddress: appConfig.bindAddress,
+      errorObjectResolver: resolveGlobalErrorLogObject,
+      loggerOptions: loggerConfig,
+      disablePrometheusRequestLogging: true,
+    })
+  }
+
   if (configOverrides.healthchecksEnabled !== false) {
     await app.register(customHealthCheck, {
-      path: '/health',
+      path: '/',
       logLevel: 'warn',
       info: {
         env: appConfig.nodeEnv,
@@ -239,25 +250,37 @@ export async function getApp(
       exposeFailure: false,
     })
     await app.register(publicHealthcheckPlugin, {
-      healthChecks: [dbHealthCheck, redisHealthCheck],
+      url: '/health',
+      healthChecks: [
+        {
+          name: 'mysql',
+          isMandatory: true,
+          checker: dbHealthCheck,
+        },
+        {
+          name: 'redis',
+          isMandatory: true,
+          checker: redisHealthCheck,
+        },
+      ],
       responsePayload: {
         version: appConfig.appVersion,
         gitCommitSha: appConfig.gitCommitSha,
-        status: 'OK',
       },
     })
+
+    if (configOverrides.monitoringEnabled) {
+      await app.register(healthcheckMetricsPlugin, {
+        healthChecks: [
+          wrapHealthCheckForPrometheus(redisHealthCheck, 'redis'),
+          wrapHealthCheckForPrometheus(dbHealthCheck, 'mysql'),
+        ],
+      })
+    }
   }
   await app.register(requestContextProviderPlugin)
 
   // Vendor-specific plugins
-  if (configOverrides.monitoringEnabled) {
-    await app.register(metricsPlugin, {
-      bindAddress: appConfig.bindAddress,
-      errorObjectResolver: resolveGlobalErrorLogObject,
-      loggerOptions: loggerConfig,
-      disablePrometheusRequestLogging: true,
-    })
-  }
   await app.register(newrelicTransactionManagerPlugin, {
     isEnabled: config.vendors.newrelic.isEnabled,
   })
