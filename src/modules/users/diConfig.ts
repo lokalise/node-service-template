@@ -27,7 +27,8 @@ const IN_MEMORY_CONFIGURATION_BASE: InMemoryCacheConfiguration = {
   cacheType: 'fifo-object',
 }
 
-type UsersDiConfig = Record<keyof UsersModuleDependencies, Resolver<unknown>>
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type UsersDiConfig = Record<keyof UsersModuleDependencies, Resolver<any>>
 
 export type UsersModuleDependencies = {
   userRepository: UserRepository

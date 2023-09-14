@@ -18,7 +18,7 @@ function plugin(
   fastify.addHook(
     'onRequest',
     (req: FastifyRequest, res: FastifyReply, done: HookHandlerDoneFunction) => {
-      if (pluginOptions.skipList.has(req.routerPath)) {
+      if (pluginOptions.skipList.has(req.routeOptions.url)) {
         return done()
       }
 

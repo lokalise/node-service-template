@@ -1,7 +1,6 @@
 import { buildClient, sendGet } from '@lokalise/node-core'
 import type { FastifyInstance } from 'fastify'
 
-import type { TestContext } from '../test/TestContext'
 import { createTestContext } from '../test/TestContext'
 
 import { getApp } from './app'
@@ -21,7 +20,7 @@ describe('app', () => {
 
   describe('healthcheck', () => {
     it('Returns health check information', async () => {
-      const response = await app.inject().get('/health').end()
+      const response = await app.inject().get('/').end()
 
       expect(response.json()).toMatchObject({
         healthChecks: {
@@ -34,12 +33,15 @@ describe('app', () => {
     })
 
     it('Returns public health check information', async () => {
-      const response = await app.inject().get('/').end()
+      const response = await app.inject().get('/health').end()
 
       expect(response.json()).toMatchObject({
         gitCommitSha: 'sha',
         heartbeat: 'HEALTHY',
-        status: 'OK',
+        checks: {
+          mysql: 'HEALTHY',
+          redis: 'HEALTHY',
+        },
         version: '1',
       })
       expect(response.statusCode).toBe(200)
@@ -51,6 +53,17 @@ describe('app', () => {
       const response = await sendGet(buildClient('http://127.0.0.1:9080'), '/metrics')
 
       expect(response.result.statusCode).toBe(200)
+    })
+
+    it('Returns Prometheus healthcheck metrics', async () => {
+      const response = await sendGet(buildClient('http://127.0.0.1:9080'), '/metrics')
+
+      expect(response.result.statusCode).toBe(200)
+      expect(response.result.body).toContain('redis_availability 1')
+      expect(response.result.body).toContain('redis_latency_msecs ')
+
+      expect(response.result.body).toContain('mysql_availability 1')
+      expect(response.result.body).toContain('mysql_latency_msecs ')
     })
   })
 
