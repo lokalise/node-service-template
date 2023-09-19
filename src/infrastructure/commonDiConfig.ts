@@ -21,7 +21,8 @@ import type { Config } from './config'
 import type { ExternalDependencies } from './diConfig'
 import { SINGLETON_CONFIG } from './diConfig'
 
-export type CommonDiConfig = Record<keyof CommonDependencies, Resolver<unknown>>
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type CommonDiConfig = Record<keyof CommonDependencies, Resolver<any>>
 
 export function resolveCommonDiConfig(
   dependencies: ExternalDependencies = { logger: globalLogger },
