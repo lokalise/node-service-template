@@ -70,10 +70,10 @@
   },
   "devDependencies": {
     "@amplitude/analytics-types": "^2.2.0",
-    "@types/amqplib": "^0.10.1",
+    "@types/amqplib": "^0.10.2",
     "@types/jsonwebtoken": "^9.0.3",
-    "@types/newrelic": "^9.14.0",
-    "@types/node": "^20.6.2",
+    "@types/newrelic": "^9.14.1",
+    "@types/node": "^20.6.5",
     "@typescript-eslint/eslint-plugin": "^6.7.2",
     "@typescript-eslint/parser": "^6.7.2",
     "@vitest/coverage-v8": "^0.34.4",
