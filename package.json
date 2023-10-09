@@ -41,7 +41,7 @@
     "@lokalise/fastify-extras": "^15.0.0",
     "@lokalise/node-core": "^6.4.0",
     "@lokalise/zod-extras": "^2.0.0",
-    "@message-queue-toolkit/amqp": "^3.5.0",
+    "@message-queue-toolkit/amqp": "^4.0.0",
     "@message-queue-toolkit/core": "^3.7.0",
     "@prisma/client": "^5.4.1",
     "@prisma/instrumentation": "^5.4.1",
