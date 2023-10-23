@@ -48,7 +48,7 @@
     "amqplib": "^0.10.3",
     "awilix": "^8.0.1",
     "awilix-manager": "^3.2.0",
-    "croner": "^7.0.2",
+    "croner": "^7.0.4",
     "dotenv": "^16.3.1",
     "fastify": "^4.24.2",
     "fastify-custom-healthcheck": "^3.1.0",
