@@ -85,8 +85,8 @@ describe('app', () => {
     describe('when not overwritten', () => {
       let config: Config
 
-      beforeEach(() => {
-        const testContext = createTestContext({}, {})
+      beforeEach(async () => {
+        const testContext = await createTestContext({}, {})
         config = testContext.diContainer.cradle.config
       })
 
@@ -100,8 +100,12 @@ describe('app', () => {
     describe('when overwritten', () => {
       let config: Config
 
-      beforeEach(() => {
-        const testContext = createTestContext({}, { vendors: { amplitude: { serverZone: 'US' } } })
+      beforeEach(async () => {
+        const testContext = await createTestContext(
+          {},
+          {},
+          { vendors: { amplitude: { serverZone: 'US' } } },
+        )
         config = testContext.diContainer.cradle.config
       })
 

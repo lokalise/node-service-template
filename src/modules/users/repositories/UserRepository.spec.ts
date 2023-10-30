@@ -10,7 +10,7 @@ describe('UserRepository', () => {
   let testContext: TestContext
   let diContainer: AwilixContainer<Cradle>
   beforeEach(async () => {
-    testContext = createTestContext()
+    testContext = await createTestContext()
     diContainer = testContext.diContainer
     await cleanTables(diContainer.cradle.prisma, [DB_MODEL.User])
   })

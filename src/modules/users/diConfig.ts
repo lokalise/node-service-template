@@ -4,8 +4,7 @@ import { asClass, asFunction, Lifetime } from 'awilix'
 import type { InMemoryCacheConfiguration, LoaderConfig } from 'layered-loader'
 import { Loader, createNotificationPair, RedisCache } from 'layered-loader'
 
-import type { CommonDependencies } from '../../infrastructure/commonDiConfig'
-import type { DIOptions } from '../../infrastructure/diConfig'
+import type { CommonDependencies, DIOptions } from '../../infrastructure/commonDiConfig'
 import { SINGLETON_CONFIG } from '../../infrastructure/diConfig'
 
 import { PermissionConsumer } from './consumers/PermissionConsumer'
@@ -94,7 +93,7 @@ export function resolveUsersConfig(options: DIOptions): UsersDiConfig {
       asyncInitPriority: 10,
       asyncDispose: 'close',
       asyncDisposePriority: 10,
-      enabled: options.amqpEnabled,
+      enabled: options.queuesEnabled,
     }),
     permissionPublisher: asClass(PermissionPublisher, {
       lifetime: Lifetime.SINGLETON,
@@ -102,7 +101,7 @@ export function resolveUsersConfig(options: DIOptions): UsersDiConfig {
       asyncInitPriority: 20,
       asyncDispose: 'close',
       asyncDisposePriority: 20,
-      enabled: options.amqpEnabled,
+      enabled: options.queuesEnabled,
     }),
 
     processLogFilesJob: asClass(ProcessLogFilesJob, {

@@ -12,8 +12,8 @@ const mockServer = getLocal()
 describe('FakeStoreApiClient', () => {
   let testContext: TestContext
 
-  beforeAll(() => {
-    testContext = createTestContext()
+  beforeAll(async () => {
+    testContext = await createTestContext()
     testContext.diContainer.cradle.config.integrations.fakeStore.baseUrl = BASE_URL
   })
 

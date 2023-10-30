@@ -24,7 +24,6 @@ import {
   healthcheckMetricsPlugin,
 } from '@lokalise/fastify-extras'
 import { resolveGlobalErrorLogObject } from '@lokalise/node-core'
-import { resolveAmqpConnection } from '@message-queue-toolkit/amqp'
 import type { AwilixContainer } from 'awilix'
 import fastify from 'fastify'
 import type { FastifyInstance, FastifyBaseLogger } from 'fastify'
@@ -38,13 +37,7 @@ import {
 } from 'fastify-type-provider-zod'
 import type { ZodTypeProvider } from 'fastify-type-provider-zod'
 
-import {
-  getAmqpConfig,
-  getConfig,
-  isDevelopment,
-  isProduction,
-  isTest,
-} from './infrastructure/config'
+import { getConfig, isDevelopment, isProduction, isTest } from './infrastructure/config'
 import type { DependencyOverrides } from './infrastructure/diConfig'
 import { registerDependencies } from './infrastructure/diConfig'
 import { errorHandler } from './infrastructure/errors/errorHandler'
@@ -67,7 +60,7 @@ export type ConfigOverrides = {
     public: Secret
     private: Secret
   }
-  amqpEnabled?: boolean
+  queuesEnabled?: boolean
   jobsEnabled?: boolean
   healthchecksEnabled?: boolean
   monitoringEnabled?: boolean
@@ -178,6 +171,8 @@ export async function getApp(
     disposeOnClose: true,
     asyncDispose: true,
     asyncInit: true,
+    eagerInject: true,
+    disposeOnResponse: false,
   })
   await app.register(fastifySchedule)
 
@@ -206,25 +201,20 @@ export async function getApp(
 
   app.setErrorHandler(errorHandler)
 
-  /**
-   * Running consumers introduces additional overhead and fragility when running tests,
-   * so we avoid doing that unless we intend to actually use them
-   */
-  const isAmqpEnabled = isProduction() || configOverrides.amqpEnabled
-  const amqpConfig = getAmqpConfig()
-  const amqpConnection = isAmqpEnabled ? await resolveAmqpConnection(amqpConfig) : undefined
-
   registerDependencies(
     configOverrides.diContainer ?? diContainer,
     {
       app,
-      amqpConnection,
       logger: app.log,
     },
     dependencyOverrides,
+    /**
+     * Running consumers and jobs introduces additional overhead and fragility when running tests,
+     * so we avoid doing that unless we intend to actually use them
+     */
     {
-      amqpEnabled: isAmqpEnabled,
-      jobsEnabled: configOverrides.jobsEnabled !== false && !isTest(),
+      queuesEnabled: !!configOverrides.queuesEnabled,
+      jobsEnabled: !!configOverrides.jobsEnabled,
     },
   )
 

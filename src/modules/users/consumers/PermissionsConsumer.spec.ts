@@ -56,7 +56,7 @@ describe('PermissionsConsumer', () => {
     beforeEach(async () => {
       app = await getApp(
         {
-          amqpEnabled: true,
+          queuesEnabled: true,
         },
         {
           consumerErrorResolver: asClass(FakeConsumerErrorResolver, SINGLETON_CONFIG),
@@ -64,7 +64,9 @@ describe('PermissionsConsumer', () => {
       )
       diContainer = app.diContainer
 
-      channel = await app.diContainer.cradle.amqpConnection.createChannel()
+      channel = await (
+        await app.diContainer.cradle.amqpConnectionManager.getConnection()
+      ).createChannel()
       await cleanTables(diContainer.cradle.prisma, [DB_MODEL.User])
       await app.diContainer.cradle.permissionsService.deleteAll()
     })
