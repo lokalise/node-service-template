@@ -56,7 +56,7 @@ describe('PermissionsConsumer', () => {
     beforeEach(async () => {
       app = await getApp(
         {
-          amqpEnabled: true,
+          queuesEnabled: true,
         },
         {
           consumerErrorResolver: asClass(FakeConsumerErrorResolver, SINGLETON_CONFIG),
