@@ -9,8 +9,10 @@ const targetPath = resolve(__dirname, '../openApiSpec.yaml')
 
 async function run() {
   const app = await getApp({
-    amqpEnabled: false,
+    queuesEnabled: false,
+    jobsEnabled: false,
     healthchecksEnabled: false,
+    monitoringEnabled: false,
   })
 
   const openApiSpecResponse = await app.inject().get('/documentation/json')

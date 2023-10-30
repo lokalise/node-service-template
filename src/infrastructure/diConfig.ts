@@ -21,7 +21,7 @@ export type DependencyOverrides = Partial<DiConfig>
 
 export type DIOptions = {
   jobsEnabled?: boolean
-  amqpEnabled?: boolean
+  queuesEnabled?: boolean
 }
 
 export function registerDependencies(
@@ -30,15 +30,9 @@ export function registerDependencies(
   dependencyOverrides: DependencyOverrides = {},
   options: DIOptions = {},
 ): void {
-  const isAmqpEnabled = dependencies.amqpConnection !== undefined
-  const areJobsEnabled = !!options.jobsEnabled
-
   const diConfig: DiConfig = {
-    ...resolveCommonDiConfig(dependencies),
-    ...resolveUsersConfig({
-      jobsEnabled: areJobsEnabled,
-      amqpEnabled: isAmqpEnabled,
-    }),
+    ...resolveCommonDiConfig(dependencies, options),
+    ...resolveUsersConfig(options),
   }
   diContainer.register(diConfig)
 

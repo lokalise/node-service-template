@@ -24,7 +24,7 @@ async function start() {
   const app = await getApp({
     monitoringEnabled: config.app.metrics.isEnabled,
     jobsEnabled: true,
-    amqpEnabled: true,
+    queuesEnabled: true,
   })
 
   try {

@@ -94,7 +94,7 @@ export function resolveUsersConfig(options: DIOptions): UsersDiConfig {
       asyncInitPriority: 10,
       asyncDispose: 'close',
       asyncDisposePriority: 10,
-      enabled: options.amqpEnabled,
+      enabled: options.queuesEnabled,
     }),
     permissionPublisher: asClass(PermissionPublisher, {
       lifetime: Lifetime.SINGLETON,
@@ -102,7 +102,7 @@ export function resolveUsersConfig(options: DIOptions): UsersDiConfig {
       asyncInitPriority: 20,
       asyncDispose: 'close',
       asyncDisposePriority: 20,
-      enabled: options.amqpEnabled,
+      enabled: options.queuesEnabled,
     }),
 
     processLogFilesJob: asClass(ProcessLogFilesJob, {
