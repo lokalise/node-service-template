@@ -1,12 +1,12 @@
 import type { Either } from '@lokalise/node-core'
-import { AbstractAmqpConsumer } from '@message-queue-toolkit/amqp'
+import { AbstractAmqpConsumerMonoSchema } from '@message-queue-toolkit/amqp'
 import type { ZodType } from 'zod'
 
 import type { CommonMessage } from '../../src/infrastructure/amqp/MessageTypes'
 import type { Dependencies } from '../../src/infrastructure/diConfig'
 import { PERMISSIONS_ADD_MESSAGE_SCHEMA } from '../../src/modules/users/consumers/userConsumerSchemas'
 
-export class FakeConsumer extends AbstractAmqpConsumer<CommonMessage> {
+export class FakeConsumer extends AbstractAmqpConsumerMonoSchema<CommonMessage> {
   constructor(
     dependencies: Dependencies,
     queueName = 'dummy',
@@ -14,7 +14,7 @@ export class FakeConsumer extends AbstractAmqpConsumer<CommonMessage> {
   ) {
     super(
       {
-        amqpConnection: dependencies.amqpConnection,
+        amqpConnectionManager: dependencies.amqpConnectionManager,
         consumerErrorResolver: dependencies.consumerErrorResolver,
         errorReporter: dependencies.errorReporter,
         logger: dependencies.logger,

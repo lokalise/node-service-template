@@ -64,7 +64,9 @@ describe('PermissionsConsumer', () => {
       )
       diContainer = app.diContainer
 
-      channel = await app.diContainer.cradle.amqpConnection.createChannel()
+      channel = await (
+        await app.diContainer.cradle.amqpConnectionManager.getConnection()
+      ).createChannel()
       await cleanTables(diContainer.cradle.prisma, [DB_MODEL.User])
       await app.diContainer.cradle.permissionsService.deleteAll()
     })

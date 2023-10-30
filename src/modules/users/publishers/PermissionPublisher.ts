@@ -18,7 +18,7 @@ export class PermissionPublisher extends AbstractAmqpPublisherMultiSchema<Suppor
   constructor(dependencies: UsersInjectableDependencies) {
     super(
       {
-        amqpConnection: dependencies.amqpConnection,
+        amqpConnectionManager: dependencies.amqpConnectionManager,
         errorReporter: dependencies.errorReporter,
         logger: dependencies.logger,
       },
