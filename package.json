@@ -30,7 +30,7 @@
     "jwt:generate": "cross-env NODE_ENV=development ts-node scripts/generateJwt.ts"
   },
   "dependencies": {
-    "@fastify/auth": "^4.3.0",
+    "@fastify/auth": "^4.4.0",
     "@fastify/awilix": "^3.2.0",
     "@fastify/cors": "^8.4.1",
     "@fastify/helmet": "^11.1.1",
