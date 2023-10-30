@@ -217,8 +217,8 @@ export async function getApp(
   registerDependencies(
     configOverrides.diContainer ?? diContainer,
     {
-      app: app,
-      amqpConnection: amqpConnection,
+      app,
+      amqpConnection,
       logger: app.log,
     },
     dependencyOverrides,

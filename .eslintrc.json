@@ -57,6 +57,7 @@
         "newlines-between": "always"
       }
     ],
+    "object-shorthand": ["error", "always"],
     "max-lines": ["error", { "max": 600 }],
     "max-params": ["error", { "max": 4 }],
     "max-statements": ["error", { "max": 15 }],
