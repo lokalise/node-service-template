@@ -4,8 +4,7 @@ import { asClass, asFunction, Lifetime } from 'awilix'
 import type { InMemoryCacheConfiguration, LoaderConfig } from 'layered-loader'
 import { Loader, createNotificationPair, RedisCache } from 'layered-loader'
 
-import type { CommonDependencies } from '../../infrastructure/commonDiConfig'
-import type { DIOptions } from '../../infrastructure/diConfig'
+import type { CommonDependencies, DIOptions } from '../../infrastructure/commonDiConfig'
 import { SINGLETON_CONFIG } from '../../infrastructure/diConfig'
 
 import { PermissionConsumer } from './consumers/PermissionConsumer'

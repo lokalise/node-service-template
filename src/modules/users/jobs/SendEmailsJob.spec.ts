@@ -6,7 +6,7 @@ describe('SendEmailsJob', () => {
   let testContext: TestContext
 
   beforeAll(async () => {
-    testContext = createTestContext()
+    testContext = await createTestContext()
     await cleanRedis(testContext.diContainer.cradle.redis)
   })
 

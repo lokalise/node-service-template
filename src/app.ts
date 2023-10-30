@@ -211,8 +211,8 @@ export async function getApp(
      * so we avoid doing that unless we intend to actually use them
      */
     {
-      queuesEnabled: configOverrides.queuesEnabled,
-      jobsEnabled: configOverrides.jobsEnabled && !isTest(),
+      queuesEnabled: !!configOverrides.queuesEnabled,
+      jobsEnabled: !!configOverrides.jobsEnabled,
     },
   )
 
