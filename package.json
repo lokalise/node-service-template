@@ -73,7 +73,7 @@
     "@types/amqplib": "^0.10.3",
     "@types/jsonwebtoken": "^9.0.4",
     "@types/newrelic": "^9.14.2",
-    "@types/node": "^20.8.9",
+    "@types/node": "^20.8.10",
     "@typescript-eslint/eslint-plugin": "^6.9.1",
     "@typescript-eslint/parser": "^6.9.1",
     "@vitest/coverage-v8": "^0.34.6",
