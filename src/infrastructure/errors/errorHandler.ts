@@ -1,8 +1,8 @@
 import {
-  InternalError,
+  isInternalError,
   isObject,
+  isPublicNonRecoverableError,
   isStandardizedError,
-  PublicNonRecoverableError,
 } from '@lokalise/node-core'
 import type { FastifyRequest, FastifyReply, FastifyInstance } from 'fastify'
 import pino from 'pino'
@@ -26,7 +26,7 @@ type ResponseObject = {
 }
 
 function resolveLogObject(error: unknown): FreeformRecord {
-  if (error instanceof InternalError) {
+  if (isInternalError(error)) {
     return {
       message: error.message,
       code: error.errorCode,
@@ -47,7 +47,7 @@ function resolveLogObject(error: unknown): FreeformRecord {
 }
 
 function resolveResponseObject(error: FreeformRecord): ResponseObject {
-  if (error instanceof PublicNonRecoverableError) {
+  if (isPublicNonRecoverableError(error)) {
     return {
       statusCode: error.httpStatusCode ?? 500,
       payload: {
@@ -106,7 +106,7 @@ export const errorHandler = function (
   const logObject = resolveLogObject(error)
   request.log.error(logObject)
 
-  if (error instanceof InternalError) {
+  if (isInternalError(error)) {
     this.diContainer.cradle.errorReporter.report({ error })
   }
 
