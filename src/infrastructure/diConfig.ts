@@ -7,7 +7,7 @@ import type { FastifyInstance, FastifyBaseLogger } from 'fastify'
 import type { UsersModuleDependencies } from '../modules/users/diConfig'
 import { resolveUsersConfig } from '../modules/users/diConfig'
 
-import type { CommonDependencies } from './commonDiConfig'
+import type { CommonDependencies, DIOptions } from './commonDiConfig'
 import { resolveCommonDiConfig } from './commonDiConfig'
 
 export type ExternalDependencies = {
@@ -19,26 +19,15 @@ export const SINGLETON_CONFIG = { lifetime: Lifetime.SINGLETON }
 
 export type DependencyOverrides = Partial<DiConfig>
 
-export type DIOptions = {
-  jobsEnabled?: boolean
-  amqpEnabled?: boolean
-}
-
 export function registerDependencies(
   diContainer: AwilixContainer,
   dependencies: ExternalDependencies = { logger: globalLogger },
   dependencyOverrides: DependencyOverrides = {},
   options: DIOptions = {},
 ): void {
-  const isAmqpEnabled = dependencies.amqpConnection !== undefined
-  const areJobsEnabled = !!options.jobsEnabled
-
   const diConfig: DiConfig = {
-    ...resolveCommonDiConfig(dependencies),
-    ...resolveUsersConfig({
-      jobsEnabled: areJobsEnabled,
-      amqpEnabled: isAmqpEnabled,
-    }),
+    ...resolveCommonDiConfig(dependencies, options),
+    ...resolveUsersConfig(options),
   }
   diContainer.register(diConfig)
 

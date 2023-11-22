@@ -3,9 +3,11 @@ import { NewRelicTransactionManager } from '@lokalise/fastify-extras'
 import { globalLogger } from '@lokalise/node-core'
 import type { AwilixContainer } from 'awilix'
 import { asFunction, createContainer } from 'awilix'
+import { AwilixManager } from 'awilix-manager'
 import type { FastifyInstance } from 'fastify'
 import merge from 'ts-deepmerge'
 
+import type { DIOptions } from '../src/infrastructure/commonDiConfig'
 import type { Config } from '../src/infrastructure/config'
 import { getConfig } from '../src/infrastructure/config'
 import type { DependencyOverrides } from '../src/infrastructure/diConfig'
@@ -21,10 +23,11 @@ export type TestContext = {
   diContainer: AwilixContainer<Cradle>
 }
 
-export function createTestContext(
+export async function createTestContext(
   dependencyOverrides: DependencyOverrides = {},
+  options: DIOptions = {},
   configOverrides?: ConfigOverrides,
-): TestContext {
+) {
   const diContainer = createContainer({
     injectionMode: 'PROXY',
   })
@@ -42,6 +45,15 @@ export function createTestContext(
       }
     : dependencyOverrides
 
+  const awilixManager = new AwilixManager({
+    diContainer,
+    asyncDispose: true,
+    asyncInit: true,
+    eagerInject: true,
+  })
+
+  await awilixManager.executeInit()
+
   registerDependencies(
     diContainer,
     {
@@ -49,10 +61,15 @@ export function createTestContext(
       logger: globalLogger,
     },
     dependencies,
+    {
+      queuesEnabled: !!options.queuesEnabled,
+      jobsEnabled: !!options.jobsEnabled,
+    },
   )
 
   return {
     diContainer,
+    awilixManager,
   }
 }
 

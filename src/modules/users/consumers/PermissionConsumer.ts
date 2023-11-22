@@ -16,19 +16,21 @@ import {
 } from './userConsumerSchemas'
 
 type SupportedMessages = PERMISSIONS_REMOVE_MESSAGE_TYPE | PERMISSIONS_ADD_MESSAGE_TYPE
+type ExecutionContext = {
+  userService: UserService
+  permissionsService: PermissionsService
+}
 
 export class PermissionConsumer extends AbstractAmqpConsumerMultiSchema<
   SupportedMessages,
-  PermissionConsumer
+  ExecutionContext
 > {
   public static QUEUE_NAME = 'user_permissions'
-  private readonly userService: UserService
-  private readonly permissionsService: PermissionsService
 
   constructor(dependencies: UsersInjectableDependencies) {
     super(
       {
-        amqpConnection: dependencies.amqpConnection,
+        amqpConnectionManager: dependencies.amqpConnectionManager,
         consumerErrorResolver: dependencies.consumerErrorResolver,
         errorReporter: dependencies.errorReporter,
         logger: dependencies.logger,
@@ -46,7 +48,7 @@ export class PermissionConsumer extends AbstractAmqpConsumerMultiSchema<
         deletionConfig: {
           deleteIfExists: isTest(),
         },
-        handlers: new MessageHandlerConfigBuilder<SupportedMessages, PermissionConsumer>()
+        handlers: new MessageHandlerConfigBuilder<SupportedMessages, ExecutionContext>()
           .addConfig(PERMISSIONS_ADD_MESSAGE_SCHEMA, async (message, context) => {
             const projectUsers = await context.userService.getUsers(message.userIds)
 
@@ -59,7 +61,7 @@ export class PermissionConsumer extends AbstractAmqpConsumerMultiSchema<
 
             // Do not do this in production, some kind of bulk insertion is needed here
             for (const user of projectUsers) {
-              await this.permissionsService.setPermissions(user.id, message.permissions)
+              await context.permissionsService.setPermissions(user.id, message.permissions)
             }
 
             return {
@@ -72,8 +74,10 @@ export class PermissionConsumer extends AbstractAmqpConsumerMultiSchema<
           .build(),
         messageTypeField: 'messageType',
       },
+      {
+        userService: dependencies.userService,
+        permissionsService: dependencies.permissionsService,
+      },
     )
-    this.userService = dependencies.userService
-    this.permissionsService = dependencies.permissionsService
   }
 }

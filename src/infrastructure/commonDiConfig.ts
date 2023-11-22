@@ -2,10 +2,9 @@ import type { JWT } from '@fastify/jwt'
 import type { Amplitude, NewRelicTransactionManager } from '@lokalise/fastify-extras'
 import { reportErrorToBugsnag } from '@lokalise/fastify-extras'
 import type { ErrorReporter, ErrorResolver } from '@lokalise/node-core'
-import { globalLogger, InternalError } from '@lokalise/node-core'
-import { AmqpConsumerErrorResolver } from '@message-queue-toolkit/amqp'
+import { globalLogger } from '@lokalise/node-core'
+import { AmqpConnectionManager, AmqpConsumerErrorResolver } from '@message-queue-toolkit/amqp'
 import { PrismaClient } from '@prisma/client'
-import type { Connection } from 'amqplib'
 import type { Resolver } from 'awilix'
 import { asClass, asFunction, Lifetime } from 'awilix'
 import type { FastifyBaseLogger } from 'fastify'
@@ -16,7 +15,7 @@ import { ToadScheduler } from 'toad-scheduler'
 
 import { FakeStoreApiClient } from '../integrations/FakeStoreApiClient'
 
-import { getConfig } from './config'
+import { getAmqpConfig, getConfig } from './config'
 import type { Config } from './config'
 import type { ExternalDependencies } from './diConfig'
 import { SINGLETON_CONFIG } from './diConfig'
@@ -24,8 +23,14 @@ import { SINGLETON_CONFIG } from './diConfig'
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type CommonDiConfig = Record<keyof CommonDependencies, Resolver<any>>
 
+export type DIOptions = {
+  jobsEnabled?: boolean
+  queuesEnabled?: boolean
+}
+
 export function resolveCommonDiConfig(
   dependencies: ExternalDependencies = { logger: globalLogger },
+  options: DIOptions = {},
 ): CommonDiConfig {
   return {
     jwt: asFunction(() => {
@@ -148,21 +153,16 @@ export function resolveCommonDiConfig(
       },
     ),
 
-    amqpConnection: asFunction(
+    amqpConnectionManager: asFunction(
       () => {
-        if (!dependencies.amqpConnection) {
-          throw new InternalError({
-            message: 'amqp connection is a mandatory dependency',
-            errorCode: 'MISSING_DEPENDENCY',
-          })
-        }
-        return dependencies.amqpConnection
+        return new AmqpConnectionManager(getAmqpConfig(), dependencies.logger)
       },
       {
         lifetime: Lifetime.SINGLETON,
-        dispose: (connection) => {
-          return connection.close()
-        },
+        asyncInit: 'init',
+        asyncDispose: 'close',
+        asyncDisposePriority: 1,
+        enabled: options.queuesEnabled,
       },
     ),
     consumerErrorResolver: asFunction(() => {
@@ -200,7 +200,7 @@ export type CommonDependencies = {
   redisConsumer: Redis
   prisma: PrismaClient
 
-  amqpConnection: Connection
+  amqpConnectionManager: AmqpConnectionManager
 
   // vendor-specific dependencies
   newRelicBackgroundTransactionManager: NewRelicTransactionManager
