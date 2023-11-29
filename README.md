@@ -162,4 +162,4 @@ You have multiple options to ease your development:
 
 ## Troubleshooting
 
-* If you are running a service in a monorepo setup, it is launched in the background and you want to always force closing the service before attempting to restart, you can use `npm run start:free-ports`, which will kill an application running on the predefined port (in an OS-independent way).
+* If you are running a service in a monorepo setup, it is launched in the background and you want to always force closing the service before attempting to restart, you can use `npm run free-ports`, which will kill an application running on the predefined port (in an OS-independent way).
