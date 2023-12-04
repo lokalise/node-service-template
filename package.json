@@ -17,6 +17,7 @@
     "start:dev": "cross-env NODE_ENV=development ts-node -r dotenv/config src/server.ts",
     "start:dev:watch": "cross-env NODE_ENV=development ts-node-dev --clear --exit-child --watch src -r dotenv/config src/server.ts",
     "start:prod": "tsc && cross-env NODE_ENV=production node -r dotenv/config dist/src/server.js",
+    "free-ports": "npx cross-port-killer 3000",
     "docker:start:dev": "docker compose up -d",
     "docker:stop:dev": "docker compose down",
     "db:start:dev": "docker compose up -d mysql redis",
