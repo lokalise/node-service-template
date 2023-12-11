@@ -87,6 +87,7 @@ describe('PermissionPublisher', () => {
       })
 
       expect(receivedMessage).toEqual({
+        id: 'abc',
         messageType: 'add',
         permissions: ['perm1', 'perm2'],
         userIds: [100, 200, 300],
