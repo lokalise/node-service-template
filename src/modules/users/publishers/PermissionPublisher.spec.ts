@@ -61,6 +61,7 @@ describe('PermissionPublisher', () => {
       const { permissionPublisher } = app.diContainer.cradle
 
       const message = {
+        id: 'abc',
         userIds,
         messageType: 'add',
         permissions: perms,
