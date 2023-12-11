@@ -93,7 +93,8 @@ describe('PermissionsConsumer', () => {
         } satisfies PERMISSIONS_ADD_MESSAGE_TYPE),
       )
 
-      await consumer.handlerSpy.waitForMessageWithId('abc')
+      const messageResult = await consumer.handlerSpy.waitForMessageWithId('abc')
+      expect(messageResult.processingResult).toBe('consumed')
       const usersPermissions = await resolvePermissions(permissionsService, userIds)
 
       if (null === usersPermissions) {
@@ -119,7 +120,9 @@ describe('PermissionsConsumer', () => {
         } satisfies PERMISSIONS_ADD_MESSAGE_TYPE),
       )
 
-      await consumer.handlerSpy.waitForMessageWithId('def', 'retryLater')
+      const messageResult = await consumer.handlerSpy.waitForMessageWithId('def')
+      expect(messageResult.processingResult).toBe('retryLater')
+
       // no users in the database, so message will go back to the queue
       const usersFromDb = await resolvePermissions(permissionsService, userIds)
       expect(usersFromDb).toBeNull()
@@ -155,7 +158,9 @@ describe('PermissionsConsumer', () => {
         } satisfies PERMISSIONS_ADD_MESSAGE_TYPE),
       )
 
-      await consumer.handlerSpy.waitForMessageWithId('abcdef', 'retryLater')
+      const messageResult = await consumer.handlerSpy.waitForMessageWithId('abcdef', 'retryLater')
+      expect(messageResult.processingResult).toBe('retryLater')
+
       // not all users are in the database, so message will go back to the queue
       const usersFromDb = await resolvePermissions(permissionsService, userIds)
       expect(usersFromDb).toBeNull()
@@ -187,12 +192,10 @@ describe('PermissionsConsumer', () => {
 
       const fakeResolver = consumerErrorResolver as FakeConsumerErrorResolver
       // even though we are failing at validating the message, we can still extract an id out of, as it's a valid json
-      await consumer.handlerSpy.waitForMessage(
-        {
-          id: 'errorMessage',
-        },
-        'error',
-      )
+      const messageResult = await consumer.handlerSpy.waitForMessage({
+        id: 'errorMessage',
+      })
+      expect(messageResult.processingResult).toBe('invalid_message')
 
       expect(fakeResolver.handleErrorCallsCount).toBe(1)
     })
@@ -206,7 +209,8 @@ describe('PermissionsConsumer', () => {
       // can't await by id, there is no resolveable id in this message
       await waitAndRetry(() => fakeResolver.handleErrorCallsCount)
 
-      expect(fakeResolver.handleErrorCallsCount).toBe(1)
+      // We fail first when doing real reading, and second one when trying to extract an id
+      expect(fakeResolver.handleErrorCallsCount).toBe(2)
     })
   })
 })
