@@ -65,7 +65,7 @@
     "pino-pretty": "^10.2.3",
     "redis-semaphore": "^5.5.0",
     "toad-scheduler": "^3.0.0",
-    "undici": "^5.28.2",
+    "undici": "^6.0.1",
     "validation-utils": "^9.1.0",
     "zod": "^3.22.4"
   },
