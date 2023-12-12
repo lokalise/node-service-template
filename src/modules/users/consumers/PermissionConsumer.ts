@@ -48,6 +48,7 @@ export class PermissionConsumer extends AbstractAmqpConsumerMultiSchema<
         deletionConfig: {
           deleteIfExists: isTest(),
         },
+        handlerSpy: isTest(),
         handlers: new MessageHandlerConfigBuilder<SupportedMessages, ExecutionContext>()
           .addConfig(PERMISSIONS_ADD_MESSAGE_SCHEMA, async (message, context) => {
             const projectUsers = await context.userService.getUsers(message.userIds)

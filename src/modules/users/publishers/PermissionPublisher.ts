@@ -1,5 +1,6 @@
 import { AbstractAmqpPublisherMultiSchema } from '@message-queue-toolkit/amqp'
 
+import { isTest } from '../../../infrastructure/config'
 import type {
   PERMISSIONS_ADD_MESSAGE_TYPE,
   PERMISSIONS_REMOVE_MESSAGE_TYPE,
@@ -31,6 +32,7 @@ export class PermissionPublisher extends AbstractAmqpPublisherMultiSchema<Suppor
             exclusive: false,
           },
         },
+        handlerSpy: isTest(),
         messageSchemas: [PERMISSIONS_ADD_MESSAGE_SCHEMA, PERMISSIONS_REMOVE_MESSAGE_SCHEMA],
         messageTypeField: 'messageType',
       },

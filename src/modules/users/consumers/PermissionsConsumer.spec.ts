@@ -31,27 +31,26 @@ async function createUsers(prisma: PrismaClient, userIdsToCreate: number[]) {
   })
 }
 
-async function waitForPermissions(permissionsService: PermissionsService, userIds: number[]) {
-  return await waitAndRetry(async () => {
-    const usersPerms = await permissionsService.getUserPermissionsBulk(userIds)
+async function resolvePermissions(permissionsService: PermissionsService, userIds: number[]) {
+  const usersPerms = await permissionsService.getUserPermissionsBulk(userIds)
 
-    if (usersPerms && usersPerms.length !== userIds.length) {
+  if (usersPerms && usersPerms.length !== userIds.length) {
+    return null
+  }
+
+  for (const userPerms of usersPerms)
+    if (userPerms.length !== perms.length) {
       return null
     }
 
-    for (const userPerms of usersPerms)
-      if (userPerms.length !== perms.length) {
-        return null
-      }
-
-    return usersPerms
-  })
+  return usersPerms
 }
 
 describe('PermissionsConsumer', () => {
   describe('consume', () => {
     let app: FastifyInstance
     let diContainer: AwilixContainer<Cradle>
+    let consumer: PermissionConsumer
     let channel: Channel
     beforeEach(async () => {
       app = await getApp(
@@ -69,6 +68,7 @@ describe('PermissionsConsumer', () => {
       ).createChannel()
       await cleanTables(diContainer.cradle.prisma, [DB_MODEL.User])
       await app.diContainer.cradle.permissionsService.deleteAll()
+      consumer = app.diContainer.cradle.permissionConsumer
     })
 
     afterEach(async () => {
@@ -86,13 +86,16 @@ describe('PermissionsConsumer', () => {
       void channel.sendToQueue(
         PermissionConsumer.QUEUE_NAME,
         buildQueueMessage({
+          id: 'abc',
           messageType: 'add',
           userIds,
           permissions: perms,
         } satisfies PERMISSIONS_ADD_MESSAGE_TYPE),
       )
 
-      const usersPermissions = await waitForPermissions(permissionsService, userIds)
+      const messageResult = await consumer.handlerSpy.waitForMessageWithId('abc')
+      expect(messageResult.processingResult).toBe('consumed')
+      const usersPermissions = await resolvePermissions(permissionsService, userIds)
 
       if (null === usersPermissions) {
         throw new Error('Users permissions unexpectedly null')
@@ -110,19 +113,23 @@ describe('PermissionsConsumer', () => {
       channel.sendToQueue(
         PermissionConsumer.QUEUE_NAME,
         buildQueueMessage({
+          id: 'def',
           userIds,
           messageType: 'add',
           permissions: perms,
         } satisfies PERMISSIONS_ADD_MESSAGE_TYPE),
       )
 
+      const messageResult = await consumer.handlerSpy.waitForMessageWithId('def')
+      expect(messageResult.processingResult).toBe('retryLater')
+
       // no users in the database, so message will go back to the queue
-      const usersFromDb = await waitForPermissions(permissionsService, userIds)
+      const usersFromDb = await resolvePermissions(permissionsService, userIds)
       expect(usersFromDb).toBeNull()
 
       await createUsers(prisma, userIds)
-
-      const usersPermissions = await waitForPermissions(permissionsService, userIds)
+      await consumer.handlerSpy.waitForMessageWithId('def', 'consumed')
+      const usersPermissions = await resolvePermissions(permissionsService, userIds)
 
       if (null === usersPermissions) {
         throw new Error('Users permissions unexpectedly null')
@@ -144,19 +151,24 @@ describe('PermissionsConsumer', () => {
       channel.sendToQueue(
         PermissionConsumer.QUEUE_NAME,
         buildQueueMessage({
+          id: 'abcdef',
           userIds,
           messageType: 'add',
           permissions: perms,
         } satisfies PERMISSIONS_ADD_MESSAGE_TYPE),
       )
 
+      const messageResult = await consumer.handlerSpy.waitForMessageWithId('abcdef', 'retryLater')
+      expect(messageResult.processingResult).toBe('retryLater')
+
       // not all users are in the database, so message will go back to the queue
-      const usersFromDb = await waitForPermissions(permissionsService, userIds)
+      const usersFromDb = await resolvePermissions(permissionsService, userIds)
       expect(usersFromDb).toBeNull()
 
       await createUsers(prisma, [missingUser!])
 
-      const usersPermissions = await waitForPermissions(permissionsService, userIds)
+      await consumer.handlerSpy.waitForMessageWithId('abcdef', 'consumed')
+      const usersPermissions = await resolvePermissions(permissionsService, userIds)
 
       if (null === usersPermissions) {
         throw new Error('Users permissions unexpectedly null')
@@ -172,13 +184,18 @@ describe('PermissionsConsumer', () => {
       channel.sendToQueue(
         PermissionConsumer.QUEUE_NAME,
         buildQueueMessage({
+          id: 'errorMessage',
           messageType: 'add',
           permissions: perms,
         }),
       )
 
       const fakeResolver = consumerErrorResolver as FakeConsumerErrorResolver
-      await waitAndRetry(() => fakeResolver.handleErrorCallsCount)
+      // even though we are failing at validating the message, we can still extract an id out of, as it's a valid json
+      const messageResult = await consumer.handlerSpy.waitForMessage({
+        id: 'errorMessage',
+      })
+      expect(messageResult.processingResult).toBe('invalid_message')
 
       expect(fakeResolver.handleErrorCallsCount).toBe(1)
     })
@@ -189,9 +206,11 @@ describe('PermissionsConsumer', () => {
       channel.sendToQueue(PermissionConsumer.QUEUE_NAME, Buffer.from('dummy'))
 
       const fakeResolver = consumerErrorResolver as FakeConsumerErrorResolver
+      // can't await by id, there is no resolveable id in this message
       await waitAndRetry(() => fakeResolver.handleErrorCallsCount)
 
-      expect(fakeResolver.handleErrorCallsCount).toBe(1)
+      // We fail first when doing real reading, and second one when trying to extract an id
+      expect(fakeResolver.handleErrorCallsCount).toBe(2)
     })
   })
 })
