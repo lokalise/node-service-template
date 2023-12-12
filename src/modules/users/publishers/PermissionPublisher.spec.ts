@@ -61,6 +61,7 @@ describe('PermissionPublisher', () => {
       const { permissionPublisher } = app.diContainer.cradle
 
       const message = {
+        id: 'abc',
         userIds,
         messageType: 'add',
         permissions: perms,
@@ -86,6 +87,7 @@ describe('PermissionPublisher', () => {
       })
 
       expect(receivedMessage).toEqual({
+        id: 'abc',
         messageType: 'add',
         permissions: ['perm1', 'perm2'],
         userIds: [100, 200, 300],
