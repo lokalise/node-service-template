@@ -1,4 +1,4 @@
-import type http from 'http'
+import type http from 'node:http'
 
 import type { FastifyBaseLogger, RouteOptions } from 'fastify'
 import type { ZodTypeProvider } from 'fastify-type-provider-zod'

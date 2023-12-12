@@ -1,6 +1,7 @@
 /* eslint-disable max-statements */
 
-import type http from 'http'
+import { EventEmitter } from 'node:events'
+import type http from 'node:http'
 
 import type { ServerZoneType } from '@amplitude/analytics-types'
 import fastifyAuth from '@fastify/auth'
@@ -51,6 +52,8 @@ import {
 import { resolveLoggerConfiguration } from './infrastructure/logger'
 import { getRoutes } from './modules/routes'
 import { jwtTokenPlugin } from './plugins/jwtTokenPlugin'
+
+EventEmitter.defaultMaxListeners = 12
 
 const GRACEFUL_SHUTDOWN_TIMEOUT_IN_MSECS = 10000
 
