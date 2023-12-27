@@ -1,4 +1,10 @@
-*.yml        @kibertoad @rupert-mckay @lokankr @drdaemos @andris-sevcenko @ForterLokalise
-*.md         @kibertoad @rupert-mckay @lokankr @drdaemos @andris-sevcenko @ForterLokalise
-*.ts         @kibertoad @rupert-mckay @lokankr @drdaemos @andris-sevcenko @ForterLokalise
-package.json @kibertoad @rupert-mckay @lokankr @drdaemos @andris-sevcenko @ForterLokalise
+package.json @lokalise/dx-guild
+package-lock.json @lokalise/dx-guild
+/.github @lokalise/dx-guild
+Dockerfile @lokalise/dx-guild
+docker-compose.yml @lokalise/dx-guild
+
+/src @kibertoad @rupert-mckay @lokankr @drdaemos
+/test @kibertoad @rupert-mckay @lokankr @drdaemos
+/docs @kibertoad @rupert-mckay @lokankr @drdaemos
+/prisma @kibertoad @rupert-mckay @lokankr @drdaemos
