@@ -6,18 +6,17 @@
     "project": "./tsconfig.json"
   },
   "ignorePatterns": ["node_modules"],
-  "plugins": ["@typescript-eslint", "prettier", "vitest", "import"],
+  "plugins": ["@typescript-eslint", "vitest", "import"],
   "extends": [
     "eslint:recommended",
     "plugin:@typescript-eslint/recommended",
     "plugin:@typescript-eslint/recommended-requiring-type-checking",
-    "plugin:prettier/recommended",
     "plugin:import/recommended",
     "plugin:import/typescript",
-    "plugin:vitest/recommended"
+    "plugin:vitest/recommended",
+    "prettier"
   ],
   "rules": {
-    "prettier/prettier": "error",
     "@typescript-eslint/no-empty-interface": "warn",
     "@typescript-eslint/ban-ts-comment": "off",
     "@typescript-eslint/no-use-before-define": "off",
