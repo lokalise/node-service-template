@@ -3,7 +3,11 @@ import { defineConfig } from 'vitest/config'
 export default defineConfig({
   test: {
     globals: true,
-    threads: false,
+    poolOptions: {
+      threads: {
+        singleThread: true
+      }
+    },
     watch: false,
     environment: 'node',
     setupFiles: ['test/dotenvConfig.ts'],
@@ -22,10 +26,12 @@ export default defineConfig({
       ],
       reporter: ['text'],
       all: true,
-      lines: 90,
-      functions: 90,
-      branches: 85,
-      statements: 90,
+      thresholds: {
+        lines: 90,
+        functions: 90,
+        branches: 85,
+        statements: 90,
+      }
     },
   },
 })
