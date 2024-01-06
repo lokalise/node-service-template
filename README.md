@@ -76,41 +76,41 @@ are relevant for the technological stack of your organization, and replace `@lok
 
 2. Install all project dependencies:
 
-    ```shell
-    npm install
-    ```
+   ```shell
+   npm install
+   ```
 
 3. Copy the `.env.default` file to a new `.env` file. You can do this with the following npm script:
 
-    ```shell
-    npm run copy:config
-    ```
+   ```shell
+   npm run copy:config
+   ```
 
 4. Launch all the infrastructural dependencies locally:
 
-    ```shell
-    docker compose up -d
-    ```
+   ```shell
+   docker compose up -d
+   ```
 
 5. Run migrations to synchronize your database schema with defined models:
 
-    ```shell
-    npm run db:migration:dev
-    ```
+   ```shell
+   npm run db:migration:dev
+   ```
 
 6. Generate Prisma client for type-safe DB operations:
 
-    ```shell
-    npm run db:update-client
-    ```
+   ```shell
+   npm run db:update-client
+   ```
 
 7. To run application:
 
-    ```shell
-    npm run start:dev
-    ```
+   ```shell
+   npm run start:dev
+   ```
 
-    > **_NOTE:_**  By default all calls to the `node-template` app will require a valid JWT token, hence authentication errors when running the application are expected if you haven't yet followed the steps in [Create jwt for dev usage](#create-jwt-for-dev-usage).
+   > **_NOTE:_** By default all calls to the `node-template` app will require a valid JWT token, hence authentication errors when running the application are expected if you haven't yet followed the steps in [Create jwt for dev usage](#create-jwt-for-dev-usage).
 
 ### OpenAPI specification
 
@@ -126,6 +126,7 @@ You have multiple options to ease your development:
 #### Generate JWT script
 
 - Script requires public-private key pair encrypted with `RS256` algorithm:
+
   ```shell
   mkdir -p ./scripts/keys && ssh-keygen -t rsa -b 4096 -m PEM -f ./scripts/keys/jwtRS256.key
   # Don't add passphrase
@@ -141,6 +142,7 @@ You have multiple options to ease your development:
   ```
 
 - Your public key and token will be printed to console to make things easier. This is an example output:
+
   ```
   Public key:
   -----BEGIN PUBLIC KEY-----||MIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEAt+2fSaw+mjbQpbPYcGv7||A0zs+P1yuCcM4LzTRpMmtXCoxCg3hwVZUM9HoxM4NxSga5A/jdHDhn1qEgQF38cX||N/wG+cRx1YfxDV2fSYxO9ouh+0J+uJaAXs0kWM0oAojrcMI4q1PcTeCFBvKDR+ei||Nu5auiRe7yrBfQTqsSmvEDRlnhUnF24CnNQPuzeN4Qe8LmcXuwimEyAi9Tf7hXBN||H31j+jnUfIq9Yy7EsbmZhW3aEmQlmR6RY/9g+IEzbpmBoYznYsxmvtODpay7n+NY||zWtOdtJC9eKDaOs3wYjDR0G9uHe00ZIBiNfZWRGfTS/3+Sl9Yx8UesVpg8WqbkxC||LwAABtA5/WiKYxp3wsx4Qu9ooZwiE6tlgsb3hZAeusNODQ+rZsoiCowxNNfZ0fvj||veaBxDz7xB4t9fST9rsBJewPna3oFMlEPxigyv4ogFo60V9Ds6e8GHuYevSUeS34||BimjE2T0uE+HYatEmUY5tHRhTgBKP+Ty9dY2I9dpPDSl/nM63PmmbqSr7DIBreh4||pr3LwEPtffpaAY/YdQ0ypAVc7xuQMreTlzEsAFzbwnfI5eTT9oxZHBb1ulrnei1e||w6yxZ93j2UmCnaXPrTWsqyr/tXH4/sfLjqkY7Upj/zl7i0FlDAxtdv3qGg5Ozpj/||8OXPuK2d9Kv7C58uaVhO5bsCAwEAAQ==||-----END PUBLIC KEY-----||
@@ -152,7 +154,7 @@ You have multiple options to ease your development:
 
 - Copy your public key to `JWT_PUBLIC_KEY` in your `.env` file as a one line string
 
-- Restart the application to load the new public key: 
+- Restart the application to load the new public key:
 
   ```shell
   npm run start:dev
@@ -162,4 +164,4 @@ You have multiple options to ease your development:
 
 ## Troubleshooting
 
-* If you are running a service in a monorepo setup, it is launched in the background and you want to always force closing the service before attempting to restart, you can use `npm run free-ports`, which will kill an application running on the predefined port (in an OS-independent way).
+- If you are running a service in a monorepo setup, it is launched in the background and you want to always force closing the service before attempting to restart, you can use `npm run free-ports`, which will kill an application running on the predefined port (in an OS-independent way).
