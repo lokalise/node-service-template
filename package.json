@@ -39,7 +39,7 @@
     "@fastify/schedule": "^4.1.1",
     "@fastify/swagger": "^8.13.0",
     "@fastify/swagger-ui": "^2.0.1",
-    "@lokalise/fastify-extras": "^16.2.2",
+    "@lokalise/fastify-extras": "^16.3.1",
     "@lokalise/node-core": "^9.4.0",
     "@lokalise/zod-extras": "^2.0.1",
     "@message-queue-toolkit/amqp": "^8.0.0",
