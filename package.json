@@ -84,7 +84,7 @@
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-import": "^2.29.1",
     "eslint-plugin-vitest": "^0.3.20",
-    "mockttp": "^3.10.0",
+    "mockttp": "^3.10.1",
     "oas-validator": "^5.0.8",
     "prettier": "^3.2.2",
     "prisma": "^5.7.1",
