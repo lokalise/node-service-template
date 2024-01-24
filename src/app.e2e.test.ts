@@ -1,7 +1,6 @@
 import { buildClient, sendGet } from '@lokalise/node-core'
 import type { FastifyInstance } from 'fastify'
 
-import type { TestContext } from '../test/TestContext'
 import { createTestContext } from '../test/TestContext'
 
 import { getApp } from './app'
@@ -13,10 +12,10 @@ describe('app', () => {
     app = await getApp({
       monitoringEnabled: true,
     })
-  })
 
-  afterAll(async () => {
-    await app.close()
+    afterAll(async () => {
+      await app.close()
+    })
   })
 
   describe('healthcheck', () => {
