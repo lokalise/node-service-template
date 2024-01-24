@@ -43,6 +43,7 @@ export type Config = {
       flushQueueSize?: number
     }
   }
+  multiLinevalue: string
 }
 
 export type JobConfig = {
@@ -123,6 +124,7 @@ export function getConfig(): Config {
         flushMaxRetries: configScope.getOptionalInteger('AMPLITUDE_FLUSH_MAX_RETRIES', 12),
       },
     },
+    multiLinevalue: configScope.getMandatory('MULTI_LINE_VALUE'),
   }
 }
 
