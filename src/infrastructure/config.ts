@@ -181,7 +181,7 @@ export function getAppConfig(): AppConfig {
   return {
     port: configScope.getOptionalInteger('APP_PORT', 3000),
     bindAddress: configScope.getMandatory('APP_BIND_ADDRESS'),
-    jwtPublicKey: configScope.getMandatory('JWT_PUBLIC_KEY').replaceAll('||', '\n'),
+    jwtPublicKey: configScope.getMandatory('JWT_PUBLIC_KEY'),
     logLevel: configScope.getMandatoryOneOf('LOG_LEVEL', [
       'fatal',
       'error',
