@@ -12,10 +12,10 @@ describe('app', () => {
     app = await getApp({
       monitoringEnabled: true,
     })
-  })
 
-  afterAll(async () => {
-    await app.close()
+    afterAll(async () => {
+      await app.close()
+    })
   })
 
   describe('healthcheck', () => {
