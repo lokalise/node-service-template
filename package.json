@@ -50,7 +50,7 @@
     "awilix": "^9.0.0",
     "awilix-manager": "^4.0.0",
     "croner": "^8.0.0",
-    "dotenv": "^16.3.2",
+    "dotenv": "^16.4.1",
     "fastify": "^4.25.2",
     "fastify-custom-healthcheck": "^3.1.0",
     "fastify-graceful-shutdown": "^3.5.1",
