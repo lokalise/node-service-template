@@ -5,7 +5,7 @@ import type { AwilixContainer } from 'awilix'
 import { asFunction, createContainer } from 'awilix'
 import { AwilixManager } from 'awilix-manager'
 import type { FastifyInstance } from 'fastify'
-import merge from 'ts-deepmerge'
+import { merge } from 'ts-deepmerge'
 
 import type { DIOptions } from '../src/infrastructure/commonDiConfig'
 import type { Config } from '../src/infrastructure/config'
