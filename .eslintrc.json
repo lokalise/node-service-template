@@ -13,8 +13,7 @@
     "plugin:@typescript-eslint/recommended-requiring-type-checking",
     "plugin:import/recommended",
     "plugin:import/typescript",
-    "plugin:vitest/recommended",
-    "prettier"
+    "plugin:vitest/recommended"
   ],
   "rules": {
     "@typescript-eslint/no-empty-interface": "warn",
