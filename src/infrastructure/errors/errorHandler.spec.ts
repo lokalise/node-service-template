@@ -3,14 +3,14 @@ import fastifyJWT from '@fastify/jwt'
 import { InternalError } from '@lokalise/node-core'
 import { asFunction } from 'awilix'
 import type { FastifyInstance } from 'fastify'
-import fastify from 'fastify'
+import { fastify } from 'fastify'
 import type { RouteHandlerMethod } from 'fastify/types/route'
 
-import { getTestConfigurationOverrides } from '../../../test/jwtUtils'
-import { jwtTokenPlugin } from '../../plugins/jwtTokenPlugin'
+import { getTestConfigurationOverrides } from '../../../test/jwtUtils.js'
+import { jwtTokenPlugin } from '../../plugins/jwtTokenPlugin.js'
 
-import { errorHandler } from './errorHandler'
-import { AuthFailedError } from './publicErrors'
+import { errorHandler } from './errorHandler.js'
+import { AuthFailedError } from './publicErrors.js'
 
 async function initApp(routeHandler: RouteHandlerMethod, awaitApp = true) {
   const app = fastify()

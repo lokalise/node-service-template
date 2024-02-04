@@ -1,11 +1,11 @@
-import type { PinoLoggerOptions } from 'fastify/types/logger'
+import type { LoggerOptions } from 'pino'
 import { levels } from 'pino'
 
-import type { AppConfig } from './config'
-import { isProduction } from './config'
+import type { AppConfig } from './config.js'
+import { isProduction } from './config.js'
 
-export function resolveLoggerConfiguration(appConfig: AppConfig): PinoLoggerOptions | boolean {
-  const config: PinoLoggerOptions = {
+export function resolveLoggerConfiguration(appConfig: AppConfig): LoggerOptions | boolean {
+  const config: LoggerOptions = {
     level: appConfig.logLevel,
     formatters: {
       level: (label, numericLevel): { level: string } => {

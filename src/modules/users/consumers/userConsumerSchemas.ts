@@ -1,4 +1,4 @@
-import z from 'zod'
+import { z } from 'zod'
 
 export const PERMISSIONS_ADD_MESSAGE_SCHEMA = z.object({
   id: z.string(),

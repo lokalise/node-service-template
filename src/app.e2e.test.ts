@@ -1,10 +1,10 @@
 import { buildClient, sendGet } from '@lokalise/node-core'
 import type { FastifyInstance } from 'fastify'
 
-import { createTestContext } from '../test/TestContext'
+import { createTestContext } from '../test/TestContext.js'
 
-import { getApp } from './app'
-import type { Config } from './infrastructure/config'
+import { getApp } from './app.js'
+import type { Config } from './infrastructure/config.js'
 
 describe('app', () => {
   let app: FastifyInstance

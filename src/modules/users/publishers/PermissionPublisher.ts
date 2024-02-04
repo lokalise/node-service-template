@@ -1,15 +1,15 @@
 import { AbstractAmqpPublisherMultiSchema } from '@message-queue-toolkit/amqp'
 
-import { isTest } from '../../../infrastructure/config'
+import { isTest } from '../../../infrastructure/config.js'
 import type {
   PERMISSIONS_ADD_MESSAGE_TYPE,
   PERMISSIONS_REMOVE_MESSAGE_TYPE,
-} from '../consumers/userConsumerSchemas'
+} from '../consumers/userConsumerSchemas.js'
 import {
   PERMISSIONS_ADD_MESSAGE_SCHEMA,
   PERMISSIONS_REMOVE_MESSAGE_SCHEMA,
-} from '../consumers/userConsumerSchemas'
-import type { UsersInjectableDependencies } from '../diConfig'
+} from '../consumers/userConsumerSchemas.js'
+import type { UsersInjectableDependencies } from '../diConfig.js'
 
 type SupportedMessages = PERMISSIONS_REMOVE_MESSAGE_TYPE | PERMISSIONS_ADD_MESSAGE_TYPE
 

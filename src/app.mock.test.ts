@@ -2,10 +2,10 @@ import type { User } from '@prisma/client'
 import { asClass } from 'awilix'
 import type { FastifyInstance } from 'fastify'
 
-import { getApp } from './app'
-import type { Dependencies } from './infrastructure/diConfig'
-import { SINGLETON_CONFIG } from './infrastructure/diConfig'
-import { UserService } from './modules/users/services/UserService'
+import { getApp } from './app.js'
+import type { Dependencies } from './infrastructure/diConfig.js'
+import { SINGLETON_CONFIG } from './infrastructure/diConfig.js'
+import { UserService } from './modules/users/services/UserService.js'
 
 class FakeUserService extends UserService {
   constructor() {

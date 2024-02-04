@@ -1,6 +1,6 @@
 import type { FastifyInstance } from 'fastify'
 
-import { getApp } from '../app'
+import { getApp } from '../app.js'
 
 describe('config', () => {
   let app: FastifyInstance

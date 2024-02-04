@@ -3,7 +3,7 @@ import type http from 'node:http'
 import type { FastifyBaseLogger, RouteOptions } from 'fastify'
 import type { ZodTypeProvider } from 'fastify-type-provider-zod'
 
-import { getUserRoutes } from './users'
+import { getUserRoutes } from './users/routes/userRoutes.js'
 
 export type Routes = Array<
   RouteOptions<

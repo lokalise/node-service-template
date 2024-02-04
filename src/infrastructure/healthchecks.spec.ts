@@ -1,11 +1,11 @@
 import type { PrismaClient } from '@prisma/client'
 import { asFunction } from 'awilix'
 import type { FastifyInstance } from 'fastify'
-import type Redis from 'ioredis'
+import type { Redis } from 'ioredis'
 
-import { getApp } from '../app'
+import { getApp } from '../app.js'
 
-import { dbHealthCheck, redisHealthCheck } from './healthchecks'
+import { dbHealthCheck, redisHealthCheck } from './healthchecks.js'
 
 const createRedisMock = (pingLatency: number, response = 'PONG') =>
   ({

@@ -4,15 +4,15 @@ import { EventEmitter } from 'node:events'
 import type http from 'node:http'
 
 import type { ServerZoneType } from '@amplitude/analytics-types'
-import fastifyAuth from '@fastify/auth'
+import { fastifyAuth } from '@fastify/auth'
 import { diContainer, fastifyAwilixPlugin } from '@fastify/awilix'
 import { fastifyCors } from '@fastify/cors'
-import fastifyHelmet from '@fastify/helmet'
+import { fastifyHelmet } from '@fastify/helmet'
 import type { Secret } from '@fastify/jwt'
 import fastifyJWT from '@fastify/jwt'
-import fastifySchedule from '@fastify/schedule'
-import fastifySwagger from '@fastify/swagger'
-import fastifySwaggerUi from '@fastify/swagger-ui'
+import { fastifySchedule } from '@fastify/schedule'
+import { fastifySwagger } from '@fastify/swagger'
+import { fastifySwaggerUi } from '@fastify/swagger-ui'
 import {
   bugsnagPlugin,
   getRequestIdFastifyAppConfig,
@@ -26,7 +26,7 @@ import {
 } from '@lokalise/fastify-extras'
 import { resolveGlobalErrorLogObject } from '@lokalise/node-core'
 import type { AwilixContainer } from 'awilix'
-import fastify from 'fastify'
+import { fastify } from 'fastify'
 import type { FastifyInstance, FastifyBaseLogger } from 'fastify'
 import customHealthCheck from 'fastify-custom-healthcheck'
 import fastifyGracefulShutdown from 'fastify-graceful-shutdown'
@@ -38,20 +38,20 @@ import {
 } from 'fastify-type-provider-zod'
 import type { ZodTypeProvider } from 'fastify-type-provider-zod'
 
-import { getConfig, isDevelopment, isProduction, isTest } from './infrastructure/config'
-import type { DependencyOverrides } from './infrastructure/diConfig'
-import { registerDependencies } from './infrastructure/diConfig'
-import { errorHandler } from './infrastructure/errors/errorHandler'
+import { getConfig, isDevelopment, isProduction, isTest } from './infrastructure/config.js'
+import type { DependencyOverrides } from './infrastructure/diConfig.js'
+import { registerDependencies } from './infrastructure/diConfig.js'
+import { errorHandler } from './infrastructure/errors/errorHandler.js'
 import {
   dbHealthCheck,
   redisHealthCheck,
   registerHealthChecks,
   runAllHealthchecks,
   wrapHealthCheckForPrometheus,
-} from './infrastructure/healthchecks'
-import { resolveLoggerConfiguration } from './infrastructure/logger'
-import { getRoutes } from './modules/routes'
-import { jwtTokenPlugin } from './plugins/jwtTokenPlugin'
+} from './infrastructure/healthchecks.js'
+import { resolveLoggerConfiguration } from './infrastructure/logger.js'
+import { getRoutes } from './modules/routes.js'
+import { jwtTokenPlugin } from './plugins/jwtTokenPlugin.js'
 
 EventEmitter.defaultMaxListeners = 12
 
@@ -128,6 +128,8 @@ export async function getApp(
     })
   }
 
+  // FixMe
+  // @ts-ignore
   await app.register(fastifyNoIcon)
 
   await app.register(fastifyAuth)
@@ -231,6 +233,8 @@ export async function getApp(
   }
 
   if (configOverrides.healthchecksEnabled !== false) {
+    // FixMe
+    // @ts-ignore
     await app.register(customHealthCheck, {
       path: '/',
       logLevel: 'warn',

@@ -1,10 +1,10 @@
 import type { Cradle } from '@fastify/awilix'
 import type { AwilixContainer } from 'awilix'
 
-import { cleanTables, DB_MODEL } from '../../../../test/DbCleaner'
-import type { TestContext } from '../../../../test/TestContext'
-import { createTestContext, destroyTestContext } from '../../../../test/TestContext'
-import { TEST_USER_1 } from '../../../../test/fixtures/testUsers'
+import { cleanTables, DB_MODEL } from '../../../test/DbCleaner.js'
+import type { TestContext } from '../../../test/TestContext.js'
+import { createTestContext, destroyTestContext } from '../../../test/TestContext.js'
+import { TEST_USER_1 } from '../../../test/fixtures/testUsers.js'
 
 describe('UserRepository', () => {
   let testContext: TestContext

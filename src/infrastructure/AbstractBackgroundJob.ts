@@ -4,12 +4,12 @@ import type { NewRelicTransactionManager } from '@lokalise/fastify-extras'
 import type { ErrorReporter } from '@lokalise/node-core'
 import { resolveGlobalErrorLogObject } from '@lokalise/node-core'
 import type { FastifyBaseLogger } from 'fastify'
-import type Redis from 'ioredis'
+import type { Redis } from 'ioredis'
 import { Mutex } from 'redis-semaphore'
 import type { LockOptions } from 'redis-semaphore'
 import type { ToadScheduler } from 'toad-scheduler'
 
-import type { CommonDependencies } from './commonDiConfig'
+import type { CommonDependencies } from './commonDiConfig.js'
 
 const DEFAULT_LOCK_NAME = 'exclusive'
 

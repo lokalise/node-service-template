@@ -8,17 +8,17 @@ import { PrismaClient } from '@prisma/client'
 import type { Resolver } from 'awilix'
 import { asClass, asFunction, Lifetime } from 'awilix'
 import type { FastifyBaseLogger } from 'fastify'
-import Redis from 'ioredis'
-import type P from 'pino'
+import { Redis } from 'ioredis'
+import type { P } from 'pino'
 import { pino } from 'pino'
 import { ToadScheduler } from 'toad-scheduler'
 
-import { FakeStoreApiClient } from '../integrations/FakeStoreApiClient'
+import { FakeStoreApiClient } from '../integrations/FakeStoreApiClient.js'
 
-import { getAmqpConfig, getConfig } from './config'
-import type { Config } from './config'
-import type { ExternalDependencies } from './diConfig'
-import { SINGLETON_CONFIG } from './diConfig'
+import { getAmqpConfig, getConfig } from './config.js'
+import type { Config } from './config.js'
+import type { ExternalDependencies } from './diConfig.js'
+import { SINGLETON_CONFIG } from './diConfig.js'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type CommonDiConfig = Record<keyof CommonDependencies, Resolver<any>>

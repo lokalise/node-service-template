@@ -1,7 +1,10 @@
 {
   "compilerOptions": {
     "outDir": "dist",
-    "module": "commonjs",
+    "module": "Node16",
+    "moduleResolution": "Node16",
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
     "target": "ES2022",
     "lib": ["ES2022", "dom"],
     "sourceMap": true,
@@ -9,7 +12,6 @@
     "declarationMap": false,
     "types": ["node", "vitest/globals"],
     "strict": true,
-    "moduleResolution": "node",
     "noUnusedLocals": false,
     "noUnusedParameters": false,
     "skipLibCheck": true,
@@ -17,12 +19,10 @@
     "strictNullChecks": true,
     "importHelpers": true,
     "baseUrl": ".",
-    "allowSyntheticDefaultImports": true,
-    "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true,
   },
   "include": ["src/**/*", "scripts/**/*"],
   "files": ["./scripts/oas-validator.d.ts"],
-  "exclude": ["node_modules", "dist"],
+  "exclude": ["src/**/*.spec.ts"],
 }

@@ -1,6 +1,6 @@
-import { cleanRedis } from '../../../../test/RedisCleaner'
-import type { TestContext } from '../../../../test/TestContext'
-import { createTestContext, destroyTestContext } from '../../../../test/TestContext'
+import { cleanRedis } from '../../../test/RedisCleaner.js'
+import type { TestContext } from '../../../test/TestContext.js'
+import { createTestContext, destroyTestContext } from '../../../test/TestContext.js'
 
 describe('SendEmailsJob', () => {
   let testContext: TestContext

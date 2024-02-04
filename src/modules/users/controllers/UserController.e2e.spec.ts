@@ -1,15 +1,15 @@
 import type { FastifyInstance } from 'fastify'
 import { beforeEach, expect } from 'vitest'
 
-import { cleanTables, DB_MODEL } from '../../../../test/DbCleaner'
-import { getTestConfigurationOverrides } from '../../../../test/jwtUtils'
-import { getApp } from '../../../app'
-import { generateJwtToken } from '../../../infrastructure/tokenUtils'
+import { getApp } from '../../../app.js'
+import { generateJwtToken } from '../../../infrastructure/tokenUtils.js'
+import { cleanTables, DB_MODEL } from '../../../test/DbCleaner.js'
+import { getTestConfigurationOverrides } from '../../../test/jwtUtils.js'
 import type {
   CREATE_USER_BODY_SCHEMA_TYPE,
   GET_USER_SCHEMA_RESPONSE_SCHEMA_TYPE,
   UPDATE_USER_BODY_SCHEMA_TYPE,
-} from '../schemas/userSchemas'
+} from '../schemas/userSchemas.js'
 
 describe('UserController', () => {
   let app: FastifyInstance

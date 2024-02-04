@@ -4,11 +4,11 @@ import type { AwilixContainer, Resolver } from 'awilix'
 import { Lifetime } from 'awilix'
 import type { FastifyInstance, FastifyBaseLogger } from 'fastify'
 
-import type { UsersModuleDependencies } from '../modules/users/diConfig'
-import { resolveUsersConfig } from '../modules/users/diConfig'
+import type { UsersModuleDependencies } from '../modules/users/diConfig.js'
+import { resolveUsersConfig } from '../modules/users/diConfig.js'
 
-import type { CommonDependencies, DIOptions } from './commonDiConfig'
-import { resolveCommonDiConfig } from './commonDiConfig'
+import type { CommonDependencies, DIOptions } from './commonDiConfig.js'
+import { resolveCommonDiConfig } from './commonDiConfig.js'
 
 export type ExternalDependencies = {
   app?: FastifyInstance

@@ -14,9 +14,9 @@ if (process.env.NEW_RELIC_ENABLED !== 'false') {
 
 import { name } from '../package.json'
 
-import { getApp } from './app'
-import type { Config } from './infrastructure/config'
-import { getConfig } from './infrastructure/config'
+import { getApp } from './app.js'
+import type { Config } from './infrastructure/config.js'
+import { getConfig } from './infrastructure/config.js'
 
 async function start() {
   globalLogger.info('Starting application...')

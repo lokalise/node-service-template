@@ -1,9 +1,9 @@
 import { SimpleIntervalJob } from 'toad-scheduler'
 
-import { AbstractBackgroundJob } from '../../../infrastructure/AbstractBackgroundJob'
-import type { IntervalJobConfig } from '../../../infrastructure/config'
-import { createTask } from '../../../infrastructure/jobs/jobUtils'
-import type { UsersInjectableDependencies } from '../diConfig'
+import { AbstractBackgroundJob } from '../../../infrastructure/AbstractBackgroundJob.js'
+import type { IntervalJobConfig } from '../../../infrastructure/config.js'
+import { createTask } from '../../../infrastructure/jobs/jobUtils.js'
+import type { UsersInjectableDependencies } from '../diConfig.js'
 
 const LOCK_TIMEOUT_IN_MSECS = 60 * 1000
 const LOCK_REFRESH_IN_MSECS = 10 * 1000

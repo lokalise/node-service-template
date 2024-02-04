@@ -5,10 +5,10 @@ import {
   isStandardizedError,
 } from '@lokalise/node-core'
 import type { FastifyRequest, FastifyReply, FastifyInstance } from 'fastify'
-import pino from 'pino'
+import { pino } from 'pino'
 import { ZodError } from 'zod'
 
-import type { FreeformRecord } from '../../schemas/commonTypes'
+import type { FreeformRecord } from '../../schemas/commonTypes.js'
 
 const knownAuthErrors = new Set([
   'FST_JWT_NO_AUTHORIZATION_IN_HEADER',

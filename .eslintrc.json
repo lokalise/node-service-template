@@ -3,7 +3,18 @@
   "parserOptions": {
     "ecmaVersion": 2022,
     "sourceType": "module",
-    "project": "./tsconfig.json"
+    "project": "./tsconfig.lint.json"
+  },
+  "settings": {
+    "import/resolver": {
+      "node": {
+        "extensions": [".js", ".jsx", ".ts", ".tsx", ".d.ts"],
+        "moduleDirectory": ["node_modules", "src/", "test/"]
+      },
+      "typescript": {
+        "project": ["tsconfig.lint.json"]
+      }
+    }
   },
   "ignorePatterns": ["node_modules"],
   "plugins": ["@typescript-eslint", "vitest", "import"],
@@ -13,15 +24,14 @@
     "plugin:@typescript-eslint/recommended-requiring-type-checking",
     "plugin:import/recommended",
     "plugin:import/typescript",
-    "plugin:vitest/recommended"
+    "plugin:vitest/recommended",
+    "plugin:import-esm/recommended"
   ],
   "rules": {
     "@typescript-eslint/no-empty-interface": "warn",
     "@typescript-eslint/ban-ts-comment": "off",
     "@typescript-eslint/no-use-before-define": "off",
     "@typescript-eslint/no-non-null-assertion": "warn",
-    "@typescript-eslint/no-var-requires": "off",
-    "@typescript-eslint/indent": "off",
     "@typescript-eslint/no-explicit-any": "warn",
     "@typescript-eslint/no-unsafe-member-access": "warn",
     "@typescript-eslint/explicit-function-return-type": "off",
@@ -48,6 +58,7 @@
       }
     ],
     "import/no-default-export": "error",
+    "import/no-unresolved": "off",
     "import/order": [
       "warn",
       {
@@ -68,6 +79,7 @@
         "@typescript-eslint/no-non-null-assertion": "off",
         "@typescript-eslint/no-unsafe-return": "off",
         "@typescript-eslint/no-unsafe-assignment": "off",
+        "@typescript-eslint/no-unsafe-argument": "off",
         "@typescript-eslint/no-unsafe-member-access": "off",
         "@typescript-eslint/no-unsafe-call": "off",
         "max-statements": ["off"]
