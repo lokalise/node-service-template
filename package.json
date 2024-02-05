@@ -84,7 +84,7 @@
     "eslint-plugin-vitest": "^0.3.21",
     "mockttp": "^3.10.1",
     "oas-validator": "^5.0.8",
-    "prettier": "^3.2.4",
+    "prettier": "^3.2.5",
     "prisma": "^5.8.1",
     "prisma-lint": "^0.1.0",
     "ts-deepmerge": "^7.0.0",
