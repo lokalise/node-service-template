@@ -58,7 +58,7 @@
     "ioredis": "^5.3.2",
     "jsonwebtoken": "^9.0.2",
     "layered-loader": "^13.0.2",
-    "newrelic": "11.10.3",
+    "newrelic": "11.10.4",
     "pino": "^8.18.0",
     "pino-pretty": "^10.3.1",
     "redis-semaphore": "^5.5.0",
