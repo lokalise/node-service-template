@@ -47,7 +47,7 @@
     "@prisma/instrumentation": "^5.9.1",
     "amqplib": "^0.10.3",
     "awilix": "^10.0.1",
-    "awilix-manager": "^5.0.1",
+    "awilix-manager": "^5.1.0",
     "dotenv": "^16.4.4",
     "fastify": "^4.26.0",
     "fastify-custom-healthcheck": "^3.1.0",
