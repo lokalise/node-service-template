@@ -68,7 +68,7 @@
     "zod": "^3.22.4"
   },
   "devDependencies": {
-    "@amplitude/analytics-types": "^2.4.0",
+    "@amplitude/analytics-types": "^2.5.0",
     "@types/amqplib": "^0.10.4",
     "@types/jsonwebtoken": "^9.0.5",
     "@types/newrelic": "^9.14.3",
