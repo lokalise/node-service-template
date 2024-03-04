@@ -42,7 +42,7 @@
     "@lokalise/node-core": "^9.10.1",
     "@lokalise/zod-extras": "^2.0.1",
     "@message-queue-toolkit/amqp": "^10.0.0",
-    "@message-queue-toolkit/core": "^8.0.0",
+    "@message-queue-toolkit/core": "^8.0.1",
     "@prisma/client": "^5.10.2",
     "@prisma/instrumentation": "^5.10.2",
     "amqplib": "^0.10.3",
