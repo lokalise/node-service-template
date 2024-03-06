@@ -1,6 +1,6 @@
 services:
   mysql:
-    image: mysql:8.0.34
+    image: mysql:8.0.36
     ports:
       - ${DOCKER_MYSQL_PORT:-3306}:3306
     volumes:
@@ -12,7 +12,7 @@ services:
       - MYSQL_DATABASE=service_db
 
   waitmysql:
-    image: mysql:8.0.34
+    image: mysql:8.0.36
     links:
       - mysql
     depends_on:
@@ -23,7 +23,7 @@ services:
       - 'until /usr/bin/mysql -hmysql -userviceuser -ppass -e "SELECT 1"; do sleep 5; done'
 
   redis:
-    image: redis:6.2.13-alpine
+    image: redis:6.2.14-alpine
     command: redis-server --requirepass sOmE_sEcUrE_pAsS
     ports:
       - ${DOCKER_REDIS_PORT:-6379}:6379
@@ -31,7 +31,7 @@ services:
       - redis_data:/redis/data:cached
 
   rabbitmq:
-    image: rabbitmq:3.12.2-management
+    image: rabbitmq:3.12.13-management
     ports:
       - ${DOCKER_RABBITMQ_CLIENT_PORT:-5672}:5672
       - ${DOCKER_RABBITMQ_MANAGEMENT_PORT:-15672}:15672
