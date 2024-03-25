@@ -51,7 +51,7 @@
     "dotenv": "^16.4.5",
     "fastify": "^4.26.2",
     "fastify-custom-healthcheck": "^3.1.0",
-    "fastify-graceful-shutdown": "^3.5.1",
+    "fastify-graceful-shutdown": "^3.5.3",
     "fastify-metrics": "^11.0.0",
     "fastify-no-icon": "^6.0.0",
     "fastify-type-provider-zod": "^1.1.9",
