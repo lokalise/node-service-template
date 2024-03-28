@@ -4,7 +4,7 @@ package-lock.json @lokalise/dx-guild
 Dockerfile @lokalise/dx-guild
 docker-compose.yml @lokalise/dx-guild
 
-/src @kibertoad @rupert-mckay @lokankr @drdaemos
-/test @kibertoad @rupert-mckay @lokankr @drdaemos
-/docs @kibertoad @rupert-mckay @lokankr @drdaemos
-/prisma @kibertoad @rupert-mckay @lokankr @drdaemos
+/src @kibertoad @drdaemos @lokalise/dx-guild
+/test @kibertoad @drdaemos @lokalise/dx-guild
+/docs @kibertoad @drdaemos @lokalise/dx-guild
+/prisma @kibertoad @drdaemos @lokalise/dx-guild
