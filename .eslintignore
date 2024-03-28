@@ -1,5 +1,5 @@
 node_modules/
 coverage/
 dist/
-test/dotenvConfig.ts
-vitest.config.ts
+test/envSetupHook.ts
+vitest.config.mts
