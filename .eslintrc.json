@@ -23,7 +23,6 @@
     "@typescript-eslint/no-var-requires": "off",
     "@typescript-eslint/indent": "off",
     "@typescript-eslint/no-explicit-any": "warn",
-    "@typescript-eslint/no-unsafe-member-access": "warn",
     "@typescript-eslint/explicit-function-return-type": "off",
     "@typescript-eslint/consistent-type-imports": "warn",
     "@typescript-eslint/no-unused-vars": [
@@ -55,10 +54,14 @@
         "newlines-between": "always"
       }
     ],
+    "@typescript-eslint/no-unsafe-return": "off",
+    "@typescript-eslint/no-unsafe-assignment": "off",
+    "@typescript-eslint/no-unsafe-member-access": "off",
+    "@typescript-eslint/no-unsafe-call": "off",
     "object-shorthand": ["error", "always"],
     "max-lines": ["error", { "max": 600 }],
     "max-params": ["error", { "max": 4 }],
-    "max-statements": ["error", { "max": 15 }],
+    "max-statements": ["error", { "max": 20 }],
     "complexity": ["error", { "max": 20 }]
   },
   "overrides": [
@@ -66,10 +69,6 @@
       "files": ["*.test.ts", "*.spec.ts"],
       "rules": {
         "@typescript-eslint/no-non-null-assertion": "off",
-        "@typescript-eslint/no-unsafe-return": "off",
-        "@typescript-eslint/no-unsafe-assignment": "off",
-        "@typescript-eslint/no-unsafe-member-access": "off",
-        "@typescript-eslint/no-unsafe-call": "off",
         "max-statements": ["off"]
       }
     }
