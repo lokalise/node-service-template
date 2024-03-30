@@ -1,4 +1,1 @@
-// @ts-ignore
-import { loadEnvFile } from 'node:process'
-
-loadEnvFile('./.env')
+process.loadEnvFile('./.env')
