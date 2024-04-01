@@ -1,4 +1,4 @@
-import { AbstractAmqpConsumerMultiSchema } from '@message-queue-toolkit/amqp'
+import { AbstractAmqpConsumer } from '@message-queue-toolkit/amqp'
 import { MessageHandlerConfigBuilder } from '@message-queue-toolkit/core'
 
 import { isTest } from '../../../infrastructure/config'
@@ -21,11 +21,8 @@ type ExecutionContext = {
   permissionsService: PermissionsService
 }
 
-export class PermissionConsumer extends AbstractAmqpConsumerMultiSchema<
-  SupportedMessages,
-  ExecutionContext
-> {
-  public static QUEUE_NAME = 'user_permissions'
+export class PermissionConsumer extends AbstractAmqpConsumer<SupportedMessages, ExecutionContext> {
+  public static readonly QUEUE_NAME = 'user_permissions'
 
   constructor(dependencies: UsersInjectableDependencies) {
     super(
