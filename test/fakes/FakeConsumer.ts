@@ -1,12 +1,11 @@
-import type { Either } from '@lokalise/node-core'
-import { AbstractAmqpConsumerMonoSchema } from '@message-queue-toolkit/amqp'
+import { AbstractAmqpConsumer } from '@message-queue-toolkit/amqp'
+import { MessageHandlerConfigBuilder } from '@message-queue-toolkit/core'
 import type { ZodType } from 'zod'
 
-import type { CommonMessage } from '../../src/infrastructure/amqp/MessageTypes'
 import type { Dependencies } from '../../src/infrastructure/diConfig'
 import { PERMISSIONS_ADD_MESSAGE_SCHEMA } from '../../src/modules/users/consumers/userConsumerSchemas'
 
-export class FakeConsumer extends AbstractAmqpConsumerMonoSchema<CommonMessage> {
+export class FakeConsumer<T extends object> extends AbstractAmqpConsumer<T, unknown> {
   constructor(
     dependencies: Dependencies,
     queueName = 'dummy',
@@ -29,15 +28,12 @@ export class FakeConsumer extends AbstractAmqpConsumerMonoSchema<CommonMessage> 
             exclusive: false,
           },
         },
-        messageSchema,
         messageTypeField: 'messageType',
+        handlers: new MessageHandlerConfigBuilder<T, unknown>()
+          .addConfig(messageSchema, () => Promise.resolve({ result: 'success' }))
+          .build(),
       },
+      undefined,
     )
-  }
-
-  processMessage(): Promise<Either<'retryLater', 'success'>> {
-    return Promise.resolve({
-      result: 'success',
-    })
   }
 }
