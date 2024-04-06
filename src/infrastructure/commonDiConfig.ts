@@ -60,11 +60,7 @@ export function resolveCommonDiConfig(
       {
         dispose: (redis) => {
           return new Promise((resolve) => {
-            void redis.quit((err, result) => {
-              if (err) {
-                globalLogger.error(`Error while closing redis: ${err.message}`)
-                return resolve(err)
-              }
+            void redis.quit((_err, result) => {
               return resolve(result)
             })
           })
@@ -91,11 +87,7 @@ export function resolveCommonDiConfig(
       {
         dispose: (redis) => {
           return new Promise((resolve) => {
-            void redis.quit((err, result) => {
-              if (err) {
-                globalLogger.error(`Error while closing redis: ${err.message}`)
-                return resolve(err)
-              }
+            void redis.quit((_err, result) => {
               return resolve(result)
             })
           })
@@ -122,11 +114,7 @@ export function resolveCommonDiConfig(
       {
         dispose: (redis) => {
           return new Promise((resolve) => {
-            void redis.quit((err, result) => {
-              if (err) {
-                globalLogger.error(`Error while closing redis: ${err.message}`)
-                return resolve(err)
-              }
+            void redis.quit((_err, result) => {
               return resolve(result)
             })
           })
