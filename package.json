@@ -45,7 +45,7 @@
     "@message-queue-toolkit/core": "^10.0.0",
     "@prisma/client": "^5.12.1",
     "@prisma/instrumentation": "^5.12.1",
-    "amqplib": "^0.10.3",
+    "amqplib": "^0.10.4",
     "awilix": "^10.0.2",
     "awilix-manager": "^5.1.0",
     "dotenv": "^16.4.5",
