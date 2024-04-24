@@ -3,7 +3,7 @@
   "parserOptions": {
     "ecmaVersion": 2022,
     "sourceType": "module",
-    "project": "./tsconfig.json"
+    "project": "./tsconfig.lint.json"
   },
   "ignorePatterns": ["node_modules"],
   "plugins": ["@typescript-eslint", "vitest", "import"],
