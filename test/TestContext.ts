@@ -7,11 +7,11 @@ import { AwilixManager } from 'awilix-manager'
 import type { FastifyInstance } from 'fastify'
 import { merge } from 'ts-deepmerge'
 
-import type { DIOptions } from '../src/infrastructure/commonDiConfig'
 import type { Config } from '../src/infrastructure/config'
 import { getConfig } from '../src/infrastructure/config'
 import type { DependencyOverrides } from '../src/infrastructure/diConfig'
 import { SINGLETON_CONFIG, registerDependencies } from '../src/infrastructure/diConfig'
+import type { DIOptions } from '../src/infrastructure/diConfigUtils'
 
 type NestedPartial<T> = {
   [P in keyof T]?: NestedPartial<T[P]>
@@ -37,12 +37,12 @@ export async function createTestContext(
   }
 
   const dependencies = configOverrides
-    ? {
+    ? ({
         ...dependencyOverrides,
         config: asFunction(() => {
           return merge(getConfig(), configOverrides)
         }, SINGLETON_CONFIG),
-      }
+      } as DependencyOverrides)
     : dependencyOverrides
 
   const awilixManager = new AwilixManager({

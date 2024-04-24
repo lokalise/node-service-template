@@ -55,7 +55,7 @@ describe('PermissionsConsumer', () => {
     beforeEach(async () => {
       app = await getApp(
         {
-          queuesEnabled: true,
+          queuesEnabled: [PermissionConsumer.QUEUE_NAME],
         },
         {
           consumerErrorResolver: asClass(FakeConsumerErrorResolver, SINGLETON_CONFIG),

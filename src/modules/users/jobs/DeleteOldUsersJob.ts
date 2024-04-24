@@ -9,11 +9,12 @@ const LOCK_TIMEOUT_IN_MSECS = 60 * 1000
 const LOCK_REFRESH_IN_MSECS = 10 * 1000
 
 export class DeleteOldUsersJob extends AbstractBackgroundJob {
+  public static JOB_NAME = 'DeleteOldUsersJob'
   private readonly config: IntervalJobConfig
   constructor(dependencies: UsersInjectableDependencies) {
     super(
       {
-        jobId: 'DeleteOldUsersJob',
+        jobId: DeleteOldUsersJob.JOB_NAME,
       },
       dependencies,
     )

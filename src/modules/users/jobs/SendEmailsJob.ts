@@ -10,11 +10,12 @@ const LOCK_REFRESH_IN_MSECS = 10 * 1000
 const LOCK_ON_SUCCESS_IN_MSECS = 60 * 1000 * 60
 
 export class SendEmailsJob extends AbstractBackgroundJob {
+  public static JOB_NAME = 'SendEmailsJob'
   private readonly config: CronJobConfig
   constructor(dependencies: UsersInjectableDependencies) {
     super(
       {
-        jobId: 'SendEmailsJob',
+        jobId: SendEmailsJob.JOB_NAME,
       },
       dependencies,
     )

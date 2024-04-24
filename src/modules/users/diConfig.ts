@@ -4,8 +4,10 @@ import { asClass, asFunction, Lifetime } from 'awilix'
 import type { InMemoryCacheConfiguration, LoaderConfig } from 'layered-loader'
 import { Loader, createNotificationPair, RedisCache } from 'layered-loader'
 
-import type { CommonDependencies, DIOptions } from '../../infrastructure/commonDiConfig'
+import type { CommonDependencies } from '../../infrastructure/commonDiConfig'
 import { SINGLETON_CONFIG } from '../../infrastructure/diConfig'
+import type { DIOptions } from '../../infrastructure/diConfigUtils'
+import { isJobEnabled, isQueueEnabled } from '../../infrastructure/diConfigUtils'
 
 import { PermissionConsumer } from './consumers/PermissionConsumer'
 import { UserDataSource } from './datasources/UserDataSource'
@@ -93,7 +95,7 @@ export function resolveUsersConfig(options: DIOptions): UsersDiConfig {
       asyncInitPriority: 10,
       asyncDispose: 'close',
       asyncDisposePriority: 10,
-      enabled: options.queuesEnabled,
+      enabled: isQueueEnabled(options, PermissionConsumer.QUEUE_NAME),
     }),
     permissionPublisher: asClass(PermissionPublisher, {
       lifetime: Lifetime.SINGLETON,
@@ -101,23 +103,23 @@ export function resolveUsersConfig(options: DIOptions): UsersDiConfig {
       asyncInitPriority: 20,
       asyncDispose: 'close',
       asyncDisposePriority: 20,
-      enabled: options.queuesEnabled,
+      enabled: isQueueEnabled(options, PermissionPublisher.QUEUE_NAME),
     }),
 
     processLogFilesJob: asClass(ProcessLogFilesJob, {
       lifetime: Lifetime.SINGLETON,
       eagerInject: 'register',
-      enabled: options.jobsEnabled,
+      enabled: isJobEnabled(options, ProcessLogFilesJob.JOB_NAME),
     }),
     deleteOldUsersJob: asClass(DeleteOldUsersJob, {
       lifetime: Lifetime.SINGLETON,
       eagerInject: 'register',
-      enabled: options.jobsEnabled,
+      enabled: isJobEnabled(options, DeleteOldUsersJob.JOB_NAME),
     }),
     sendEmailsJob: asClass(SendEmailsJob, {
       lifetime: Lifetime.SINGLETON,
       eagerInject: 'register',
-      enabled: options.jobsEnabled,
+      enabled: isJobEnabled(options, SendEmailsJob.JOB_NAME),
     }),
   }
 }

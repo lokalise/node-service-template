@@ -10,11 +10,12 @@ const LOCK_REFRESH_IN_MSECS = 10 * 1000
 const FILE_PROCESSING_BATCH_SIZE = 20
 
 export class ProcessLogFilesJob extends AbstractBackgroundJob {
+  public static JOB_NAME = 'ProcessLogFilesJob'
   private readonly config: IntervalJobConfig
   constructor(dependencies: UsersInjectableDependencies) {
     super(
       {
-        jobId: 'ProcessLogFilesJob',
+        jobId: ProcessLogFilesJob.JOB_NAME,
       },
       dependencies,
     )
