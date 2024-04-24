@@ -63,8 +63,8 @@ export type ConfigOverrides = {
     public: Secret
     private: Secret
   }
-  queuesEnabled?: boolean
-  jobsEnabled?: boolean
+  queuesEnabled?: boolean | string[]
+  jobsEnabled?: boolean | string[]
   healthchecksEnabled?: boolean
   monitoringEnabled?: boolean
 }

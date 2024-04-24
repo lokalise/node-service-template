@@ -2,6 +2,7 @@ import { diContainer } from '@fastify/awilix'
 import { deserializeAmqpMessage } from '@message-queue-toolkit/amqp'
 import { waitAndRetry } from '@message-queue-toolkit/core'
 import type { Channel } from 'amqplib'
+import type { Constructor } from 'awilix'
 import { asClass, Lifetime } from 'awilix'
 import type { FastifyInstance } from 'fastify'
 
@@ -26,11 +27,11 @@ describe('PermissionPublisher', () => {
     beforeAll(async () => {
       app = await getApp(
         {
-          queuesEnabled: true,
+          queuesEnabled: [PermissionPublisher.QUEUE_NAME],
         },
         {
           consumerErrorResolver: asClass(FakeConsumerErrorResolver, SINGLETON_CONFIG),
-          permissionConsumer: asClass(FakeConsumer, {
+          permissionConsumer: asClass(FakeConsumer as unknown as Constructor<PermissionConsumer>, {
             lifetime: Lifetime.SINGLETON,
             asyncInit: 'start',
             asyncDispose: 'close',

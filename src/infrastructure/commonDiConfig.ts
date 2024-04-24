@@ -5,12 +5,10 @@ import type { ErrorReporter, ErrorResolver } from '@lokalise/node-core'
 import { globalLogger } from '@lokalise/node-core'
 import { AmqpConnectionManager, AmqpConsumerErrorResolver } from '@message-queue-toolkit/amqp'
 import { PrismaClient } from '@prisma/client'
-import type { Resolver } from 'awilix'
+import type { NameAndRegistrationPair } from 'awilix'
 import { asClass, asFunction, Lifetime } from 'awilix'
 import type { FastifyBaseLogger } from 'fastify'
 import Redis from 'ioredis'
-import type P from 'pino'
-import { pino } from 'pino'
 import { ToadScheduler } from 'toad-scheduler'
 
 import { FakeStoreApiClient } from '../integrations/FakeStoreApiClient'
@@ -19,24 +17,22 @@ import { getAmqpConfig, getConfig } from './config'
 import type { Config } from './config'
 import type { ExternalDependencies } from './diConfig'
 import { SINGLETON_CONFIG } from './diConfig'
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export type CommonDiConfig = Record<keyof CommonDependencies, Resolver<any>>
-
-export type DIOptions = {
-  jobsEnabled?: boolean
-  queuesEnabled?: boolean
-}
+import type { DIOptions } from './diConfigUtils'
+import { FakeAmplitude } from './fakes/FakeAmplitude'
+import { FakeNewrelicTransactionManager } from './fakes/FakeNewrelicTransactionManager'
 
 export function resolveCommonDiConfig(
   dependencies: ExternalDependencies = { logger: globalLogger },
   options: DIOptions = {},
-): CommonDiConfig {
+): NameAndRegistrationPair<CommonDependencies> {
   return {
     jwt: asFunction(() => {
-      return dependencies.app?.jwt
+      if (!dependencies.app) {
+        throw new Error('app with JWT set is necessary to use JWT as a dependency')
+      }
+      return dependencies.app.jwt
     }, SINGLETON_CONFIG),
-    logger: asFunction(() => dependencies.logger ?? pino(), SINGLETON_CONFIG),
+    logger: asFunction(() => dependencies.logger, SINGLETON_CONFIG),
 
     scheduler: asFunction(() => {
       return dependencies.app?.scheduler ?? new ToadScheduler()
@@ -150,7 +146,7 @@ export function resolveCommonDiConfig(
         asyncInit: 'init',
         asyncDispose: 'close',
         asyncDisposePriority: 1,
-        enabled: options.queuesEnabled,
+        enabled: options.queuesEnabled !== false && options.queuesEnabled !== undefined,
       },
     ),
     consumerErrorResolver: asFunction(() => {
@@ -163,10 +159,13 @@ export function resolveCommonDiConfig(
 
     // vendor-specific dependencies
     newRelicBackgroundTransactionManager: asFunction(() => {
-      return dependencies.app?.newrelicTransactionManager
+      return (
+        dependencies.app?.newrelicTransactionManager ??
+        (new FakeNewrelicTransactionManager() as NewRelicTransactionManager)
+      )
     }, SINGLETON_CONFIG),
     amplitude: asFunction(() => {
-      return dependencies.app?.amplitude
+      return dependencies.app?.amplitude ?? new FakeAmplitude()
     }, SINGLETON_CONFIG),
     errorReporter: asFunction(() => {
       return {
@@ -180,7 +179,7 @@ export function resolveCommonDiConfig(
 export type CommonDependencies = {
   jwt: JWT
   config: Config
-  logger: FastifyBaseLogger & P.Logger
+  logger: FastifyBaseLogger
   scheduler: ToadScheduler
 
   redis: Redis
