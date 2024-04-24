@@ -19,7 +19,7 @@ Mechanisms:
 - [Dependency injection](./docs/dependency-injection.md) (using [awilix](https://github.com/jeffijoe/awilix));
 - [Scheduling](./docs/scheduling.md) (using [toad-scheduler](https://github.com/kibertoad/toad-scheduler)
   and [redis-semaphore](https://github.com/swarthy/redis-semaphore));
-- Type-safe [dependency mocking](./src/app.mock.test.ts) for tests;
+- Type-safe [dependency mocking](./src/app.mock.spec.ts) for tests;
 
 Scaffolding:
 
