@@ -2,8 +2,8 @@ import { diContainer } from '@fastify/awilix'
 import { deserializeAmqpMessage } from '@message-queue-toolkit/amqp'
 import { waitAndRetry } from '@message-queue-toolkit/core'
 import type { Channel } from 'amqplib'
-import type { Constructor } from 'awilix'
 import { asClass, Lifetime } from 'awilix'
+import { asMockClass } from 'awilix-manager'
 import type { FastifyInstance } from 'fastify'
 
 import { cleanTables, DB_MODEL } from '../../../../test/DbCleaner'
@@ -31,7 +31,7 @@ describe('PermissionPublisher', () => {
         },
         {
           consumerErrorResolver: asClass(FakeConsumerErrorResolver, SINGLETON_CONFIG),
-          permissionConsumer: asClass(FakeConsumer as unknown as Constructor<PermissionConsumer>, {
+          permissionConsumer: asMockClass(FakeConsumer, {
             lifetime: Lifetime.SINGLETON,
             asyncInit: 'start',
             asyncDispose: 'close',
