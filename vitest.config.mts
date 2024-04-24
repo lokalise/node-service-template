@@ -18,6 +18,8 @@ export default defineConfig({
         'src/infrastructure/diConfig.ts',
         'src/infrastructure/errors/publicErrors.ts',
         'src/infrastructure/errors/internalErrors.ts',
+        'src/infrastructure/fakes/FakeAmplitude.ts',
+        'src/infrastructure/fakes/FakeNewrelicTransactionManager.ts',
         'src/schemas/commonTypes.ts',
         'src/server.ts',
         'src/app.ts',
