@@ -2,6 +2,7 @@
 
 In development, environment variables are resolved from the .env file
 In production you are expected to set environment variables during deployment (e. g. using Vault)
+For tests there are some overrides defined in [dotenvConfig.ts](../test/dotenvConfig.ts)
 
 ## List of environment variables
 
