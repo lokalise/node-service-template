@@ -1,13 +1,13 @@
 import { buildClient, sendGet } from '@lokalise/node-core'
-import type { FastifyInstance } from 'fastify'
 
 import { createTestContext } from '../test/TestContext'
 
+import type { AppInstance } from './app'
 import { getApp } from './app'
 import type { Config } from './infrastructure/config'
 
 describe('app', () => {
-  let app: FastifyInstance
+  let app: AppInstance
   beforeAll(async () => {
     app = await getApp({
       monitoringEnabled: true,

@@ -3,6 +3,7 @@ import { asFunction } from 'awilix'
 import type { FastifyInstance } from 'fastify'
 import type Redis from 'ioredis'
 
+import type { AppInstance } from '../app'
 import { getApp } from '../app'
 
 import { dbHealthCheck, redisHealthCheck } from './healthchecks'
@@ -25,7 +26,7 @@ const createPrismaMock = (shouldSucceed: boolean) =>
   }) as Pick<PrismaClient, '$queryRaw'>
 
 describe('healthcheck', () => {
-  let app: FastifyInstance
+  let app: AppInstance
   beforeEach(async () => {
     app = await getApp()
   })
@@ -41,7 +42,7 @@ describe('healthcheck', () => {
         asFunction(() => createPrismaMock(false)),
       )
 
-      const result = await dbHealthCheck(app)
+      const result = await dbHealthCheck(app as unknown as FastifyInstance)
       expect(result.result).toBeUndefined()
       expect(result.error).toBeDefined()
     })
@@ -52,7 +53,7 @@ describe('healthcheck', () => {
         asFunction(() => createPrismaMock(true)),
       )
 
-      const result = await dbHealthCheck(app)
+      const result = await dbHealthCheck(app as unknown as FastifyInstance)
       expect(result.result).toBeDefined()
       expect(result.error).toBeUndefined()
     })
@@ -65,7 +66,7 @@ describe('healthcheck', () => {
         asFunction(() => createRedisMock(0, '')),
       )
 
-      const result = await redisHealthCheck(app)
+      const result = await redisHealthCheck(app as unknown as FastifyInstance)
       expect(result).toMatchObject({
         error: new Error('Redis did not respond with PONG'),
       })
@@ -76,7 +77,7 @@ describe('healthcheck', () => {
       redis.disconnect()
 
       expect.assertions(1)
-      const promise = redisHealthCheck(app)
+      const promise = redisHealthCheck(app as unknown as FastifyInstance)
 
       await expect(promise).resolves.toMatchObject({
         error: new Error('Redis did not respond with PONG'),
@@ -89,7 +90,7 @@ describe('healthcheck', () => {
         asFunction(() => createRedisMock(0)),
       )
 
-      const result = await redisHealthCheck(app)
+      const result = await redisHealthCheck(app as unknown as FastifyInstance)
       expect(result).toMatchObject({
         result: true,
       })

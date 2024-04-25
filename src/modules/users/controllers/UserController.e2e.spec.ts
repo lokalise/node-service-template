@@ -1,8 +1,8 @@
-import type { FastifyInstance } from 'fastify'
 import { beforeEach, expect } from 'vitest'
 
 import { cleanTables, DB_MODEL } from '../../../../test/DbCleaner'
 import { getTestConfigurationOverrides } from '../../../../test/jwtUtils'
+import type { AppInstance } from '../../../app'
 import { getApp } from '../../../app'
 import { generateJwtToken } from '../../../infrastructure/tokenUtils'
 import type {
@@ -12,7 +12,7 @@ import type {
 } from '../schemas/userSchemas'
 
 describe('UserController', () => {
-  let app: FastifyInstance
+  let app: AppInstance
   beforeAll(async () => {
     app = await getApp(getTestConfigurationOverrides())
   })

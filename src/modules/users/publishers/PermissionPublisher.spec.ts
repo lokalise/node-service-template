@@ -4,11 +4,11 @@ import { waitAndRetry } from '@message-queue-toolkit/core'
 import type { Channel } from 'amqplib'
 import { asClass, Lifetime } from 'awilix'
 import { asMockClass } from 'awilix-manager'
-import type { FastifyInstance } from 'fastify'
 
 import { cleanTables, DB_MODEL } from '../../../../test/DbCleaner'
 import { FakeConsumer } from '../../../../test/fakes/FakeConsumer'
 import { FakeConsumerErrorResolver } from '../../../../test/fakes/FakeConsumerErrorResolver'
+import type { AppInstance } from '../../../app'
 import { getApp } from '../../../app'
 import { SINGLETON_CONFIG } from '../../../infrastructure/diConfig'
 import { PermissionConsumer } from '../consumers/PermissionConsumer'
@@ -22,7 +22,7 @@ const userIds = [100, 200, 300]
 
 describe('PermissionPublisher', () => {
   describe('publish', () => {
-    let app: FastifyInstance
+    let app: AppInstance
     let channel: Channel
     beforeAll(async () => {
       app = await getApp(

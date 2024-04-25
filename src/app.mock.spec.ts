@@ -1,7 +1,7 @@
 import type { User } from '@prisma/client'
 import { asClass } from 'awilix'
-import type { FastifyInstance } from 'fastify'
 
+import type { AppInstance } from './app'
 import { getApp } from './app'
 import type { Dependencies } from './infrastructure/diConfig'
 import { SINGLETON_CONFIG } from './infrastructure/diConfig'
@@ -23,7 +23,7 @@ class FakeUserService extends UserService {
 }
 
 describe('dependency mocking', () => {
-  let app: FastifyInstance
+  let app: AppInstance
   beforeAll(async () => {
     app = await getApp(
       {},
