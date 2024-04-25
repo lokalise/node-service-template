@@ -2,7 +2,7 @@
   "name": "node-service-template",
   "version": "1.0.0",
   "engines": {
-    "node": ">=20"
+    "node": ">=20.12.2"
   },
   "scripts": {
     "build": "tsc",
@@ -13,9 +13,9 @@
     "test:ci": "npm run copy:config && npm run test:migrate && npm run test:coverage",
     "lint": "eslint . --ext .ts && npx prisma-lint -c ./.prismalintrc.json && prettier --check --log-level warn \"**/*.{json,md,ts}\" && tsc --project tsconfig.lint.json --noEmit",
     "lint:fix": "eslint . --ext .ts --fix && prettier --write --log-level warn \"**/*.{json,md,ts}\" && npx prisma format",
-    "start:dev": "cross-env NODE_ENV=development ts-node -r dotenv/config src/server.ts",
-    "start:dev:watch": "cross-env NODE_ENV=development ts-node-dev --clear --exit-child --watch src -r dotenv/config src/server.ts",
-    "start:prod": "tsc && cross-env NODE_ENV=production node -r dotenv/config dist/src/server.js",
+    "start:dev": "cross-env NODE_ENV=development node --env-file=.env -r ts-node/register src/server.ts",
+    "start:dev:watch": "cross-env NODE_ENV=development ts-node-dev --clear --exit-child --watch src --env-file=.env src/server.ts",
+    "start:prod": "tsc && cross-env NODE_ENV=production node --env-file=.env dist/src/server.js",
     "free-ports": "npx cross-port-killer 3000",
     "docker:start:dev": "docker compose up -d",
     "docker:stop:dev": "docker compose down",
@@ -24,8 +24,8 @@
     "db:migration:dev": "npx prisma migrate dev",
     "db:migration:run": "npx prisma migrate deploy",
     "db:update-client": "npx prisma generate",
-    "spec:generate": "cross-env NODE_ENV=development ts-node -r dotenv/config scripts/generateOpenApi.ts && npm run spec:validate",
-    "spec:validate": "cross-env NODE_ENV=development ts-node -r dotenv/config scripts/validateOpenApi.ts",
+    "spec:generate": "cross-env NODE_ENV=development node --env-file=.env -r ts-node/register scripts/generateOpenApi.ts && npm run spec:validate",
+    "spec:validate": "cross-env NODE_ENV=development node --env-file=.env -r ts-node/register scripts/validateOpenApi.ts",
     "prepublishOnly": "npm run build",
     "jwt:generate": "cross-env NODE_ENV=development ts-node scripts/generateJwt.ts"
   },
@@ -48,7 +48,6 @@
     "amqplib": "^0.10.4",
     "awilix": "^10.0.2",
     "awilix-manager": "^5.2.1",
-    "dotenv": "^16.4.5",
     "fastify": "^4.26.2",
     "fastify-custom-healthcheck": "^3.1.0",
     "fastify-graceful-shutdown": "^3.5.3",

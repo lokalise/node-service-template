@@ -10,7 +10,7 @@ export default defineConfig({
     },
     watch: false,
     environment: 'node',
-    setupFiles: ['test/dotenvConfig.ts'],
+    setupFiles: ['test/envSetupHook.ts'],
     reporters: ['default'],
     coverage: {
       include: ['src/**/*.ts'],
