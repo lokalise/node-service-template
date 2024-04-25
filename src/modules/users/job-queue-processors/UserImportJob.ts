@@ -1,0 +1,45 @@
+import type { BaseJobPayload } from '@lokalise/background-jobs-common'
+import type { RequestContext } from '@lokalise/fastify-extras'
+import type { Job } from 'bullmq'
+
+import type { Dependencies } from '../../../infrastructure/diConfig'
+import { AbstractRedisJobProcessor } from '../../../infrastructure/jobs/AbstractRedisJobProcessor'
+import type { UserService } from '../services/UserService'
+
+export type UserImportJobPayload = {
+  payload: {
+    name: string
+    age: number
+    email: string
+  }
+} & BaseJobPayload
+
+export class UserImportJob extends AbstractRedisJobProcessor<UserImportJobPayload> {
+  public static QUEUE_ID = 'UserImportJob'
+  private readonly userService: UserService
+
+  constructor(dependencies: Dependencies) {
+    super(dependencies, {
+      queueId: UserImportJob.QUEUE_ID,
+      workerOptions: {
+        concurrency: 10,
+      },
+    })
+
+    this.userService = dependencies.userService
+  }
+
+  protected async process(
+    job: Job<UserImportJobPayload>,
+    requestContext: RequestContext,
+  ): Promise<void> {
+    const user = await this.userService.createUser(job.data.payload)
+
+    requestContext.logger.info(
+      {
+        userId: user.id,
+      },
+      `Created new user`,
+    )
+  }
+}

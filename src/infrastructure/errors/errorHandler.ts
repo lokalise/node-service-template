@@ -4,10 +4,11 @@ import {
   isPublicNonRecoverableError,
   isStandardizedError,
 } from '@lokalise/node-core'
-import type { FastifyRequest, FastifyReply, FastifyInstance } from 'fastify'
+import type { FastifyRequest, FastifyReply } from 'fastify'
 import pino from 'pino'
 import { ZodError } from 'zod'
 
+import type { AppInstance } from '../../app'
 import type { FreeformRecord } from '../../schemas/commonTypes'
 
 const knownAuthErrors = new Set([
@@ -98,7 +99,7 @@ function resolveResponseObject(error: FreeformRecord): ResponseObject {
 }
 
 export const errorHandler = function (
-  this: FastifyInstance,
+  this: AppInstance,
   error: FreeformRecord,
   request: FastifyRequest,
   reply: FastifyReply,

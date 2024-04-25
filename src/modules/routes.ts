@@ -1,6 +1,7 @@
 import type http from 'node:http'
 
-import type { FastifyBaseLogger, RouteOptions } from 'fastify'
+import type { CommonLogger } from '@lokalise/node-core'
+import type { RouteOptions } from 'fastify'
 import type { ZodTypeProvider } from 'fastify-type-provider-zod'
 
 import { getUserRoutes } from './users'
@@ -17,7 +18,7 @@ export type Routes = Array<
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     any,
     ZodTypeProvider,
-    FastifyBaseLogger
+    CommonLogger
   >
 >
 

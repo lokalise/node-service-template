@@ -11,9 +11,10 @@ import { isJobEnabled, isQueueEnabled } from '../../infrastructure/diConfigUtils
 
 import { PermissionConsumer } from './consumers/PermissionConsumer'
 import { UserDataSource } from './datasources/UserDataSource'
-import { DeleteOldUsersJob } from './jobs/DeleteOldUsersJob'
-import { ProcessLogFilesJob } from './jobs/ProcessLogFilesJob'
-import { SendEmailsJob } from './jobs/SendEmailsJob'
+import { DeleteOldUsersJob } from './in-memory-jobs/DeleteOldUsersJob'
+import { ProcessLogFilesJob } from './in-memory-jobs/ProcessLogFilesJob'
+import { SendEmailsJob } from './in-memory-jobs/SendEmailsJob'
+import { UserImportJob } from './job-queue-processors/UserImportJob'
 import { PermissionPublisher } from './publishers/PermissionPublisher'
 import { UserRepository } from './repositories/UserRepository'
 import { PermissionsService } from './services/PermissionsService'
@@ -43,6 +44,8 @@ export type UsersModuleDependencies = {
   deleteOldUsersJob: DeleteOldUsersJob
   processLogFilesJob: ProcessLogFilesJob
   sendEmailsJob: SendEmailsJob
+
+  userImportJob: UserImportJob
 }
 
 export type UsersInjectableDependencies = UsersModuleDependencies & CommonDependencies
@@ -120,6 +123,13 @@ export function resolveUsersConfig(options: DIOptions): UsersDiConfig {
       lifetime: Lifetime.SINGLETON,
       eagerInject: 'register',
       enabled: isJobEnabled(options, SendEmailsJob.JOB_NAME),
+    }),
+
+    userImportJob: asClass(UserImportJob, {
+      lifetime: Lifetime.SINGLETON,
+      asyncInit: 'start',
+      asyncDispose: 'dispose',
+      enabled: isJobEnabled(options, UserImportJob.QUEUE_ID),
     }),
   }
 }
