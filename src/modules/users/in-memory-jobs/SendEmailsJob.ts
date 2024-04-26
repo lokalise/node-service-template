@@ -1,14 +1,14 @@
 import { CronJob } from 'toad-scheduler'
 
 import type { CronJobConfig } from '../../../infrastructure/config'
-import { AbstractInMemoryJob, createTask } from '../../../infrastructure/jobs/AbstractInMemoryJob'
+import { AbstractPeriodicJob, createTask } from '../../../infrastructure/jobs/AbstractPeriodicJob'
 import type { UsersInjectableDependencies } from '../diConfig'
 
 const LOCK_TIMEOUT_IN_MSECS = 60 * 1000
 const LOCK_REFRESH_IN_MSECS = 10 * 1000
 const LOCK_ON_SUCCESS_IN_MSECS = 60 * 1000 * 60
 
-export class SendEmailsJob extends AbstractInMemoryJob {
+export class SendEmailsJob extends AbstractPeriodicJob {
   public static JOB_NAME = 'SendEmailsJob'
   private readonly config: CronJobConfig
   constructor(dependencies: UsersInjectableDependencies) {

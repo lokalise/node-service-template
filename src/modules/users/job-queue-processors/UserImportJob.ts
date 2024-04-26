@@ -3,7 +3,7 @@ import type { RequestContext } from '@lokalise/fastify-extras'
 import type { Job } from 'bullmq'
 
 import type { Dependencies } from '../../../infrastructure/diConfig'
-import { AbstractRedisJobProcessor } from '../../../infrastructure/jobs/AbstractRedisJobProcessor'
+import { AbstractEnqueuedJobProcessor } from '../../../infrastructure/jobs/AbstractEnqueuedJobProcessor'
 import type { UserService } from '../services/UserService'
 
 export type UserImportJobPayload = {
@@ -14,7 +14,7 @@ export type UserImportJobPayload = {
   }
 } & BaseJobPayload
 
-export class UserImportJob extends AbstractRedisJobProcessor<UserImportJobPayload> {
+export class UserImportJob extends AbstractEnqueuedJobProcessor<UserImportJobPayload> {
   public static QUEUE_ID = 'UserImportJob'
   private readonly userService: UserService
 

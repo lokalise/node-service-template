@@ -1,14 +1,14 @@
 import { SimpleIntervalJob } from 'toad-scheduler'
 
 import type { IntervalJobConfig } from '../../../infrastructure/config'
-import { AbstractInMemoryJob, createTask } from '../../../infrastructure/jobs/AbstractInMemoryJob'
+import { AbstractPeriodicJob, createTask } from '../../../infrastructure/jobs/AbstractPeriodicJob'
 import type { UsersInjectableDependencies } from '../diConfig'
 
 const LOCK_TIMEOUT_IN_MSECS = 60 * 1000
 const LOCK_REFRESH_IN_MSECS = 10 * 1000
 const FILE_PROCESSING_BATCH_SIZE = 20
 
-export class ProcessLogFilesJob extends AbstractInMemoryJob {
+export class ProcessLogFilesJob extends AbstractPeriodicJob {
   public static JOB_NAME = 'ProcessLogFilesJob'
   private readonly config: IntervalJobConfig
   constructor(dependencies: UsersInjectableDependencies) {

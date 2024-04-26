@@ -24,7 +24,7 @@ export type LockConfiguration = {
   lockTimeout: number
 }
 
-export function createTask(logger: CommonLogger, job: AbstractInMemoryJob) {
+export function createTask(logger: CommonLogger, job: AbstractPeriodicJob) {
   return new AsyncTask(
     job.jobId,
     () => {
@@ -42,7 +42,7 @@ export function createTask(logger: CommonLogger, job: AbstractInMemoryJob) {
   )
 }
 
-export abstract class AbstractInMemoryJob {
+export abstract class AbstractPeriodicJob {
   public readonly jobId: string
   protected readonly redis: Redis
   protected readonly newRelicBackgroundTransactionManager: NewRelicTransactionManager

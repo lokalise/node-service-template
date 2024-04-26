@@ -11,7 +11,7 @@ import type { Dependencies } from '../diConfig'
 
 export type BackgroundJobConfig = Omit<BackgroundJobProcessorConfig, 'isTest'>
 
-export abstract class AbstractRedisJobProcessor<
+export abstract class AbstractEnqueuedJobProcessor<
   JobPayload extends object & BaseJobPayload,
   JobReturn = void,
 > extends AbstractBackgroundJobProcessor<JobPayload, JobReturn> {
