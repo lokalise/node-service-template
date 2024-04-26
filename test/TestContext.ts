@@ -4,9 +4,9 @@ import { globalLogger } from '@lokalise/node-core'
 import type { AwilixContainer } from 'awilix'
 import { asFunction, createContainer } from 'awilix'
 import { AwilixManager } from 'awilix-manager'
-import type { FastifyInstance } from 'fastify'
 import { merge } from 'ts-deepmerge'
 
+import type { AppInstance } from '../src/app'
 import type { Config } from '../src/infrastructure/config'
 import { getConfig } from '../src/infrastructure/config'
 import type { DependencyOverrides } from '../src/infrastructure/diConfig'
@@ -32,7 +32,7 @@ export async function createTestContext(
     injectionMode: 'PROXY',
   })
 
-  const fakeApp: Partial<FastifyInstance> = {
+  const fakeApp: Partial<AppInstance> = {
     newrelicTransactionManager: new NewRelicTransactionManager(false),
   }
 
@@ -57,7 +57,7 @@ export async function createTestContext(
   registerDependencies(
     diContainer,
     {
-      app: fakeApp as FastifyInstance,
+      app: fakeApp as AppInstance,
       logger: globalLogger,
     },
     dependencies,

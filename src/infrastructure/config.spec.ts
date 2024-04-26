@@ -1,9 +1,8 @@
-import type { FastifyInstance } from 'fastify'
-
+import type { AppInstance } from '../app'
 import { getApp } from '../app'
 
 describe('config', () => {
-  let app: FastifyInstance
+  let app: AppInstance
 
   beforeAll(async () => {
     app = await getApp({

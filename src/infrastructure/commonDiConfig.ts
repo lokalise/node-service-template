@@ -1,13 +1,12 @@
 import type { JWT } from '@fastify/jwt'
 import type { Amplitude, NewRelicTransactionManager } from '@lokalise/fastify-extras'
 import { reportErrorToBugsnag } from '@lokalise/fastify-extras'
-import type { ErrorReporter, ErrorResolver } from '@lokalise/node-core'
+import type { CommonLogger, ErrorReporter, ErrorResolver } from '@lokalise/node-core'
 import { globalLogger } from '@lokalise/node-core'
 import { AmqpConnectionManager, AmqpConsumerErrorResolver } from '@message-queue-toolkit/amqp'
 import { PrismaClient } from '@prisma/client'
 import type { NameAndRegistrationPair } from 'awilix'
 import { asClass, asFunction, Lifetime } from 'awilix'
-import type { FastifyBaseLogger } from 'fastify'
 import Redis from 'ioredis'
 import { ToadScheduler } from 'toad-scheduler'
 
@@ -50,6 +49,7 @@ export function resolveCommonDiConfig(
           password: redisConfig.password,
           connectTimeout: redisConfig.connectTimeout,
           commandTimeout: redisConfig.commandTimeout,
+          maxRetriesPerRequest: null,
           tls: redisConfig.useTls ? {} : undefined,
         })
       },
@@ -179,7 +179,7 @@ export function resolveCommonDiConfig(
 export type CommonDependencies = {
   jwt: JWT
   config: Config
-  logger: FastifyBaseLogger
+  logger: CommonLogger
   scheduler: ToadScheduler
 
   redis: Redis

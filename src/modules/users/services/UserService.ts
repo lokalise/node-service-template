@@ -26,6 +26,7 @@ export class UserService {
   async createUser(user: UserCreateDTO) {
     const newUser = await this.userRepository.createUser({
       name: user.name ?? null,
+      age: user.age ?? null,
       email: user.email,
     })
     await this.userLoader.invalidateCacheFor(newUser.id.toString())

@@ -24,10 +24,11 @@ import {
   amplitudePlugin,
   healthcheckMetricsPlugin,
 } from '@lokalise/fastify-extras'
+import type { CommonLogger } from '@lokalise/node-core'
 import { resolveGlobalErrorLogObject } from '@lokalise/node-core'
 import type { AwilixContainer } from 'awilix'
 import fastify from 'fastify'
-import type { FastifyInstance, FastifyBaseLogger } from 'fastify'
+import type { FastifyInstance } from 'fastify'
 import customHealthCheck from 'fastify-custom-healthcheck'
 import fastifyGracefulShutdown from 'fastify-graceful-shutdown'
 import fastifyNoIcon from 'fastify-no-icon'
@@ -57,6 +58,13 @@ EventEmitter.defaultMaxListeners = 12
 
 const GRACEFUL_SHUTDOWN_TIMEOUT_IN_MSECS = 10000
 
+export type AppInstance = FastifyInstance<
+  http.Server,
+  http.IncomingMessage,
+  http.ServerResponse,
+  CommonLogger
+>
+
 export type ConfigOverrides = {
   diContainer?: AwilixContainer
   jwtKeys?: {
@@ -69,23 +77,16 @@ export type ConfigOverrides = {
   monitoringEnabled?: boolean
 }
 
-export type RequestContext = {
-  logger?: FastifyBaseLogger
-  reqId: string
-}
-
 export async function getApp(
   configOverrides: ConfigOverrides = {},
   dependencyOverrides: DependencyOverrides = {},
-): Promise<
-  FastifyInstance<http.Server, http.IncomingMessage, http.ServerResponse, FastifyBaseLogger>
-> {
+): Promise<AppInstance> {
   const config = getConfig()
   const appConfig = config.app
   const loggerConfig = resolveLoggerConfiguration(appConfig)
   const enableRequestLogging = ['debug', 'trace'].includes(appConfig.logLevel)
 
-  const app = fastify<http.Server, http.IncomingMessage, http.ServerResponse, FastifyBaseLogger>({
+  const app = fastify<http.Server, http.IncomingMessage, http.ServerResponse, CommonLogger>({
     ...getRequestIdFastifyAppConfig(),
     logger: loggerConfig,
     disableRequestLogging: !enableRequestLogging,

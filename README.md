@@ -23,7 +23,7 @@ Mechanisms:
 
 Scaffolding:
 
-- [Background jobs](./src/infrastructure/AbstractBackgroundJob.ts);
+- [Background jobs](./src/infrastructure/AbstractInMemoryBackgroundJob.ts);
 
 Basic building block examples:
 

@@ -4,10 +4,10 @@ import type { PrismaClient } from '@prisma/client'
 import type { Channel } from 'amqplib'
 import type { AwilixContainer } from 'awilix'
 import { asClass } from 'awilix'
-import type { FastifyInstance } from 'fastify'
 
 import { cleanTables, DB_MODEL } from '../../../../test/DbCleaner'
 import { FakeConsumerErrorResolver } from '../../../../test/fakes/FakeConsumerErrorResolver'
+import type { AppInstance } from '../../../app'
 import { getApp } from '../../../app'
 import { SINGLETON_CONFIG } from '../../../infrastructure/diConfig'
 import { buildQueueMessage } from '../../../utils/queueUtils'
@@ -48,7 +48,7 @@ async function resolvePermissions(permissionsService: PermissionsService, userId
 
 describe('PermissionsConsumer', () => {
   describe('consume', () => {
-    let app: FastifyInstance
+    let app: AppInstance
     let diContainer: AwilixContainer<Cradle>
     let consumer: PermissionConsumer
     let channel: Channel

@@ -1,31 +1,31 @@
-import { SimpleIntervalJob } from 'toad-scheduler'
+import { CronJob } from 'toad-scheduler'
 
-import { AbstractBackgroundJob } from '../../../infrastructure/AbstractBackgroundJob'
-import type { IntervalJobConfig } from '../../../infrastructure/config'
-import { createTask } from '../../../infrastructure/jobs/jobUtils'
+import type { CronJobConfig } from '../../../infrastructure/config'
+import { AbstractPeriodicJob, createTask } from '../../../infrastructure/jobs/AbstractPeriodicJob'
 import type { UsersInjectableDependencies } from '../diConfig'
 
 const LOCK_TIMEOUT_IN_MSECS = 60 * 1000
 const LOCK_REFRESH_IN_MSECS = 10 * 1000
+const LOCK_ON_SUCCESS_IN_MSECS = 60 * 1000 * 60
 
-export class DeleteOldUsersJob extends AbstractBackgroundJob {
-  public static JOB_NAME = 'DeleteOldUsersJob'
-  private readonly config: IntervalJobConfig
+export class SendEmailsJob extends AbstractPeriodicJob {
+  public static JOB_NAME = 'SendEmailsJob'
+  private readonly config: CronJobConfig
   constructor(dependencies: UsersInjectableDependencies) {
     super(
       {
-        jobId: DeleteOldUsersJob.JOB_NAME,
+        jobId: SendEmailsJob.JOB_NAME,
       },
       dependencies,
     )
 
-    this.config = dependencies.config.jobs.deleteOldUsersJob
+    this.config = dependencies.config.jobs.sendEmailsJob
   }
 
   public register() {
     const task = createTask(this.logger, this)
-    this.scheduler.addSimpleIntervalJob(
-      new SimpleIntervalJob({ seconds: this.config.periodInSeconds }, task, {
+    this.scheduler.addCronJob(
+      new CronJob({ cronExpression: this.config.cronExpression }, task, {
         id: this.jobId,
         preventOverrun: true,
       }),
@@ -45,15 +45,14 @@ export class DeleteOldUsersJob extends AbstractBackgroundJob {
       return
     }
 
-    try {
-      // Process job logic here
-      await this.deleteOldUsers()
-    } finally {
-      await lock.release()
-    }
+    // Process job logic here
+    await this.sendEmails()
+
+    // If successful, we don't want to process this job again for a longer period of time, let's put a new lock
+    await this.updateMutex(lock, LOCK_ON_SUCCESS_IN_MSECS)
   }
 
-  private async deleteOldUsers() {
+  private async sendEmails() {
     // dummy processing logic
     return Promise.resolve()
   }

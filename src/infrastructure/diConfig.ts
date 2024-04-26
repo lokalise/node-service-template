@@ -1,9 +1,10 @@
+import type { CommonLogger } from '@lokalise/node-core'
 import { globalLogger } from '@lokalise/node-core'
 import type { Connection } from 'amqplib'
 import type { AwilixContainer, NameAndRegistrationPair, Resolver } from 'awilix'
 import { Lifetime } from 'awilix'
-import type { FastifyBaseLogger, FastifyInstance } from 'fastify'
 
+import type { AppInstance } from '../app'
 import type { UsersModuleDependencies } from '../modules/users/diConfig'
 import { resolveUsersConfig } from '../modules/users/diConfig'
 
@@ -12,8 +13,8 @@ import { resolveCommonDiConfig } from './commonDiConfig'
 import type { DIOptions } from './diConfigUtils'
 
 export type ExternalDependencies = {
-  app?: FastifyInstance
-  logger: FastifyBaseLogger
+  app?: AppInstance
+  logger: CommonLogger
   amqpConnection?: Connection
 }
 export const SINGLETON_CONFIG = { lifetime: Lifetime.SINGLETON }

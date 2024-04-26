@@ -1,15 +1,16 @@
 import { randomUUID } from 'crypto'
 
 import type { NewRelicTransactionManager } from '@lokalise/fastify-extras'
-import type { ErrorReporter } from '@lokalise/node-core'
+import type { CommonLogger, ErrorReporter } from '@lokalise/node-core'
 import { resolveGlobalErrorLogObject } from '@lokalise/node-core'
-import type { FastifyBaseLogger } from 'fastify'
 import type Redis from 'ioredis'
+import { stdSerializers } from 'pino'
 import { Mutex } from 'redis-semaphore'
 import type { LockOptions } from 'redis-semaphore'
 import type { ToadScheduler } from 'toad-scheduler'
+import { AsyncTask } from 'toad-scheduler'
 
-import type { CommonDependencies } from './commonDiConfig'
+import type { CommonDependencies } from '../commonDiConfig'
 
 const DEFAULT_LOCK_NAME = 'exclusive'
 
@@ -23,11 +24,29 @@ export type LockConfiguration = {
   lockTimeout: number
 }
 
-export abstract class AbstractBackgroundJob {
+export function createTask(logger: CommonLogger, job: AbstractPeriodicJob) {
+  return new AsyncTask(
+    job.jobId,
+    () => {
+      return job.process()
+    },
+    (error) => {
+      logger.error(
+        stdSerializers.err({
+          name: error.name,
+          message: error.message,
+          stack: error.stack,
+        }),
+      )
+    },
+  )
+}
+
+export abstract class AbstractPeriodicJob {
   public readonly jobId: string
   protected readonly redis: Redis
   protected readonly newRelicBackgroundTransactionManager: NewRelicTransactionManager
-  protected readonly logger: FastifyBaseLogger
+  protected readonly logger: CommonLogger
   protected readonly errorReporter: ErrorReporter
   protected readonly scheduler: ToadScheduler
 
