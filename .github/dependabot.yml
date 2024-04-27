@@ -30,8 +30,7 @@ updates:
           - '@vitest/*'
       typescript:
         patterns:
-          - 'ts-node'
-          - 'ts-node-dev'
+          - 'tsx'
           - 'typescript'
       fastify:
         patterns:
