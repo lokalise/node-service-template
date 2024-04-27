@@ -13,8 +13,8 @@
     "test:ci": "npm run copy:config && npm run test:migrate && npm run test:coverage",
     "lint": "eslint . --ext .ts && npx prisma-lint -c ./.prismalintrc.json && prettier --check --log-level warn \"**/*.{json,md,ts}\" && tsc --project tsconfig.lint.json --noEmit",
     "lint:fix": "eslint . --ext .ts --fix && prettier --write --log-level warn \"**/*.{json,md,ts}\" && npx prisma format",
-    "start:dev": "cross-env NODE_ENV=development node --env-file=.env -r ts-node/register src/server.ts",
-    "start:dev:watch": "cross-env NODE_ENV=development ts-node-dev --clear --exit-child --watch src --env-file=.env src/server.ts",
+    "start:dev": "cross-env NODE_ENV=development tsx --env-file=.env src/server.ts",
+    "start:dev:watch": "cross-env NODE_ENV=development tsx watch --env-file=.env src/server.ts",
     "start:prod": "tsc && cross-env NODE_ENV=production node --env-file=.env dist/src/server.js",
     "free-ports": "npx cross-port-killer 3000",
     "docker:start:dev": "docker compose up -d",
@@ -24,10 +24,10 @@
     "db:migration:dev": "npx prisma migrate dev",
     "db:migration:run": "npx prisma migrate deploy",
     "db:update-client": "npx prisma generate",
-    "spec:generate": "cross-env NODE_ENV=development node --env-file=.env -r ts-node/register scripts/generateOpenApi.ts && npm run spec:validate",
-    "spec:validate": "cross-env NODE_ENV=development node --env-file=.env -r ts-node/register scripts/validateOpenApi.ts",
+    "spec:generate": "cross-env NODE_ENV=development tsx --env-file=.env scripts/generateOpenApi.ts && npm run spec:validate",
+    "spec:validate": "cross-env NODE_ENV=development tsx --env-file=.env scripts/validateOpenApi.ts",
     "prepublishOnly": "npm run build",
-    "jwt:generate": "cross-env NODE_ENV=development ts-node scripts/generateJwt.ts"
+    "jwt:generate": "cross-env NODE_ENV=development tsx scripts/generateJwt.ts"
   },
   "dependencies": {
     "@fastify/auth": "^4.6.1",
@@ -88,8 +88,7 @@
     "prisma": "^5.12.1",
     "prisma-lint": "^0.4.0",
     "ts-deepmerge": "^7.0.0",
-    "ts-node": "^10.9.2",
-    "ts-node-dev": "^2.0.0",
+    "tsx": "^4.7.3",
     "typescript": "5.4.5",
     "vitest": "1.5.0",
     "yaml": "^2.4.1"
