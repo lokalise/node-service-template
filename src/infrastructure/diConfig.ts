@@ -4,13 +4,13 @@ import type { Connection } from 'amqplib'
 import type { AwilixContainer, NameAndRegistrationPair, Resolver } from 'awilix'
 import { Lifetime } from 'awilix'
 
-import type { AppInstance } from '../app'
-import type { UsersModuleDependencies } from '../modules/users/diConfig'
-import { resolveUsersConfig } from '../modules/users/diConfig'
+import type { AppInstance } from '../app.js'
+import type { UsersModuleDependencies } from '../modules/users/diConfig.js'
+import { resolveUsersConfig } from '../modules/users/diConfig.js'
 
-import type { CommonDependencies } from './commonDiConfig'
-import { resolveCommonDiConfig } from './commonDiConfig'
-import type { DIOptions } from './diConfigUtils'
+import type { CommonDependencies } from './commonDiConfig.js'
+import { resolveCommonDiConfig } from './commonDiConfig.js'
+import type { DIOptions } from './diConfigUtils.js'
 
 export type ExternalDependencies = {
   app?: AppInstance

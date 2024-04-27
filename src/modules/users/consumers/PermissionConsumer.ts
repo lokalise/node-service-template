@@ -1,19 +1,19 @@
 import { AbstractAmqpConsumer } from '@message-queue-toolkit/amqp'
 import { MessageHandlerConfigBuilder } from '@message-queue-toolkit/core'
 
-import { isTest } from '../../../infrastructure/config'
-import type { UsersInjectableDependencies } from '../diConfig'
-import type { PermissionsService } from '../services/PermissionsService'
-import type { UserService } from '../services/UserService'
+import { isTest } from '../../../infrastructure/config.js'
+import type { UsersInjectableDependencies } from '../diConfig.js'
+import type { PermissionsService } from '../services/PermissionsService.js'
+import type { UserService } from '../services/UserService.js'
 
 import type {
   PERMISSIONS_ADD_MESSAGE_TYPE,
   PERMISSIONS_REMOVE_MESSAGE_TYPE,
-} from './userConsumerSchemas'
+} from './userConsumerSchemas.js'
 import {
   PERMISSIONS_REMOVE_MESSAGE_SCHEMA,
   PERMISSIONS_ADD_MESSAGE_SCHEMA,
-} from './userConsumerSchemas'
+} from './userConsumerSchemas.js'
 
 type SupportedMessages = PERMISSIONS_REMOVE_MESSAGE_TYPE | PERMISSIONS_ADD_MESSAGE_TYPE
 type ExecutionContext = {

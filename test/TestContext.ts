@@ -6,12 +6,12 @@ import { asFunction, createContainer } from 'awilix'
 import { AwilixManager } from 'awilix-manager'
 import { merge } from 'ts-deepmerge'
 
-import type { AppInstance } from '../src/app'
-import type { Config } from '../src/infrastructure/config'
-import { getConfig } from '../src/infrastructure/config'
-import type { DependencyOverrides } from '../src/infrastructure/diConfig'
-import { SINGLETON_CONFIG, registerDependencies } from '../src/infrastructure/diConfig'
-import type { DIOptions } from '../src/infrastructure/diConfigUtils'
+import type { AppInstance } from '../src/app.js'
+import type { Config } from '../src/infrastructure/config.js'
+import { getConfig } from '../src/infrastructure/config.js'
+import type { DependencyOverrides } from '../src/infrastructure/diConfig.js'
+import { SINGLETON_CONFIG, registerDependencies } from '../src/infrastructure/diConfig.js'
+import type { DIOptions } from '../src/infrastructure/diConfigUtils.js'
 
 type NestedPartial<T> = {
   [P in keyof T]?: NestedPartial<T[P]>

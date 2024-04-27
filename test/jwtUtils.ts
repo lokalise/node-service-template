@@ -1,7 +1,7 @@
 import { readFileSync } from 'node:fs'
 import path from 'node:path'
 
-import type { ConfigOverrides } from '../src/app'
+import type { ConfigOverrides } from '../src/app.js'
 
 const getPrivateKey = (): Buffer =>
   readFileSync(path.resolve(__dirname, './keys/jwtRS256-testing.key'))

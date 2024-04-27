@@ -1,10 +1,10 @@
 import { buildClient, sendGet } from '@lokalise/node-core'
 
-import { createTestContext } from '../test/TestContext'
+import { createTestContext } from '../test/TestContext.js'
 
-import type { AppInstance } from './app'
-import { getApp } from './app'
-import type { Config } from './infrastructure/config'
+import type { AppInstance } from './app.js'
+import { getApp } from './app.js'
+import type { Config } from './infrastructure/config.js'
 
 describe('app', () => {
   let app: AppInstance

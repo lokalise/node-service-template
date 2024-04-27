@@ -1,9 +1,9 @@
-import { cleanTables, DB_MODEL } from '../../../../test/DbCleaner'
-import { cleanRedis } from '../../../../test/RedisCleaner'
-import type { TestContext } from '../../../../test/TestContext'
-import { createTestContext, destroyTestContext } from '../../../../test/TestContext'
+import { cleanTables, DB_MODEL } from '../../../../test/DbCleaner.js'
+import { cleanRedis } from '../../../../test/RedisCleaner.js'
+import type { TestContext } from '../../../../test/TestContext.js'
+import { createTestContext, destroyTestContext } from '../../../../test/TestContext.js'
 
-import { UserImportJob } from './UserImportJob'
+import { UserImportJob } from './UserImportJob.js'
 
 describe('UserImportJob', () => {
   let testContext: TestContext

@@ -2,9 +2,9 @@ import type { BaseJobPayload } from '@lokalise/background-jobs-common'
 import type { RequestContext } from '@lokalise/fastify-extras'
 import type { Job } from 'bullmq'
 
-import type { Dependencies } from '../../../infrastructure/diConfig'
-import { AbstractEnqueuedJobProcessor } from '../../../infrastructure/jobs/AbstractEnqueuedJobProcessor'
-import type { UserService } from '../services/UserService'
+import type { Dependencies } from '../../../infrastructure/diConfig.js'
+import { AbstractEnqueuedJobProcessor } from '../../../infrastructure/jobs/AbstractEnqueuedJobProcessor.js'
+import type { UserService } from '../services/UserService.js'
 
 export type UserImportJobPayload = {
   payload: {

@@ -5,17 +5,17 @@ import type { Channel } from 'amqplib'
 import { asClass, Lifetime } from 'awilix'
 import { asMockClass } from 'awilix-manager'
 
-import { cleanTables, DB_MODEL } from '../../../../test/DbCleaner'
-import { FakeConsumer } from '../../../../test/fakes/FakeConsumer'
-import { FakeConsumerErrorResolver } from '../../../../test/fakes/FakeConsumerErrorResolver'
-import type { AppInstance } from '../../../app'
-import { getApp } from '../../../app'
-import { SINGLETON_CONFIG } from '../../../infrastructure/diConfig'
-import { PermissionConsumer } from '../consumers/PermissionConsumer'
-import type { PERMISSIONS_ADD_MESSAGE_TYPE } from '../consumers/userConsumerSchemas'
-import { PERMISSIONS_ADD_MESSAGE_SCHEMA } from '../consumers/userConsumerSchemas'
+import { cleanTables, DB_MODEL } from '../../../../test/DbCleaner.js'
+import { FakeConsumer } from '../../../../test/fakes/FakeConsumer.js'
+import { FakeConsumerErrorResolver } from '../../../../test/fakes/FakeConsumerErrorResolver.js'
+import type { AppInstance } from '../../../app.js'
+import { getApp } from '../../../app.js'
+import { SINGLETON_CONFIG } from '../../../infrastructure/diConfig.js'
+import { PermissionConsumer } from '../consumers/PermissionConsumer.js'
+import type { PERMISSIONS_ADD_MESSAGE_TYPE } from '../consumers/userConsumerSchemas.js'
+import { PERMISSIONS_ADD_MESSAGE_SCHEMA } from '../consumers/userConsumerSchemas.js'
 
-import { PermissionPublisher } from './PermissionPublisher'
+import { PermissionPublisher } from './PermissionPublisher.js'
 
 const perms: [string, ...string[]] = ['perm1', 'perm2']
 const userIds = [100, 200, 300]

@@ -1,8 +1,11 @@
 import { SimpleIntervalJob } from 'toad-scheduler'
 
-import type { IntervalJobConfig } from '../../../infrastructure/config'
-import { AbstractPeriodicJob, createTask } from '../../../infrastructure/jobs/AbstractPeriodicJob'
-import type { UsersInjectableDependencies } from '../diConfig'
+import type { IntervalJobConfig } from '../../../infrastructure/config.js'
+import {
+  AbstractPeriodicJob,
+  createTask,
+} from '../../../infrastructure/jobs/AbstractPeriodicJob.js'
+import type { UsersInjectableDependencies } from '../diConfig.js'
 
 const LOCK_TIMEOUT_IN_MSECS = 60 * 1000
 const LOCK_REFRESH_IN_MSECS = 10 * 1000

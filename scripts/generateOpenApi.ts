@@ -3,7 +3,7 @@ import { resolve } from 'node:path'
 
 import { stringify as toYaml } from 'yaml'
 
-import { getApp } from '../src/app'
+import { getApp } from '../src/app.js'
 
 const targetPath = resolve(__dirname, '../openApiSpec.yaml')
 

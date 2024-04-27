@@ -6,7 +6,7 @@ import type {
   GET_USER_PARAMS_SCHEMA_TYPE,
   UPDATE_USER_BODY_SCHEMA_TYPE,
   UPDATE_USER_PARAMS_SCHEMA_TYPE,
-} from '../schemas/userSchemas'
+} from '../schemas/userSchemas.js'
 
 export const postCreateUser = async (
   req: FastifyRequest<{ Body: CREATE_USER_BODY_SCHEMA_TYPE }>,
