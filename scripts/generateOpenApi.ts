@@ -5,7 +5,9 @@ import { stringify as toYaml } from 'yaml'
 
 import { getApp } from '../src/app.js'
 
-const targetPath = resolve(__dirname, '../openApiSpec.yaml')
+import { getRootDirectory } from './utils/pathUtils.js'
+
+const targetPath = resolve(getRootDirectory(), 'openApiSpec.yaml')
 
 async function run() {
   const app = await getApp({
