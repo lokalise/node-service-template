@@ -5,16 +5,16 @@ import type { Channel } from 'amqplib'
 import type { AwilixContainer } from 'awilix'
 import { asClass } from 'awilix'
 
-import { cleanTables, DB_MODEL } from '../../../../test/DbCleaner'
-import { FakeConsumerErrorResolver } from '../../../../test/fakes/FakeConsumerErrorResolver'
-import type { AppInstance } from '../../../app'
-import { getApp } from '../../../app'
-import { SINGLETON_CONFIG } from '../../../infrastructure/diConfig'
-import { buildQueueMessage } from '../../../utils/queueUtils'
-import type { PermissionsService } from '../services/PermissionsService'
+import { cleanTables, DB_MODEL } from '../../../../test/DbCleaner.js'
+import { FakeConsumerErrorResolver } from '../../../../test/fakes/FakeConsumerErrorResolver.js'
+import type { AppInstance } from '../../../app.js'
+import { getApp } from '../../../app.js'
+import { SINGLETON_CONFIG } from '../../../infrastructure/diConfig.js'
+import { buildQueueMessage } from '../../../utils/queueUtils.js'
+import type { PermissionsService } from '../services/PermissionsService.js'
 
-import { PermissionConsumer } from './PermissionConsumer'
-import type { PERMISSIONS_ADD_MESSAGE_TYPE } from './userConsumerSchemas'
+import { PermissionConsumer } from './PermissionConsumer.js'
+import type { PERMISSIONS_ADD_MESSAGE_TYPE } from './userConsumerSchemas.js'
 
 const userIds = [100, 200, 300]
 const perms: [string, ...string[]] = ['perm1', 'perm2']

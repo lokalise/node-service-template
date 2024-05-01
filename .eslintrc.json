@@ -6,7 +6,7 @@
     "project": "./tsconfig.lint.json"
   },
   "ignorePatterns": ["node_modules"],
-  "plugins": ["@typescript-eslint", "vitest", "import"],
+  "plugins": ["@typescript-eslint", "vitest", "import", "n"],
   "extends": [
     "eslint:recommended",
     "plugin:@typescript-eslint/recommended",
@@ -16,6 +16,13 @@
     "plugin:vitest/recommended"
   ],
   "rules": {
+    "n/file-extension-in-import": [
+      "error",
+      "always",
+      {
+        ".js": "always"
+      }
+    ],
     "@typescript-eslint/no-empty-interface": "warn",
     "@typescript-eslint/ban-ts-comment": "off",
     "@typescript-eslint/no-use-before-define": "off",
@@ -46,6 +53,7 @@
         }
       }
     ],
+    "import/no-unresolved": "off",
     "import/no-default-export": "error",
     "import/order": [
       "warn",

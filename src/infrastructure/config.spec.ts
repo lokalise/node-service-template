@@ -1,5 +1,5 @@
-import type { AppInstance } from '../app'
-import { getApp } from '../app'
+import type { AppInstance } from '../app.js'
+import { getApp } from '../app.js'
 
 describe('config', () => {
   let app: AppInstance

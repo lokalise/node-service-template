@@ -39,20 +39,20 @@ import {
 } from 'fastify-type-provider-zod'
 import type { ZodTypeProvider } from 'fastify-type-provider-zod'
 
-import { getConfig, isDevelopment, isProduction, isTest } from './infrastructure/config'
-import type { DependencyOverrides } from './infrastructure/diConfig'
-import { registerDependencies } from './infrastructure/diConfig'
-import { errorHandler } from './infrastructure/errors/errorHandler'
+import { getConfig, isDevelopment, isProduction, isTest } from './infrastructure/config.js'
+import type { DependencyOverrides } from './infrastructure/diConfig.js'
+import { registerDependencies } from './infrastructure/diConfig.js'
+import { errorHandler } from './infrastructure/errors/errorHandler.js'
 import {
   dbHealthCheck,
   redisHealthCheck,
   registerHealthChecks,
   runAllHealthchecks,
   wrapHealthCheckForPrometheus,
-} from './infrastructure/healthchecks'
-import { resolveLoggerConfiguration } from './infrastructure/logger'
-import { getRoutes } from './modules/routes'
-import { jwtTokenPlugin } from './plugins/jwtTokenPlugin'
+} from './infrastructure/healthchecks.js'
+import { resolveLoggerConfiguration } from './infrastructure/logger.js'
+import { getRoutes } from './modules/routes.js'
+import { jwtTokenPlugin } from './plugins/jwtTokenPlugin.js'
 
 EventEmitter.defaultMaxListeners = 12
 

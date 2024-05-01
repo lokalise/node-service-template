@@ -8,8 +8,8 @@ import type { FastifyRequest, FastifyReply } from 'fastify'
 import pino from 'pino'
 import { ZodError } from 'zod'
 
-import type { AppInstance } from '../../app'
-import type { FreeformRecord } from '../../schemas/commonTypes'
+import type { AppInstance } from '../../app.js'
+import type { FreeformRecord } from '../../schemas/commonTypes.js'
 
 const knownAuthErrors = new Set([
   'FST_JWT_NO_AUTHORIZATION_IN_HEADER',

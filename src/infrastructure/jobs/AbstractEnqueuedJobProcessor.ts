@@ -6,8 +6,8 @@ import {
 import type { RequestContext } from '@lokalise/fastify-extras'
 import type { Job } from 'bullmq'
 
-import { isTest } from '../config'
-import type { Dependencies } from '../diConfig'
+import { isTest } from '../config.js'
+import type { Dependencies } from '../diConfig.js'
 
 export type BackgroundJobConfig = Omit<BackgroundJobProcessorConfig, 'isTest'>
 

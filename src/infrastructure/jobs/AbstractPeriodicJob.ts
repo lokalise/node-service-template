@@ -10,7 +10,7 @@ import type { LockOptions } from 'redis-semaphore'
 import type { ToadScheduler } from 'toad-scheduler'
 import { AsyncTask } from 'toad-scheduler'
 
-import type { CommonDependencies } from '../commonDiConfig'
+import type { CommonDependencies } from '../commonDiConfig.js'
 
 const DEFAULT_LOCK_NAME = 'exclusive'
 

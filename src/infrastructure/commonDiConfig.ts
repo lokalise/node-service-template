@@ -10,15 +10,15 @@ import { asClass, asFunction, Lifetime } from 'awilix'
 import Redis from 'ioredis'
 import { ToadScheduler } from 'toad-scheduler'
 
-import { FakeStoreApiClient } from '../integrations/FakeStoreApiClient'
+import { FakeStoreApiClient } from '../integrations/FakeStoreApiClient.js'
 
-import { getAmqpConfig, getConfig } from './config'
-import type { Config } from './config'
-import type { ExternalDependencies } from './diConfig'
-import { SINGLETON_CONFIG } from './diConfig'
-import type { DIOptions } from './diConfigUtils'
-import { FakeAmplitude } from './fakes/FakeAmplitude'
-import { FakeNewrelicTransactionManager } from './fakes/FakeNewrelicTransactionManager'
+import { getAmqpConfig, getConfig } from './config.js'
+import type { Config } from './config.js'
+import type { ExternalDependencies } from './diConfig.js'
+import { SINGLETON_CONFIG } from './diConfig.js'
+import type { DIOptions } from './diConfigUtils.js'
+import { FakeAmplitude } from './fakes/FakeAmplitude.js'
+import { FakeNewrelicTransactionManager } from './fakes/FakeNewrelicTransactionManager.js'
 
 export function resolveCommonDiConfig(
   dependencies: ExternalDependencies = { logger: globalLogger },

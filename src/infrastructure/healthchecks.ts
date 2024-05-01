@@ -9,7 +9,7 @@ import type { Either } from '@lokalise/node-core'
 import { executeSettleAllAndHandleGlobalErrors } from '@lokalise/node-core'
 import type { FastifyInstance } from 'fastify'
 
-import type { AppInstance } from '../app'
+import type { AppInstance } from '../app.js'
 
 export const wrapHealthCheck = (app: AppInstance, healthCheck: HealthChecker) => {
   return async () => {

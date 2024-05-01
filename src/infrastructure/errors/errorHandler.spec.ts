@@ -5,12 +5,12 @@ import { asFunction } from 'awilix'
 import fastify from 'fastify'
 import type { RouteHandlerMethod } from 'fastify/types/route'
 
-import { getTestConfigurationOverrides } from '../../../test/jwtUtils'
-import type { AppInstance } from '../../app'
-import { jwtTokenPlugin } from '../../plugins/jwtTokenPlugin'
+import { getTestConfigurationOverrides } from '../../../test/jwtUtils.js'
+import type { AppInstance } from '../../app.js'
+import { jwtTokenPlugin } from '../../plugins/jwtTokenPlugin.js'
 
-import { errorHandler } from './errorHandler'
-import { AuthFailedError } from './publicErrors'
+import { errorHandler } from './errorHandler.js'
+import { AuthFailedError } from './publicErrors.js'
 
 async function initApp(routeHandler: RouteHandlerMethod, awaitApp = true): Promise<AppInstance> {
   const app: AppInstance = fastify()

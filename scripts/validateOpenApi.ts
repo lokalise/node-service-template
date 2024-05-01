@@ -4,7 +4,9 @@ import { resolve } from 'node:path'
 import { validate } from 'oas-validator'
 import { parse as fromYaml } from 'yaml'
 
-const targetPath = resolve(__dirname, '../openApiSpec.yaml')
+import { getRootDirectory } from './utils/pathUtils.js'
+
+const targetPath = resolve(getRootDirectory(), 'openApiSpec.yaml')
 
 const hasOptions = (error: unknown): error is { options: unknown } =>
   typeof error === 'object' && error !== null && 'options' in error

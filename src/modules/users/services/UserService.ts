@@ -1,14 +1,14 @@
 import type { User } from '@prisma/client'
 import type { Loader } from 'layered-loader'
 
-import { EntityNotFoundError } from '../../../infrastructure/errors/publicErrors'
-import type { UsersInjectableDependencies } from '../diConfig'
-import type { UserRepository } from '../repositories/UserRepository'
+import { EntityNotFoundError } from '../../../infrastructure/errors/publicErrors.js'
+import type { UsersInjectableDependencies } from '../diConfig.js'
+import type { UserRepository } from '../repositories/UserRepository.js'
 import type {
   CREATE_USER_BODY_SCHEMA_TYPE,
   UPDATE_USER_BODY_SCHEMA_TYPE,
   USER_SCHEMA_TYPE,
-} from '../schemas/userSchemas'
+} from '../schemas/userSchemas.js'
 
 export type UserDTO = USER_SCHEMA_TYPE
 export type UserCreateDTO = CREATE_USER_BODY_SCHEMA_TYPE

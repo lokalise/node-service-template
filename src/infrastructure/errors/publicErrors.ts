@@ -1,6 +1,6 @@
 import { PublicNonRecoverableError } from '@lokalise/node-core'
 
-import type { FreeformRecord } from '../../schemas/commonTypes'
+import type { FreeformRecord } from '../../schemas/commonTypes.js'
 
 export type CommonErrorParams = {
   message: string
