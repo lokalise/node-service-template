@@ -40,7 +40,7 @@
     "@fastify/swagger": "^8.14.0",
     "@fastify/swagger-ui": "^3.0.0",
     "@lokalise/background-jobs-common": "^2.0.6",
-    "@lokalise/fastify-extras": "^17.1.1",
+    "@lokalise/fastify-extras": "^18.0.0",
     "@lokalise/node-core": "^9.16.0",
     "@lokalise/zod-extras": "^2.1.0",
     "@message-queue-toolkit/amqp": "^13.0.0",
@@ -78,7 +78,7 @@
     "@types/node": "^20.12.7",
     "@typescript-eslint/eslint-plugin": "^7.7.1",
     "@typescript-eslint/parser": "^7.7.1",
-    "@vitest/coverage-v8": "1.5.0",
+    "@vitest/coverage-v8": "1.5.2",
     "cpy-cli": "^5.0.0",
     "cross-env": "^7.0.3",
     "eslint": "^8.57.0",
@@ -92,7 +92,7 @@
     "ts-deepmerge": "^7.0.0",
     "tsx": "^4.7.3",
     "typescript": "5.4.5",
-    "vitest": "1.5.0",
-    "yaml": "^2.4.1"
+    "vitest": "1.5.2",
+    "yaml": "^2.4.2"
   }
 }
