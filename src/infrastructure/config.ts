@@ -1,6 +1,9 @@
 import { ConfigScope, createRangeValidator } from '@lokalise/node-core'
 import type { RedisConfig } from '@lokalise/node-core'
 
+import type { AwsConfig } from './aws/awsConfig.js'
+import { getAwsConfig } from './aws/awsConfig.js'
+
 const configScope: ConfigScope = new ConfigScope()
 const redisDbValidator = createRangeValidator(0, 15)
 
@@ -13,7 +16,9 @@ export type CronJobConfig = {
 }
 
 export type Config = {
+  app: AppConfig
   db: DbConfig
+  aws: AwsConfig
   redis: RedisConfig
   scheduler: RedisConfig
   amqp: AmqpConfig
@@ -22,7 +27,6 @@ export type Config = {
       baseUrl: string
     }
   }
-  app: AppConfig
   jobs: JobConfig
   vendors: {
     newrelic: {
@@ -83,6 +87,7 @@ export function getConfig(): Config {
   return {
     app: getAppConfig(),
     db: getDbConfig(),
+    aws: getAwsConfig(configScope),
     redis: getRedisConfig(),
     amqp: getAmqpConfig(),
     scheduler: getSchedulerConfig(),
