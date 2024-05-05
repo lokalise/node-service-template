@@ -1,26 +1,24 @@
 services:
-  mysql:
-    image: mysql:8.0.36
+  postgres:
+    image: postgres:16.2
+    # see https://www.postgresql.org/docs/current/non-durability.html
+    command: '-c full_page_writes=off -c fsync=off -c synchronous_commit=off'
     ports:
-      - ${DOCKER_MYSQL_PORT:-3306}:3306
-    volumes:
-      - mysql_data:/var/lib/mysql
+      - '5432:5432'
     environment:
-      - MYSQL_ROOT_PASSWORD=rootpass
-      - MYSQL_PASSWORD=pass
-      - MYSQL_USER=serviceuser
-      - MYSQL_DATABASE=service_db
-
-  waitmysql:
-    image: mysql:8.0.36
+      - POSTGRES_USER=serviceuser
+      - POSTGRES_PASSWORD=pass
+      - POSTGRES_DB=service_db
+  waitpostgres:
+    image: postgres:16.2
     links:
-      - mysql
+      - postgres
     depends_on:
-      - mysql
+      - postgres
     entrypoint:
       - bash
       - -c
-      - 'until /usr/bin/mysql -hmysql -userviceuser -ppass -e "SELECT 1"; do sleep 5; done'
+      - 'until /usr/local/bin/psql postgres://serviceuser:pass@postgres/service_db -c "SELECT 1"; do sleep 5; done'
 
   redis:
     image: redis:6.2.14-alpine
