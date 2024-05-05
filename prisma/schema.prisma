@@ -14,7 +14,7 @@ datasource db {
 }
 
 model Post {
-  id        String   @id @unique @default(dbgenerated("gen_random_ulid()")) @db.Uuid
+  id              String @id @default(cuid()) @db.VarChar(32)
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
   title     String   @db.VarChar(255)
@@ -28,7 +28,7 @@ model Post {
 }
 
 model Profile {
-  id     String  @id @unique @default(dbgenerated("gen_random_ulid()")) @db.Uuid
+  id              String @id @default(cuid()) @db.VarChar(32)
   bio    String?
   user   User    @relation(fields: [userId], references: [id])
   userId String  @unique @map("user_id")
@@ -38,7 +38,7 @@ model Profile {
 }
 
 model User {
-  id      String   @id @unique @default(dbgenerated("gen_random_ulid()")) @db.Uuid
+  id              String @id @default(cuid()) @db.VarChar(32)
   age     Int?
   email   String   @unique
   name    String
