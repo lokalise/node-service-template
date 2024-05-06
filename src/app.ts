@@ -40,8 +40,6 @@ import {
 import type { ZodTypeProvider } from 'fastify-type-provider-zod'
 
 import { getConfig, isDevelopment, isProduction, isTest } from './infrastructure/config.js'
-import type { DependencyOverrides } from './infrastructure/diConfig.js'
-import { registerDependencies } from './infrastructure/diConfig.js'
 import { errorHandler } from './infrastructure/errors/errorHandler.js'
 import {
   dbHealthCheck,
@@ -51,6 +49,8 @@ import {
   wrapHealthCheckForPrometheus,
 } from './infrastructure/healthchecks.js'
 import { resolveLoggerConfiguration } from './infrastructure/logger.js'
+import { registerDependencies } from './infrastructure/parentDiConfig.js'
+import type { DependencyOverrides } from './infrastructure/parentDiConfig.js'
 import { getRoutes } from './modules/routes.js'
 import { jwtTokenPlugin } from './plugins/jwtTokenPlugin.js'
 

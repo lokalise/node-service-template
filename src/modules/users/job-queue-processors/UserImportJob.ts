@@ -2,8 +2,9 @@ import type { BaseJobPayload } from '@lokalise/background-jobs-common'
 import type { RequestContext } from '@lokalise/fastify-extras'
 import type { Job } from 'bullmq'
 
-import type { Dependencies } from '../../../infrastructure/diConfig.js'
+import { SERVICE_NAME } from '../../../infrastructure/config.js'
 import { AbstractEnqueuedJobProcessor } from '../../../infrastructure/jobs/AbstractEnqueuedJobProcessor.js'
+import type { Dependencies } from '../../../infrastructure/parentDiConfig.js'
 import type { UserService } from '../services/UserService.js'
 
 export type UserImportJobPayload = {
@@ -21,6 +22,7 @@ export class UserImportJob extends AbstractEnqueuedJobProcessor<UserImportJobPay
   constructor(dependencies: Dependencies) {
     super(dependencies, {
       queueId: UserImportJob.QUEUE_ID,
+      ownerName: SERVICE_NAME,
       workerOptions: {
         concurrency: 10,
       },

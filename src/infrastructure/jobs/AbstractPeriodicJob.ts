@@ -1,7 +1,10 @@
 import { randomUUID } from 'crypto'
 
-import type { NewRelicTransactionManager } from '@lokalise/fastify-extras'
-import type { CommonLogger, ErrorReporter } from '@lokalise/node-core'
+import type {
+  CommonLogger,
+  ErrorReporter,
+  TransactionObservabilityManager,
+} from '@lokalise/node-core'
 import { resolveGlobalErrorLogObject } from '@lokalise/node-core'
 import type Redis from 'ioredis'
 import { stdSerializers } from 'pino'
@@ -45,7 +48,7 @@ export function createTask(logger: CommonLogger, job: AbstractPeriodicJob) {
 export abstract class AbstractPeriodicJob {
   public readonly jobId: string
   protected readonly redis: Redis
-  protected readonly newRelicBackgroundTransactionManager: NewRelicTransactionManager
+  protected readonly transactionObservabilityManager: TransactionObservabilityManager
   protected readonly logger: CommonLogger
   protected readonly errorReporter: ErrorReporter
   protected readonly scheduler: ToadScheduler
@@ -55,7 +58,7 @@ export abstract class AbstractPeriodicJob {
     {
       redis,
       logger,
-      newRelicBackgroundTransactionManager,
+      transactionObservabilityManager,
       errorReporter,
       scheduler,
     }: CommonDependencies,
@@ -63,7 +66,7 @@ export abstract class AbstractPeriodicJob {
     this.jobId = options.jobId
     this.logger = logger
     this.redis = redis
-    this.newRelicBackgroundTransactionManager = newRelicBackgroundTransactionManager
+    this.transactionObservabilityManager = transactionObservabilityManager
     this.errorReporter = errorReporter
     this.scheduler = scheduler
   }
@@ -75,7 +78,7 @@ export abstract class AbstractPeriodicJob {
     const uuid = randomUUID()
 
     try {
-      this.newRelicBackgroundTransactionManager.start(this.jobId)
+      this.transactionObservabilityManager.start(this.jobId, uuid)
       this.logger.info(`Started processing ${this.jobId} (${uuid})`)
 
       await this.processInternal(uuid)
@@ -93,7 +96,7 @@ export abstract class AbstractPeriodicJob {
       }
     } finally {
       this.logger.info(`Finished processing ${this.jobId} (${uuid})`)
-      this.newRelicBackgroundTransactionManager.stop(this.jobId)
+      this.transactionObservabilityManager.stop(uuid)
     }
   }
 
