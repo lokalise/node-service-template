@@ -41,7 +41,7 @@
     "@fastify/swagger-ui": "^3.0.0",
     "@lokalise/background-jobs-common": "^2.0.6",
     "@lokalise/fastify-extras": "^18.0.0",
-    "@lokalise/node-core": "^9.16.0",
+    "@lokalise/node-core": "^9.16.1",
     "@lokalise/zod-extras": "^2.1.0",
     "@message-queue-toolkit/amqp": "^13.0.0",
     "@message-queue-toolkit/core": "^11.0.0",
