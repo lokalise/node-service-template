@@ -6,6 +6,7 @@ import { getAwsConfig } from './aws/awsConfig.js'
 
 const configScope: ConfigScope = new ConfigScope()
 const redisDbValidator = createRangeValidator(0, 15)
+export const SERVICE_NAME = 'node-service-template'
 
 export type IntervalJobConfig = {
   periodInSeconds: number

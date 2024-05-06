@@ -2,7 +2,7 @@ import { AbstractAmqpConsumer } from '@message-queue-toolkit/amqp'
 import { MessageHandlerConfigBuilder } from '@message-queue-toolkit/core'
 import type { ZodType } from 'zod'
 
-import type { Dependencies } from '../../src/infrastructure/diConfig.js'
+import type { Dependencies } from '../../src/infrastructure/parentDiConfig.js'
 import { PERMISSIONS_ADD_MESSAGE_SCHEMA } from '../../src/modules/users/consumers/userConsumerSchemas.js'
 
 export class FakeConsumer<T extends object> extends AbstractAmqpConsumer<T, unknown> {
@@ -17,7 +17,7 @@ export class FakeConsumer<T extends object> extends AbstractAmqpConsumer<T, unkn
         consumerErrorResolver: dependencies.consumerErrorResolver,
         errorReporter: dependencies.errorReporter,
         logger: dependencies.logger,
-        transactionObservabilityManager: dependencies.newRelicBackgroundTransactionManager,
+        transactionObservabilityManager: dependencies.transactionObservabilityManager,
       },
       {
         creationConfig: {

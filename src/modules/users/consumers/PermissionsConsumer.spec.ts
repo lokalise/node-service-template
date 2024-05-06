@@ -9,7 +9,7 @@ import { cleanTables, DB_MODEL } from '../../../../test/DbCleaner.js'
 import { FakeConsumerErrorResolver } from '../../../../test/fakes/FakeConsumerErrorResolver.js'
 import type { AppInstance } from '../../../app.js'
 import { getApp } from '../../../app.js'
-import { SINGLETON_CONFIG } from '../../../infrastructure/diConfig.js'
+import { SINGLETON_CONFIG } from '../../../infrastructure/parentDiConfig.js'
 import { buildQueueMessage } from '../../../utils/queueUtils.js'
 import type { PermissionsService } from '../services/PermissionsService.js'
 
