@@ -16,7 +16,7 @@ In our experience, manual management of concurrency via obtaining and releasing 
 
 [AbstractInMemoryBackgroundJob](../src/infrastructure/AbstractInMemoryBackgroundJob.ts) is the base class that you should extend when implementing your background jobs.
 
-You should use `eagerInject: 'register` in DI configuration for all of your jobs in [diConfig.ts](../src/infrastructure/diConfig.ts) to ensure that they are launched when application starts.
+You should use `eagerInject: 'register` in DI configuration for all of your jobs in [diConfig.ts](../src/infrastructure/parentDiConfig.ts) to ensure that they are launched when application starts.
 
 Both period ("run job every X hours/minutes/seconds") and cron ("0 \* \* \* \*") configuration styles are supported. Check [jobs.ts](../src/modules/jobs.ts) for examples.
 

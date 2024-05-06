@@ -1,7 +1,12 @@
 import type { JWT } from '@fastify/jwt'
 import type { Amplitude, NewRelicTransactionManager } from '@lokalise/fastify-extras'
 import { reportErrorToBugsnag } from '@lokalise/fastify-extras'
-import type { CommonLogger, ErrorReporter, ErrorResolver } from '@lokalise/node-core'
+import type {
+  CommonLogger,
+  ErrorReporter,
+  ErrorResolver,
+  TransactionObservabilityManager,
+} from '@lokalise/node-core'
 import { globalLogger } from '@lokalise/node-core'
 import { AmqpConnectionManager, AmqpConsumerErrorResolver } from '@message-queue-toolkit/amqp'
 import { PrismaClient } from '@prisma/client'
@@ -14,11 +19,11 @@ import { FakeStoreApiClient } from '../integrations/FakeStoreApiClient.js'
 
 import { getAmqpConfig, getConfig } from './config.js'
 import type { Config } from './config.js'
-import type { ExternalDependencies } from './diConfig.js'
-import { SINGLETON_CONFIG } from './diConfig.js'
 import type { DIOptions } from './diConfigUtils.js'
 import { FakeAmplitude } from './fakes/FakeAmplitude.js'
 import { FakeNewrelicTransactionManager } from './fakes/FakeNewrelicTransactionManager.js'
+import { SINGLETON_CONFIG } from './parentDiConfig.js'
+import type { ExternalDependencies } from './parentDiConfig.js'
 
 export function resolveCommonDiConfig(
   dependencies: ExternalDependencies = { logger: globalLogger },
@@ -158,7 +163,7 @@ export function resolveCommonDiConfig(
     }, SINGLETON_CONFIG),
 
     // vendor-specific dependencies
-    newRelicBackgroundTransactionManager: asFunction(() => {
+    transactionObservabilityManager: asFunction(() => {
       return (
         dependencies.app?.newrelicTransactionManager ??
         (new FakeNewrelicTransactionManager() as NewRelicTransactionManager)
@@ -190,7 +195,7 @@ export type CommonDependencies = {
   amqpConnectionManager: AmqpConnectionManager
 
   // vendor-specific dependencies
-  newRelicBackgroundTransactionManager: NewRelicTransactionManager
+  transactionObservabilityManager: TransactionObservabilityManager
   amplitude: Amplitude
 
   errorReporter: ErrorReporter

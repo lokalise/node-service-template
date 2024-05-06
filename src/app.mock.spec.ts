@@ -3,8 +3,8 @@ import { asClass } from 'awilix'
 
 import type { AppInstance } from './app.js'
 import { getApp } from './app.js'
-import type { Dependencies } from './infrastructure/diConfig.js'
-import { SINGLETON_CONFIG } from './infrastructure/diConfig.js'
+import type { Dependencies } from './infrastructure/parentDiConfig.js'
+import { SINGLETON_CONFIG } from './infrastructure/parentDiConfig.js'
 import { UserService } from './modules/users/services/UserService.js'
 
 class FakeUserService extends UserService {

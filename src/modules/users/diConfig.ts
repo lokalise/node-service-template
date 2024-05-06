@@ -5,9 +5,9 @@ import type { InMemoryCacheConfiguration, LoaderConfig } from 'layered-loader'
 import { Loader, createNotificationPair, RedisCache } from 'layered-loader'
 
 import type { CommonDependencies } from '../../infrastructure/commonDiConfig.js'
-import { SINGLETON_CONFIG } from '../../infrastructure/diConfig.js'
 import type { DIOptions } from '../../infrastructure/diConfigUtils.js'
 import { isJobEnabled, isQueueEnabled } from '../../infrastructure/diConfigUtils.js'
+import { SINGLETON_CONFIG } from '../../infrastructure/parentDiConfig.js'
 
 import { PermissionConsumer } from './consumers/PermissionConsumer.js'
 import { UserDataSource } from './datasources/UserDataSource.js'

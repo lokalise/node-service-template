@@ -6,7 +6,7 @@ Dependencies are managed using [awilix](https://github.com/jeffijoe/awilix).
 
 ### Configuration
 
-You can find configuration for the dependencies in [diConfig.ts](../src/infrastructure/diConfig.ts).
+You can find configuration for the dependencies in [diConfig.ts](../src/infrastructure/parentDiConfig.ts).
 
 When adding a new module, you have to update two places:
 

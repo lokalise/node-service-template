@@ -6,8 +6,8 @@ import {
 import type { RequestContext } from '@lokalise/fastify-extras'
 import type { Job } from 'bullmq'
 
-import { isTest } from '../config.js'
-import type { Dependencies } from '../diConfig.js'
+import { isTest, SERVICE_NAME } from '../config.js'
+import type { Dependencies } from '../parentDiConfig.js'
 
 export type BackgroundJobConfig = Omit<BackgroundJobProcessorConfig, 'isTest'>
 
@@ -22,10 +22,11 @@ export abstract class AbstractEnqueuedJobProcessor<
         redis: dependencies.redis,
         errorReporter: dependencies.errorReporter,
         bullmqFactory: new CommonBullmqFactory(),
-        transactionObservabilityManager: dependencies.newRelicBackgroundTransactionManager,
+        transactionObservabilityManager: dependencies.transactionObservabilityManager,
       },
       {
         isTest: isTest(),
+        ownerName: SERVICE_NAME,
         queueId: config.queueId,
         queueOptions: config.queueOptions,
         workerOptions: config.workerOptions,
