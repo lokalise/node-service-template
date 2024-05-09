@@ -1,12 +1,12 @@
 // Not a real example of a service, do not use for non-testing purposes
 export class PermissionsService {
-  private permissions: Record<number, string[]>
+  private permissions: Record<string, string[]>
 
   constructor() {
     this.permissions = {}
   }
 
-  async setPermissions(userId: number, permissions: string[]) {
+  async setPermissions(userId: string, permissions: string[]) {
     this.permissions[userId] = permissions
     return Promise.resolve()
   }
