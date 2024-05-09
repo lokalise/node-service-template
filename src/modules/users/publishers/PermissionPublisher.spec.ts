@@ -18,7 +18,7 @@ import { PERMISSIONS_ADD_MESSAGE_SCHEMA } from '../consumers/userConsumerSchemas
 import { PermissionPublisher } from './PermissionPublisher.js'
 
 const perms: [string, ...string[]] = ['perm1', 'perm2']
-const userIds = [100, 200, 300]
+const userIds = ['100', '200', '300']
 
 describe('PermissionPublisher', () => {
   describe('publish', () => {
@@ -91,7 +91,7 @@ describe('PermissionPublisher', () => {
         id: 'abc',
         messageType: 'add',
         permissions: ['perm1', 'perm2'],
-        userIds: [100, 200, 300],
+        userIds: ['100', '200', '300'],
       })
     })
   })

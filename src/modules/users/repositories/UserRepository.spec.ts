@@ -22,7 +22,7 @@ describe('UserRepository', () => {
     it('Returns NOT_FOUND for non-existing user', async () => {
       const { userRepository } = diContainer.cradle
 
-      const result = await userRepository.getUser(0)
+      const result = await userRepository.getUser('dummy')
 
       expect(result).toBeNull()
     })

@@ -3,14 +3,14 @@ import z from 'zod'
 export const PERMISSIONS_ADD_MESSAGE_SCHEMA = z.object({
   id: z.string(),
   messageType: z.literal('add'),
-  userIds: z.array(z.number()).describe('User IDs'),
+  userIds: z.array(z.string()).describe('User IDs'),
   permissions: z.array(z.string()).nonempty().describe('List of user permissions'),
 })
 
 export const PERMISSIONS_REMOVE_MESSAGE_SCHEMA = z.object({
   id: z.string(),
   messageType: z.literal('remove'),
-  userIds: z.array(z.number()).describe('User IDs'),
+  userIds: z.array(z.string()).describe('User IDs'),
   permissions: z.array(z.string()).nonempty().describe('List of user permissions'),
 })
 

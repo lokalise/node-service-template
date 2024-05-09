@@ -33,9 +33,9 @@ export class UserService {
     return newUser
   }
 
-  async getUser(id: number): Promise<User> {
+  async getUser(id: string): Promise<User> {
     const getUserResult =
-      this.userLoader.getInMemoryOnly(id.toString()) ?? (await this.userLoader.get(id.toString()))
+      this.userLoader.getInMemoryOnly(id.toString()) ?? (await this.userLoader.get(id))
 
     if (!getUserResult) {
       throw new EntityNotFoundError({ message: 'User not found', details: { id } })
@@ -44,25 +44,25 @@ export class UserService {
     return getUserResult
   }
 
-  async deleteUser(id: number): Promise<void> {
+  async deleteUser(id: string): Promise<void> {
     await this.userRepository.deleteUser(id)
     await this.userLoader.invalidateCacheFor(id.toString())
   }
 
-  async updateUser(id: number, updatedData: UserUpdateDTO) {
+  async updateUser(id: string, updatedData: UserUpdateDTO) {
     await this.userRepository.updateUser(id, updatedData)
-    await this.userLoader.invalidateCacheFor(id.toString())
+    await this.userLoader.invalidateCacheFor(id)
   }
 
-  async getUsers(userIds: number[]): Promise<UserDTO[]> {
+  async getUsers(userIds: string[]): Promise<UserDTO[]> {
     const users = await this.userRepository.getUsers(userIds)
 
     return users
   }
 
-  async findUserById(id: number): Promise<UserDTO | null> {
+  async findUserById(id: string): Promise<UserDTO | null> {
     const getUserResult =
-      this.userLoader.getInMemoryOnly(id.toString()) ?? (await this.userLoader.get(id.toString()))
+      this.userLoader.getInMemoryOnly(id.toString()) ?? (await this.userLoader.get(id))
 
     return getUserResult ?? null
   }

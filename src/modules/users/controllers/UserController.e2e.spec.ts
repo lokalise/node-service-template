@@ -56,7 +56,7 @@ describe('UserController', () => {
 
   describe('GET /users/:userId', () => {
     it('returns user when requested twice', async () => {
-      const token = await generateJwtToken(app.jwt, { userId: 1 }, 9999)
+      const token = await generateJwtToken(app.jwt, { userId: '1' }, 9999)
 
       const response = await app
         .inject()
@@ -64,7 +64,7 @@ describe('UserController', () => {
         .headers({
           authorization: `Bearer ${token}`,
         })
-        .body({ name: 'dummy', email: 'email@test.com' } as CREATE_USER_BODY_SCHEMA_TYPE)
+        .body({ name: 'dummy', email: 'email@test.com' } satisfies CREATE_USER_BODY_SCHEMA_TYPE)
         .end()
       expect(response.statusCode).toBe(201)
       const { id } = response.json<GET_USER_SCHEMA_RESPONSE_SCHEMA_TYPE>().data
@@ -94,7 +94,7 @@ describe('UserController', () => {
 
   describe('DELETE /users/:userId', () => {
     it('resets cache after deletion', async () => {
-      const token = await generateJwtToken(app.jwt, { userId: 1 }, 9999)
+      const token = await generateJwtToken(app.jwt, { userId: '1' }, 9999)
 
       const response = await app
         .inject()

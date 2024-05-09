@@ -13,10 +13,10 @@ export class UserDataSource implements DataSource<User> {
   }
 
   get(userId: string): Promise<User | null> {
-    return this.userRepository.getUser(Number.parseInt(userId))
+    return this.userRepository.getUser(userId)
   }
 
   getMany(keys: string[]): Promise<User[]> {
-    return this.userRepository.getUsers(keys.map(Number.parseInt))
+    return this.userRepository.getUsers(keys)
   }
 }
