@@ -25,6 +25,7 @@
     "db:migration:dev": "npx prisma migrate dev",
     "db:migration:run": "npx prisma migrate deploy",
     "db:update-client": "npx prisma generate",
+    "db:wait": "while ! echo \"SELECT 1;\" | prisma db execute --stdin; do sleep 1; done",
     "spec:generate": "cross-env NODE_ENV=development tsx --env-file=.env scripts/generateOpenApi.ts && npm run spec:validate",
     "spec:validate": "cross-env NODE_ENV=development tsx --env-file=.env scripts/validateOpenApi.ts",
     "prepublishOnly": "npm run build",

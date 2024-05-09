@@ -11,16 +11,6 @@ services:
       - POSTGRES_DB=service_db
     volumes:
       - ./scripts/db/init-dbs.sh:/docker-entrypoint-initdb.d/init-dbs.sh
-  waitpostgres:
-    image: postgres:16.2
-    links:
-      - postgres
-    depends_on:
-      - postgres
-    entrypoint:
-      - bash
-      - -c
-      - 'until psql postgres://serviceuser:pass@postgres/service_db -c "SELECT 1"; do sleep 5; done'
 
   redis:
     image: redis:6.2.14-alpine

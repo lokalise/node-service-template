@@ -26,8 +26,7 @@ jobs:
 
       - name: Docker start
         run: |
-          docker compose up --quiet-pull waitpostgres
-          docker compose up -d --quiet-pull redis rabbitmq
+          docker compose up -d --quiet-pull
 
       - name: Build TS
         run: |
@@ -36,11 +35,8 @@ jobs:
       - name: Schema preparation
         run: |
           npm run copy:config
+          npm run db:wait
           npm run db:migration:run
-
-      - name: Generate client
-        run: |
-          npm run db:update-client
 
       - name: Run Tests
         run: |
