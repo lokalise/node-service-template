@@ -42,6 +42,6 @@ describe('dependency mocking', () => {
 
     const result = await userService.getUser('1')
 
-    expect(result.id).toBe(-1)
+    expect(result.id).toBe('-1')
   })
 })
