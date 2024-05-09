@@ -20,7 +20,7 @@ services:
     entrypoint:
       - bash
       - -c
-      - 'until /usr/local/bin/psql postgres://serviceuser:pass@postgres/service_db -c "SELECT 1"; do sleep 5; done'
+      - 'until psql postgres://serviceuser:pass@postgres/service_db -c "SELECT 1"; do sleep 5; done'
 
   redis:
     image: redis:6.2.14-alpine
