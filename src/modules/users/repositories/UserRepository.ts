@@ -9,7 +9,7 @@ export class UserRepository {
     this.prisma = prisma
   }
 
-  getUser(id: number): Promise<User | null> {
+  getUser(id: string): Promise<User | null> {
     return this.prisma.user.findUnique({
       where: {
         id,
@@ -17,7 +17,7 @@ export class UserRepository {
     })
   }
 
-  deleteUser(id: number): Promise<User | null> {
+  deleteUser(id: string): Promise<User | null> {
     return this.prisma.user.delete({
       where: {
         id,
@@ -25,7 +25,7 @@ export class UserRepository {
     })
   }
 
-  updateUser(id: number, updatedUser: Prisma.UserUpdateInput): Promise<User | null> {
+  updateUser(id: string, updatedUser: Prisma.UserUpdateInput): Promise<User | null> {
     return this.prisma.user.update({
       data: updatedUser,
       where: {
@@ -34,7 +34,7 @@ export class UserRepository {
     })
   }
 
-  async getUsers(userIds: number[]): Promise<User[]> {
+  async getUsers(userIds: string[]): Promise<User[]> {
     const result = await this.prisma.user.findMany({
       where: {
         id: {

@@ -13,19 +13,19 @@ export const UPDATE_USER_BODY_SCHEMA = z.object({
 })
 
 export const GET_USER_PARAMS_SCHEMA = z.object({
-  userId: z.preprocess(toNumberPreprocessor, z.number()),
+  userId: z.string(),
 })
 
 export const UPDATE_USER_PARAMS_SCHEMA = z.object({
-  userId: z.preprocess(toNumberPreprocessor, z.number()),
+  userId: z.string(),
 })
 
 export const DELETE_USER_PARAMS_SCHEMA = z.object({
-  userId: z.preprocess(toNumberPreprocessor, z.number()),
+  userId: z.string(),
 })
 
 export const USER_SCHEMA = z.object({
-  id: z.number(),
+  id: z.string(),
   name: z.string(),
   age: z.optional(z.nullable(z.preprocess(toNumberPreprocessor, z.number()))),
   email: z.string().email(),
