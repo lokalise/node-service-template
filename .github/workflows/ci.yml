@@ -26,7 +26,7 @@ jobs:
 
       - name: Docker start
         run: |
-          docker compose up --quiet-pull waitmysql
+          docker compose up --quiet-pull waitpostgres
           docker compose up -d --quiet-pull redis rabbitmq
 
       - name: Build TS
