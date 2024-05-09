@@ -16,10 +16,10 @@ import type { PermissionsService } from '../services/PermissionsService.js'
 import { PermissionConsumer } from './PermissionConsumer.js'
 import type { PERMISSIONS_ADD_MESSAGE_TYPE } from './userConsumerSchemas.js'
 
-const userIds = [100, 200, 300]
+const userIds = ['100', '200', '300']
 const perms: [string, ...string[]] = ['perm1', 'perm2']
 
-async function createUsers(prisma: PrismaClient, userIdsToCreate: number[]) {
+async function createUsers(prisma: PrismaClient, userIdsToCreate: string[]) {
   await prisma.user.createMany({
     data: userIdsToCreate.map((userId) => {
       return {
@@ -31,7 +31,7 @@ async function createUsers(prisma: PrismaClient, userIdsToCreate: number[]) {
   })
 }
 
-async function resolvePermissions(permissionsService: PermissionsService, userIds: number[]) {
+async function resolvePermissions(permissionsService: PermissionsService, userIds: string[]) {
   const usersPerms = await permissionsService.getUserPermissionsBulk(userIds)
 
   if (usersPerms && usersPerms.length !== userIds.length) {

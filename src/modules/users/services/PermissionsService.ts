@@ -11,10 +11,10 @@ export class PermissionsService {
     return Promise.resolve()
   }
 
-  async getUserPermissionsBulk(userIds: number[]) {
+  async getUserPermissionsBulk(userIds: string[]) {
     const result = Object.entries(this.permissions)
       .filter((entry) => {
-        return userIds.includes(Number.parseInt(entry[0]))
+        return userIds.includes(entry[0])
       })
       .map((entry) => {
         return entry[1]

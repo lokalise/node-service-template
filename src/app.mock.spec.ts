@@ -14,7 +14,7 @@ class FakeUserService extends UserService {
 
   async getUser(): Promise<User> {
     return Promise.resolve({
-      id: -1,
+      id: '-1',
       age: null,
       email: 'dummy',
       name: 'dummy',
@@ -40,7 +40,7 @@ describe('dependency mocking', () => {
   it('uses mock implementation', async () => {
     const { userService } = app.diContainer.cradle
 
-    const result = await userService.getUser(1)
+    const result = await userService.getUser('1')
 
     expect(result.id).toBe(-1)
   })
