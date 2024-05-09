@@ -31,7 +31,7 @@ export class PermissionConsumer extends AbstractAmqpConsumer<SupportedMessages, 
         consumerErrorResolver: dependencies.consumerErrorResolver,
         errorReporter: dependencies.errorReporter,
         logger: dependencies.logger,
-        transactionObservabilityManager: dependencies.newRelicBackgroundTransactionManager,
+        transactionObservabilityManager: dependencies.transactionObservabilityManager,
       },
       {
         creationConfig: {

@@ -9,9 +9,9 @@ import { merge } from 'ts-deepmerge'
 import type { AppInstance } from '../src/app.js'
 import type { Config } from '../src/infrastructure/config.js'
 import { getConfig } from '../src/infrastructure/config.js'
-import type { DependencyOverrides } from '../src/infrastructure/diConfig.js'
-import { SINGLETON_CONFIG, registerDependencies } from '../src/infrastructure/diConfig.js'
 import type { DIOptions } from '../src/infrastructure/diConfigUtils.js'
+import type { DependencyOverrides } from '../src/infrastructure/parentDiConfig.js'
+import { SINGLETON_CONFIG, registerDependencies } from '../src/infrastructure/parentDiConfig.js'
 
 type NestedPartial<T> = {
   [P in keyof T]?: NestedPartial<T[P]>
