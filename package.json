@@ -57,7 +57,7 @@
     "awilix": "^10.0.2",
     "awilix-manager": "^5.2.1",
     "bullmq": "^5.7.8",
-    "eslint-plugin-n": "^17.3.1",
+    "eslint-plugin-n": "^17.6.0",
     "fastify": "^4.26.2",
     "fastify-custom-healthcheck": "^3.1.0",
     "fastify-graceful-shutdown": "^3.5.3",
