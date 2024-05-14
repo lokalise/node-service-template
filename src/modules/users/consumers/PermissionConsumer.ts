@@ -53,6 +53,7 @@ export class PermissionConsumer extends AbstractAmqpConsumer<
         deletionConfig: {
           deleteIfExists: isTest(),
         },
+        logMessages: true,
         handlerSpy: isTest(),
         handlers: new MessageHandlerConfigBuilder<
           SupportedMessages,

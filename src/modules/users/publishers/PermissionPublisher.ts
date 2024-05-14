@@ -32,6 +32,7 @@ export class PermissionPublisher extends AbstractAmqpPublisher<SupportedMessages
             exclusive: false,
           },
         },
+        logMessages: true,
         handlerSpy: isTest(),
         messageSchemas: [PERMISSIONS_ADD_MESSAGE_SCHEMA, PERMISSIONS_REMOVE_MESSAGE_SCHEMA],
         messageTypeField: 'messageType',
