@@ -28,7 +28,7 @@ export class FakeConsumer<T extends object> extends AbstractAmqpConsumer<T, unkn
             exclusive: false,
           },
         },
-        messageTypeField: 'messageType',
+        messageTypeField: 'type',
         handlers: new MessageHandlerConfigBuilder<T, unknown>()
           .addConfig(messageSchema, () => Promise.resolve({ result: 'success' }))
           .build(),

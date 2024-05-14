@@ -65,7 +65,7 @@ export class PermissionConsumer extends AbstractAmqpConsumer<
           })
           .addConfig(PERMISSIONS_REMOVE_MESSAGE_SCHEMA, removePermissionsHandler)
           .build(),
-        messageTypeField: 'messageType',
+        messageTypeField: 'type',
       },
       {
         userService: dependencies.userService,

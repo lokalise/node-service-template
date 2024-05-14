@@ -8,6 +8,7 @@ import { asMockClass } from 'awilix-manager'
 import { cleanTables, DB_MODEL } from '../../../../test/DbCleaner.js'
 import { FakeConsumer } from '../../../../test/fakes/FakeConsumer.js'
 import { FakeConsumerErrorResolver } from '../../../../test/fakes/FakeConsumerErrorResolver.js'
+import { createRequestContext } from '../../../../test/requestUtils.js'
 import type { AppInstance } from '../../../app.js'
 import { getApp } from '../../../app.js'
 import { SINGLETON_CONFIG } from '../../../infrastructure/parentDiConfig.js'
@@ -19,6 +20,7 @@ import { PermissionPublisher } from './PermissionPublisher.js'
 
 const perms: [string, ...string[]] = ['perm1', 'perm2']
 const userIds = ['100', '200', '300']
+const testRequestContext = createRequestContext()
 
 describe('PermissionPublisher', () => {
   describe('publish', () => {
@@ -43,7 +45,7 @@ describe('PermissionPublisher', () => {
 
     beforeEach(async () => {
       await cleanTables(diContainer.cradle.prisma, [DB_MODEL.User])
-      await app.diContainer.cradle.permissionsService.deleteAll()
+      await app.diContainer.cradle.permissionsService.deleteAll(testRequestContext)
       channel = await (
         await app.diContainer.cradle.amqpConnectionManager.getConnection()
       ).createChannel()
@@ -63,9 +65,12 @@ describe('PermissionPublisher', () => {
 
       const message = {
         id: 'abc',
-        userIds,
-        messageType: 'add',
-        permissions: perms,
+        type: 'add',
+        timestamp: new Date().toISOString(),
+        payload: {
+          userIds,
+          permissions: perms,
+        },
       } satisfies AddPermissionsMessageType
 
       let receivedMessage: AddPermissionsMessageType | null = null
@@ -78,7 +83,7 @@ describe('PermissionPublisher', () => {
           PERMISSIONS_ADD_MESSAGE_SCHEMA,
           new FakeConsumerErrorResolver(),
         )
-        receivedMessage = decodedMessage.result!
+        receivedMessage = decodedMessage.result!.parsedMessage
       })
 
       permissionPublisher.publish(message)
@@ -89,9 +94,12 @@ describe('PermissionPublisher', () => {
 
       expect(receivedMessage).toEqual({
         id: 'abc',
-        messageType: 'add',
-        permissions: ['perm1', 'perm2'],
-        userIds: ['100', '200', '300'],
+        type: 'add',
+        timestamp: expect.any(String),
+        payload: {
+          permissions: ['perm1', 'perm2'],
+          userIds: ['100', '200', '300'],
+        },
       })
     })
   })
