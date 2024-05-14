@@ -3,8 +3,6 @@ import {
   AbstractBackgroundJobProcessor,
   CommonBullmqFactory,
 } from '@lokalise/background-jobs-common'
-import type { RequestContext } from '@lokalise/fastify-extras'
-import type { Job } from 'bullmq'
 
 import { isTest, SERVICE_NAME } from '../config.js'
 import type { Dependencies } from '../parentDiConfig.js'
@@ -32,9 +30,5 @@ export abstract class AbstractEnqueuedJobProcessor<
         workerOptions: config.workerOptions,
       },
     )
-  }
-
-  protected onFailed(_job: Job, _error: Error, _requestContext: RequestContext): Promise<void> {
-    return Promise.resolve(undefined)
   }
 }
