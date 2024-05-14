@@ -1,6 +1,8 @@
 import type { User } from '@prisma/client'
 import { asClass } from 'awilix'
 
+import { createRequestContext } from '../test/requestUtils.js'
+
 import type { AppInstance } from './app.js'
 import { getApp } from './app.js'
 import type { Dependencies } from './infrastructure/parentDiConfig.js'
@@ -40,7 +42,7 @@ describe('dependency mocking', () => {
   it('uses mock implementation', async () => {
     const { userService } = app.diContainer.cradle
 
-    const result = await userService.getUser('1')
+    const result = await userService.getUser(createRequestContext(), '1')
 
     expect(result.id).toBe('-1')
   })

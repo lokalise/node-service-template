@@ -1,8 +1,8 @@
 import type { User } from '@prisma/client'
 import type { DataSource } from 'layered-loader'
 
-import type { UsersInjectableDependencies } from '../diConfig.js'
 import type { UserRepository } from '../repositories/UserRepository.js'
+import type { UsersInjectableDependencies } from '../userDiConfig.js'
 
 export class UserDataSource implements DataSource<User> {
   name = 'User loader'

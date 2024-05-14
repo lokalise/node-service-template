@@ -2,16 +2,16 @@ import { AbstractAmqpPublisher } from '@message-queue-toolkit/amqp'
 
 import { isTest } from '../../../infrastructure/config.js'
 import type {
-  PERMISSIONS_ADD_MESSAGE_TYPE,
-  PERMISSIONS_REMOVE_MESSAGE_TYPE,
+  AddPermissionsMessageType,
+  RemovePermissionsMessageType,
 } from '../consumers/userConsumerSchemas.js'
 import {
   PERMISSIONS_ADD_MESSAGE_SCHEMA,
   PERMISSIONS_REMOVE_MESSAGE_SCHEMA,
 } from '../consumers/userConsumerSchemas.js'
-import type { UsersInjectableDependencies } from '../diConfig.js'
+import type { UsersInjectableDependencies } from '../userDiConfig.js'
 
-type SupportedMessages = PERMISSIONS_REMOVE_MESSAGE_TYPE | PERMISSIONS_ADD_MESSAGE_TYPE
+type SupportedMessages = RemovePermissionsMessageType | AddPermissionsMessageType
 
 export class PermissionPublisher extends AbstractAmqpPublisher<SupportedMessages> {
   public static QUEUE_NAME = 'user_permissions'
@@ -32,9 +32,10 @@ export class PermissionPublisher extends AbstractAmqpPublisher<SupportedMessages
             exclusive: false,
           },
         },
+        logMessages: true,
         handlerSpy: isTest(),
         messageSchemas: [PERMISSIONS_ADD_MESSAGE_SCHEMA, PERMISSIONS_REMOVE_MESSAGE_SCHEMA],
-        messageTypeField: 'messageType',
+        messageTypeField: 'type',
       },
     )
   }

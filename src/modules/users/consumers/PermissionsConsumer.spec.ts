@@ -7,6 +7,7 @@ import { asClass } from 'awilix'
 
 import { cleanTables, DB_MODEL } from '../../../../test/DbCleaner.js'
 import { FakeConsumerErrorResolver } from '../../../../test/fakes/FakeConsumerErrorResolver.js'
+import { createRequestContext } from '../../../../test/requestUtils.js'
 import type { AppInstance } from '../../../app.js'
 import { getApp } from '../../../app.js'
 import { SINGLETON_CONFIG } from '../../../infrastructure/parentDiConfig.js'
@@ -14,10 +15,11 @@ import { buildQueueMessage } from '../../../utils/queueUtils.js'
 import type { PermissionsService } from '../services/PermissionsService.js'
 
 import { PermissionConsumer } from './PermissionConsumer.js'
-import type { PERMISSIONS_ADD_MESSAGE_TYPE } from './userConsumerSchemas.js'
+import type { AddPermissionsMessageType } from './userConsumerSchemas.js'
 
 const userIds = ['100', '200', '300']
 const perms: [string, ...string[]] = ['perm1', 'perm2']
+const testRequestContext = createRequestContext()
 
 async function createUsers(prisma: PrismaClient, userIdsToCreate: string[]) {
   await prisma.user.createMany({
@@ -32,7 +34,7 @@ async function createUsers(prisma: PrismaClient, userIdsToCreate: string[]) {
 }
 
 async function resolvePermissions(permissionsService: PermissionsService, userIds: string[]) {
-  const usersPerms = await permissionsService.getUserPermissionsBulk(userIds)
+  const usersPerms = await permissionsService.getUserPermissionsBulk(testRequestContext, userIds)
 
   if (usersPerms && usersPerms.length !== userIds.length) {
     return null
@@ -67,7 +69,7 @@ describe('PermissionsConsumer', () => {
         await app.diContainer.cradle.amqpConnectionManager.getConnection()
       ).createChannel()
       await cleanTables(diContainer.cradle.prisma, [DB_MODEL.User])
-      await app.diContainer.cradle.permissionsService.deleteAll()
+      await app.diContainer.cradle.permissionsService.deleteAll(testRequestContext)
       consumer = app.diContainer.cradle.permissionConsumer
     })
 
@@ -78,7 +80,7 @@ describe('PermissionsConsumer', () => {
 
     it('Creates permissions', async () => {
       const { userService, permissionsService, prisma } = diContainer.cradle
-      const users = await userService.getUsers(userIds)
+      const users = await userService.getUsers(testRequestContext, userIds)
       expect(users).toHaveLength(0)
 
       await createUsers(prisma, userIds)
@@ -87,10 +89,13 @@ describe('PermissionsConsumer', () => {
         PermissionConsumer.QUEUE_NAME,
         buildQueueMessage({
           id: 'abc',
-          messageType: 'add',
-          userIds,
-          permissions: perms,
-        } satisfies PERMISSIONS_ADD_MESSAGE_TYPE),
+          type: 'add',
+          timestamp: new Date().toISOString(),
+          payload: {
+            userIds,
+            permissions: perms,
+          },
+        } satisfies AddPermissionsMessageType),
       )
 
       const messageResult = await consumer.handlerSpy.waitForMessageWithId('abc')
@@ -107,17 +112,20 @@ describe('PermissionsConsumer', () => {
 
     it('Wait for users to be created and then create permissions', async () => {
       const { userService, permissionsService, prisma } = diContainer.cradle
-      const users = await userService.getUsers(userIds)
+      const users = await userService.getUsers(testRequestContext, userIds)
       expect(users).toHaveLength(0)
 
       channel.sendToQueue(
         PermissionConsumer.QUEUE_NAME,
         buildQueueMessage({
           id: 'def',
-          userIds,
-          messageType: 'add',
-          permissions: perms,
-        } satisfies PERMISSIONS_ADD_MESSAGE_TYPE),
+          type: 'add',
+          timestamp: new Date().toISOString(),
+          payload: {
+            userIds,
+            permissions: perms,
+          },
+        } satisfies AddPermissionsMessageType),
       )
 
       const messageResult = await consumer.handlerSpy.waitForMessageWithId('def')
@@ -141,7 +149,7 @@ describe('PermissionsConsumer', () => {
 
     it('Not all users exist, no permissions were created', async () => {
       const { userService, permissionsService, prisma } = diContainer.cradle
-      const users = await userService.getUsers(userIds)
+      const users = await userService.getUsers(testRequestContext, userIds)
       expect(users).toHaveLength(0)
 
       const partialUsers = [...userIds]
@@ -152,10 +160,13 @@ describe('PermissionsConsumer', () => {
         PermissionConsumer.QUEUE_NAME,
         buildQueueMessage({
           id: 'abcdef',
-          userIds,
-          messageType: 'add',
-          permissions: perms,
-        } satisfies PERMISSIONS_ADD_MESSAGE_TYPE),
+          type: 'add',
+          timestamp: new Date().toISOString(),
+          payload: {
+            userIds,
+            permissions: perms,
+          },
+        } satisfies AddPermissionsMessageType),
       )
 
       const messageResult = await consumer.handlerSpy.waitForMessageWithId('abcdef', 'retryLater')
@@ -185,8 +196,11 @@ describe('PermissionsConsumer', () => {
         PermissionConsumer.QUEUE_NAME,
         buildQueueMessage({
           id: 'errorMessage',
-          messageType: 'add',
-          permissions: perms,
+          type: 'add',
+          timestamp: new Date().toISOString(),
+          payload: {
+            permissions: perms,
+          },
         }),
       )
 
