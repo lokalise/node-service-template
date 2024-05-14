@@ -31,10 +31,11 @@ export const getUser = async (
   reply: FastifyReply,
 ): Promise<void> => {
   const { userId } = req.params
+  const { reqContext } = req
 
   const { userService } = req.diScope.cradle
 
-  const user = await userService.getUser(userId)
+  const user = await userService.getUser(reqContext, userId)
 
   return reply.send({
     data: user,
@@ -46,10 +47,11 @@ export const deleteUser = async (
   reply: FastifyReply,
 ): Promise<void> => {
   const { userId } = req.params
+  const { reqContext } = req
 
   const { userService } = req.diScope.cradle
 
-  await userService.deleteUser(userId)
+  await userService.deleteUser(reqContext, userId)
 
   return reply.status(204).send()
 }
@@ -63,10 +65,11 @@ export const patchUpdateUser = async (
 ): Promise<void> => {
   const { userId } = req.params
   const updatedUser = req.body
+  const { reqContext } = req
 
   const { userService } = req.diScope.cradle
 
-  await userService.updateUser(userId, updatedUser)
+  await userService.updateUser(reqContext, userId, updatedUser)
 
   return reply.status(204).send()
 }

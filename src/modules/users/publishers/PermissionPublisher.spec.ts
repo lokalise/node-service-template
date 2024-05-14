@@ -12,7 +12,7 @@ import type { AppInstance } from '../../../app.js'
 import { getApp } from '../../../app.js'
 import { SINGLETON_CONFIG } from '../../../infrastructure/parentDiConfig.js'
 import { PermissionConsumer } from '../consumers/PermissionConsumer.js'
-import type { PERMISSIONS_ADD_MESSAGE_TYPE } from '../consumers/userConsumerSchemas.js'
+import type { AddPermissionsMessageType } from '../consumers/userConsumerSchemas.js'
 import { PERMISSIONS_ADD_MESSAGE_SCHEMA } from '../consumers/userConsumerSchemas.js'
 
 import { PermissionPublisher } from './PermissionPublisher.js'
@@ -66,9 +66,9 @@ describe('PermissionPublisher', () => {
         userIds,
         messageType: 'add',
         permissions: perms,
-      } satisfies PERMISSIONS_ADD_MESSAGE_TYPE
+      } satisfies AddPermissionsMessageType
 
-      let receivedMessage: PERMISSIONS_ADD_MESSAGE_TYPE | null = null
+      let receivedMessage: AddPermissionsMessageType | null = null
       await channel.consume(PermissionPublisher.QUEUE_NAME, (message) => {
         if (message === null) {
           return

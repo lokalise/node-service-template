@@ -14,7 +14,7 @@ import { buildQueueMessage } from '../../../utils/queueUtils.js'
 import type { PermissionsService } from '../services/PermissionsService.js'
 
 import { PermissionConsumer } from './PermissionConsumer.js'
-import type { PERMISSIONS_ADD_MESSAGE_TYPE } from './userConsumerSchemas.js'
+import type { AddPermissionsMessageType } from './userConsumerSchemas.js'
 
 const userIds = ['100', '200', '300']
 const perms: [string, ...string[]] = ['perm1', 'perm2']
@@ -90,7 +90,7 @@ describe('PermissionsConsumer', () => {
           messageType: 'add',
           userIds,
           permissions: perms,
-        } satisfies PERMISSIONS_ADD_MESSAGE_TYPE),
+        } satisfies AddPermissionsMessageType),
       )
 
       const messageResult = await consumer.handlerSpy.waitForMessageWithId('abc')
@@ -117,7 +117,7 @@ describe('PermissionsConsumer', () => {
           userIds,
           messageType: 'add',
           permissions: perms,
-        } satisfies PERMISSIONS_ADD_MESSAGE_TYPE),
+        } satisfies AddPermissionsMessageType),
       )
 
       const messageResult = await consumer.handlerSpy.waitForMessageWithId('def')
@@ -155,7 +155,7 @@ describe('PermissionsConsumer', () => {
           userIds,
           messageType: 'add',
           permissions: perms,
-        } satisfies PERMISSIONS_ADD_MESSAGE_TYPE),
+        } satisfies AddPermissionsMessageType),
       )
 
       const messageResult = await consumer.handlerSpy.waitForMessageWithId('abcdef', 'retryLater')

@@ -5,8 +5,8 @@ import type { AwilixContainer, NameAndRegistrationPair, Resolver } from 'awilix'
 import { Lifetime } from 'awilix'
 
 import type { AppInstance } from '../app.js'
-import type { UsersModuleDependencies } from '../modules/users/diConfig.js'
-import { resolveUsersConfig } from '../modules/users/diConfig.js'
+import type { UsersModuleDependencies } from '../modules/users/userDiConfig.js'
+import { resolveUsersConfig } from '../modules/users/userDiConfig.js'
 
 import type { CommonDependencies } from './commonDiConfig.js'
 import { resolveCommonDiConfig } from './commonDiConfig.js'

@@ -1,6 +1,6 @@
 import type { Prisma, PrismaClient, User } from '@prisma/client'
 
-import type { UsersInjectableDependencies } from '../diConfig.js'
+import type { UsersInjectableDependencies } from '../userDiConfig.js'
 
 export class UserRepository {
   private readonly prisma: PrismaClient
