@@ -16,7 +16,7 @@ Logs provide us a mechanism for
 
 ### Payload
 
-In order to efficiently solve the problem outlined in the previous section, logs must satisfy the following criteria:
+In order to effectively solve the problem outlined in the previous section, logs must satisfy the following criteria:
 
 - It should be easy to link different log entries for the same flow together. For that purpose a x-request-id log entry should be added to all log entries that belong to a particular flow:
 
