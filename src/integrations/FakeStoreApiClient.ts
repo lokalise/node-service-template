@@ -1,8 +1,13 @@
-import { buildClient, sendGet } from '@lokalise/node-core'
+import { buildClient, sendGet } from '@lokalise/backend-http-client'
 import type { Client } from 'undici'
+import z from 'zod'
 
 import type { CommonDependencies } from '../infrastructure/commonDiConfig.js'
-import type { FreeformRecord } from '../schemas/commonTypes.js'
+
+const GET_PRODUCT_RESPONSE_SCHEMA = z.object({
+  id: z.number(),
+  name: z.string(),
+})
 
 export class FakeStoreApiClient {
   private readonly client: Client
@@ -12,7 +17,9 @@ export class FakeStoreApiClient {
   }
 
   async getProduct(productId: number) {
-    const response = await sendGet<FreeformRecord>(this.client, `/products/${productId}`, {
+    const response = await sendGet(this.client, `/products/${productId}`, {
+      requestLabel: 'GET product from FakeStoreAPI',
+      responseSchema: GET_PRODUCT_RESPONSE_SCHEMA,
       retryConfig: {
         statusCodesToRetry: [500, 502, 503],
         retryOnTimeout: false,
