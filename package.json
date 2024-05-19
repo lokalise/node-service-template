@@ -63,7 +63,7 @@
     "fastify-graceful-shutdown": "^3.5.3",
     "fastify-metrics": "^11.0.0",
     "fastify-no-icon": "^6.0.0",
-    "fastify-type-provider-zod": "^1.1.9",
+    "fastify-type-provider-zod": "^1.2.0",
     "ioredis": "^5.4.1",
     "jsonwebtoken": "^9.0.2",
     "layered-loader": "^13.1.0",
