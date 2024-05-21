@@ -78,7 +78,7 @@ export const dbHealthCheck: HealthChecker = async (app): Promise<Either<Error, t
 export function registerHealthChecks(app: AppInstance) {
   app.addHealthCheck('heartbeat', () => true)
   app.addHealthCheck('redis', wrapHealthCheck(app, redisHealthCheck))
-  app.addHealthCheck('mysql', wrapHealthCheck(app, dbHealthCheck))
+  app.addHealthCheck('postgres', wrapHealthCheck(app, dbHealthCheck))
 }
 
 export async function runAllHealthchecks(app: AppInstance) {

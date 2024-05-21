@@ -26,7 +26,7 @@ describe('app', () => {
         healthChecks: {
           heartbeat: 'HEALTHY',
           redis: 'HEALTHY',
-          mysql: 'HEALTHY',
+          postgres: 'HEALTHY',
         },
       })
       expect(response.statusCode).toBe(200)
@@ -39,7 +39,7 @@ describe('app', () => {
         gitCommitSha: 'sha',
         heartbeat: 'HEALTHY',
         checks: {
-          mysql: 'HEALTHY',
+          postgres: 'HEALTHY',
           redis: 'HEALTHY',
         },
         version: '1',
@@ -68,8 +68,8 @@ describe('app', () => {
       expect(response.result.body).toContain('redis_availability 1')
       expect(response.result.body).toContain('redis_latency_msecs ')
 
-      expect(response.result.body).toContain('mysql_availability 1')
-      expect(response.result.body).toContain('mysql_latency_msecs ')
+      expect(response.result.body).toContain('postgres_availability 1')
+      expect(response.result.body).toContain('postgres_latency_msecs ')
     })
   })
 

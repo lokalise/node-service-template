@@ -247,7 +247,7 @@ export async function getApp(
       url: '/health',
       healthChecks: [
         {
-          name: 'mysql',
+          name: 'postgres',
           isMandatory: true,
           checker: dbHealthCheck,
         },
@@ -267,7 +267,7 @@ export async function getApp(
       await app.register(healthcheckMetricsPlugin, {
         healthChecks: [
           wrapHealthCheckForPrometheus(redisHealthCheck, 'redis'),
-          wrapHealthCheckForPrometheus(dbHealthCheck, 'mysql'),
+          wrapHealthCheckForPrometheus(dbHealthCheck, 'postgres'),
         ],
       })
     }

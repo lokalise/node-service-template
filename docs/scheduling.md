@@ -65,5 +65,3 @@ await this.updateMutex(lock, LOCK_ON_SUCCESS_IN_MSECS)
 - All jobs are automatically stopped when fastify instance is stopped
 
 - Default template implementation disables background scheduling of jobs when running tests (see `jobsEnabled: configOverrides.jobsEnabled !== false && !isTest(),` block in [app.ts](../src/app.ts) if you would like to change this behaviour)
-
-- If you are not using cron expressions for scheduling your jobs, you can drop the optional dependency `croner` from `package.json`.

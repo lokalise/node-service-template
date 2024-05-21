@@ -60,6 +60,7 @@ Service template also comes with a curated set of plugins [installed](./src/app.
   requestContext on request)
 - @lokalise/fastify-extras -> newRelicTransactionManagerPlugin (creating custom NewRelic spans for background jobs)
 - @lokalise/fastify-extras -> bugsnagPlugin (reporting errors to BugSnag)
+- @lokalise/fastify-extras -> amplitudePlugin (tracking events in Amplitude)
 - @lokalise/fastify-extras -> prismaOtelTracingPlugin (generating OpenTelemetry metrics for DB operations using prisma)
 - @lokalise/fastify-extras -> publicHealthcheckPlugin (registering public healthchecks)
 
@@ -72,7 +73,7 @@ are relevant for the technological stack of your organization, and replace `@lok
 
 ## Getting Started
 
-1. Make sure your node version is compatible with the requirements in [package.json](package.json). We are working with `node >= 18` and recommend using a version manager, such as [nvm](https://github.com/nvm-sh/nvm), to manage multiple Node versions on your device if needed.
+1. Make sure your node version is compatible with the requirements in [package.json](package.json). We are working with `node >= 20` and recommend using a version manager, such as [nvm](https://github.com/nvm-sh/nvm), to manage multiple Node versions on your device if needed.
 
 2. Install all project dependencies:
 
@@ -111,6 +112,16 @@ are relevant for the technological stack of your organization, and replace `@lok
    ```
 
    > **_NOTE:_** By default all calls to the `node-template` app will require a valid JWT token, hence authentication errors when running the application are expected if you haven't yet followed the steps in [Create jwt for dev usage](#create-jwt-for-dev-usage).
+
+### Tests
+
+Before running your tests, make sure to run
+
+```shell
+npm run test:migrate
+```
+
+To initialize your test database and/or apply your latest schema changes.
 
 ### OpenAPI specification
 
@@ -152,7 +163,7 @@ You have multiple options to ease your development:
   {"claim":"value","iat":1676958080}
   ```
 
-- Copy your public key to `JWT_PUBLIC_KEY` in your `.env` file as a one line string
+- Copy your public key to `JWT_PUBLIC_KEY` in your `.env` file. Make sure to replace occurrences of `||`  in your key with new lines
 
 - Restart the application to load the new public key:
 

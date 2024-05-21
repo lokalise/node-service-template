@@ -2,29 +2,51 @@
 
 ## Overview
 
-Dependencies are managed using [awilix](https://github.com/jeffijoe/awilix).
+Dependencies are managed using [awilix](https://github.com/jeffijoe/awilix) and [awilix-manager](https://github.com/kibertoad/awilix-manager).
 
 ### Configuration
 
-You can find configuration for the dependencies in [diConfig.ts](../src/infrastructure/parentDiConfig.ts).
+You can find configuration for the dependencies in [parentDiConfig.ts](../src/infrastructure/parentDiConfig.ts).
 
-When adding a new module, you have to update two places:
+When adding a new module, you have to create a new diConfig for it (e.g. [userDiConfig.ts](../src/modules/users/userDiConfig.ts)) that:
 
-1. Add new resolver to diConfig:
+1. Exposes a method to resolve the new dependencies:
+
+```ts
+export function resolveUsersConfig(options: DIOptions): UsersDiConfig {
+  return {
+    userService: asClass(UserService, SINGLETON_CONFIG),
+  }
+}
+```
+
+2. Adds new fields to the DiConfig interface:
+
+```ts
+export type UsersModuleDependencies = {
+  userService: UserService
+}
+
+// dependencies injectable within the module
+export type UsersInjectableDependencies = UsersModuleDependencies & CommonDependencies
+
+// dependencies injectable across different modules
+export type UsersPublicDependencies = Pick<
+        UsersInjectableDependencies,
+        'userService'
+>
+```
+
+Additionally, the new resolver should be added to the [parentDiConfig.ts](../src/infrastructure/parentDiConfig.ts):
 
 ```ts
 const diConfig: DiConfig = {
-  userRepository: asClass(UserRepository, SINGLETON_CONFIG),
-}
+    ...resolveCommonDiConfig(dependencies, options),
+    ...resolveUsersConfig(options),
+  }
 ```
 
-2. Add new field to the DiConfig interface:
-
-```ts
-export interface Dependencies {
-  userRepository: UserRepository
-}
-```
+### Resolve dependencies
 
 In order to make a class a module, you have to implement a constructor which accepts `dependencies: Dependencies` as its
 only constructor parameter (`asClass` definition).
@@ -45,7 +67,7 @@ only parameter (`asFunction` definition).
 Example:
 
 ```ts
-;({ config }: Dependencies) => {
+({ config }: Dependencies) => {
   return new PrismaClient({
     datasources: {
       db: {
