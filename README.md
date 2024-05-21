@@ -163,7 +163,7 @@ You have multiple options to ease your development:
   {"claim":"value","iat":1676958080}
   ```
 
-- Copy your public key to `JWT_PUBLIC_KEY` in your `.env` file. Make sure to replace occurrences of `||`  in your key with new lines
+- Copy your public key to `JWT_PUBLIC_KEY` in your `.env` file. Make sure to replace occurrences of `||` in your key with new lines
 
 - Restart the application to load the new public key:
 

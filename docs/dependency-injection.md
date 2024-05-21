@@ -31,19 +31,16 @@ export type UsersModuleDependencies = {
 export type UsersInjectableDependencies = UsersModuleDependencies & CommonDependencies
 
 // dependencies injectable across different modules
-export type UsersPublicDependencies = Pick<
-        UsersInjectableDependencies,
-        'userService'
->
+export type UsersPublicDependencies = Pick<UsersInjectableDependencies, 'userService'>
 ```
 
 Additionally, the new resolver should be added to the [parentDiConfig.ts](../src/infrastructure/parentDiConfig.ts):
 
 ```ts
 const diConfig: DiConfig = {
-    ...resolveCommonDiConfig(dependencies, options),
-    ...resolveUsersConfig(options),
-  }
+  ...resolveCommonDiConfig(dependencies, options),
+  ...resolveUsersConfig(options),
+}
 ```
 
 ### Resolve dependencies
@@ -67,7 +64,7 @@ only parameter (`asFunction` definition).
 Example:
 
 ```ts
-({ config }: Dependencies) => {
+;({ config }: Dependencies) => {
   return new PrismaClient({
     datasources: {
       db: {
