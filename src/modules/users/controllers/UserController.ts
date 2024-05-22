@@ -12,13 +12,14 @@ export const postCreateUser = async (
   req: FastifyRequest<{ Body: CREATE_USER_BODY_SCHEMA_TYPE }>,
   reply: FastifyReply,
 ): Promise<void> => {
-  const { name, email } = req.body
+  const { name, email, age } = req.body
 
   const { userService } = req.diScope.cradle
 
   const createdUser = await userService.createUser({
     name,
     email,
+    age,
   })
 
   return reply.status(201).send({

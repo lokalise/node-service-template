@@ -46,8 +46,6 @@ services:
     restart: on-failure
 
 volumes:
-  mysql_data:
-    driver: local
   redis_data:
     driver: local
   rabbit_data:

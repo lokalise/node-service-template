@@ -15,8 +15,24 @@ For tests there are some overrides defined in [envSetupHook.ts](../test/envSetup
 - (OPTIONAL) `APP_PORT` - port, on which server will be listening for HTTP(S) connections (`3000`)
 - (OPTIONAL) `APP_VERSION` - application version, exposed via healthcheck endpoint (`VERSION_NOT_SET`)
 - (OPTIONAL) `GIT_COMMIT_SHA` - SHA of a last commit of the deployed version (`COMMIT_SHA_NOT_SET`)
-- `DATABASE_URL` - full DB connection URL. e. g. 'mysql://root:rootpass@localhost:3306/service_db'
-- `JWT_PUBLIC_KEY` - full public key for JWT token validation, with newlines replaced with '||', e. g. `-----BEGIN PUBLIC KEY-----||MIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEAzi4k4ful8Q65RWbHvZwD||jKNfspb89typkUATf8KXlYcWp6ibUG9nKpYrig3jmlCdMvCm+S7kZedACshFyRmm||1ocaWjRIt/jJyzntxnMIgWetTedZXXzlFbparDMrdEMmsPbM7LrByCU57iKloZEl||BhOSQZk/JbJK1YpozTCxcs28YlpnTuMBaXvXddrQuNHo+HYhK53XlFXyiOBzmEFY||cBrVqptdjA3z7uNNd6A4IAfEkRYp4lZxZgwTPyjYZ1oXmhalvbr6OAs9ujLIZPSM||QoP1VoHLdOqrs7QTmi2rrNCfIcFkFp02N39TovMm9zZQJjQvFEJqIKe4db2457vr||uJ5qxkWmbBu+/tf6ytKfbiA433neLSvpfquPXbq3OLGzJ4H2YHiHa0ddfUCqdN49||t5nCPEMp6OTa5kXuwObf8yvHyoP8HgQQD+/sftHUIE/1sdQ6fzB/9L+smzp5SW/X||nI8NY0k1SH9MLlweGuXi6M1jS62kPWk4HTDQmiqUTImcG0XYRrVd5ISXPdfnVgnq||KKht+SUmkPrfaWMDc21FsXXmmVSRTjvBhA6Cy6PLPzGZaeA4TVkOZUkp1OvcyfiI||HixuZca1OASxGeUM8lcPi9my8TJCtw5ZR0M/uqVV/1o3U0nx+U5z54ulWN9leMLY||vgv+lGrqfFWRemajGXSm8L0CAwEAAQ==||-----END PUBLIC KEY-----`
+- `DATABASE_URL` - full DB connection URL. e. g. 'postgresql://serviceuser:pass@localhost:5432/service_db'
+- `JWT_PUBLIC_KEY` - full public key for JWT token validation, with '||' replaced with new lines, e. g.
+  ```
+    -----BEGIN PUBLIC KEY-----
+    MIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEAzi4k4ful8Q65RWbHvZwD
+    jKNfspb89typkUATf8KXlYcWp6ibUG9nKpYrig3jmlCdMvCm+S7kZedACshFyRmm
+    1ocaWjRIt/jJyzntxnMIgWetTedZXXzlFbparDMrdEMmsPbM7LrByCU57iKloZEl
+    BhOSQZk/JbJK1YpozTCxcs28YlpnTuMBaXvXddrQuNHo+HYhK53XlFXyiOBzmEFY
+    cBrVqptdjA3z7uNNd6A4IAfEkRYp4lZxZgwTPyjYZ1oXmhalvbr6OAs9ujLIZPSM
+    QoP1VoHLdOqrs7QTmi2rrNCfIcFkFp02N39TovMm9zZQJjQvFEJqIKe4db2457vr
+    uJ5qxkWmbBu+/tf6ytKfbiA433neLSvpfquPXbq3OLGzJ4H2YHiHa0ddfUCqdN49
+    t5nCPEMp6OTa5kXuwObf8yvHyoP8HgQQD+/sftHUIE/1sdQ6fzB/9L+smzp5SW/X
+    nI8NY0k1SH9MLlweGuXi6M1jS62kPWk4HTDQmiqUTImcG0XYRrVd5ISXPdfnVgnq
+    KKht+SUmkPrfaWMDc21FsXXmmVSRTjvBhA6Cy6PLPzGZaeA4TVkOZUkp1OvcyfiI
+    HixuZca1OASxGeUM8lcPi9my8TJCtw5ZR0M/uqVV/1o3U0nx+U5z54ulWN9leMLY
+    vgv+lGrqfFWRemajGXSm8L0CAwEAAQ==
+    -----END PUBLIC KEY-----
+  ```
 - (OPTIONAL) `METRICS_ENABLED` - whether to enable `metricsPlugin` (`true`)
 
 ### redis
@@ -47,6 +63,18 @@ For tests there are some overrides defined in [envSetupHook.ts](../test/envSetup
 - (OPTIONAL) `AMQP_VHOST` - AMQP broker vhost
 - (OPTIONAL) `AMQP_USE_TLS` - whether to use https connection for AMQP broker (`true`)
 
+### aws
+
+- `AWS_REGION` - AWS region
+- (OPTIONAL) `AWS_ACCESS_KEY_ID` - AWS access key ID
+- (OPTIONAL) `AWS_SECRET_ACCESS_KEY` - AWS secret access key
+- (OPTIONAL) `AWS_KMS_KEY_ID` - AWS KMS key ID
+- (OPTIONAL) `AWS_ALLOWED_SOURCE_OWNER` - AWS allowed source owner
+- (OPTIONAL) `AWS_SNS_ENDPOINT` - AWS SNS endpoint
+- (OPTIONAL) `AWS_SNS_TOPIC_NAME_PATTERN` - AWS SNS topic name pattern
+- (OPTIONAL) `AWS_SQS_ENDPOINT` - AWS SQS endpoint
+- (OPTIONAL) `AWS_SQS_QUEUE_NAME_PATTERN` - AWS SQS queue name pattern
+
 ## new relic
 
 - (OPTIONAL) `NEW_RELIC_LICENSE_KEY` - New Relic API key
@@ -62,7 +90,6 @@ For tests there are some overrides defined in [envSetupHook.ts](../test/envSetup
 
 ### docker compose
 
-- (OPTIONAL) `DOCKER_MYSQL_PORT` - Docker `mysql` service port, for development purposes only (`3306`)
 - (OPTIONAL) `DOCKER_REDIS_PORT` - Docker `redis` service port, for development purposes only (`6379`)
 - (OPTIONAL) `DOCKER_RABBITMQ_CLIENT_PORT` - Docker `rabbitmq` service client port, for development purposes only (`5672`)
 - (OPTIONAL) `DOCKER_RABBITMQ_MANAGEMENT_PORT` - Docker `rabbitmq` service management port, for development purposes only (`15672`)
