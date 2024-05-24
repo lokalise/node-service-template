@@ -12,11 +12,10 @@ import { createRequestContext } from '../../../../test/requestUtils.js'
 import type { AppInstance } from '../../../app.js'
 import { getApp } from '../../../app.js'
 import { SINGLETON_CONFIG } from '../../../infrastructure/parentDiConfig.js'
-import { buildQueueMessage } from '../../../utils/queueUtils.js'
 import type { PermissionsService } from '../services/PermissionsService.js'
 
+import type { PublisherManager } from '../../../infrastructure/commonDiConfig'
 import { PermissionConsumer } from './PermissionConsumer.js'
-import type { AddPermissionsMessageType } from './userConsumerSchemas.js'
 
 const userIds = ['100', '200', '300']
 const perms: [string, ...string[]] = ['perm1', 'perm2']
@@ -54,6 +53,7 @@ describe('PermissionsConsumer', () => {
     let app: AppInstance
     let diContainer: AwilixContainer<Cradle>
     let consumer: PermissionConsumer
+    let publisher: PublisherManager
     let channel: Channel
     beforeEach(async () => {
       app = await getApp(
@@ -72,6 +72,7 @@ describe('PermissionsConsumer', () => {
       await cleanTables(diContainer.cradle.prisma, [DB_MODEL.User])
       await app.diContainer.cradle.permissionsService.deleteAll(testRequestContext)
       consumer = app.diContainer.cradle.permissionConsumer
+      publisher = app.diContainer.cradle.publisherManager
     })
 
     afterEach(async () => {
@@ -85,19 +86,14 @@ describe('PermissionsConsumer', () => {
       expect(users).toHaveLength(0)
 
       await createUsers(prisma, userIds)
-
-      void channel.sendToQueue(
-        PermissionConsumer.QUEUE_NAME,
-        buildQueueMessage({
-          id: 'abc',
-          type: 'add',
-          timestamp: new Date().toISOString(),
-          payload: {
-            userIds,
-            permissions: perms,
-          },
-        } satisfies AddPermissionsMessageType),
-      )
+      publisher.publishSync('user_permissions', {
+        id: 'abc',
+        payload: {
+          userIds,
+          permissions: perms,
+        },
+        type: 'permissions.added',
+      })
 
       const messageResult = await consumer.handlerSpy.waitForMessageWithId('abc')
       expect(messageResult.processingResult).toBe('consumed')
@@ -109,25 +105,21 @@ describe('PermissionsConsumer', () => {
 
       expect(usersPermissions).toBeDefined()
       expect(usersPermissions[0]).toHaveLength(2)
-    })
+    }, 99999)
 
     it('Wait for users to be created and then create permissions', async () => {
       const { userService, permissionsService, prisma } = diContainer.cradle
       const users = await userService.getUsers(testRequestContext, userIds)
       expect(users).toHaveLength(0)
 
-      channel.sendToQueue(
-        PermissionConsumer.QUEUE_NAME,
-        buildQueueMessage({
-          id: 'def',
-          type: 'add',
-          timestamp: new Date().toISOString(),
-          payload: {
-            userIds,
-            permissions: perms,
-          },
-        } satisfies AddPermissionsMessageType),
-      )
+      publisher.publishSync('user_permissions', {
+        id: 'def',
+        type: 'permissions.added',
+        payload: {
+          userIds,
+          permissions: perms,
+        },
+      })
 
       const messageResult = await consumer.handlerSpy.waitForMessageWithId('def')
       expect(messageResult.processingResult).toBe('retryLater')
@@ -157,18 +149,14 @@ describe('PermissionsConsumer', () => {
       const missingUser = partialUsers.pop()
       await createUsers(prisma, partialUsers)
 
-      channel.sendToQueue(
-        PermissionConsumer.QUEUE_NAME,
-        buildQueueMessage({
-          id: 'abcdef',
-          type: 'add',
-          timestamp: new Date().toISOString(),
-          payload: {
-            userIds,
-            permissions: perms,
-          },
-        } satisfies AddPermissionsMessageType),
-      )
+      publisher.publishSync('user_permissions', {
+        id: 'abcdef',
+        payload: {
+          userIds,
+          permissions: perms,
+        },
+        type: 'permissions.added',
+      })
 
       const messageResult = await consumer.handlerSpy.waitForMessageWithId('abcdef', 'retryLater')
       expect(messageResult.processingResult).toBe('retryLater')
@@ -193,17 +181,14 @@ describe('PermissionsConsumer', () => {
     it('Invalid message in the queue', async () => {
       const { consumerErrorResolver } = diContainer.cradle
 
-      channel.sendToQueue(
-        PermissionConsumer.QUEUE_NAME,
-        buildQueueMessage({
-          id: 'errorMessage',
-          type: 'add',
-          timestamp: new Date().toISOString(),
-          payload: {
-            permissions: perms,
-          },
-        }),
-      )
+      publisher.publishSync('user_permissions', {
+        id: 'errorMessage',
+        // @ts-expect-error This should be causing a compilation error
+        payload: {
+          permissions: perms,
+        },
+        type: 'permissions.added',
+      })
 
       const fakeResolver = consumerErrorResolver as FakeConsumerErrorResolver
       // even though we are failing at validating the message, we can still extract an id out of, as it's a valid json

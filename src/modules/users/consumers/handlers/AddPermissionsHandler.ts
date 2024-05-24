@@ -1,10 +1,11 @@
 import type { Either } from '@lokalise/node-core'
 import type { PreHandlingOutputs } from '@message-queue-toolkit/core'
 
+import type z from 'zod'
 import type { RequestContextPreHandlerOutput } from '../../../../infrastructure/prehandlers/requestContextPrehandler.js'
 import type { PermissionsService } from '../../services/PermissionsService.js'
 import type { UserService } from '../../services/UserService.js'
-import type { AddPermissionsMessageType } from '../userConsumerSchemas.js'
+import type { PermissionsMessages } from '../permissionsMessageShemas'
 
 export type AddPermissionsContext = {
   userService: UserService
@@ -12,7 +13,7 @@ export type AddPermissionsContext = {
 }
 
 export async function addPermissionsHandler(
-  message: AddPermissionsMessageType,
+  message: z.infer<typeof PermissionsMessages.added.consumerSchema>,
   handlerContext: AddPermissionsContext,
   preHandlingOutputs: PreHandlingOutputs<RequestContextPreHandlerOutput, unknown>,
 ): Promise<Either<'retryLater', 'success'>> {

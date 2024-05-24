@@ -1,11 +1,12 @@
 import type { Either } from '@lokalise/node-core'
 import type { PreHandlingOutputs } from '@message-queue-toolkit/core'
 
+import type z from 'zod'
 import type { RequestContextPreHandlerOutput } from '../../../../infrastructure/prehandlers/requestContextPrehandler.js'
-import type { RemovePermissionsMessageType } from '../userConsumerSchemas.js'
+import type { PermissionsMessages } from '../permissionsMessageShemas'
 
 export function removePermissionsHandler(
-  _message: RemovePermissionsMessageType,
+  _message: z.infer<typeof PermissionsMessages.removed.consumerSchema>,
   _handlerContext: unknown,
   _preHandlingOutputs: PreHandlingOutputs<RequestContextPreHandlerOutput, unknown>,
 ): Promise<Either<'retryLater', 'success'>> {

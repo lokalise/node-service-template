@@ -8,7 +8,12 @@ import type {
   TransactionObservabilityManager,
 } from '@lokalise/node-core'
 import { globalLogger } from '@lokalise/node-core'
-import { AmqpConnectionManager, AmqpConsumerErrorResolver } from '@message-queue-toolkit/amqp'
+import {
+  type AmqpAwareEventDefinition,
+  AmqpConnectionManager,
+  AmqpConsumerErrorResolver,
+  AmqpQueuePublisherManager,
+} from '@message-queue-toolkit/amqp'
 import { PrismaClient } from '@prisma/client'
 import type { NameAndRegistrationPair } from 'awilix'
 import { Lifetime, asClass, asFunction } from 'awilix'
@@ -17,13 +22,31 @@ import { ToadScheduler } from 'toad-scheduler'
 
 import { FakeStoreApiClient } from '../integrations/FakeStoreApiClient.js'
 
-import { getAmqpConfig, getConfig } from './config.js'
+import {
+  type CommonAmqpQueuePublisher,
+  CommonAmqpQueuePublisherFactory,
+} from '@message-queue-toolkit/amqp/dist/lib/CommonAmqpPublisherFactory'
+import { CommonMetadataFiller, EventRegistry } from '@message-queue-toolkit/core'
+import type z from 'zod'
+import { PermissionsMessages } from '../modules/users/consumers/permissionsMessageShemas'
+import { getAmqpConfig, getConfig, isTest } from './config.js'
 import type { Config } from './config.js'
 import type { DIOptions } from './diConfigUtils.js'
 import { FakeAmplitude } from './fakes/FakeAmplitude.js'
 import { FakeNewrelicTransactionManager } from './fakes/FakeNewrelicTransactionManager.js'
 import { SINGLETON_CONFIG } from './parentDiConfig.js'
 import type { ExternalDependencies } from './parentDiConfig.js'
+
+const supportedMessages = [
+  ...Object.values(PermissionsMessages),
+] as const satisfies AmqpAwareEventDefinition[]
+
+type MessagesPublishPayloadsType = z.infer<(typeof supportedMessages)[number]['publisherSchema']>
+
+export type PublisherManager = AmqpQueuePublisherManager<
+  CommonAmqpQueuePublisher<MessagesPublishPayloadsType>,
+  typeof supportedMessages
+>
 
 export function resolveCommonDiConfig(
   dependencies: ExternalDependencies = { logger: globalLogger },
@@ -157,6 +180,40 @@ export function resolveCommonDiConfig(
     consumerErrorResolver: asFunction(() => {
       return new AmqpConsumerErrorResolver()
     }),
+    eventRegistry: asFunction(() => {
+      return new EventRegistry(supportedMessages)
+    }),
+    publisherManager: asFunction((dependencies: CommonDependencies) => {
+      return new AmqpQueuePublisherManager<
+        CommonAmqpQueuePublisher<MessagesPublishPayloadsType>,
+        typeof supportedMessages
+      >(
+        {
+          errorReporter: dependencies.errorReporter,
+          logger: dependencies.logger,
+          amqpConnectionManager: dependencies.amqpConnectionManager,
+          eventRegistry: dependencies.eventRegistry,
+        },
+        {
+          metadataField: 'metadata',
+          metadataFiller: new CommonMetadataFiller({
+            serviceId: 'node-service-template',
+            defaultVersion: '1.0.0',
+          }),
+          publisherFactory: new CommonAmqpQueuePublisherFactory(),
+          newPublisherOptions: {
+            messageTypeField: 'type',
+            messageIdField: 'id',
+            logMessages: true,
+            handlerSpy: isTest(),
+            messageTimestampField: 'timestamp',
+            deletionConfig: {
+              deleteIfExists: isTest(),
+            },
+          },
+        },
+      )
+    }),
 
     config: asFunction(() => {
       return getConfig()
@@ -198,6 +255,8 @@ export type CommonDependencies = {
   transactionObservabilityManager: TransactionObservabilityManager
   amplitude: Amplitude
 
+  eventRegistry: EventRegistry<typeof supportedMessages>
+  publisherManager: PublisherManager
   errorReporter: ErrorReporter
   consumerErrorResolver: ErrorResolver
 

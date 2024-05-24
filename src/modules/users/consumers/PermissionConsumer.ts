@@ -1,4 +1,4 @@
-import { AbstractAmqpConsumer } from '@message-queue-toolkit/amqp'
+import { AbstractAmqpQueueConsumer } from '@message-queue-toolkit/amqp'
 import { MessageHandlerConfigBuilder } from '@message-queue-toolkit/core'
 
 import { isTest } from '../../../infrastructure/config.js'
@@ -7,30 +7,27 @@ import { createRequestContextPreHandler } from '../../../infrastructure/prehandl
 import type { PermissionsService } from '../services/PermissionsService.js'
 import type { UserService } from '../services/UserService.js'
 import type { UsersInjectableDependencies } from '../userDiConfig.js'
+import { PermissionsMessages } from './permissionsMessageShemas.js'
 
+import type z from 'zod'
 import { addPermissionsHandler } from './handlers/AddPermissionsHandler.js'
 import { removePermissionsHandler } from './handlers/RemovePermissionsHandler.js'
-import type {
-  AddPermissionsMessageType,
-  RemovePermissionsMessageType,
-} from './userConsumerSchemas.js'
-import {
-  PERMISSIONS_ADD_MESSAGE_SCHEMA,
-  PERMISSIONS_REMOVE_MESSAGE_SCHEMA,
-} from './userConsumerSchemas.js'
+import { PERMISSIONS_QUEUE } from './permissionsMessageShemas'
 
-type SupportedMessages = RemovePermissionsMessageType | AddPermissionsMessageType
+type SupportedMessages =
+  | z.infer<typeof PermissionsMessages.added.consumerSchema>
+  | z.infer<typeof PermissionsMessages.removed.consumerSchema>
 type ExecutionContext = {
   userService: UserService
   permissionsService: PermissionsService
 }
 
-export class PermissionConsumer extends AbstractAmqpConsumer<
+export class PermissionConsumer extends AbstractAmqpQueueConsumer<
   SupportedMessages,
   ExecutionContext,
   RequestContextPreHandlerOutput
 > {
-  public static readonly QUEUE_NAME = 'user_permissions'
+  public static readonly QUEUE_NAME = PERMISSIONS_QUEUE
 
   constructor(dependencies: UsersInjectableDependencies) {
     super(
@@ -60,10 +57,10 @@ export class PermissionConsumer extends AbstractAmqpConsumer<
           ExecutionContext,
           RequestContextPreHandlerOutput
         >()
-          .addConfig(PERMISSIONS_ADD_MESSAGE_SCHEMA, addPermissionsHandler, {
+          .addConfig(PermissionsMessages.added.consumerSchema, addPermissionsHandler, {
             preHandlers: [createRequestContextPreHandler(dependencies.logger)],
           })
-          .addConfig(PERMISSIONS_REMOVE_MESSAGE_SCHEMA, removePermissionsHandler)
+          .addConfig(PermissionsMessages.removed.consumerSchema, removePermissionsHandler)
           .build(),
         messageTypeField: 'type',
       },
