@@ -1,0 +1,121 @@
+{
+  "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
+  "organizeImports": {
+    "enabled": true
+  },
+  "json": {
+    "formatter": {
+      "enabled": true,
+      "trailingCommas": "none",
+      "lineWidth": 100,
+      "indentStyle": "space",
+      "indentWidth": 2,
+      "lineEnding": "lf"
+    }
+  },
+  "javascript": {
+    "formatter": {
+      "enabled": true,
+      "arrowParentheses": "always",
+      "bracketSpacing": true,
+      "indentWidth": 2,
+      "indentStyle": "space",
+      "semicolons": "asNeeded",
+      "lineWidth": 100,
+      "quoteStyle": "single",
+      "trailingComma": "all"
+    }
+  },
+  "files": {
+    "include": [
+      "./test/**/*.ts",
+      "./src/**/*.ts",
+      "./scripts/**/*.ts",
+      "./biome.json",
+      "./package.json"
+    ],
+    "ignore": ["./dist", "./coverage", "./node_modules"]
+  },
+  "formatter": {
+    "enabled": true,
+    "lineEnding": "lf",
+    "indentStyle": "space",
+    "indentWidth": 2
+  },
+  "linter": {
+    "rules": {
+      "style": {
+        "noNonNullAssertion": "off",
+        "noDefaultExport": "error",
+        "noParameterAssign": "error",
+        "useTemplate": "error",
+        "useShorthandAssign": "error",
+        "useShorthandFunctionType": "error",
+        "noVar": "error",
+        "noUselessElse": "error",
+        "noUnusedTemplateLiteral": "off",
+        "useConst": "error",
+        "useExportType": "error",
+        "useNodejsImportProtocol": "error",
+        "useForOf": "error",
+        "useImportType": "error"
+      },
+      "correctness": {
+        "noConstAssign": "error",
+        "noConstructorReturn": "error",
+        "noGlobalObjectCalls": "error",
+        "noInnerDeclarations": "error",
+        "noInvalidConstructorSuper": "error",
+        "noInvalidNewBuiltin": "error",
+        "noSelfAssign": "error",
+        "noSetterReturn": "error",
+        "noUnreachable": "error",
+        "useYield": "error",
+        "useValidForDirection": "error",
+        "noUnusedVariables": "error",
+        "noUnusedImports": "error",
+        "noUnusedPrivateClassMembers": "error",
+        "noUnreachableSuper": "error",
+        "noUndeclaredVariables": "error"
+      },
+      "suspicious": {
+        "noGlobalIsNan": "off",
+        "noAssignInExpressions": "error",
+        "noCatchAssign": "error",
+        "noClassAssign": "error",
+        "noConsoleLog": "error",
+        "noDuplicateCase": "error",
+        "noDuplicateClassMembers": "error",
+        "noEmptyBlockStatements": "off",
+        "useValidTypeof": "error",
+        "useIsArray": "error",
+        "useGetterReturn": "error",
+        "useAwait": "error",
+        "noSkippedTests": "off",
+        "noShadowRestrictedNames": "error",
+        "noRedeclare": "error",
+        "noDuplicateParameters": "error",
+        "noDuplicateObjectKeys": "error",
+        "noPrototypeBuiltins": "error",
+        "noMisleadingInstantiator": "error",
+        "noExplicitAny": "error",
+        "noFocusedTests": "error",
+        "noGlobalAssign": "error",
+        "noFunctionAssign": "error"
+      },
+      "complexity": {
+        "noForEach": "error",
+        "useOptionalChain": "error",
+        "noEmptyTypeParameters": "off",
+        "noExcessiveCognitiveComplexity": {
+          "level": "error",
+          "options": {
+            "maxAllowedComplexity": 15
+          }
+        },
+        "noExtraBooleanCast": "error",
+        "noBannedTypes": "off"
+      }
+    }
+  }
+}

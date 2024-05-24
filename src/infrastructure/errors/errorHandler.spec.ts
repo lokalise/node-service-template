@@ -4,7 +4,7 @@ import { InternalError } from '@lokalise/node-core'
 import { asFunction } from 'awilix'
 import fastify from 'fastify'
 import type { RouteHandlerMethod } from 'fastify/types/route'
-
+import { afterAll, describe, expect, it } from 'vitest'
 import { getTestConfigurationOverrides } from '../../../test/jwtUtils.js'
 import type { AppInstance } from '../../app.js'
 import { jwtTokenPlugin } from '../../plugins/jwtTokenPlugin.js'

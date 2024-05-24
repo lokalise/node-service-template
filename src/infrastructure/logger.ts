@@ -8,7 +8,7 @@ export function resolveLoggerConfiguration(appConfig: AppConfig): PinoLoggerOpti
   const config: PinoLoggerOptions = {
     level: appConfig.logLevel,
     formatters: {
-      level: (label, numericLevel): { level: string } => {
+      level: (_label, numericLevel): { level: string } => {
         const level = levels.labels[numericLevel] || 'unknown'
         return { level }
       },

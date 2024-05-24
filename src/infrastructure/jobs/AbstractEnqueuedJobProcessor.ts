@@ -4,7 +4,7 @@ import {
   CommonBullmqFactory,
 } from '@lokalise/background-jobs-common'
 
-import { isTest, SERVICE_NAME } from '../config.js'
+import { SERVICE_NAME, isTest } from '../config.js'
 import type { Dependencies } from '../parentDiConfig.js'
 
 export type BackgroundJobConfig = Omit<BackgroundJobProcessorConfig, 'isTest'>

@@ -4,7 +4,7 @@ import {
   isPublicNonRecoverableError,
   isStandardizedError,
 } from '@lokalise/node-core'
-import type { FastifyRequest, FastifyReply } from 'fastify'
+import type { FastifyReply, FastifyRequest } from 'fastify'
 import pino from 'pino'
 import { ZodError } from 'zod'
 

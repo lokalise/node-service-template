@@ -47,7 +47,7 @@ export const redisHealthCheck: HealthChecker = async (app): Promise<Either<Error
     if (result !== 'PONG') {
       return { error: new Error('Redis did not respond with PONG') }
     }
-  } catch (err) {
+  } catch (_err) {
     return { error: new Error('Redis did not respond with PONG') }
   }
 
@@ -81,7 +81,7 @@ export function registerHealthChecks(app: AppInstance) {
   app.addHealthCheck('postgres', wrapHealthCheck(app, dbHealthCheck))
 }
 
-export async function runAllHealthchecks(app: AppInstance) {
+export function runAllHealthchecks(app: AppInstance) {
   return executeSettleAllAndHandleGlobalErrors(
     [wrapHealthCheck(app, dbHealthCheck)(), wrapHealthCheck(app, redisHealthCheck)()],
     false,

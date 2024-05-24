@@ -1,7 +1,8 @@
 import type { Cradle } from '@fastify/awilix'
 import type { AwilixContainer } from 'awilix'
+import { afterEach, beforeEach, describe, expect, it } from 'vitest'
 
-import { cleanTables, DB_MODEL } from '../../../../test/DbCleaner.js'
+import { DB_MODEL, cleanTables } from '../../../../test/DbCleaner.js'
 import type { TestContext } from '../../../../test/TestContext.js'
 import { createTestContext, destroyTestContext } from '../../../../test/TestContext.js'
 import { TEST_USER_1 } from '../../../../test/fixtures/testUsers.js'

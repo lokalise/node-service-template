@@ -11,7 +11,7 @@ import { globalLogger } from '@lokalise/node-core'
 import { AmqpConnectionManager, AmqpConsumerErrorResolver } from '@message-queue-toolkit/amqp'
 import { PrismaClient } from '@prisma/client'
 import type { NameAndRegistrationPair } from 'awilix'
-import { asClass, asFunction, Lifetime } from 'awilix'
+import { Lifetime, asClass, asFunction } from 'awilix'
 import Redis from 'ioredis'
 import { ToadScheduler } from 'toad-scheduler'
 

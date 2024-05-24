@@ -1,5 +1,5 @@
 import { ConfigScope } from '@lokalise/node-core'
-
+import { describe, expect, it } from 'vitest'
 import { getAwsConfig } from './awsConfig.js'
 
 const SNS_ENDPOINT_LITERAL = 'sns-endpoint'

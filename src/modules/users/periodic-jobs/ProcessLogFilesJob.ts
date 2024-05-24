@@ -69,12 +69,12 @@ export class ProcessLogFilesJob extends AbstractPeriodicJob {
     }
   }
 
-  private async processFile(_file: string) {
+  private processFile(_file: string) {
     // dummy processing logic
     return Promise.resolve()
   }
 
-  private async getUnprocessedLogFile() {
+  private getUnprocessedLogFile() {
     // dummy sample data
     return Promise.resolve('someData')
   }

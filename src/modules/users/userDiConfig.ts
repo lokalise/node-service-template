@@ -1,8 +1,8 @@
 import type { User } from '@prisma/client'
 import type { Resolver } from 'awilix'
-import { asClass, asFunction, Lifetime } from 'awilix'
+import { Lifetime, asClass, asFunction } from 'awilix'
 import type { InMemoryCacheConfiguration, LoaderConfig } from 'layered-loader'
-import { Loader, createNotificationPair, RedisCache } from 'layered-loader'
+import { Loader, RedisCache, createNotificationPair } from 'layered-loader'
 
 import type { CommonDependencies } from '../../infrastructure/commonDiConfig.js'
 import type { DIOptions } from '../../infrastructure/diConfigUtils.js'
@@ -29,7 +29,7 @@ const IN_MEMORY_CONFIGURATION_BASE: InMemoryCacheConfiguration = {
   cacheType: 'fifo-object',
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// biome-ignore lint/suspicious/noExplicitAny: it's ok
 type UsersDiConfig = Record<keyof UsersModuleDependencies, Resolver<any>>
 
 export type UsersModuleDependencies = {

@@ -1,4 +1,4 @@
-import { writeFile, rm } from 'node:fs/promises'
+import { rm, writeFile } from 'node:fs/promises'
 import { resolve } from 'node:path'
 
 import { stringify as toYaml } from 'yaml'
