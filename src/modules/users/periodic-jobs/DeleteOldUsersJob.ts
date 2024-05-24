@@ -55,7 +55,7 @@ export class DeleteOldUsersJob extends AbstractPeriodicJob {
     }
   }
 
-  private async deleteOldUsers() {
+  private deleteOldUsers() {
     // dummy processing logic
     return Promise.resolve()
   }

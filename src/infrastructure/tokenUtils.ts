@@ -23,18 +23,16 @@ export function generateJwtToken(
 const hasCode = (error: unknown): error is { code: unknown } =>
   typeof error === 'object' && error !== null && 'code' in error
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function decodeJwtToken(jwt: JWT, encodedToken: string): Promise<any> {
-  return new Promise((resolve, reject) => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    jwt.verify(encodedToken, (err: Error | null, decoded: any) => {
+export function decodeJwtToken<T>(jwt: JWT, encodedToken: string): Promise<T> {
+  return new Promise<T>((resolve, reject) => {
+    jwt.verify(encodedToken, (err: Error | null, decoded: T) => {
       if (err) {
         return reject(err)
       }
       if (!decoded) {
         throw new EmptyTokenError()
       }
-      resolve(decoded)
+      resolve(decoded as T)
     })
   }).catch((err) => {
     if (hasCode(err) && err.code === 'FAST_JWT_INVALID_SIGNATURE') {

@@ -1,8 +1,8 @@
 import type { User } from '@prisma/client'
 import { asClass } from 'awilix'
 
+import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 import { createRequestContext } from '../test/requestUtils.js'
-
 import type { AppInstance } from './app.js'
 import { getApp } from './app.js'
 import type { Dependencies } from './infrastructure/parentDiConfig.js'
@@ -14,7 +14,7 @@ class FakeUserService extends UserService {
     super({} as Dependencies)
   }
 
-  async getUser(): Promise<User> {
+  getUser(): Promise<User> {
     return Promise.resolve({
       id: '-1',
       age: null,

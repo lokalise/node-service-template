@@ -1,4 +1,5 @@
-import { cleanTables, DB_MODEL } from '../../../../test/DbCleaner.js'
+import { afterAll, beforeAll, describe, expect, it } from 'vitest'
+import { DB_MODEL, cleanTables } from '../../../../test/DbCleaner.js'
 import { cleanRedis } from '../../../../test/RedisCleaner.js'
 import type { TestContext } from '../../../../test/TestContext.js'
 import { createTestContext, destroyTestContext } from '../../../../test/TestContext.js'

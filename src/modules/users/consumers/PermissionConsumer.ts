@@ -15,8 +15,8 @@ import type {
   RemovePermissionsMessageType,
 } from './userConsumerSchemas.js'
 import {
-  PERMISSIONS_REMOVE_MESSAGE_SCHEMA,
   PERMISSIONS_ADD_MESSAGE_SCHEMA,
+  PERMISSIONS_REMOVE_MESSAGE_SCHEMA,
 } from './userConsumerSchemas.js'
 
 type SupportedMessages = RemovePermissionsMessageType | AddPermissionsMessageType

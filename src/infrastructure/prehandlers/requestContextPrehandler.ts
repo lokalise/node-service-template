@@ -1,4 +1,4 @@
-import { randomUUID } from 'crypto'
+import { randomUUID } from 'node:crypto'
 
 import type { RequestContext } from '@lokalise/fastify-extras'
 import type { CommonLogger } from '@lokalise/node-core'

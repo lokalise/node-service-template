@@ -1,7 +1,7 @@
 import type {
+  FastifyInstance,
   FastifyReply,
   FastifyRequest,
-  FastifyInstance,
   HookHandlerDoneFunction,
 } from 'fastify'
 import fp from 'fastify-plugin'
@@ -17,7 +17,7 @@ function plugin(
 ) {
   fastify.addHook(
     'onRequest',
-    (req: FastifyRequest, res: FastifyReply, done: HookHandlerDoneFunction) => {
+    (req: FastifyRequest, _res: FastifyReply, done: HookHandlerDoneFunction) => {
       if (req.routeOptions.url && pluginOptions.skipList.has(req.routeOptions.url)) {
         return done()
       }

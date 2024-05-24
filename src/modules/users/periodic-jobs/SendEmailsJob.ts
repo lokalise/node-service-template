@@ -55,7 +55,7 @@ export class SendEmailsJob extends AbstractPeriodicJob {
     await this.updateMutex(lock, LOCK_ON_SUCCESS_IN_MSECS)
   }
 
-  private async sendEmails() {
+  private sendEmails() {
     // dummy processing logic
     return Promise.resolve()
   }

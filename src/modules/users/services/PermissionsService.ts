@@ -8,7 +8,7 @@ export class PermissionsService {
     this.permissions = {}
   }
 
-  async setPermissions(requestContext: RequestContext, userId: string, permissions: string[]) {
+  setPermissions(requestContext: RequestContext, userId: string, permissions: string[]) {
     this.permissions[userId] = permissions
 
     requestContext.logger.info({ userId, permissions }, 'Updated permissions')
@@ -28,7 +28,7 @@ export class PermissionsService {
     return Promise.resolve(result)
   }
 
-  async deleteAll(requestContext: RequestContext) {
+  deleteAll(requestContext: RequestContext) {
     this.permissions = {}
 
     requestContext.logger.info('Deleted all permissions')

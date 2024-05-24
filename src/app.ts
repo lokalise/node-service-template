@@ -14,15 +14,15 @@ import fastifySchedule from '@fastify/schedule'
 import fastifySwagger from '@fastify/swagger'
 import fastifySwaggerUi from '@fastify/swagger-ui'
 import {
+  amplitudePlugin,
   bugsnagPlugin,
   getRequestIdFastifyAppConfig,
+  healthcheckMetricsPlugin,
   metricsPlugin,
   newrelicTransactionManagerPlugin,
   prismaOtelTracingPlugin,
-  requestContextProviderPlugin,
   publicHealthcheckPlugin,
-  amplitudePlugin,
-  healthcheckMetricsPlugin,
+  requestContextProviderPlugin,
 } from '@lokalise/fastify-extras'
 import type { CommonLogger } from '@lokalise/node-core'
 import { resolveGlobalErrorLogObject } from '@lokalise/node-core'
@@ -77,6 +77,7 @@ export type ConfigOverrides = {
   monitoringEnabled?: boolean
 }
 
+// biome-ignore lint/complexity/noExcessiveCognitiveComplexity: This is intentional
 export async function getApp(
   configOverrides: ConfigOverrides = {},
   dependencyOverrides: DependencyOverrides = {},
@@ -307,11 +308,13 @@ export async function getApp(
   app.after(() => {
     // Register routes
     const { routes } = getRoutes()
-    routes.forEach((route) => app.withTypeProvider<ZodTypeProvider>().route(route))
+    for (const route of routes) {
+      app.withTypeProvider<ZodTypeProvider>().route(route)
+    }
 
     // Graceful shutdown hook
     if (!isDevelopment()) {
-      app.gracefulShutdown((signal, next) => {
+      app.gracefulShutdown((_signal, next) => {
         app.log.info('Starting graceful shutdown')
         next()
       })

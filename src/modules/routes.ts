@@ -11,11 +11,11 @@ export type Routes = Array<
     http.Server,
     http.IncomingMessage,
     http.ServerResponse,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // biome-ignore lint/suspicious/noExplicitAny: it's ok
     any,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // biome-ignore lint/suspicious/noExplicitAny: it's ok
     any,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // biome-ignore lint/suspicious/noExplicitAny: it's ok
     any,
     ZodTypeProvider,
     CommonLogger

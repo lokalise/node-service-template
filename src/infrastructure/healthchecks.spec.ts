@@ -2,7 +2,7 @@ import type { PrismaClient } from '@prisma/client'
 import { asFunction } from 'awilix'
 import type { FastifyInstance } from 'fastify'
 import type Redis from 'ioredis'
-
+import { afterEach, beforeEach, describe, expect, it } from 'vitest'
 import type { AppInstance } from '../app.js'
 import { getApp } from '../app.js'
 

@@ -4,6 +4,7 @@ import { resolve } from 'node:path'
 import { validate } from 'oas-validator'
 import { parse as fromYaml } from 'yaml'
 
+import { consoleLog } from './utils/loggingUtils.js'
 import { getRootDirectory } from './utils/pathUtils.js'
 
 const targetPath = resolve(getRootDirectory(), 'openApiSpec.yaml')
@@ -15,9 +16,9 @@ async function run() {
   const yaml = await readFile(targetPath)
   try {
     await validate(fromYaml(yaml.toString()), {})
-    console.log('Document is valid')
+    consoleLog('Document is valid')
   } catch (err) {
-    console.log(hasOptions(err) ? JSON.stringify(err.options) : err)
+    consoleLog(hasOptions(err) ? JSON.stringify(err.options) : err)
     throw new Error('Specification validation has failed')
   }
 }
