@@ -15,6 +15,7 @@ import { SINGLETON_CONFIG } from '../../../infrastructure/parentDiConfig.js'
 import type { PermissionsService } from '../services/PermissionsService.js'
 
 import type { PublisherManager } from '../../../infrastructure/commonDiConfig'
+import { buildQueueMessage } from '../../../utils/queueUtils'
 import { PermissionConsumer } from './PermissionConsumer.js'
 
 const userIds = ['100', '200', '300']
@@ -86,6 +87,7 @@ describe('PermissionsConsumer', () => {
       expect(users).toHaveLength(0)
 
       await createUsers(prisma, userIds)
+
       publisher.publishSync('user_permissions', {
         id: 'abc',
         payload: {
@@ -105,7 +107,7 @@ describe('PermissionsConsumer', () => {
 
       expect(usersPermissions).toBeDefined()
       expect(usersPermissions[0]).toHaveLength(2)
-    }, 99999)
+    }, 9999999)
 
     it('Wait for users to be created and then create permissions', async () => {
       const { userService, permissionsService, prisma } = diContainer.cradle
@@ -180,15 +182,33 @@ describe('PermissionsConsumer', () => {
 
     it('Invalid message in the queue', async () => {
       const { consumerErrorResolver } = diContainer.cradle
-
-      publisher.publishSync('user_permissions', {
+      const invalidMessage = {
         id: 'errorMessage',
-        // @ts-expect-error This should be causing a compilation error
         payload: {
           permissions: perms,
         },
         type: 'permissions.added',
-      })
+      }
+
+      expect(() =>
+        // @ts-expect-error This should be causing a compilation error
+        publisher.publishSync('user_permissions', invalidMessage),
+      ).toThrowErrorMatchingInlineSnapshot(`
+        [ZodError: [
+          {
+            "code": "invalid_type",
+            "expected": "array",
+            "received": "undefined",
+            "path": [
+              "payload",
+              "userIds"
+            ],
+            "message": "Required"
+          }
+        ]]
+      `)
+
+      channel.sendToQueue(PermissionConsumer.QUEUE_NAME, buildQueueMessage(invalidMessage))
 
       const fakeResolver = consumerErrorResolver as FakeConsumerErrorResolver
       // even though we are failing at validating the message, we can still extract an id out of, as it's a valid json

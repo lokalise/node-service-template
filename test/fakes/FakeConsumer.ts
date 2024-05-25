@@ -1,9 +1,9 @@
 import { AbstractAmqpConsumer } from '@message-queue-toolkit/amqp'
 import { MessageHandlerConfigBuilder } from '@message-queue-toolkit/core'
-import { undefined, ZodType } from "zod";
+import type { ZodType } from 'zod'
 
 import type { Dependencies } from '../../src/infrastructure/parentDiConfig.js'
-import { PermissionsMessages } from "../../src/modules/users/consumers/permissionsMessageShemas";
+import { PermissionsMessages } from '../../src/modules/users/consumers/permissionsMessageShemas'
 
 export class FakeConsumer<T extends object> extends AbstractAmqpConsumer<T, unknown> {
   constructor(
@@ -38,6 +38,6 @@ export class FakeConsumer<T extends object> extends AbstractAmqpConsumer<T, unkn
   }
 
   protected createMissingEntities(): Promise<void> {
-    return Promise.resolve();
+    return Promise.resolve()
   }
 }

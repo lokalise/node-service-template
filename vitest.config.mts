@@ -13,6 +13,7 @@ export default defineConfig({
     setupFiles: ['test/envSetupHook.ts'],
     reporters: ['default'],
     coverage: {
+      provider: 'v8',
       include: ['src/**/*.ts'],
       exclude: [
         'src/infrastructure/diConfig.ts',

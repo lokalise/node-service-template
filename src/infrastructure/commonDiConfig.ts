@@ -208,7 +208,7 @@ export function resolveCommonDiConfig(
             handlerSpy: isTest(),
             messageTimestampField: 'timestamp',
             deletionConfig: {
-              deleteIfExists: isTest(),
+              deleteIfExists: false, // queue deletion/creation should be handled by consumers
             },
           },
         },
