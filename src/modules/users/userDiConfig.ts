@@ -15,7 +15,6 @@ import { UserImportJob } from './job-queue-processors/UserImportJob.js'
 import { DeleteOldUsersJob } from './periodic-jobs/DeleteOldUsersJob.js'
 import { ProcessLogFilesJob } from './periodic-jobs/ProcessLogFilesJob.js'
 import { SendEmailsJob } from './periodic-jobs/SendEmailsJob.js'
-import { PermissionPublisher } from './publishers/PermissionPublisher.js'
 import { UserRepository } from './repositories/UserRepository.js'
 import { PermissionsService } from './services/PermissionsService.js'
 import { UserService } from './services/UserService.js'
@@ -39,7 +38,6 @@ export type UsersModuleDependencies = {
 
   permissionsService: PermissionsService
   permissionConsumer: PermissionConsumer
-  permissionPublisher: PermissionPublisher
 
   deleteOldUsersJob: DeleteOldUsersJob
   processLogFilesJob: ProcessLogFilesJob
@@ -99,14 +97,6 @@ export function resolveUsersConfig(options: DIOptions): UsersDiConfig {
       asyncDispose: 'close',
       asyncDisposePriority: 10,
       enabled: isQueueEnabled(options, PermissionConsumer.QUEUE_NAME),
-    }),
-    permissionPublisher: asClass(PermissionPublisher, {
-      lifetime: Lifetime.SINGLETON,
-      asyncInit: 'init',
-      asyncInitPriority: 20,
-      asyncDispose: 'close',
-      asyncDisposePriority: 20,
-      enabled: isQueueEnabled(options, PermissionPublisher.QUEUE_NAME),
     }),
 
     processLogFilesJob: asClass(ProcessLogFilesJob, {
