@@ -1,4 +1,5 @@
 # node-service-template
+# node-service-template
 
 ## Overview
 
@@ -19,11 +20,15 @@ Mechanisms:
 - [Dependency injection](./docs/dependency-injection.md) (using [awilix](https://github.com/jeffijoe/awilix));
 - [Scheduling](./docs/scheduling.md) (using [toad-scheduler](https://github.com/kibertoad/toad-scheduler)
   and [redis-semaphore](https://github.com/swarthy/redis-semaphore));
+- Type-safe message queue handling, using [message-queue-toolkit](https://github.com/kibertoad/message-queue-toolkit) framework;
 - Type-safe [dependency mocking](./src/app.mock.spec.ts) for tests;
 
 Scaffolding:
 
-- [Background jobs](./src/infrastructure/AbstractInMemoryBackgroundJob.ts);
+- [Periodic in-memory jobs](./src/infrastructure/jobs/AbstractPeriodicJob.ts);
+- [Durable enqueued Redis jobs](./src/infrastructure/jobs/AbstractEnqueuedJobProcessor.ts);
+- [API client](./src/integrations/FakeStoreApiClient.ts), using opinionated high-performance [backend client](https://www.npmjs.com/package/@lokalise/backend-http-client), based on [undici](https://www.npmjs.com/package/undici)
+- [AWS configuration loading](./src/infrastructure/aws/awsConfig.ts)
 
 Basic building block examples:
 
