@@ -88,7 +88,7 @@ describe('PermissionsConsumer', () => {
 
       await createUsers(prisma, userIds)
 
-      publisher.publishSync('user_permissions', {
+      publisher.publishSync('permissions', {
         id: 'abc',
         payload: {
           userIds,
@@ -107,14 +107,14 @@ describe('PermissionsConsumer', () => {
 
       expect(usersPermissions).toBeDefined()
       expect(usersPermissions[0]).toHaveLength(2)
-    }, 9999999)
+    })
 
     it('Wait for users to be created and then create permissions', async () => {
       const { userService, permissionsService, prisma } = diContainer.cradle
       const users = await userService.getUsers(testRequestContext, userIds)
       expect(users).toHaveLength(0)
 
-      publisher.publishSync('user_permissions', {
+      publisher.publishSync('permissions', {
         id: 'def',
         type: 'permissions.added',
         payload: {
@@ -151,7 +151,7 @@ describe('PermissionsConsumer', () => {
       const missingUser = partialUsers.pop()
       await createUsers(prisma, partialUsers)
 
-      publisher.publishSync('user_permissions', {
+      publisher.publishSync('permissions', {
         id: 'abcdef',
         payload: {
           userIds,
@@ -192,7 +192,7 @@ describe('PermissionsConsumer', () => {
 
       expect(() =>
         // @ts-expect-error This should be causing a compilation error
-        publisher.publishSync('user_permissions', invalidMessage),
+        publisher.publishSync('permissions', invalidMessage),
       ).toThrowErrorMatchingInlineSnapshot(`
         [ZodError: [
           {

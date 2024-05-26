@@ -12,7 +12,8 @@ import {
   type AmqpAwareEventDefinition,
   AmqpConnectionManager,
   AmqpConsumerErrorResolver,
-  AmqpQueuePublisherManager,
+  AmqpTopicPublisherManager,
+  CommonAmqpTopicPublisherFactory,
 } from '@message-queue-toolkit/amqp'
 import { PrismaClient } from '@prisma/client'
 import type { NameAndRegistrationPair } from 'awilix'
@@ -22,13 +23,10 @@ import { ToadScheduler } from 'toad-scheduler'
 
 import { FakeStoreApiClient } from '../integrations/FakeStoreApiClient.js'
 
-import {
-  type CommonAmqpQueuePublisher,
-  CommonAmqpQueuePublisherFactory,
-} from '@message-queue-toolkit/amqp/dist/lib/CommonAmqpPublisherFactory'
+import type { CommonAmqpTopicPublisher } from '@message-queue-toolkit/amqp'
 import { CommonMetadataFiller, EventRegistry } from '@message-queue-toolkit/core'
 import type z from 'zod'
-import { PermissionsMessages } from '../modules/users/consumers/permissionsMessageShemas'
+import { PermissionsMessages } from '../modules/users/consumers/permissionsMessageSchemas'
 import { getAmqpConfig, getConfig, isTest } from './config.js'
 import type { Config } from './config.js'
 import type { DIOptions } from './diConfigUtils.js'
@@ -43,8 +41,8 @@ const supportedMessages = [
 
 type MessagesPublishPayloadsType = z.infer<(typeof supportedMessages)[number]['publisherSchema']>
 
-export type PublisherManager = AmqpQueuePublisherManager<
-  CommonAmqpQueuePublisher<MessagesPublishPayloadsType>,
+export type PublisherManager = AmqpTopicPublisherManager<
+  CommonAmqpTopicPublisher<MessagesPublishPayloadsType>,
   typeof supportedMessages
 >
 
@@ -184,8 +182,8 @@ export function resolveCommonDiConfig(
       return new EventRegistry(supportedMessages)
     }),
     publisherManager: asFunction((dependencies: CommonDependencies) => {
-      return new AmqpQueuePublisherManager<
-        CommonAmqpQueuePublisher<MessagesPublishPayloadsType>,
+      return new AmqpTopicPublisherManager<
+        CommonAmqpTopicPublisher<MessagesPublishPayloadsType>,
         typeof supportedMessages
       >(
         {
@@ -200,7 +198,7 @@ export function resolveCommonDiConfig(
             serviceId: 'node-service-template',
             defaultVersion: '1.0.0',
           }),
-          publisherFactory: new CommonAmqpQueuePublisherFactory(),
+          publisherFactory: new CommonAmqpTopicPublisherFactory(),
           newPublisherOptions: {
             messageTypeField: 'type',
             messageIdField: 'id',
