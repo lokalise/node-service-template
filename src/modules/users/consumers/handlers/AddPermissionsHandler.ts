@@ -5,7 +5,7 @@ import type z from 'zod'
 import type { RequestContextPreHandlerOutput } from '../../../../infrastructure/prehandlers/requestContextPrehandler.js'
 import type { PermissionsService } from '../../services/PermissionsService.js'
 import type { UserService } from '../../services/UserService.js'
-import type { PermissionsMessages } from '../permissionsMessageShemas'
+import type { PermissionsMessages } from '../permissionsMessageSchemas'
 
 export type AddPermissionsContext = {
   userService: UserService

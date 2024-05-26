@@ -2,7 +2,10 @@ import type { AmqpAwareEventDefinition } from '@message-queue-toolkit/amqp'
 import { enrichMessageSchemaWithBase } from '@message-queue-toolkit/core'
 import z from 'zod'
 
-export const PERMISSIONS_QUEUE = 'user_permissions'
+// Rename into consumer service name when using in real code
+export const SERVICE_TEMPLATE_PERMISSIONS_QUEUE = 'service_template.user_permissions'
+
+export const PERMISSIONS_EXCHANGE = 'permissions'
 
 export const PermissionsMessages = {
   added: {
@@ -14,7 +17,7 @@ export const PermissionsMessages = {
       }),
     ),
     schemaVersion: '1.0.1',
-    queueName: PERMISSIONS_QUEUE,
+    exchange: PERMISSIONS_EXCHANGE,
   },
 
   removed: {
@@ -25,6 +28,6 @@ export const PermissionsMessages = {
         permissions: z.array(z.string()).nonempty().describe('List of user permissions'),
       }),
     ),
-    queueName: PERMISSIONS_QUEUE,
+    exchange: PERMISSIONS_EXCHANGE,
   },
 } as const satisfies Record<string, AmqpAwareEventDefinition>

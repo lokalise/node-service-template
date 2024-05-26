@@ -1,4 +1,4 @@
-import { AbstractAmqpQueueConsumer } from '@message-queue-toolkit/amqp'
+import { AbstractAmqpTopicConsumer } from '@message-queue-toolkit/amqp'
 import { MessageHandlerConfigBuilder } from '@message-queue-toolkit/core'
 
 import { isTest } from '../../../infrastructure/config.js'
@@ -7,12 +7,15 @@ import { createRequestContextPreHandler } from '../../../infrastructure/prehandl
 import type { PermissionsService } from '../services/PermissionsService.js'
 import type { UserService } from '../services/UserService.js'
 import type { UsersInjectableDependencies } from '../userDiConfig.js'
-import { PermissionsMessages } from './permissionsMessageShemas.js'
+import {
+  PERMISSIONS_EXCHANGE,
+  PermissionsMessages,
+  SERVICE_TEMPLATE_PERMISSIONS_QUEUE,
+} from './permissionsMessageSchemas'
 
 import type z from 'zod'
 import { addPermissionsHandler } from './handlers/AddPermissionsHandler.js'
 import { removePermissionsHandler } from './handlers/RemovePermissionsHandler.js'
-import { PERMISSIONS_QUEUE } from './permissionsMessageShemas'
 
 type SupportedMessages =
   | z.infer<typeof PermissionsMessages.added.consumerSchema>
@@ -22,12 +25,13 @@ type ExecutionContext = {
   permissionsService: PermissionsService
 }
 
-export class PermissionConsumer extends AbstractAmqpQueueConsumer<
+export class PermissionConsumer extends AbstractAmqpTopicConsumer<
   SupportedMessages,
   ExecutionContext,
   RequestContextPreHandlerOutput
 > {
-  public static readonly QUEUE_NAME = PERMISSIONS_QUEUE
+  public static readonly QUEUE_NAME = SERVICE_TEMPLATE_PERMISSIONS_QUEUE
+  public static readonly EXCHANGE_NAME = PERMISSIONS_EXCHANGE
 
   constructor(dependencies: UsersInjectableDependencies) {
     super(
@@ -40,7 +44,9 @@ export class PermissionConsumer extends AbstractAmqpQueueConsumer<
       },
       {
         creationConfig: {
+          exchange: PermissionConsumer.EXCHANGE_NAME,
           queueName: PermissionConsumer.QUEUE_NAME,
+          topicPattern: '',
           queueOptions: {
             autoDelete: false,
             durable: true,
