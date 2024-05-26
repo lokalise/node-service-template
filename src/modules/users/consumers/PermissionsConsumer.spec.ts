@@ -88,20 +88,14 @@ describe('PermissionsConsumer', () => {
 
       await createUsers(prisma, userIds)
 
-      publisher.publishSync(
-        'permissions',
-        {
-          id: 'abc',
-          payload: {
-            userIds,
-            permissions: perms,
-          },
-          type: 'permissions.added',
+      publisher.publishSync('permissions', {
+        id: 'abc',
+        payload: {
+          userIds,
+          permissions: perms,
         },
-        {
-          routingKey: '',
-        },
-      )
+        type: 'permissions.added',
+      })
 
       const messageResult = await consumer.handlerSpy.waitForMessageWithId('abc')
       expect(messageResult.processingResult).toBe('consumed')
@@ -120,20 +114,14 @@ describe('PermissionsConsumer', () => {
       const users = await userService.getUsers(testRequestContext, userIds)
       expect(users).toHaveLength(0)
 
-      publisher.publishSync(
-        'permissions',
-        {
-          id: 'def',
-          type: 'permissions.added',
-          payload: {
-            userIds,
-            permissions: perms,
-          },
+      publisher.publishSync('permissions', {
+        id: 'def',
+        type: 'permissions.added',
+        payload: {
+          userIds,
+          permissions: perms,
         },
-        {
-          routingKey: '',
-        },
-      )
+      })
 
       const messageResult = await consumer.handlerSpy.waitForMessageWithId('def')
       expect(messageResult.processingResult).toBe('retryLater')
@@ -163,20 +151,14 @@ describe('PermissionsConsumer', () => {
       const missingUser = partialUsers.pop()
       await createUsers(prisma, partialUsers)
 
-      publisher.publishSync(
-        'permissions',
-        {
-          id: 'abcdef',
-          payload: {
-            userIds,
-            permissions: perms,
-          },
-          type: 'permissions.added',
+      publisher.publishSync('permissions', {
+        id: 'abcdef',
+        payload: {
+          userIds,
+          permissions: perms,
         },
-        {
-          routingKey: '',
-        },
-      )
+        type: 'permissions.added',
+      })
 
       const messageResult = await consumer.handlerSpy.waitForMessageWithId('abcdef', 'retryLater')
       expect(messageResult.processingResult).toBe('retryLater')

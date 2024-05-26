@@ -46,7 +46,6 @@ export class PermissionConsumer extends AbstractAmqpTopicConsumer<
         creationConfig: {
           exchange: PermissionConsumer.EXCHANGE_NAME,
           queueName: PermissionConsumer.QUEUE_NAME,
-          topicPattern: '',
           queueOptions: {
             autoDelete: false,
             durable: true,
