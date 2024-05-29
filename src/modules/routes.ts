@@ -3,8 +3,7 @@ import type http from 'node:http'
 import type { CommonLogger } from '@lokalise/node-core'
 import type { RouteOptions } from 'fastify'
 import type { ZodTypeProvider } from 'fastify-type-provider-zod'
-
-import { getUserRoutes } from './users/index.js'
+import { getUserRoutes } from './users/routes/userRoutes.js'
 
 export type Routes = Array<
   RouteOptions<
