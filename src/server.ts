@@ -12,7 +12,7 @@ if (process.env.NEW_RELIC_ENABLED !== 'false') {
   require('newrelic')
 }
 
-import { name } from '../package.json'
+import packageJson from '../package.json' with { type: 'json' }
 
 import { getApp } from './app.js'
 import type { Config } from './infrastructure/config.js'
@@ -32,7 +32,7 @@ async function start() {
       host: config.app.bindAddress,
       port: config.app.port,
       listenTextResolver: (address) => {
-        return `${name} listening at ${address}`
+        return `${packageJson.name} listening at ${address}`
       },
     })
   } catch (err) {
