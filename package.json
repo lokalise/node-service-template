@@ -92,7 +92,7 @@
     "prisma": "^5.14.0",
     "prisma-lint": "^0.5.0",
     "ts-deepmerge": "^7.0.0",
-    "tsx": "^4.11.0",
+    "tsx": "^4.11.2",
     "typescript": "5.4.5",
     "vitest": "1.6.0",
     "yaml": "^2.4.2"
