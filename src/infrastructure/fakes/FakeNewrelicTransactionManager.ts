@@ -5,9 +5,9 @@ export class FakeNewrelicTransactionManager extends NewRelicTransactionManager {
     super(false)
   }
 
-  addCustomAttribute(): void {}
+  override addCustomAttribute(): void {}
 
-  start(): void {}
+  override start(): void {}
 
-  stop(): void {}
+  override stop(): void {}
 }

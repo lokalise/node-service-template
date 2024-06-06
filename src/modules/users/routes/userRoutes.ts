@@ -1,4 +1,4 @@
-import type { Routes } from 'src/modules/routes'
+import type { Routes } from '../../routes'
 
 import {
   deleteUser,
