@@ -14,7 +14,7 @@ class FakeUserService extends UserService {
     super({} as Dependencies)
   }
 
-  getUser(): Promise<User> {
+  override getUser(): Promise<User> {
     return Promise.resolve({
       id: '-1',
       age: null,
