@@ -11,7 +11,7 @@ import {
   PERMISSIONS_EXCHANGE,
   PermissionsMessages,
   SERVICE_TEMPLATE_PERMISSIONS_QUEUE,
-} from './permissionsMessageSchemas'
+} from './permissionsMessageSchemas.js'
 
 import type z from 'zod'
 import { addPermissionsHandler } from './handlers/AddPermissionsHandler.js'
