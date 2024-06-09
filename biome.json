@@ -23,7 +23,7 @@
       "semicolons": "asNeeded",
       "lineWidth": 100,
       "quoteStyle": "single",
-      "trailingComma": "all"
+      "trailingCommas": "all"
     }
   },
   "files": {
@@ -44,6 +44,15 @@
   },
   "linter": {
     "rules": {
+      "nursery": {
+        "useImportExtensions": "error"
+      },
+      "performance": {
+        "noAccumulatingSpread": "error",
+        "noBarrelFile": "error",
+        "noDelete": "error",
+        "noReExportAll": "error"
+      },
       "style": {
         "noNonNullAssertion": "off",
         "noDefaultExport": "error",

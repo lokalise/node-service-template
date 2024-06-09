@@ -1,5 +1,3 @@
-/* eslint-disable max-statements */
-
 import { EventEmitter } from 'node:events'
 import type http from 'node:http'
 
@@ -20,7 +18,6 @@ import {
   healthcheckMetricsPlugin,
   metricsPlugin,
   newrelicTransactionManagerPlugin,
-  prismaOtelTracingPlugin,
   publicHealthcheckPlugin,
   requestContextProviderPlugin,
 } from '@lokalise/fastify-extras'
@@ -39,7 +36,7 @@ import {
 } from 'fastify-type-provider-zod'
 import type { ZodTypeProvider } from 'fastify-type-provider-zod'
 
-import { getConfig, isDevelopment, isProduction, isTest } from './infrastructure/config.js'
+import { getConfig, isDevelopment, isTest } from './infrastructure/config.js'
 import { errorHandler } from './infrastructure/errors/errorHandler.js'
 import {
   dbHealthCheck,
@@ -287,12 +284,6 @@ export async function getApp(
       appVersion: appConfig.appVersion,
       ...(config.vendors.bugsnag.appType && { appType: config.vendors.bugsnag.appType }),
     },
-  })
-  await app.register(prismaOtelTracingPlugin, {
-    isEnabled: config.vendors.newrelic.isEnabled,
-    samplingRatio: isProduction() ? 0.1 : 1.0,
-    serviceName: config.vendors.newrelic.appName,
-    useBatchSpans: isProduction(),
   })
   await app.register(amplitudePlugin, {
     isEnabled: config.vendors.amplitude.isEnabled,

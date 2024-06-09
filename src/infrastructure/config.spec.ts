@@ -1,5 +1,5 @@
 import { expect, test } from 'vitest'
-import { decodeJwtConfig } from './config'
+import { decodeJwtConfig } from './config.js'
 
 test('replaces double pipe characters with newline', () => {
   const jwtPublicKey = 'key1||key2||key3'

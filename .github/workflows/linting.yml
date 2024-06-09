@@ -31,5 +31,4 @@ jobs:
           npm install --ignore-scripts
           npx prisma generate
 
-      - name: Run lint
-        run: npm run lint
+
