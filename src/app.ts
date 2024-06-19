@@ -185,22 +185,6 @@ export async function getApp(
     },
   })
 
-  await app.register(jwtTokenPlugin, {
-    skipList: new Set([
-      '/login',
-      '/access-token',
-      '/refresh-token',
-      '/documentation',
-      '/documentation/json',
-      '/documentation/static/*',
-      '/documentation/static/index.html',
-      '/documentation/static/swagger-initializer.js',
-      '/',
-      '/health',
-      '/metrics',
-    ]),
-  })
-
   app.setErrorHandler(errorHandler)
 
   registerDependencies(
@@ -271,6 +255,22 @@ export async function getApp(
     }
   }
   await app.register(requestContextProviderPlugin)
+
+  await app.register(jwtTokenPlugin, {
+    skipList: new Set([
+      '/login',
+      '/access-token',
+      '/refresh-token',
+      '/documentation',
+      '/documentation/json',
+      '/documentation/static/*',
+      '/documentation/static/index.html',
+      '/documentation/static/swagger-initializer.js',
+      '/',
+      '/health',
+      '/metrics',
+    ]),
+  })
 
   // Vendor-specific plugins
   await app.register(newrelicTransactionManagerPlugin, {
