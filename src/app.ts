@@ -76,7 +76,7 @@ export type ConfigOverrides = {
   monitoringEnabled?: boolean
 } & PartialDeep<Config>
 
-// biome-ignore lint/complexity/noExcessiveCognitiveComplexity: This is intentional
+// biome-ignore lint/complexity/noExcessiveCognitiveComplexity: This is intentional. Don't remove.
 export async function getApp(
   configOverrides: ConfigOverrides = {},
   dependencyOverrides: DependencyOverrides = {},
@@ -252,6 +252,7 @@ export async function getApp(
       schema: false,
       exposeFailure: false,
     })
+
     await app.register(publicHealthcheckPlugin, {
       url: '/health',
       healthChecks: [
@@ -287,6 +288,7 @@ export async function getApp(
   await app.register(newrelicTransactionManagerPlugin, {
     isEnabled: config.vendors.newrelic.isEnabled,
   })
+
   await app.register(bugsnagPlugin, {
     isEnabled: config.vendors.bugsnag.isEnabled,
     bugsnag: {
@@ -296,6 +298,7 @@ export async function getApp(
       ...(config.vendors.bugsnag.appType && { appType: config.vendors.bugsnag.appType }),
     },
   })
+
   await app.register(amplitudePlugin, {
     isEnabled: config.vendors.amplitude.isEnabled,
     apiKey: config.vendors.amplitude.apiKey,

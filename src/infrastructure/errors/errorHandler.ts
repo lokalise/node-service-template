@@ -1,4 +1,5 @@
 import {
+  type FreeformRecord,
   isInternalError,
   isObject,
   isPublicNonRecoverableError,
@@ -9,7 +10,6 @@ import pino from 'pino'
 import { ZodError } from 'zod'
 
 import type { AppInstance } from '../../app.js'
-import type { FreeformRecord } from '../../schemas/commonTypes.js'
 
 const knownAuthErrors = new Set([
   'FST_JWT_NO_AUTHORIZATION_IN_HEADER',
