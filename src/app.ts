@@ -23,7 +23,7 @@ import {
 } from '@lokalise/fastify-extras'
 import type { CommonLogger } from '@lokalise/node-core'
 import { resolveGlobalErrorLogObject } from '@lokalise/node-core'
-import type { AwilixContainer } from 'awilix'
+import { type AwilixContainer, asFunction } from 'awilix'
 import fastify from 'fastify'
 import type { FastifyInstance } from 'fastify'
 import customHealthCheck from 'fastify-custom-healthcheck'
@@ -35,8 +35,9 @@ import {
   validatorCompiler,
 } from 'fastify-type-provider-zod'
 import type { ZodTypeProvider } from 'fastify-type-provider-zod'
-
-import { getConfig, isDevelopment, isTest } from './infrastructure/config.js'
+import { merge } from 'ts-deepmerge'
+import type { PartialDeep } from 'type-fest'
+import { type Config, getConfig, isDevelopment, isTest } from './infrastructure/config.js'
 import { errorHandler } from './infrastructure/errors/errorHandler.js'
 import {
   dbHealthCheck,
@@ -46,7 +47,7 @@ import {
   wrapHealthCheckForPrometheus,
 } from './infrastructure/healthchecks.js'
 import { resolveLoggerConfiguration } from './infrastructure/logger.js'
-import { registerDependencies } from './infrastructure/parentDiConfig.js'
+import { SINGLETON_CONFIG, registerDependencies } from './infrastructure/parentDiConfig.js'
 import type { DependencyOverrides } from './infrastructure/parentDiConfig.js'
 import { getRoutes } from './modules/routes.js'
 import { jwtTokenPlugin } from './plugins/jwtTokenPlugin.js'
@@ -72,7 +73,7 @@ export type ConfigOverrides = {
   jobsEnabled?: boolean | string[]
   healthchecksEnabled?: boolean
   monitoringEnabled?: boolean
-}
+} & PartialDeep<Config>
 
 // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: This is intentional. Don't remove.
 export async function getApp(
@@ -203,13 +204,22 @@ export async function getApp(
 
   app.setErrorHandler(errorHandler)
 
+  const dependencies: DependencyOverrides = configOverrides
+    ? {
+        ...dependencyOverrides,
+        config: asFunction(() => {
+          return merge(getConfig(), configOverrides) as Config
+        }, SINGLETON_CONFIG),
+      }
+    : dependencyOverrides
+
   registerDependencies(
     configOverrides.diContainer ?? diContainer,
     {
       app,
       logger: app.log,
     },
-    dependencyOverrides,
+    dependencies,
     /**
      * Running consumers and jobs introduces additional overhead and fragility when running tests,
      * so we avoid doing that unless we intend to actually use them
@@ -241,6 +251,7 @@ export async function getApp(
       schema: false,
       exposeFailure: false,
     })
+
     await app.register(publicHealthcheckPlugin, {
       url: '/health',
       healthChecks: [
@@ -276,6 +287,7 @@ export async function getApp(
   await app.register(newrelicTransactionManagerPlugin, {
     isEnabled: config.vendors.newrelic.isEnabled,
   })
+
   await app.register(bugsnagPlugin, {
     isEnabled: config.vendors.bugsnag.isEnabled,
     bugsnag: {
@@ -285,6 +297,7 @@ export async function getApp(
       ...(config.vendors.bugsnag.appType && { appType: config.vendors.bugsnag.appType }),
     },
   })
+
   await app.register(amplitudePlugin, {
     isEnabled: config.vendors.amplitude.isEnabled,
     apiKey: config.vendors.amplitude.apiKey,
