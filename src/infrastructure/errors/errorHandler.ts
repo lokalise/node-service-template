@@ -29,7 +29,7 @@ type ResponseObject = {
 function resolveLogObject(error: unknown): FreeformRecord {
   if (isInternalError(error)) {
     return {
-      message: error.message,
+      msg: error.message,
       code: error.errorCode,
       details: error.details ? JSON.stringify(error.details) : undefined,
       error: pino.stdSerializers.err({
@@ -105,7 +105,14 @@ export const errorHandler = function (
   reply: FastifyReply,
 ): void {
   const logObject = resolveLogObject(error)
-  request.log.error(logObject)
+
+  // Potentially request can break before we resolved the context
+  if (request.reqContext) {
+    // this preserves correct request id field
+    request.reqContext.logger.error(logObject)
+  } else {
+    request.log.error(logObject)
+  }
 
   if (isInternalError(error)) {
     this.diContainer.cradle.errorReporter.report({ error })

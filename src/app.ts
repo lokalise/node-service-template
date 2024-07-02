@@ -35,6 +35,7 @@ import {
   validatorCompiler,
 } from 'fastify-type-provider-zod'
 import type { ZodTypeProvider } from 'fastify-type-provider-zod'
+
 import { merge } from 'ts-deepmerge'
 import type { PartialDeep } from 'type-fest'
 import { type Config, getConfig, isDevelopment, isTest } from './infrastructure/config.js'
