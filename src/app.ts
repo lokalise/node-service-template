@@ -74,6 +74,7 @@ export type ConfigOverrides = {
   monitoringEnabled?: boolean
 }
 
+// biome-ignore lint/complexity/noExcessiveCognitiveComplexity: This is intentional. Don't remove.
 export async function getApp(
   configOverrides: ConfigOverrides = {},
   dependencyOverrides: DependencyOverrides = {},
