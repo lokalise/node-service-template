@@ -1,5 +1,5 @@
 import type { Cradle } from '@fastify/awilix'
-import { generateMonotonicUuid } from '@lokalise/id-utils'
+import { generateUuid7 } from '@lokalise/id-utils'
 import type { AwilixContainer } from 'awilix'
 import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest'
 
@@ -11,6 +11,7 @@ import { TEST_USER_1 } from '../../../../test/fixtures/testUsers.js'
 describe('UserRepository', () => {
   let testContext: TestContext
   let diContainer: AwilixContainer<Cradle>
+
   beforeAll(async () => {
     testContext = await createTestContext()
     diContainer = testContext.diContainer
@@ -28,7 +29,7 @@ describe('UserRepository', () => {
     it('Returns NOT_FOUND for non-existing user', async () => {
       const { userRepository } = diContainer.cradle
 
-      const result = await userRepository.getUser(generateMonotonicUuid())
+      const result = await userRepository.getUser(generateUuid7())
 
       expect(result).toBeNull()
     })
@@ -37,6 +38,7 @@ describe('UserRepository', () => {
       const { userRepository } = diContainer.cradle
       const user = await userRepository.createUser({
         ...TEST_USER_1,
+        id: generateUuid7(),
       })
 
       const result = await userRepository.getUser(user.id)
