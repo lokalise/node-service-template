@@ -6,7 +6,7 @@ CREATE SCHEMA IF NOT EXISTS "user";
 
 -- CreateTable
 CREATE TABLE "post"."post" (
-    "id" VARCHAR(32) NOT NULL,
+    "id" UUID NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
     "title" VARCHAR(255) NOT NULL,
@@ -19,7 +19,7 @@ CREATE TABLE "post"."post" (
 
 -- CreateTable
 CREATE TABLE "user"."profile" (
-    "id" VARCHAR(32) NOT NULL,
+    "id" UUID NOT NULL,
     "bio" TEXT,
     "user_id" TEXT NOT NULL,
 
@@ -28,7 +28,7 @@ CREATE TABLE "user"."profile" (
 
 -- CreateTable
 CREATE TABLE "user"."user" (
-    "id" VARCHAR(32) NOT NULL,
+    "id" UUID NOT NULL,
     "age" INTEGER,
     "email" TEXT NOT NULL,
     "name" TEXT NOT NULL,

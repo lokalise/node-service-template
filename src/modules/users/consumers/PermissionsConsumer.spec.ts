@@ -14,11 +14,12 @@ import { getApp } from '../../../app.js'
 import { SINGLETON_CONFIG } from '../../../infrastructure/parentDiConfig.js'
 import type { PermissionsService } from '../services/PermissionsService.js'
 
+import { generateUuid7 } from '@lokalise/id-utils'
 import type { PublisherManager } from '../../../infrastructure/commonDiConfig.js'
 import { buildQueueMessage } from '../../../utils/queueUtils.js'
 import { PermissionConsumer } from './PermissionConsumer.js'
 
-const userIds = ['100', '200', '300']
+const userIds = [generateUuid7(), generateUuid7(), generateUuid7()]
 const perms: [string, ...string[]] = ['perm1', 'perm2']
 const testRequestContext = createRequestContext()
 
