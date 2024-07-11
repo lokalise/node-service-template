@@ -129,7 +129,7 @@ To initialize your test database and/or apply your latest schema changes.
 
 ### OpenAPI specification
 
-You can access OpenAPI specification of your application, while it is running, by opening [SwaggerUI](http://localhost:3000/documentation)
+You can access OpenAPI specification of your application, while it is running, by opening [/documentation](http://localhost:3000/documentation)
 
 ### Create jwt for dev usage
 
