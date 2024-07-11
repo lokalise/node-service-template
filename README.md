@@ -52,10 +52,10 @@ Service template also comes with a curated set of plugins [installed](./src/app.
 
 - @fastify/helmet (security headers)
 - @fastify/swagger (OpenAPI specification generation)
-- @fastify/swagger-ui (visualizing OpenAPI specification)
 - @fastify/awilix (dependency injection)
 - @fastify/schedule (scheduling background jobs)
 - @fastify/auth (authentication)
+- @scalar/fastify-api-reference (OpenAPI specification website)
 - fastify-graceful-shutdown (handling SEGTERM gracefully)
 - fastify-no-icon (avoiding warnings when sending GET calls via browser)
 - fastify-custom-healthcheck (registering app and dependency healthchecks)
@@ -129,7 +129,7 @@ To initialize your test database and/or apply your latest schema changes.
 
 ### OpenAPI specification
 
-You can access OpenAPI specification of your application, while it is running, by opening [SwaggerUI](http://localhost:3000/documentation)
+You can access OpenAPI specification of your application, while it is running, by opening [/documentation](http://localhost:3000/documentation)
 
 ### Create jwt for dev usage
 

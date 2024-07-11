@@ -14,6 +14,7 @@ For tests there are some overrides defined in [envSetupHook.ts](../test/envSetup
 - `LOG_LEVEL` - logs starting from which level should be emitted. Supported values: `fatal` | `error` | `warn` | `info` | `debug` | `trace` | `silent`
 - (OPTIONAL) `APP_PORT` - port, on which server will be listening for HTTP(S) connections (`3000`)
 - (OPTIONAL) `APP_VERSION` - application version, exposed via healthcheck endpoint (`VERSION_NOT_SET`)
+- (OPTIONAL) `BASE_URL` - URL where the app is available externally, used in OpenAPI specification (default: `http://${APP_BIND_ADDRESS}:{APP_PORT}`)
 - (OPTIONAL) `GIT_COMMIT_SHA` - SHA of a last commit of the deployed version (`COMMIT_SHA_NOT_SET`)
 - `DATABASE_URL` - full DB connection URL. e. g. 'postgresql://serviceuser:pass@localhost:5432/service_db'
 - `JWT_PUBLIC_KEY` - full public key for JWT token validation, with '||' replaced with new lines, e. g.
