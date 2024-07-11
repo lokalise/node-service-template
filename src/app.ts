@@ -10,7 +10,6 @@ import type { Secret } from '@fastify/jwt'
 import fastifyJWT from '@fastify/jwt'
 import fastifySchedule from '@fastify/schedule'
 import fastifySwagger from '@fastify/swagger'
-import fastifySwaggerUi from '@fastify/swagger-ui'
 import {
   amplitudePlugin,
   bugsnagPlugin,
@@ -23,6 +22,7 @@ import {
 } from '@lokalise/fastify-extras'
 import type { CommonLogger } from '@lokalise/node-core'
 import { resolveGlobalErrorLogObject } from '@lokalise/node-core'
+import scalarFastifyApiReference from '@scalar/fastify-api-reference'
 import { type AwilixContainer, asFunction } from 'awilix'
 import fastify from 'fastify'
 import type { FastifyInstance } from 'fastify'
@@ -153,9 +153,11 @@ export async function getApp(
       },
       servers: [
         {
-          url: `http://${
-            appConfig.bindAddress === '0.0.0.0' ? 'localhost' : appConfig.bindAddress
-          }:${appConfig.port}`,
+          url:
+            appConfig.baseUrl ||
+            `http://${
+              appConfig.bindAddress === '0.0.0.0' ? 'localhost' : appConfig.bindAddress
+            }:${appConfig.port}`,
         },
       ],
       components: {
@@ -170,7 +172,13 @@ export async function getApp(
     },
   })
 
-  await app.register(fastifySwaggerUi)
+  await app.register(scalarFastifyApiReference, {
+    routePrefix: '/documentation',
+  })
+  app.get('/documentation/json', { schema: { hide: true } }, () => {
+    return app.swagger()
+  })
+
   await app.register(fastifyAwilixPlugin, {
     disposeOnClose: true,
     asyncDispose: true,
@@ -189,14 +197,13 @@ export async function getApp(
 
   await app.register(jwtTokenPlugin, {
     skipList: new Set([
+      '/favicon.ico',
       '/login',
       '/access-token',
       '/refresh-token',
       '/documentation',
       '/documentation/json',
-      '/documentation/static/*',
-      '/documentation/static/index.html',
-      '/documentation/static/swagger-initializer.js',
+      '/documentation/@scalar/fastify-api-reference/js/browser.js',
       '/',
       '/health',
       '/metrics',
