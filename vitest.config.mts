@@ -8,6 +8,7 @@ export default defineConfig({
         singleThread: true,
       },
     },
+    pool: "threads",
     watch: false,
     environment: 'node',
     setupFiles: ['test/envSetupHook.ts'],

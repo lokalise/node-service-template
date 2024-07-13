@@ -1,4 +1,4 @@
-import { UNKNOWN_RESPONSE_SCHEMA, buildClient, sendGet } from '@lokalise/backend-http-client'
+import { TEST_OPTIONS, buildClient, sendGet } from '@lokalise/backend-http-client'
 import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest'
 
 import { createTestContext } from '../test/TestContext.js'
@@ -51,19 +51,13 @@ describe('app', () => {
 
   describe('metrics', () => {
     it('Returns Prometheus metrics', async () => {
-      const response = await sendGet(buildClient('http://127.0.0.1:9080'), '/metrics', {
-        responseSchema: UNKNOWN_RESPONSE_SCHEMA,
-        requestLabel: 'test',
-      })
+      const response = await sendGet(buildClient('http://127.0.0.1:9080'), '/metrics', TEST_OPTIONS)
 
       expect(response.result.statusCode).toBe(200)
     })
 
     it('Returns Prometheus healthcheck metrics', async () => {
-      const response = await sendGet(buildClient('http://127.0.0.1:9080'), '/metrics', {
-        responseSchema: UNKNOWN_RESPONSE_SCHEMA,
-        requestLabel: 'test',
-      })
+      const response = await sendGet(buildClient('http://127.0.0.1:9080'), '/metrics', TEST_OPTIONS)
 
       expect(response.result.statusCode).toBe(200)
       expect(response.result.body).toContain('redis_availability 1')
