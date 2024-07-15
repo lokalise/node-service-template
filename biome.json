@@ -45,7 +45,22 @@
   "linter": {
     "rules": {
       "nursery": {
-        "useImportExtensions": "error"
+        "useImportExtensions": {
+          "level": "error",
+          "fix": "unsafe",
+          "options": {
+            "suggestedExtensions": {
+              "ts": {
+                "module": "js",
+                "component": "jsx"
+              },
+              "mts": {
+                "module": "mjs",
+                "component": "jsx"
+              }
+            }
+          }
+        }
       },
       "performance": {
         "noAccumulatingSpread": "error",

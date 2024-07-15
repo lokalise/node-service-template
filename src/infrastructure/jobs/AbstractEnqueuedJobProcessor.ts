@@ -7,7 +7,7 @@ import {
 import { SERVICE_NAME, isTest } from '../config.js'
 import type { Dependencies } from '../parentDiConfig.js'
 
-export type BackgroundJobConfig = Omit<BackgroundJobProcessorConfig, 'isTest'>
+export type BackgroundJobConfig = Omit<BackgroundJobProcessorConfig, 'isTest' | 'redisConfig'>
 
 export abstract class AbstractEnqueuedJobProcessor<
   JobPayload extends object & BaseJobPayload,
@@ -17,7 +17,6 @@ export abstract class AbstractEnqueuedJobProcessor<
     super(
       {
         logger: dependencies.logger,
-        redis: dependencies.redis,
         errorReporter: dependencies.errorReporter,
         bullmqFactory: new CommonBullmqFactory(),
         transactionObservabilityManager: dependencies.transactionObservabilityManager,
@@ -28,6 +27,7 @@ export abstract class AbstractEnqueuedJobProcessor<
         queueId: config.queueId,
         queueOptions: config.queueOptions,
         workerOptions: config.workerOptions,
+        redisConfig: dependencies.config.redis,
       },
     )
   }
