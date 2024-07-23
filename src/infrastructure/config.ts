@@ -153,7 +153,7 @@ export function getDbConfig(): DbConfig {
 export function getRedisConfig(): RedisConfig {
   return {
     host: configScope.getMandatory('REDIS_HOST'),
-    db: configScope.getMandatoryValidatedInteger('REDIS_DB', redisDbValidator),
+    keyPrefix: configScope.getMandatory('REDIS_KEY_PREFIX'),
     port: configScope.getMandatoryInteger('REDIS_PORT'),
     username: configScope.getOptionalNullable('REDIS_USERNAME', undefined),
     password: configScope.getOptionalNullable('REDIS_PASSWORD', undefined),

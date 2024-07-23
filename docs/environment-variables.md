@@ -42,7 +42,7 @@ For tests there are some overrides defined in [envSetupHook.ts](../test/envSetup
 - `REDIS_PORT` - Redis DB port
 - `REDIS_USERNAME` - Redis DB username
 - `REDIS_PASSWORD` - Redis DB password
-- `REDIS_DB` - Redis DB database (number in 0-15 range)
+- `REDIS_KEY_PREFIX` - prefix to prepend to all keys in a command
 - (OPTIONAL) `REDIS_USE_TLS` - whether to use https connection (`true`)
 - (OPTIONAL) `REDIS_CONNECT_TIMEOUT` - if set, the milliseconds before a timeout occurs during the initial connection to the Redis server.
 - (OPTIONAL) `REDIS_COMMAND_TIMEOUT` - if set, and a command does not return a reply within a set number of milliseconds, a "Command timed out" error will be thrown.
