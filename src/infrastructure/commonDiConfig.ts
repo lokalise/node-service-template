@@ -69,7 +69,7 @@ export function resolveCommonDiConfig(
 
         return new Redis({
           host: redisConfig.host,
-          db: redisConfig.db,
+          keyPrefix: redisConfig.keyPrefix,
           port: redisConfig.port,
           username: redisConfig.username,
           password: redisConfig.password,
@@ -97,7 +97,7 @@ export function resolveCommonDiConfig(
 
         return new Redis({
           host: redisConfig.host,
-          db: redisConfig.db,
+          keyPrefix: redisConfig.keyPrefix,
           port: redisConfig.port,
           username: redisConfig.username,
           password: redisConfig.password,
@@ -124,7 +124,7 @@ export function resolveCommonDiConfig(
 
         return new Redis({
           host: redisConfig.host,
-          db: redisConfig.db,
+          keyPrefix: redisConfig.keyPrefix,
           port: redisConfig.port,
           username: redisConfig.username,
           password: redisConfig.password,
