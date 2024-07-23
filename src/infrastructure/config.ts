@@ -1,11 +1,10 @@
-import { ConfigScope, createRangeValidator } from '@lokalise/node-core'
+import { ConfigScope } from '@lokalise/node-core'
 import type { RedisConfig } from '@lokalise/node-core'
 
 import type { AwsConfig } from './aws/awsConfig.js'
 import { getAwsConfig } from './aws/awsConfig.js'
 
 const configScope: ConfigScope = new ConfigScope()
-const redisDbValidator = createRangeValidator(0, 15)
 export const SERVICE_NAME = 'node-service-template'
 
 export type IntervalJobConfig = {
@@ -166,7 +165,7 @@ export function getRedisConfig(): RedisConfig {
 export function getSchedulerConfig(): RedisConfig {
   return {
     host: configScope.getMandatory('SCHEDULER_REDIS_HOST'),
-    db: configScope.getMandatoryValidatedInteger('SCHEDULER_REDIS_DB', redisDbValidator),
+    keyPrefix: configScope.getMandatory('SCHEDULER_REDIS_KEY_PREFIX'),
     port: configScope.getMandatoryInteger('SCHEDULER_REDIS_PORT'),
     username: configScope.getOptionalNullable('SCHEDULER_REDIS_USERNAME', undefined),
     password: configScope.getOptionalNullable('SCHEDULER_REDIS_PASSWORD', undefined),

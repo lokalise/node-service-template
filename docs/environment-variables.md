@@ -50,7 +50,7 @@ For tests there are some overrides defined in [envSetupHook.ts](../test/envSetup
 - `SCHEDULER_REDIS_PORT` - scheduling Redis instance port
 - `SCHEDULER_REDIS_USERNAME` - scheduling Redis instance username
 - `SCHEDULER_REDIS_PASSWORD` - scheduling Redis instance password
-- `SCHEDULER_REDIS_DB` - scheduling Redis instance database (number in 0-15 range)
+- `SCHEDULER_REDIS_KEY_PREFIX` - scheduling Redis instance prefix to prepend to all keys in a command
 - (OPTIONAL) `SCHEDULER_REDIS_USE_TLS` - whether to use https connection for scheduling Redis instance (`true`)
 - (OPTIONAL) `SCHEDULER_REDIS_CONNECT_TIMEOUT` - if set, the milliseconds before a timeout occurs during the initial connection to the Redis server.
 - (OPTIONAL) `SCHEDULER_REDIS_COMMAND_TIMEOUT` - if set, and a command does not return a reply within a set number of milliseconds, a "Command timed out" error will be thrown.
