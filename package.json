@@ -47,7 +47,7 @@
     "@lokalise/background-jobs-common": "^4.0.1",
     "@lokalise/fastify-extras": "^21.4.1",
     "@lokalise/id-utils": "^2.1.0",
-    "@lokalise/node-core": "^11.1.0",
+    "@lokalise/node-core": "^11.2.0",
     "@lokalise/zod-extras": "^2.1.0",
     "@message-queue-toolkit/amqp": "^16.0.0",
     "@message-queue-toolkit/core": "^15.1.1",
