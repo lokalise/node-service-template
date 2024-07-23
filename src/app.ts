@@ -326,9 +326,9 @@ export async function getApp(
 
     // Graceful shutdown hook
     if (!isDevelopment()) {
-      app.gracefulShutdown((_signal, next) => {
+      app.gracefulShutdown((_signal) => {
         app.log.info('Starting graceful shutdown')
-        next()
+        return Promise.resolve()
       })
     }
 
