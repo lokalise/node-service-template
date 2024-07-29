@@ -60,7 +60,7 @@
     "amqplib": "^0.10.4",
     "awilix": "^10.0.2",
     "awilix-manager": "^5.4.0",
-    "bullmq": "^5.10.3",
+    "bullmq": "^5.10.4",
     "fastify": "^4.28.1",
     "fastify-custom-healthcheck": "^3.1.0",
     "fastify-graceful-shutdown": "^4.0.1",
