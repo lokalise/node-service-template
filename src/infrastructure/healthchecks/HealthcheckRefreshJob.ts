@@ -1,5 +1,5 @@
 import type { CommonDependencies } from '../commonDiConfig.js'
-import { AbstractPeriodicJob } from '../jobs/AbstractPeriodicJob.jsx'
+import { AbstractPeriodicJob } from '../jobs/AbstractPeriodicJob.js'
 import {
   DbHealthcheck,
   type HealthcheckClass,

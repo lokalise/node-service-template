@@ -32,7 +32,7 @@ import type { Config } from './config.js'
 import type { DIOptions } from './diConfigUtils.js'
 import { FakeAmplitude } from './fakes/FakeAmplitude.js'
 import { FakeNewrelicTransactionManager } from './fakes/FakeNewrelicTransactionManager.js'
-import { HealthcheckRefreshJob } from './healthchecks/HealthcheckRefreshJob.jsx'
+import { HealthcheckRefreshJob } from './healthchecks/HealthcheckRefreshJob.js'
 import { SINGLETON_CONFIG } from './parentDiConfig.js'
 import type { ExternalDependencies } from './parentDiConfig.js'
 
