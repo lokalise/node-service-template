@@ -33,6 +33,11 @@ export type BackgroundJobConfiguration = {
      * By default, the lock TTL is 2 * intervalInMs, to prevent the lock from expiring before the next execution.
      */
     lockTimeout?: number
+
+    /**
+     * Lock will be reset to this value after success, so that other node could potentially acquire the lock after it expires, but in order to prevent immediate acquire
+     */
+    lockTimeoutAfterSuccess?: number
   }
   /**
    * If true, the job will log when it starts and finishes.
@@ -166,7 +171,13 @@ export abstract class AbstractPeriodicJob {
       }
     } finally {
       // stop auto-refreshing the lock to let it expire
-      this.singleConsumerLock?.stopRefresh()
+      if (this.singleConsumerLock) {
+        await this.updateMutex(
+          this.singleConsumerLock,
+          this.options.singleConsumerMode.lockTimeoutAfterSuccess ?? this.options.intervalInMs,
+        )
+        this.singleConsumerLock.stopRefresh()
+      }
 
       if (this.options.shouldLogExecution) logger.info(`Periodic job finished`)
       this.transactionObservabilityManager.stop(executionUuid)
@@ -193,6 +204,25 @@ export abstract class AbstractPeriodicJob {
     }
 
     return mutex
+  }
+
+  protected async updateMutex(
+    mutex: Mutex,
+    newLockTimeout: number,
+    key: string = DEFAULT_LOCK_NAME,
+  ) {
+    const newMutex = new Mutex(this.redis, this.getJobLockName(key), {
+      acquiredExternally: true,
+      identifier: mutex.identifier,
+      lockTimeout: newLockTimeout,
+    })
+
+    const lock = await newMutex.tryAcquire()
+    if (!lock) {
+      return
+    }
+
+    return newMutex
   }
 
   protected getJobLockName(key: string) {
