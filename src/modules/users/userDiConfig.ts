@@ -14,7 +14,6 @@ import { UserDataSource } from './datasources/UserDataSource.js'
 import { UserImportJob } from './job-queue-processors/UserImportJob.js'
 import { DeleteOldUsersJob } from './periodic-jobs/DeleteOldUsersJob.js'
 import { ProcessLogFilesJob } from './periodic-jobs/ProcessLogFilesJob.js'
-import { SendEmailsJob } from './periodic-jobs/SendEmailsJob.js'
 import { UserRepository } from './repositories/UserRepository.js'
 import { PermissionsService } from './services/PermissionsService.js'
 import { UserService } from './services/UserService.js'
@@ -41,7 +40,6 @@ export type UsersModuleDependencies = {
 
   deleteOldUsersJob: DeleteOldUsersJob
   processLogFilesJob: ProcessLogFilesJob
-  sendEmailsJob: SendEmailsJob
 
   userImportJob: UserImportJob
 }
@@ -108,11 +106,6 @@ export function resolveUsersConfig(options: DIOptions): UsersDiConfig {
       lifetime: Lifetime.SINGLETON,
       eagerInject: 'register',
       enabled: isJobEnabled(options, DeleteOldUsersJob.JOB_NAME),
-    }),
-    sendEmailsJob: asClass(SendEmailsJob, {
-      lifetime: Lifetime.SINGLETON,
-      eagerInject: 'register',
-      enabled: isJobEnabled(options, SendEmailsJob.JOB_NAME),
     }),
 
     userImportJob: asClass(UserImportJob, {

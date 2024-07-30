@@ -24,11 +24,11 @@ export class DeleteOldUsersJob extends AbstractPeriodicJob {
     this.config = dependencies.config.jobs.deleteOldUsersJob
   }
 
-  public register() {
+  public override register() {
     const task = createTask(this.logger, this)
     this.scheduler.addSimpleIntervalJob(
       new SimpleIntervalJob({ seconds: this.config.periodInSeconds }, task, {
-        id: this.jobId,
+        id: this.options.jobId,
         preventOverrun: true,
       }),
     )

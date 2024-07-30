@@ -32,6 +32,7 @@ import type { Config } from './config.js'
 import type { DIOptions } from './diConfigUtils.js'
 import { FakeAmplitude } from './fakes/FakeAmplitude.js'
 import { FakeNewrelicTransactionManager } from './fakes/FakeNewrelicTransactionManager.js'
+import { HealthcheckRefreshJob } from './healthchecks/HealthcheckRefreshJob.jsx'
 import { SINGLETON_CONFIG } from './parentDiConfig.js'
 import type { ExternalDependencies } from './parentDiConfig.js'
 
@@ -233,6 +234,8 @@ export function resolveCommonDiConfig(
       } satisfies ErrorReporter
     }),
     fakeStoreApiClient: asClass(FakeStoreApiClient, SINGLETON_CONFIG),
+
+    healthcheckRefreshJob: asClass(HealthcheckRefreshJob, SINGLETON_CONFIG),
   }
 }
 
@@ -259,4 +262,5 @@ export type CommonDependencies = {
   consumerErrorResolver: ErrorResolver
 
   fakeStoreApiClient: FakeStoreApiClient
+  healthcheckRefreshJob: HealthcheckRefreshJob
 }

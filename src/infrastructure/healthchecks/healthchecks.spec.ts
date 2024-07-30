@@ -3,10 +3,10 @@ import { asFunction } from 'awilix'
 import type { FastifyInstance } from 'fastify'
 import type Redis from 'ioredis'
 import { afterEach, beforeEach, describe, expect, it } from 'vitest'
-import type { AppInstance } from '../app.js'
-import { getApp } from '../app.js'
+import type { AppInstance } from '../../app.js'
+import { getApp } from '../../app.js'
 
-import { dbHealthCheck, redisHealthCheck } from './healthchecks.js'
+import { dbHealthCheck, redisHealthCheck } from './healthchecksWrappers.js'
 
 const createRedisMock = (pingLatency: number, response = 'PONG') =>
   ({
