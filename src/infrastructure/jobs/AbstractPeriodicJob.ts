@@ -56,6 +56,12 @@ export type LockConfiguration = {
 export function createTask(logger: FastifyBaseLogger, job: AbstractPeriodicJob) {
   const executorId = randomUUID()
 
+  logger.info({
+    msg: 'Periodic job registered',
+    jobId: job.options.jobId,
+    executorId,
+  })
+
   return new AsyncTask(
     job.options.jobId,
     () => {
@@ -189,21 +195,32 @@ export abstract class AbstractPeriodicJob {
   }
 
   protected async tryAcquireExclusiveLock(lockConfiguration?: LockConfiguration) {
-    const mutex = this.getJobMutex(lockConfiguration?.lockName ?? DEFAULT_LOCK_NAME, {
+    const mutexOptions = {
       acquireAttemptsLimit: 1,
       refreshInterval: lockConfiguration?.refreshInterval,
       acquiredExternally: lockConfiguration?.acquiredExternally,
-      identifier: lockConfiguration?.acquiredExternally ? lockConfiguration?.identifier : undefined,
+      identifier: lockConfiguration?.identifier,
       lockTimeout: lockConfiguration?.lockTimeout ?? this.options.singleConsumerMode.lockTimeout,
-    })
+    }
 
-    const lock = await mutex.tryAcquire()
+    let lock = this.getJobMutex(lockConfiguration?.lockName ?? DEFAULT_LOCK_NAME, mutexOptions)
+    let acquired = await lock.tryAcquire()
+
+    // If lock has been acquired previously by this instance, try to refresh
+    if (!acquired && lockConfiguration?.identifier) {
+      lock = this.getJobMutex(lockConfiguration?.lockName ?? DEFAULT_LOCK_NAME, {
+        ...mutexOptions,
+        acquiredExternally: true,
+      })
+      acquired = await lock.tryAcquire()
+    }
+
     // If someone else already has this lock, skip
-    if (!lock) {
+    if (!acquired) {
       return
     }
 
-    return mutex
+    return lock
   }
 
   protected async updateMutex(
