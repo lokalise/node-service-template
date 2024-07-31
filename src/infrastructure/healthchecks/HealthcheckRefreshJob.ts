@@ -1,19 +1,15 @@
 import type { CommonDependencies } from '../commonDiConfig.js'
 import { AbstractPeriodicJob } from '../jobs/AbstractPeriodicJob.js'
-import {
-  DbHealthcheck,
-  type HealthcheckClass,
-  RedisHealthcheck,
-  type SupportedHealthchecks,
-} from './healthchecks.js'
+import type { HealthcheckClass, SupportedHealthchecks } from './healthchecks.js'
 
 export class HealthcheckRefreshJob extends AbstractPeriodicJob {
+  public static JOB_NAME = 'HealthcheckRefreshJob'
   private readonly healthCheckers: Record<SupportedHealthchecks, HealthcheckClass>
 
   constructor(dependencies: CommonDependencies) {
     super(
       {
-        jobId: HealthcheckRefreshJob.name,
+        jobId: HealthcheckRefreshJob.JOB_NAME,
         intervalInMs: 10000,
         singleConsumerMode: {
           enabled: true,
@@ -23,8 +19,8 @@ export class HealthcheckRefreshJob extends AbstractPeriodicJob {
     )
 
     this.healthCheckers = {
-      redis: new RedisHealthcheck(dependencies),
-      postgresql: new DbHealthcheck(dependencies),
+      redis: dependencies.redisHealthcheck,
+      postgresql: dependencies.dbHealthcheck,
     }
   }
 

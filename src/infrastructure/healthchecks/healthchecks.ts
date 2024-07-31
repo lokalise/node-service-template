@@ -12,6 +12,20 @@ export type SupportedHealthchecks = 'redis' | 'postgresql'
 export const healthcheckResultStore = new FifoMap<boolean>(5, 20)
 export const healthcheckLatencyStore = new FifoMap<number | undefined>(5, 20)
 
+export function getHealthcheckResult(healthcheck: SupportedHealthchecks): boolean {
+  // if we don't yet have results, we consider that to be a success, in order to avoid arbitrary restarts
+  return healthcheckResultStore.get(healthcheck) !== false
+}
+
+export function getHealthcheckLatency(healthcheck: SupportedHealthchecks): number | undefined {
+  return healthcheckLatencyStore.get(healthcheck)
+}
+
+export function resetHealthcheckStores() {
+  healthcheckResultStore.clear()
+  healthcheckLatencyStore.clear()
+}
+
 export type HealthcheckClass = {
   id: SupportedHealthchecks
   areMetricsEnabled: boolean

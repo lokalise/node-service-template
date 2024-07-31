@@ -3,7 +3,7 @@ import type { Either } from '@lokalise/node-core'
 import type { FastifyInstance } from 'fastify'
 
 import type { AppInstance } from '../../app.js'
-import { type SupportedHealthchecks, healthcheckResultStore } from './healthchecks.js'
+import { getHealthcheckResult } from './healthchecks.js'
 
 export const wrapHealthCheck = (app: AppInstance, healthCheck: HealthChecker) => {
   return async () => {
@@ -15,18 +15,18 @@ export const wrapHealthCheck = (app: AppInstance, healthCheck: HealthChecker) =>
 }
 
 export const redisHealthCheck: HealthChecker = (): Promise<Either<Error, true>> => {
-  const dbResult = healthcheckResultStore.get('redis' satisfies SupportedHealthchecks)
+  const redisResult = getHealthcheckResult('redis')
 
-  if (dbResult === false) {
+  if (redisResult === false) {
     return Promise.resolve({
-      error: new Error('DB healthcheck got an unexpected response'),
+      error: new Error('Redis did not respond with PONG'),
     })
   }
   return Promise.resolve({ result: true })
 }
 
 export const dbHealthCheck: HealthChecker = (): Promise<Either<Error, true>> => {
-  const dbResult = healthcheckResultStore.get('postgresql' satisfies SupportedHealthchecks)
+  const dbResult = getHealthcheckResult('postgresql')
 
   if (dbResult === false) {
     return Promise.resolve({
