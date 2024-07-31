@@ -11,9 +11,6 @@ export class HealthcheckRefreshJob extends AbstractPeriodicJob {
       {
         jobId: HealthcheckRefreshJob.JOB_NAME,
         intervalInMs: 10000,
-        singleConsumerMode: {
-          enabled: true,
-        },
       },
       dependencies,
     )

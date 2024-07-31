@@ -6,7 +6,6 @@ import { afterEach, beforeEach, describe, expect, it } from 'vitest'
 import type { AppInstance } from '../../app.js'
 import { getApp } from '../../app.js'
 
-import { cleanRedis } from '../../../test/RedisCleaner.js'
 import { resetHealthcheckStores } from './healthchecks.js'
 import { dbHealthCheck, redisHealthCheck } from './healthchecksWrappers.js'
 
@@ -36,7 +35,6 @@ describe('healthcheck', () => {
       jobsEnabled: false,
     })
     resetHealthcheckStores()
-    await cleanRedis(app.diContainer.cradle.redis)
   })
 
   afterEach(async () => {
