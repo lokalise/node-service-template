@@ -1,3 +1,4 @@
+import { PromisePool } from '@supercharge/promise-pool'
 import type { CommonDependencies } from '../commonDiConfig.js'
 import { AbstractPeriodicJob } from '../jobs/AbstractPeriodicJob.js'
 import type { Healthcheck, SupportedHealthchecks } from './healthchecks.js'
@@ -21,10 +22,11 @@ export class HealthcheckRefreshJob extends AbstractPeriodicJob {
     this.healthCheckers = dependencies.healthchecks
   }
 
-  protected processInternal(_executionUuid: string): Promise<unknown> {
-    return Promise.all([
-      this.healthCheckers.postgres.execute(),
-      this.healthCheckers.redis.execute(),
-    ])
+  protected async processInternal(_executionUuid: string): Promise<void> {
+    await PromisePool.withConcurrency(2)
+      .for(Object.values(this.healthCheckers))
+      .process(async (healthcheck) => {
+        await healthcheck.execute()
+      })
   }
 }

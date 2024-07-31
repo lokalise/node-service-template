@@ -247,13 +247,8 @@ export function resolveCommonDiConfig(
       enabled: isJobEnabled(options, HealthcheckRefreshJob.JOB_NAME),
     }),
 
-    dbHealthcheck: asFunction((dependencies: CommonDependencies) => {
-      return new DbHealthcheck(dependencies)
-    }),
-
-    redisHealthcheck: asFunction((dependencies: CommonDependencies) => {
-      return new RedisHealthcheck(dependencies)
-    }),
+    dbHealthcheck: asClass(DbHealthcheck, SINGLETON_CONFIG),
+    redisHealthcheck: asClass(RedisHealthcheck, SINGLETON_CONFIG),
 
     healthchecks: asFunction((dependencies: CommonDependencies) => {
       return {
