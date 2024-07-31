@@ -33,7 +33,12 @@ import { type DIOptions, isJobEnabled } from './diConfigUtils.js'
 import { FakeAmplitude } from './fakes/FakeAmplitude.js'
 import { FakeNewrelicTransactionManager } from './fakes/FakeNewrelicTransactionManager.js'
 import { HealthcheckRefreshJob } from './healthchecks/HealthcheckRefreshJob.js'
-import { DbHealthcheck, RedisHealthcheck } from './healthchecks/healthchecks.js'
+import {
+  DbHealthcheck,
+  type Healthcheck,
+  RedisHealthcheck,
+  type SupportedHealthchecks,
+} from './healthchecks/healthchecks.js'
 import { SINGLETON_CONFIG } from './parentDiConfig.js'
 import type { ExternalDependencies } from './parentDiConfig.js'
 
@@ -249,6 +254,13 @@ export function resolveCommonDiConfig(
     redisHealthcheck: asFunction((dependencies: CommonDependencies) => {
       return new RedisHealthcheck(dependencies)
     }),
+
+    healthchecks: asFunction((dependencies: CommonDependencies) => {
+      return {
+        redis: dependencies.redisHealthcheck,
+        postgres: dependencies.dbHealthcheck,
+      }
+    }),
   }
 }
 
@@ -278,4 +290,5 @@ export type CommonDependencies = {
   healthcheckRefreshJob: HealthcheckRefreshJob
   redisHealthcheck: RedisHealthcheck
   dbHealthcheck: DbHealthcheck
+  healthchecks: Record<SupportedHealthchecks, Healthcheck>
 }

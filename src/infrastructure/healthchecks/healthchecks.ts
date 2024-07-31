@@ -63,7 +63,7 @@ export function resetHealthcheckStores() {
   healthcheckStore.clear()
 }
 
-export type HealthcheckClass = {
+export type Healthcheck = {
   areMetricsEnabled: boolean
 
   instantiateMetrics: () => void
@@ -72,7 +72,7 @@ export type HealthcheckClass = {
   storeResult: (result: Either<Error, number>) => void
 }
 
-export abstract class AbstractHealthcheck implements HealthcheckClass {
+export abstract class AbstractHealthcheck implements Healthcheck {
   readonly areMetricsEnabled: boolean
 
   // returns execution time in msecs if successful
@@ -126,7 +126,7 @@ export abstract class AbstractHealthcheck implements HealthcheckClass {
   }
 }
 
-export class RedisHealthcheck extends AbstractHealthcheck implements HealthcheckClass {
+export class RedisHealthcheck extends AbstractHealthcheck implements Healthcheck {
   private readonly redis: Redis
 
   constructor({ redis, config }: CommonDependencies) {
@@ -155,7 +155,7 @@ export class RedisHealthcheck extends AbstractHealthcheck implements Healthcheck
   }
 }
 
-export class DbHealthcheck extends AbstractHealthcheck implements HealthcheckClass {
+export class DbHealthcheck extends AbstractHealthcheck implements Healthcheck {
   private readonly prisma: PrismaClient
 
   constructor({ config, prisma }: CommonDependencies) {
