@@ -12,8 +12,6 @@ import { dbHealthCheck, redisHealthCheck } from './healthchecksWrappers.js'
 const createRedisMock = (pingLatency: number, response = 'PONG') =>
   ({
     ping: () => new Promise((resolve) => setTimeout(resolve, pingLatency, response)),
-    // set: () => Promise.resolve(),
-    // get: () => Promise.resolve('dummy')
   }) as Pick<Redis, 'ping'>
 
 const createPrismaMock = (shouldSucceed: boolean) =>
