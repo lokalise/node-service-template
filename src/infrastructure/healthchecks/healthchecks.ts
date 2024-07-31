@@ -9,21 +9,58 @@ import type { CommonDependencies } from '../commonDiConfig.js'
 
 export type SupportedHealthchecks = 'redis' | 'postgres'
 
-export const healthcheckResultStore = new FifoMap<boolean>(5, 20)
-export const healthcheckLatencyStore = new FifoMap<number | undefined>(5, 20)
+export type HealthcheckEntry = {
+  isSuccessful?: boolean
+  errorMessage?: string
+  checkTimestamp: Date
+  latency?: number
+}
 
+const STALENESS_THRESHOLD = 30000 // 30 seconds
+export const healthcheckStore = new FifoMap<HealthcheckEntry>(5, 20000)
+
+function isLessThanMSecsAgo(givenDate: Date, deltaInMsecs: number) {
+  return Date.now() - givenDate.getTime() < deltaInMsecs
+}
+
+/**
+ * Returns true if check is passing, false if not
+ */
 export function getHealthcheckResult(healthcheck: SupportedHealthchecks): boolean {
-  // if we don't yet have results, we consider that to be a success, in order to avoid arbitrary restarts
-  return healthcheckResultStore.get(healthcheck) !== false
+  const healthcheckEntry = healthcheckStore.get(healthcheck)
+  // If we don't have any results yet, we assume service is healthy
+  if (!healthcheckEntry) {
+    const emptyEntry: HealthcheckEntry = {
+      checkTimestamp: new Date(),
+    }
+    healthcheckStore.set(healthcheck, emptyEntry)
+    return true
+  }
+
+  if (healthcheckEntry.isSuccessful) {
+    return true
+  }
+
+  if (healthcheckEntry.isSuccessful === false) {
+    return false
+  }
+
+  // If we still don't have healthcheck results, check how old the undefined state is
+  // If it is very stale, assume check is broken and report unhealthy service
+  return isLessThanMSecsAgo(healthcheckEntry.checkTimestamp, STALENESS_THRESHOLD)
 }
 
 export function getHealthcheckLatency(healthcheck: SupportedHealthchecks): number | undefined {
-  return healthcheckLatencyStore.get(healthcheck)
+  const healthcheckEntry = healthcheckStore.get(healthcheck)
+  if (!healthcheckEntry) {
+    return undefined
+  }
+
+  return healthcheckEntry.latency
 }
 
 export function resetHealthcheckStores() {
-  healthcheckResultStore.clear()
-  healthcheckLatencyStore.clear()
+  healthcheckStore.clear()
 }
 
 export type HealthcheckClass = {
@@ -80,13 +117,12 @@ export abstract class AbstractHealthcheck implements HealthcheckClass {
   }
   storeResult(result: Either<Error, number>): void {
     const id = this.getId()
-    healthcheckResultStore.set(id, !result.error)
-
-    if (result.error) {
-      healthcheckLatencyStore.set(id, undefined)
-    } else {
-      healthcheckLatencyStore.set(id, result.result!)
-    }
+    healthcheckStore.set(id, {
+      latency: result.error ? undefined : result.result,
+      checkTimestamp: new Date(),
+      isSuccessful: !result.error,
+      errorMessage: result.error ? result.error.message : undefined,
+    })
   }
 }
 
