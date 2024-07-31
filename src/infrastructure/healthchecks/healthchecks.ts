@@ -7,7 +7,7 @@ import type Redis from 'ioredis'
 import { FifoMap } from 'toad-cache'
 import type { CommonDependencies } from '../commonDiConfig.js'
 
-export type SupportedHealthchecks = 'redis' | 'postgresql'
+export type SupportedHealthchecks = 'redis' | 'postgres'
 
 export const healthcheckResultStore = new FifoMap<boolean>(5, 20)
 export const healthcheckLatencyStore = new FifoMap<number | undefined>(5, 20)
@@ -27,7 +27,6 @@ export function resetHealthcheckStores() {
 }
 
 export type HealthcheckClass = {
-  id: SupportedHealthchecks
   areMetricsEnabled: boolean
 
   instantiateMetrics: () => void
@@ -38,35 +37,41 @@ export type HealthcheckClass = {
 
 export abstract class AbstractHealthcheck implements HealthcheckClass {
   readonly areMetricsEnabled: boolean
-  abstract id: SupportedHealthchecks
 
   // returns execution time in msecs if successful
   abstract check(): Promise<Either<Error, number>>
 
+  abstract getId(): SupportedHealthchecks
+
   constructor(areMetricsEnabled: boolean) {
     this.areMetricsEnabled = areMetricsEnabled
+
+    if (areMetricsEnabled) {
+      this.instantiateMetrics()
+    }
   }
 
   instantiateMetrics(): void {
-    if (this.areMetricsEnabled) {
-      const id = this.id
-      new Gauge({
-        name: `${this.id}_availability`,
-        help: `Whether ${this.id} was available at the time`,
-        collect() {
-          const checkResult = healthcheckResultStore.get(id)
-          this.set(checkResult !== false ? 1 : 0)
-        },
-      })
-      new Gauge({
-        name: `${this.id}_latency_msecs`,
-        help: `How long the healthcheck for ${this.id} took`,
-        collect() {
-          const checkLength = healthcheckLatencyStore.get(id)
-          this.set(checkLength ?? 0)
-        },
-      })
+    if (!this.areMetricsEnabled) {
+      return
     }
+    const id = this.getId()
+    new Gauge({
+      name: `${id}_availability`,
+      help: `Whether ${id} was available at the time`,
+      collect() {
+        const checkResult = getHealthcheckResult(id)
+        this.set(checkResult !== false ? 1 : 0)
+      },
+    })
+    new Gauge({
+      name: `${id}_latency_msecs`,
+      help: `How long the healthcheck for ${id} took`,
+      collect() {
+        const checkLength = getHealthcheckLatency(id)
+        this.set(checkLength ?? 0)
+      },
+    })
   }
 
   async execute(): Promise<void> {
@@ -74,24 +79,27 @@ export abstract class AbstractHealthcheck implements HealthcheckClass {
     this.storeResult(result)
   }
   storeResult(result: Either<Error, number>): void {
-    healthcheckResultStore.set(this.id, !result.error)
+    const id = this.getId()
+    healthcheckResultStore.set(id, !result.error)
 
     if (result.error) {
-      healthcheckLatencyStore.set(this.id, undefined)
+      healthcheckLatencyStore.set(id, undefined)
     } else {
-      healthcheckLatencyStore.set(this.id, result.result!)
+      healthcheckLatencyStore.set(id, result.result!)
     }
   }
 }
 
 export class RedisHealthcheck extends AbstractHealthcheck implements HealthcheckClass {
-  id = 'redis' as const
-
   private readonly redis: Redis
 
   constructor({ redis, config }: CommonDependencies) {
     super(config.app.metrics.isEnabled)
     this.redis = redis
+  }
+
+  getId(): SupportedHealthchecks {
+    return 'redis'
   }
 
   async check(): Promise<Either<Error, number>> {
@@ -112,12 +120,15 @@ export class RedisHealthcheck extends AbstractHealthcheck implements Healthcheck
 }
 
 export class DbHealthcheck extends AbstractHealthcheck implements HealthcheckClass {
-  id = 'postgresql' as const
   private readonly prisma: PrismaClient
 
   constructor({ config, prisma }: CommonDependencies) {
     super(config.app.metrics.isEnabled)
     this.prisma = prisma
+  }
+
+  getId(): SupportedHealthchecks {
+    return 'postgres'
   }
 
   async check(): Promise<Either<Error, number>> {

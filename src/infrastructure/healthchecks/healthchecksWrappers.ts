@@ -26,7 +26,7 @@ export const redisHealthCheck: HealthChecker = (): Promise<Either<Error, true>> 
 }
 
 export const dbHealthCheck: HealthChecker = (): Promise<Either<Error, true>> => {
-  const dbResult = getHealthcheckResult('postgresql')
+  const dbResult = getHealthcheckResult('postgres')
 
   if (dbResult === false) {
     return Promise.resolve({

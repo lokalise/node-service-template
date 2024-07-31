@@ -37,7 +37,7 @@ describe('HealthcheckRefreshJob', () => {
   it('updates successful db healthcheck', async () => {
     await job.process(randomUUID())
     const healthcheckSuccess = await dbHealthCheck(app as unknown as FastifyInstance)
-    const healthcheckResult = getHealthcheckResult('postgresql')
+    const healthcheckResult = getHealthcheckResult('postgres')
 
     expect(healthcheckSuccess.result).toBe(true)
     expect(healthcheckResult).toBe(true)

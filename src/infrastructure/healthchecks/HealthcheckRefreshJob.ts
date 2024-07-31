@@ -20,13 +20,13 @@ export class HealthcheckRefreshJob extends AbstractPeriodicJob {
 
     this.healthCheckers = {
       redis: dependencies.redisHealthcheck,
-      postgresql: dependencies.dbHealthcheck,
+      postgres: dependencies.dbHealthcheck,
     }
   }
 
   protected processInternal(_executionUuid: string): Promise<unknown> {
     return Promise.all([
-      this.healthCheckers.postgresql.execute(),
+      this.healthCheckers.postgres.execute(),
       this.healthCheckers.redis.execute(),
     ])
   }
