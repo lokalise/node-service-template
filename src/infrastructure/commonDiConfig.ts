@@ -29,9 +29,16 @@ import type z from 'zod'
 import { PermissionsMessages } from '../modules/users/consumers/permissionsMessageSchemas.js'
 import { getAmqpConfig, getConfig, isTest } from './config.js'
 import type { Config } from './config.js'
-import type { DIOptions } from './diConfigUtils.js'
+import { type DIOptions, isJobEnabled } from './diConfigUtils.js'
 import { FakeAmplitude } from './fakes/FakeAmplitude.js'
 import { FakeNewrelicTransactionManager } from './fakes/FakeNewrelicTransactionManager.js'
+import { HealthcheckRefreshJob } from './healthchecks/HealthcheckRefreshJob.js'
+import {
+  DbHealthcheck,
+  type Healthcheck,
+  RedisHealthcheck,
+  type SupportedHealthchecks,
+} from './healthchecks/healthchecks.js'
 import { SINGLETON_CONFIG } from './parentDiConfig.js'
 import type { ExternalDependencies } from './parentDiConfig.js'
 
@@ -233,6 +240,27 @@ export function resolveCommonDiConfig(
       } satisfies ErrorReporter
     }),
     fakeStoreApiClient: asClass(FakeStoreApiClient, SINGLETON_CONFIG),
+
+    healthcheckRefreshJob: asClass(HealthcheckRefreshJob, {
+      lifetime: Lifetime.SINGLETON,
+      eagerInject: 'register',
+      enabled: isJobEnabled(options, HealthcheckRefreshJob.JOB_NAME),
+    }),
+
+    dbHealthcheck: asFunction((dependencies: CommonDependencies) => {
+      return new DbHealthcheck(dependencies)
+    }),
+
+    redisHealthcheck: asFunction((dependencies: CommonDependencies) => {
+      return new RedisHealthcheck(dependencies)
+    }),
+
+    healthchecks: asFunction((dependencies: CommonDependencies) => {
+      return {
+        redis: dependencies.redisHealthcheck,
+        postgres: dependencies.dbHealthcheck,
+      }
+    }),
   }
 }
 
@@ -259,4 +287,8 @@ export type CommonDependencies = {
   consumerErrorResolver: ErrorResolver
 
   fakeStoreApiClient: FakeStoreApiClient
+  healthcheckRefreshJob: HealthcheckRefreshJob
+  redisHealthcheck: RedisHealthcheck
+  dbHealthcheck: DbHealthcheck
+  healthchecks: Record<SupportedHealthchecks, Healthcheck>
 }

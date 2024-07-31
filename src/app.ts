@@ -14,7 +14,6 @@ import {
   amplitudePlugin,
   bugsnagPlugin,
   getRequestIdFastifyAppConfig,
-  healthcheckMetricsPlugin,
   metricsPlugin,
   newrelicTransactionManagerPlugin,
   publicHealthcheckPlugin,
@@ -38,15 +37,13 @@ import type { ZodTypeProvider } from 'fastify-type-provider-zod'
 
 import { merge } from 'ts-deepmerge'
 import type { PartialDeep } from 'type-fest'
-import { type Config, getConfig, isDevelopment, isTest } from './infrastructure/config.js'
+import { type Config, getConfig, isDevelopment } from './infrastructure/config.js'
 import { errorHandler } from './infrastructure/errors/errorHandler.js'
 import {
   dbHealthCheck,
   redisHealthCheck,
   registerHealthChecks,
-  runAllHealthchecks,
-  wrapHealthCheckForPrometheus,
-} from './infrastructure/healthchecks.js'
+} from './infrastructure/healthchecks/healthchecksWrappers.js'
 import { resolveLoggerConfiguration } from './infrastructure/logger.js'
 import { SINGLETON_CONFIG, registerDependencies } from './infrastructure/parentDiConfig.js'
 import type { DependencyOverrides } from './infrastructure/parentDiConfig.js'
@@ -76,7 +73,7 @@ export type ConfigOverrides = {
   monitoringEnabled?: boolean
 } & PartialDeep<Config>
 
-// biome-ignore lint/complexity/noExcessiveCognitiveComplexity: This is intentional. Don't remove.
+// do not delete // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: This is intentional. Don't remove.
 export async function getApp(
   configOverrides: ConfigOverrides = {},
   dependencyOverrides: DependencyOverrides = {},
@@ -279,15 +276,6 @@ export async function getApp(
         gitCommitSha: appConfig.gitCommitSha,
       },
     })
-
-    if (configOverrides.monitoringEnabled) {
-      await app.register(healthcheckMetricsPlugin, {
-        healthChecks: [
-          wrapHealthCheckForPrometheus(redisHealthCheck, 'redis'),
-          wrapHealthCheckForPrometheus(dbHealthCheck, 'postgres'),
-        ],
-      })
-    }
   }
   await app.register(requestContextProviderPlugin)
 
@@ -339,9 +327,6 @@ export async function getApp(
 
   try {
     await app.ready()
-    if (!isTest() && configOverrides.healthchecksEnabled !== false) {
-      await runAllHealthchecks(app)
-    }
   } catch (err) {
     app.log.error('Error while initializing app: ', err)
     throw err

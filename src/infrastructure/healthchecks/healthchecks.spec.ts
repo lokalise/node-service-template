@@ -3,10 +3,11 @@ import { asFunction } from 'awilix'
 import type { FastifyInstance } from 'fastify'
 import type Redis from 'ioredis'
 import { afterEach, beforeEach, describe, expect, it } from 'vitest'
-import type { AppInstance } from '../app.js'
-import { getApp } from '../app.js'
+import type { AppInstance } from '../../app.js'
+import { getApp } from '../../app.js'
 
-import { dbHealthCheck, redisHealthCheck } from './healthchecks.js'
+import { resetHealthcheckStores } from './healthchecks.js'
+import { dbHealthCheck, redisHealthCheck } from './healthchecksWrappers.js'
 
 const createRedisMock = (pingLatency: number, response = 'PONG') =>
   ({
@@ -28,7 +29,10 @@ const createPrismaMock = (shouldSucceed: boolean) =>
 describe('healthcheck', () => {
   let app: AppInstance
   beforeEach(async () => {
-    app = await getApp()
+    app = await getApp({
+      jobsEnabled: false,
+    })
+    resetHealthcheckStores()
   })
 
   afterEach(async () => {
@@ -42,6 +46,7 @@ describe('healthcheck', () => {
         asFunction(() => createPrismaMock(false)),
       )
 
+      await app.diContainer.cradle.dbHealthcheck.execute()
       const result = await dbHealthCheck(app as unknown as FastifyInstance)
       expect(result.result).toBeUndefined()
       expect(result.error).toBeDefined()
@@ -53,6 +58,7 @@ describe('healthcheck', () => {
         asFunction(() => createPrismaMock(true)),
       )
 
+      await app.diContainer.cradle.dbHealthcheck.execute()
       const result = await dbHealthCheck(app as unknown as FastifyInstance)
       expect(result.result).toBeDefined()
       expect(result.error).toBeUndefined()
@@ -66,6 +72,7 @@ describe('healthcheck', () => {
         asFunction(() => createRedisMock(0, '')),
       )
 
+      await app.diContainer.cradle.redisHealthcheck.execute()
       const result = await redisHealthCheck(app as unknown as FastifyInstance)
       expect(result).toMatchObject({
         error: new Error('Redis did not respond with PONG'),
@@ -77,6 +84,8 @@ describe('healthcheck', () => {
       redis.disconnect()
 
       expect.assertions(1)
+
+      await app.diContainer.cradle.redisHealthcheck.execute()
       const promise = redisHealthCheck(app as unknown as FastifyInstance)
 
       await expect(promise).resolves.toMatchObject({
@@ -90,6 +99,7 @@ describe('healthcheck', () => {
         asFunction(() => createRedisMock(0)),
       )
 
+      await app.diContainer.cradle.redisHealthcheck.execute()
       const result = await redisHealthCheck(app as unknown as FastifyInstance)
       expect(result).toMatchObject({
         result: true,

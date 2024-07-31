@@ -52,11 +52,11 @@
             "suggestedExtensions": {
               "ts": {
                 "module": "js",
-                "component": "jsx"
+                "component": "js"
               },
               "mts": {
                 "module": "mjs",
-                "component": "jsx"
+                "component": "mjs"
               }
             }
           }

@@ -6,17 +6,24 @@ import { createTestContext } from '../test/TestContext.js'
 import type { AppInstance } from './app.js'
 import { getApp } from './app.js'
 import type { Config } from './infrastructure/config.js'
+import { resetHealthcheckStores } from './infrastructure/healthchecks/healthchecks.js'
 
 describe('app', () => {
   let app: AppInstance
   beforeAll(async () => {
     app = await getApp({
       monitoringEnabled: true,
+      app: {
+        metrics: {
+          isEnabled: true,
+        },
+      },
     })
+    resetHealthcheckStores()
+  })
 
-    afterAll(async () => {
-      await app.close()
-    })
+  afterAll(async () => {
+    await app.close()
   })
 
   describe('healthcheck', () => {
@@ -57,6 +64,8 @@ describe('app', () => {
     })
 
     it('Returns Prometheus healthcheck metrics', async () => {
+      await app.diContainer.cradle.redisHealthcheck.execute()
+      await app.diContainer.cradle.dbHealthcheck.execute()
       const response = await sendGet(buildClient('http://127.0.0.1:9080'), '/metrics', TEST_OPTIONS)
 
       expect(response.result.statusCode).toBe(200)

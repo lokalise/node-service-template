@@ -28,7 +28,9 @@ describe('dependency mocking', () => {
   let app: AppInstance
   beforeAll(async () => {
     app = await getApp(
-      {},
+      {
+        jobsEnabled: false,
+      },
       {
         userService: asClass(FakeUserService, SINGLETON_CONFIG),
       },

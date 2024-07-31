@@ -1,3 +1,4 @@
+import { randomUUID } from 'node:crypto'
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 import { cleanRedis } from '../../../../test/RedisCleaner.js'
 import type { TestContext } from '../../../../test/TestContext.js'
@@ -19,6 +20,6 @@ describe('ProcessLogFilesJob', () => {
     // this job doesn't really do anything, so we can't assert much
     expect.assertions(0)
     const { processLogFilesJob } = testContext.diContainer.cradle
-    await processLogFilesJob.process()
+    await processLogFilesJob.process(randomUUID())
   })
 })

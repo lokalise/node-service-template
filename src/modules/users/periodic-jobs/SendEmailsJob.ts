@@ -25,11 +25,11 @@ export class SendEmailsJob extends AbstractPeriodicJob {
     this.config = dependencies.config.jobs.sendEmailsJob
   }
 
-  public register() {
+  public override register() {
     const task = createTask(this.logger, this)
     this.scheduler.addCronJob(
       new CronJob({ cronExpression: this.config.cronExpression }, task, {
-        id: this.jobId,
+        id: this.options.jobId,
         preventOverrun: true,
       }),
     )
