@@ -1,9 +1,8 @@
 import { randomUUID } from 'node:crypto'
 import type { FastifyInstance } from 'fastify'
 import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest'
-import { cleanRedis } from '../../../test/RedisCleaner.js'
 import { type AppInstance, getApp } from '../../app.js'
-import { HealthcheckRefreshJob } from './HealthcheckRefreshJob.js'
+import type { HealthcheckRefreshJob } from './HealthcheckRefreshJob.js'
 import { getHealthcheckResult, resetHealthcheckStores } from './healthchecks.js'
 import { dbHealthCheck, redisHealthCheck } from './healthchecksWrappers.js'
 
@@ -12,13 +11,12 @@ describe('HealthcheckRefreshJob', () => {
   let job: HealthcheckRefreshJob
   beforeAll(async () => {
     app = await getApp({
-      jobsEnabled: [HealthcheckRefreshJob.JOB_NAME],
+      jobsEnabled: false,
     })
     job = app.diContainer.cradle.healthcheckRefreshJob
   })
-  beforeEach(async () => {
+  beforeEach(() => {
     resetHealthcheckStores()
-    await cleanRedis(app.diContainer.cradle.redis)
   })
 
   afterAll(async () => {
