@@ -23,6 +23,11 @@ import { ToadScheduler } from 'toad-scheduler'
 
 import { FakeStoreApiClient } from '../integrations/FakeStoreApiClient.js'
 
+import {
+  type Healthcheck,
+  HealthcheckRefreshJob,
+  HealthcheckResultsStore,
+} from '@lokalise/healthcheck-utils'
 import type { CommonAmqpTopicPublisher } from '@message-queue-toolkit/amqp'
 import { CommonMetadataFiller, EventRegistry } from '@message-queue-toolkit/core'
 import type z from 'zod'
@@ -32,11 +37,11 @@ import type { Config } from './config.js'
 import { type DIOptions, isJobEnabled } from './diConfigUtils.js'
 import { FakeAmplitude } from './fakes/FakeAmplitude.js'
 import { FakeNewrelicTransactionManager } from './fakes/FakeNewrelicTransactionManager.js'
-import { HealthcheckRefreshJob } from './healthchecks/HealthcheckRefreshJob.js'
 import {
   DbHealthcheck,
-  type Healthcheck,
+  HEALTHCHECK_TTL_IN_MSECS,
   RedisHealthcheck,
+  STALENESS_THRESHOLD_IN_MSECS,
   type SupportedHealthchecks,
 } from './healthchecks/healthchecks.js'
 import { SINGLETON_CONFIG } from './parentDiConfig.js'
@@ -184,10 +189,10 @@ export function resolveCommonDiConfig(
     ),
     consumerErrorResolver: asFunction(() => {
       return new AmqpConsumerErrorResolver()
-    }),
+    }, SINGLETON_CONFIG),
     eventRegistry: asFunction(() => {
       return new EventRegistry(supportedMessages)
-    }),
+    }, SINGLETON_CONFIG),
     publisherManager: asFunction((dependencies: CommonDependencies) => {
       return new AmqpTopicPublisherManager<
         CommonAmqpTopicPublisher<MessagesPublishPayloadsType>,
@@ -218,7 +223,7 @@ export function resolveCommonDiConfig(
           },
         },
       )
-    }),
+    }, SINGLETON_CONFIG),
 
     config: asFunction(() => {
       return getConfig()
@@ -238,24 +243,34 @@ export function resolveCommonDiConfig(
       return {
         report: (report) => reportErrorToBugsnag(report),
       } satisfies ErrorReporter
-    }),
+    }, SINGLETON_CONFIG),
     fakeStoreApiClient: asClass(FakeStoreApiClient, SINGLETON_CONFIG),
 
-    healthcheckRefreshJob: asClass(HealthcheckRefreshJob, {
-      lifetime: Lifetime.SINGLETON,
-      eagerInject: 'register',
-      enabled: isJobEnabled(options, HealthcheckRefreshJob.JOB_NAME),
-    }),
+    healthcheckRefreshJob: asFunction(
+      (dependencies: CommonDependencies) => {
+        return new HealthcheckRefreshJob(dependencies, dependencies.healthchecks)
+      },
+      {
+        lifetime: Lifetime.SINGLETON,
+        eagerInject: 'register',
+        enabled: isJobEnabled(options, HealthcheckRefreshJob.JOB_NAME),
+      },
+    ),
 
     dbHealthcheck: asClass(DbHealthcheck, SINGLETON_CONFIG),
     redisHealthcheck: asClass(RedisHealthcheck, SINGLETON_CONFIG),
 
+    healthcheckStore: asFunction(() => {
+      return new HealthcheckResultsStore({
+        maxHealthcheckNumber: 10,
+        stalenessThresholdInMsecs: STALENESS_THRESHOLD_IN_MSECS,
+        healthCheckResultTtlInMsecs: HEALTHCHECK_TTL_IN_MSECS,
+      })
+    }, SINGLETON_CONFIG),
+
     healthchecks: asFunction((dependencies: CommonDependencies) => {
-      return {
-        redis: dependencies.redisHealthcheck,
-        postgres: dependencies.dbHealthcheck,
-      }
-    }),
+      return [dependencies.redisHealthcheck, dependencies.dbHealthcheck]
+    }, SINGLETON_CONFIG),
   }
 }
 
@@ -285,5 +300,6 @@ export type CommonDependencies = {
   healthcheckRefreshJob: HealthcheckRefreshJob
   redisHealthcheck: RedisHealthcheck
   dbHealthcheck: DbHealthcheck
-  healthchecks: Record<SupportedHealthchecks, Healthcheck>
+  healthcheckStore: HealthcheckResultsStore<SupportedHealthchecks>
+  healthchecks: readonly Healthcheck[]
 }

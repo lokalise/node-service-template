@@ -3,10 +3,10 @@ import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest'
 
 import { createTestContext } from '../test/TestContext.js'
 
+import { randomUUID } from 'node:crypto'
 import type { AppInstance } from './app.js'
 import { getApp } from './app.js'
 import type { Config } from './infrastructure/config.js'
-import { resetHealthcheckStores } from './infrastructure/healthchecks/healthchecks.js'
 
 describe('app', () => {
   let app: AppInstance
@@ -19,7 +19,7 @@ describe('app', () => {
         },
       },
     })
-    resetHealthcheckStores()
+    app.diContainer.cradle.healthcheckStore.resetHealthcheckStores()
   })
 
   afterAll(async () => {
@@ -64,8 +64,7 @@ describe('app', () => {
     })
 
     it('Returns Prometheus healthcheck metrics', async () => {
-      await app.diContainer.cradle.redisHealthcheck.execute()
-      await app.diContainer.cradle.dbHealthcheck.execute()
+      await app.diContainer.cradle.healthcheckRefreshJob.process(randomUUID())
       const response = await sendGet(buildClient('http://127.0.0.1:9080'), '/metrics', TEST_OPTIONS)
 
       expect(response.result.statusCode).toBe(200)
