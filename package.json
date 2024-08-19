@@ -57,7 +57,7 @@
     "@message-queue-toolkit/sqs": "^17.1.0",
     "@prisma/client": "^5.18.0",
     "@prisma/instrumentation": "^5.18.0",
-    "@scalar/fastify-api-reference": "^1.24.74",
+    "@scalar/fastify-api-reference": "^1.25.4",
     "@supercharge/promise-pool": "^3.2.0",
     "amqplib": "^0.10.4",
     "awilix": "^10.0.2",
