@@ -83,7 +83,7 @@
     "zod": "^3.23.8"
   },
   "devDependencies": {
-    "@amplitude/analytics-types": "^2.7.0",
+    "@amplitude/analytics-types": "^2.8.0",
     "@biomejs/biome": "1.8.4-nightly.a579bf7",
     "@types/amqplib": "^0.10.5",
     "@types/jsonwebtoken": "^9.0.6",
