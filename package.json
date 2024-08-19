@@ -34,7 +34,7 @@
   },
   "dependencies": {
     "@aws-sdk/client-sns": "^3.632.0",
-    "@aws-sdk/client-sqs": "^3.624.0",
+    "@aws-sdk/client-sqs": "^3.632.0",
     "@aws-sdk/credential-providers": "^3.632.0",
     "@fastify/auth": "^4.6.1",
     "@fastify/awilix": "^5.1.0",
