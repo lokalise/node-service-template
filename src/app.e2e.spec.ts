@@ -7,6 +7,8 @@ import { randomUUID } from 'node:crypto'
 import type { AppInstance } from './app.js'
 import { getApp } from './app.js'
 import type { Config } from './infrastructure/config.js'
+import { generateInternalError } from '@lokalise/fastify-extras'
+import { isInternalError } from "@lokalise/node-core";
 
 describe('app', () => {
   let app: AppInstance
@@ -27,6 +29,14 @@ describe('app', () => {
   })
 
   describe('healthcheck', () => {
+    it('validates error type checks', () => {
+      const packageError = generateInternalError({
+        message: 'fa',
+        errorCode: 'ba'
+      })
+      expect(isInternalError(packageError)).toBe(true)
+    })
+
     it('Returns health check information', async () => {
       const response = await app.inject().get('/').end()
 
