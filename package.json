@@ -48,7 +48,7 @@
     "@lokalise/fastify-extras": "^21.7.0",
     "@lokalise/healthcheck-utils": "^1.2.1",
     "@lokalise/id-utils": "^2.1.0",
-    "@lokalise/node-core": "^11.2.0",
+    "@lokalise/node-core": "^12.0.0",
     "@lokalise/zod-extras": "^2.1.0",
     "@message-queue-toolkit/amqp": "^16.1.0",
     "@message-queue-toolkit/core": "^16.0.1",
