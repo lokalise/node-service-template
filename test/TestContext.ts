@@ -52,8 +52,6 @@ export async function createTestContext(
     eagerInject: true,
   })
 
-  await awilixManager.executeInit()
-
   registerDependencies(
     diContainer,
     {
@@ -66,6 +64,8 @@ export async function createTestContext(
       jobsEnabled: !!options.jobsEnabled,
     },
   )
+
+  await awilixManager.executeInit()
 
   return {
     diContainer,
