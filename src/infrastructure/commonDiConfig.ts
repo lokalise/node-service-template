@@ -30,6 +30,7 @@ import {
 } from '@lokalise/healthcheck-utils'
 import type { CommonAmqpTopicPublisher } from '@message-queue-toolkit/amqp'
 import { CommonMetadataFiller, EventRegistry } from '@message-queue-toolkit/core'
+import type { AwilixManager } from 'awilix-manager'
 import type z from 'zod'
 import { PermissionsMessages } from '../modules/users/consumers/permissionsMessageSchemas.js'
 import { getAmqpConfig, getConfig, isTest } from './config.js'
@@ -73,6 +74,15 @@ export function resolveCommonDiConfig(
 
     scheduler: asFunction(() => {
       return dependencies.app?.scheduler ?? new ToadScheduler()
+    }, SINGLETON_CONFIG),
+
+    awilixManager: asFunction(() => {
+      if (!dependencies.app) {
+        throw new Error(
+          'app with awilixManager set is necessary to use awilixManager as a dependency',
+        )
+      }
+      return dependencies.app?.awilixManager
     }, SINGLETON_CONFIG),
 
     redis: asFunction(
@@ -279,6 +289,7 @@ export type CommonDependencies = {
   config: Config
   logger: CommonLogger
   scheduler: ToadScheduler
+  awilixManager: AwilixManager
 
   redis: Redis
   redisPublisher: Redis

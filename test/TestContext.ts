@@ -32,10 +32,6 @@ export async function createTestContext(
     injectionMode: 'PROXY',
   })
 
-  const fakeApp: Partial<AppInstance> = {
-    newrelicTransactionManager: new NewRelicTransactionManager(false),
-  }
-
   const dependencies = configOverrides
     ? ({
         ...dependencyOverrides,
@@ -51,6 +47,11 @@ export async function createTestContext(
     asyncInit: true,
     eagerInject: true,
   })
+
+  const fakeApp: Partial<AppInstance> = {
+    newrelicTransactionManager: new NewRelicTransactionManager(false),
+    awilixManager,
+  }
 
   registerDependencies(
     diContainer,
@@ -74,5 +75,6 @@ export async function createTestContext(
 }
 
 export async function destroyTestContext(testContext: TestContext) {
+  await testContext.diContainer.cradle.awilixManager.executeDispose()
   await testContext.diContainer.dispose()
 }
