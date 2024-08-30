@@ -79,7 +79,7 @@ export function resolveCommonDiConfig(
     awilixManager: asFunction(() => {
       if (!dependencies.app) {
         throw new Error(
-            'app with awilixManager set is necessary to use awilixManager as a dependency',
+          'app with awilixManager set is necessary to use awilixManager as a dependency',
         )
       }
       return dependencies.app?.awilixManager
