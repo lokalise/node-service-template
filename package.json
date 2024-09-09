@@ -84,7 +84,7 @@
   },
   "devDependencies": {
     "@amplitude/analytics-types": "^2.8.0",
-    "@biomejs/biome": "1.8.4-nightly.a579bf7",
+    "@biomejs/biome": "1.8.4-nightly.7aaf0ce",
     "@types/amqplib": "^0.10.5",
     "@types/jsonwebtoken": "^9.0.6",
     "@types/newrelic": "^9.14.4",
