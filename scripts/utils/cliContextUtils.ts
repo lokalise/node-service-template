@@ -1,27 +1,22 @@
+import { type ParseArgsConfig, parseArgs } from 'node:util'
 import type { RequestContext } from '@lokalise/fastify-extras'
 import { generateMonotonicUuid } from '@lokalise/id-utils'
 import type { CommonLogger } from '@lokalise/node-core'
 import type z from 'zod'
 import { type AppInstance, getApp } from '../../src/app.js'
 
-export const getArgs = () => {
-  return process.argv.reduce((args: Record<string, unknown>, arg) => {
-    if (arg.startsWith('--')) {
-      const [key, value] = arg.slice(2).split('=')
-      if (key) {
-        args[key] = value ?? true
-      }
-    } else if (arg.startsWith('-')) {
-      for (const flag of arg.slice(1)) {
-        args[flag] = true
-      }
-    }
-    return args
-  }, {})
+export const getArgs = (config: Partial<ParseArgsConfig> = {}) => {
+  const { values } = parseArgs({
+    ...config,
+    args: process.argv,
+    strict: false,
+  } satisfies ParseArgsConfig)
+
+  return values
 }
 
 export const createCliContext = async <Arguments>(
-  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+  // biome-ignore lint/suspicious/noExplicitAny: This is a generic schema
   ARGUMENTS_SCHEMA: z.ZodObject<any>,
   origin: string,
 ): Promise<{
