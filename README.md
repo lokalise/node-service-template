@@ -192,14 +192,20 @@ Create a new command in the `scripts` section of `package.json`:
 ```json
 "scripts": {
   "cmd:getUserImportJobs:dev": "cross-env NODE_ENV=development tsx --env-file=.env scripts/cmd/getUserImportJobs.ts",
-  "cmd:getUserImportJobs:prod": "cross-env NODE_ENV=production node --env-file=.env scripts/cmd/getUserImportJobs.js",
+  "cmd:getUserImportJobs:prod": "node scripts/cmd/getUserImportJobs.js",
 }
 ```
 
 !!! **Be aware of extensions and node / typescript execution commands in command paths, as development environment differs from non-development.**
 
-To run a command, use `npm run {npmScriptName} -- {arguments}`. Example:
+To run a command locally, use `npm run {npmScriptName} -- {arguments}`. Example:
 
 ```shell
 npm run cmd:getUserImportJobs:dev -- --queue=active
+```
+
+To run a command in a run-command pipeline, use `{npmScriptName} -- {arguments}` as a command argument. Example:
+
+```shell
+cmd:getUserImportJobs:prod -- --queue=active
 ```
