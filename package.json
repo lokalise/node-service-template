@@ -30,7 +30,9 @@
     "spec:generate": "cross-env NODE_ENV=development tsx --env-file=.env scripts/generateOpenApi.ts && npm run spec:validate",
     "spec:validate": "cross-env NODE_ENV=development tsx --env-file=.env scripts/validateOpenApi.ts",
     "prepublishOnly": "npm run build",
-    "jwt:generate": "cross-env NODE_ENV=development tsx scripts/generateJwt.ts"
+    "jwt:generate": "cross-env NODE_ENV=development tsx scripts/generateJwt.ts",
+    "cmd:getUserImportJobs:dev": "cross-env NODE_ENV=development tsx --env-file=.env scripts/cmd/getUserImportJobs.ts",
+    "cmd:getUserImportJobs:prod": "node scripts/cmd/getUserImportJobs.js"
   },
   "dependencies": {
     "@aws-sdk/client-sns": "^3.654.0",
@@ -84,7 +86,7 @@
   },
   "devDependencies": {
     "@amplitude/analytics-types": "^2.8.2",
-    "@biomejs/biome": "1.8.4-nightly.7aaf0ce",
+    "@biomejs/biome": "1.9.2",
     "@types/amqplib": "^0.10.5",
     "@types/jsonwebtoken": "^9.0.7",
     "@types/newrelic": "^9.14.4",

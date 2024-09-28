@@ -180,3 +180,32 @@ You have multiple options to ease your development:
 ## Troubleshooting
 
 - If you are running a service in a monorepo setup, it is launched in the background and you want to always force closing the service before attempting to restart, you can use `npm run free-ports`, which will kill an application running on the predefined port (in an OS-independent way).
+
+## CLI Commands
+
+To create a new CLI command, create a new file in the [scripts/cmd](./scripts/cmd) directory. The file should be self-executable. The process should create a CLI context using `cliContextUtils.ts` and destroy it before exiting.
+
+To use arguments in your command, ZOD schema and generic type should be provided in `createCliContext()`. Arguments will be parsed and validated using the provided schema.
+
+Create a new command in the `scripts` section of `package.json`:
+
+```json
+"scripts": {
+  "cmd:getUserImportJobs:dev": "cross-env NODE_ENV=development tsx --env-file=.env scripts/cmd/getUserImportJobs.ts",
+  "cmd:getUserImportJobs:prod": "node scripts/cmd/getUserImportJobs.js",
+}
+```
+
+!!! **Be aware of extensions and node / typescript execution commands in command paths, as development environment differs from non-development.**
+
+To run a command locally, use `npm run {npmScriptName} -- {arguments}`. Example:
+
+```shell
+npm run cmd:getUserImportJobs:dev -- --queue=active
+```
+
+To run a command in a run-command pipeline, use `{npmScriptName} -- {arguments}` as a command argument. Example:
+
+```shell
+cmd:getUserImportJobs:prod -- --queue=active
+```
