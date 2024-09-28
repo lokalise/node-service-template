@@ -1,5 +1,5 @@
 import type { PinoLoggerOptions } from 'fastify/types/logger'
-import { levels, type Logger } from 'pino'
+import { type Logger, levels } from 'pino'
 // import pretty from 'pino-pretty'
 
 import type { AppConfig } from './config.js'
