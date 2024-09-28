@@ -44,24 +44,6 @@
   },
   "linter": {
     "rules": {
-      "nursery": {
-        "useImportExtensions": {
-          "level": "error",
-          "fix": "unsafe",
-          "options": {
-            "suggestedExtensions": {
-              "ts": {
-                "module": "js",
-                "component": "js"
-              },
-              "mts": {
-                "module": "mjs",
-                "component": "mjs"
-              }
-            }
-          }
-        }
-      },
       "performance": {
         "noAccumulatingSpread": "error",
         "noBarrelFile": "error",
@@ -100,7 +82,23 @@
         "noUnusedImports": "error",
         "noUnusedPrivateClassMembers": "error",
         "noUnreachableSuper": "error",
-        "noUndeclaredVariables": "error"
+        "noUndeclaredVariables": "error",
+        "useImportExtensions": {
+          "level": "error",
+          "fix": "safe",
+          "options": {
+            "suggestedExtensions": {
+              "ts": {
+                "module": "js",
+                "component": "js"
+              },
+              "mts": {
+                "module": "mjs",
+                "component": "mjs"
+              }
+            }
+          }
+        }
       },
       "suspicious": {
         "noGlobalIsNan": "off",
