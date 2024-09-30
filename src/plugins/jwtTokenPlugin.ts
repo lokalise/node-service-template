@@ -37,6 +37,6 @@ function plugin(
 }
 
 export const jwtTokenPlugin = fp<JwtTokenPluginOptions>(plugin, {
-  fastify: '4.x',
+  fastify: '5.x',
   name: 'jwt-token-plugin',
 })
