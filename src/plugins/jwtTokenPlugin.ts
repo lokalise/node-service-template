@@ -1,5 +1,6 @@
 import type {
   FastifyInstance,
+  FastifyPluginCallback,
   FastifyReply,
   FastifyRequest,
   HookHandlerDoneFunction,
@@ -36,7 +37,8 @@ function plugin(
   next()
 }
 
-export const jwtTokenPlugin = fp<JwtTokenPluginOptions>(plugin, {
-  fastify: '5.x',
-  name: 'jwt-token-plugin',
-})
+export const jwtTokenPlugin: FastifyPluginCallback<JwtTokenPluginOptions> =
+  fp<JwtTokenPluginOptions>(plugin, {
+    fastify: '5.x',
+    name: 'jwt-token-plugin',
+  })
