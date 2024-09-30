@@ -36,21 +36,32 @@ describe('UserController', () => {
         .end()
 
       expect(response.statusCode).toBe(400)
-      expect(response.json()).toEqual(
-        expect.objectContaining({
-          details: {
-            error: [
+      expect(response.json()).toMatchInlineSnapshot(`
+        {
+          "details": {
+            "error": [
               {
-                code: 'invalid_string',
-                message: 'Invalid email',
-                path: ['email'],
-                validation: 'email',
+                "instancePath": "/email",
+                "keyword": "invalid_string",
+                "message": "Invalid email",
+                "params": {
+                  "issue": {
+                    "code": "invalid_string",
+                    "message": "Invalid email",
+                    "path": [
+                      "email",
+                    ],
+                    "validation": "email",
+                  },
+                },
+                "schemaPath": "#/email/invalid_string",
               },
             ],
           },
-          message: 'Invalid params',
-        }),
-      )
+          "errorCode": "VALIDATION_ERROR",
+          "message": "Invalid params",
+        }
+      `)
     })
   })
 

@@ -1,14 +1,9 @@
-import type { PinoLoggerOptions } from 'fastify/types/logger'
-import { type Logger, levels } from 'pino'
-// import pretty from 'pino-pretty'
+import pino, { type Logger, levels, type Level } from 'pino'
+import pretty from 'pino-pretty'
 
-import type { AppConfig } from './config.js'
+import { type AppConfig, isProduction } from './config.js'
 
-export function resolveLoggerConfiguration(
-  appConfig: AppConfig,
-): PinoLoggerOptions | Logger | boolean {
-  // FixMe https://github.com/fastify/help/issues/1060
-  /*
+export function resolveLoggerConfiguration(appConfig: AppConfig): Logger {
   if (!isProduction()) {
     return pino(
       pretty({
@@ -20,9 +15,8 @@ export function resolveLoggerConfiguration(
       }),
     )
   }
-   */
 
-  return {
+  return pino({
     level: appConfig.logLevel,
     formatters: {
       level: (_label, numericLevel): { level: string } => {
@@ -30,5 +24,5 @@ export function resolveLoggerConfiguration(
         return { level }
       },
     },
-  } satisfies PinoLoggerOptions
+  })
 }

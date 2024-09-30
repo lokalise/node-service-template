@@ -80,12 +80,12 @@ export async function getApp(
 ): Promise<AppInstance> {
   const config = getConfig()
   const appConfig = config.app
-  const loggerConfig = resolveLoggerConfiguration(appConfig)
+  const logger = resolveLoggerConfiguration(appConfig)
   const enableRequestLogging = ['debug', 'trace'].includes(appConfig.logLevel)
 
   const app = fastify<http.Server, http.IncomingMessage, http.ServerResponse, CommonLogger>({
     ...getRequestIdFastifyAppConfig(),
-    logger: loggerConfig,
+    loggerInstance: logger,
     disableRequestLogging: !enableRequestLogging,
   })
 
@@ -239,7 +239,7 @@ export async function getApp(
     await app.register(metricsPlugin, {
       bindAddress: appConfig.bindAddress,
       errorObjectResolver: resolveGlobalErrorLogObject,
-      loggerOptions: loggerConfig,
+      logger,
       disablePrometheusRequestLogging: true,
     })
   }
