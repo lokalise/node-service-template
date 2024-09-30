@@ -3,7 +3,7 @@ import pretty from 'pino-pretty'
 
 import { type AppConfig, isProduction } from './config.js'
 
-export function resolveLoggerConfiguration(appConfig: AppConfig): Logger {
+export function resolveLoggerInstance(appConfig: AppConfig): Logger {
   if (!isProduction()) {
     return pino(
       pretty({

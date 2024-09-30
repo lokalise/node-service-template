@@ -44,7 +44,7 @@ import {
   redisHealthCheck,
   registerHealthChecks,
 } from './infrastructure/healthchecks/healthchecksWrappers.js'
-import { resolveLoggerConfiguration } from './infrastructure/logger.js'
+import { resolveLoggerInstance } from './infrastructure/logger.js'
 import { SINGLETON_CONFIG, registerDependencies } from './infrastructure/parentDiConfig.js'
 import type { DependencyOverrides } from './infrastructure/parentDiConfig.js'
 import { getRoutes } from './modules/routes.js'
@@ -80,7 +80,7 @@ export async function getApp(
 ): Promise<AppInstance> {
   const config = getConfig()
   const appConfig = config.app
-  const logger = resolveLoggerConfiguration(appConfig)
+  const logger = resolveLoggerInstance(appConfig)
   const enableRequestLogging = ['debug', 'trace'].includes(appConfig.logLevel)
 
   const app = fastify<http.Server, http.IncomingMessage, http.ServerResponse, CommonLogger>({
