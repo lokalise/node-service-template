@@ -94,7 +94,7 @@
     "@vitest/coverage-v8": "^2.1.1",
     "cpy-cli": "^5.0.0",
     "cross-env": "^7.0.3",
-    "mockttp": "^3.15.2",
+    "mockttp": "^3.15.3",
     "oas-validator": "^5.0.8",
     "prisma": "^5.19.1",
     "prisma-lint": "^0.6.0",
