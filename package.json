@@ -61,7 +61,7 @@
     "@scalar/fastify-api-reference": "^1.25.28",
     "@supercharge/promise-pool": "^3.2.0",
     "amqplib": "^0.10.4",
-    "awilix": "^12.0.1",
+    "awilix": "^12.0.2",
     "awilix-manager": "^5.5.0",
     "bullmq": "^5.16.0",
     "fastify": "^5.0.0",
