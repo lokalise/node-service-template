@@ -19,7 +19,7 @@ import {
   publicHealthcheckPlugin,
   requestContextProviderPlugin,
 } from '@lokalise/fastify-extras'
-import type { CommonLogger } from '@lokalise/node-core'
+import { type CommonLogger, resolveLogger } from '@lokalise/node-core'
 import { resolveGlobalErrorLogObject } from '@lokalise/node-core'
 import scalarFastifyApiReference from '@scalar/fastify-api-reference'
 import { type AwilixContainer, asFunction } from 'awilix'
@@ -44,7 +44,6 @@ import {
   redisHealthCheck,
   registerHealthChecks,
 } from './infrastructure/healthchecks/healthchecksWrappers.js'
-import { resolveLoggerInstance } from './infrastructure/logger.js'
 import { SINGLETON_CONFIG, registerDependencies } from './infrastructure/parentDiConfig.js'
 import type { DependencyOverrides } from './infrastructure/parentDiConfig.js'
 import { getRoutes } from './modules/routes.js'
@@ -80,7 +79,7 @@ export async function getApp(
 ): Promise<AppInstance> {
   const config = getConfig()
   const appConfig = config.app
-  const logger = resolveLoggerInstance(appConfig)
+  const logger = resolveLogger(appConfig)
   const enableRequestLogging = ['debug', 'trace'].includes(appConfig.logLevel)
 
   const app = fastify<http.Server, http.IncomingMessage, http.ServerResponse, CommonLogger>({
