@@ -83,10 +83,17 @@ describe('app', () => {
       expect(response.statusCode).toBe(200)
     })
 
+    it('Returns OpenAPI information (HTML) - redirect', async () => {
+      const response = await app.inject().get('/documentation/static/index.html').end()
+
+      expect(response.statusCode).toBe(302)
+      expect(response.headers.location).toBe('/documentation/')
+    })
+
     it('Returns OpenAPI information (HTML)', async () => {
       const response = await app.inject().get('/documentation').end()
 
-      expect(response.statusCode).toBe(302)
+      expect(response.statusCode).toBe(200)
     })
   })
 
