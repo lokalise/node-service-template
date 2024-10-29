@@ -1,6 +1,6 @@
 services:
   postgres:
-    image: postgres:16.2
+    image: postgres:17.0
     # see https://www.postgresql.org/docs/current/non-durability.html
     command: '-c full_page_writes=off -c fsync=off -c synchronous_commit=off'
     ports:
@@ -29,7 +29,7 @@ services:
       - rabbit_data:/var/lib/rabbitmq
 
   localstack:
-    image: localstack/localstack:3.4.0
+    image: localstack/localstack:3.8.1
     hostname: localstack
     ports:
       - '4566:4566'

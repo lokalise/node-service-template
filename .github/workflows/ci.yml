@@ -9,7 +9,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [20.x, 22.x]
+        node-version: [22.x, 23.x]
 
     steps:
       - uses: actions/checkout@v4
@@ -30,21 +30,21 @@ jobs:
 
       - name: Build TS
         run: |
-          npm run build
+          node --run build
 
       - name: Schema preparation
         run: |
-          npm run copy:config
-          npm run db:wait
-          npm run db:migration:run
+          node --run copy:config
+          node --run db:wait
+          node --run db:migration:run
 
       - name: Run Tests
         run: |
-          npm run test:ci
+          node --run test:ci
 
       - name: Run lint
         run: |
-          npm run lint   
+          node --run lint   
 
       - name: DB stop
         run: |
@@ -52,7 +52,7 @@ jobs:
 
       - name: Generate and validate OpenAPI schema
         run: |
-          npm run spec:generate
+          node --run spec:generate
 
   automerge:
     needs: build

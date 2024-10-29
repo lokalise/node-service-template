@@ -88,7 +88,7 @@ are relevant for the technological stack of your organization, and replace `@lok
 3. Copy the `.env.default` file to a new `.env` file. You can do this with the following npm script:
 
    ```shell
-   npm run copy:config
+   node --run copy:config
    ```
 
 4. Launch all the infrastructural dependencies locally:
@@ -100,19 +100,19 @@ are relevant for the technological stack of your organization, and replace `@lok
 5. Run migrations to synchronize your database schema with defined models:
 
    ```shell
-   npm run db:migration:dev
+   node --run db:migration:dev
    ```
 
 6. Generate Prisma client for type-safe DB operations:
 
    ```shell
-   npm run db:update-client
+   node --run db:update-client
    ```
 
 7. To run application:
 
    ```shell
-   npm run start:dev
+   node --run start:dev
    ```
 
    > **_NOTE:_** By default all calls to the `node-template` app will require a valid JWT token, hence authentication errors when running the application are expected if you haven't yet followed the steps in [Create jwt for dev usage](#create-jwt-for-dev-usage).
@@ -122,7 +122,7 @@ are relevant for the technological stack of your organization, and replace `@lok
 Before running your tests, make sure to run
 
 ```shell
-npm run test:migrate
+node --run test:migrate
 ```
 
 To initialize your test database and/or apply your latest schema changes.
@@ -153,7 +153,7 @@ You have multiple options to ease your development:
 - Run JWT generate script:
 
   ```shell
-  npm run jwt:generate
+  node --run jwt:generate
   ```
 
 - Your public key and token will be printed to console to make things easier. This is an example output:
@@ -172,14 +172,14 @@ You have multiple options to ease your development:
 - Restart the application to load the new public key:
 
   ```shell
-  npm run start:dev
+  node --run start:dev
   ```
 
 - Use your token to authenticate through bearer authentication in your requests
 
 ## Troubleshooting
 
-- If you are running a service in a monorepo setup, it is launched in the background and you want to always force closing the service before attempting to restart, you can use `npm run free-ports`, which will kill an application running on the predefined port (in an OS-independent way).
+- If you are running a service in a monorepo setup, it is launched in the background and you want to always force closing the service before attempting to restart, you can use `node --run free-ports`, which will kill an application running on the predefined port (in an OS-independent way).
 
 ## CLI Commands
 
@@ -198,10 +198,10 @@ Create a new command in the `scripts` section of `package.json`:
 
 !!! **Be aware of extensions and node / typescript execution commands in command paths, as development environment differs from non-development.**
 
-To run a command locally, use `npm run {npmScriptName} -- {arguments}`. Example:
+To run a command locally, use `node --run {npmScriptName} -- {arguments}`. Example:
 
 ```shell
-npm run cmd:getUserImportJobs:dev -- --queue=active
+node --run cmd:getUserImportJobs:dev -- --queue=active
 ```
 
 To run a command in a run-command pipeline, use `{npmScriptName} -- {arguments}` as a command argument. Example:

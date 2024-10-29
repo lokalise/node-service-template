@@ -1,5 +1,5 @@
 # ---- Base Node ----
-FROM node:20.18.0-bookworm-slim as base
+FROM node:22.10.0-bookworm-slim as base
 
 RUN set -ex;\
     apt-get update -y; \
@@ -42,7 +42,7 @@ RUN set -ex; \
 FROM dependencies as build
 
 COPY --chown=node:node . .
-RUN npm run build
+RUN node --run build
 
 # ---- App ----
 FROM base as app
