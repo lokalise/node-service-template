@@ -139,5 +139,17 @@
         "noBannedTypes": "off"
       }
     }
-  }
+  },
+  "overrides": [
+    {
+      "include": ["src/db/drizzle.config.ts"],
+      "linter": {
+        "rules": {
+          "style": {
+            "noDefaultExport": "off"
+          }
+        }
+      }
+    }
+  ]
 }

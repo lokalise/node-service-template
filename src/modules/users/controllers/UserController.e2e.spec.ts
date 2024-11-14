@@ -17,7 +17,7 @@ describe('UserController', () => {
     app = await getApp(getTestConfigurationOverrides())
   })
   beforeEach(async () => {
-    await cleanTables(app.diContainer.cradle.prisma, [DB_MODEL.User])
+    await cleanTables(app.diContainer.cradle.drizzle, [DB_MODEL.User])
   })
   afterAll(async () => {
     await app.close()

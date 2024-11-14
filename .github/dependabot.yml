@@ -40,10 +40,9 @@ updates:
       message-queue-toolkit:
         patterns:
           - '@message-queue-toolkit/*'
-      prisma:
+      drizzle:
         patterns:
-          - 'prisma'
-          - '@prisma/*'
+          - 'drizzle-*'
       awilix:
         patterns:
           - 'awilix'

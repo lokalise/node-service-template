@@ -1,7 +1,7 @@
 import type { RequestContext } from '@lokalise/fastify-extras'
-import type { User } from '@prisma/client'
 import type { Loader } from 'layered-loader'
 
+import type { User } from '../../../db/schema/user.js'
 import { EntityNotFoundError } from '../../../infrastructure/errors/publicErrors.js'
 import type { UserRepository } from '../repositories/UserRepository.js'
 import type {

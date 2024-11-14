@@ -18,7 +18,7 @@ describe('UserRepository', () => {
   })
 
   beforeEach(async () => {
-    await cleanTables(diContainer.cradle.prisma, [DB_MODEL.User])
+    await cleanTables(diContainer.cradle.drizzle, [DB_MODEL.User])
   })
 
   afterAll(async () => {
