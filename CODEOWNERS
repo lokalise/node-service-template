@@ -7,4 +7,3 @@ docker-compose.yml @lokalise/dx-guild
 /src @kibertoad @drdaemos @lokalise/dx-guild
 /test @kibertoad @drdaemos @lokalise/dx-guild
 /docs @kibertoad @drdaemos @lokalise/dx-guild
-/prisma @kibertoad @drdaemos @lokalise/dx-guild

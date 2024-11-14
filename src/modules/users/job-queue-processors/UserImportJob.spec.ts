@@ -4,6 +4,7 @@ import { cleanRedis } from '../../../../test/RedisCleaner.js'
 import type { TestContext } from '../../../../test/TestContext.js'
 import { createTestContext, destroyTestContext } from '../../../../test/TestContext.js'
 
+import { user as userTable } from '../../../db/schema/user.js'
 import { UserImportJob } from './UserImportJob.js'
 
 describe('UserImportJob', () => {
@@ -18,7 +19,7 @@ describe('UserImportJob', () => {
       },
     )
     await cleanRedis(testContext.diContainer.cradle.redis)
-    await cleanTables(testContext.diContainer.cradle.prisma, [DB_MODEL.User])
+    await cleanTables(testContext.diContainer.cradle.drizzle, [DB_MODEL.User])
     userImportJob = testContext.diContainer.cradle.userImportJob
   })
 
@@ -44,7 +45,7 @@ describe('UserImportJob', () => {
       'completed',
     )
 
-    const users = await testContext.diContainer.cradle.prisma.user.findMany()
+    const users = await testContext.diContainer.cradle.drizzle.select().from(userTable)
     expect(users).toHaveLength(1)
     expect(users[0]).toMatchObject(userData)
 
