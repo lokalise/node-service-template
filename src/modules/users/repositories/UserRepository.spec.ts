@@ -7,14 +7,17 @@ import { DB_MODEL, cleanTables } from '../../../../test/DbCleaner.js'
 import type { TestContext } from '../../../../test/TestContext.js'
 import { createTestContext, destroyTestContext } from '../../../../test/TestContext.js'
 import { TEST_USER_1 } from '../../../../test/fixtures/testUsers.js'
+import type { UserRepository } from './UserRepository.js'
 
 describe('UserRepository', () => {
   let testContext: TestContext
   let diContainer: AwilixContainer<Cradle>
+  let userRepository: UserRepository
 
   beforeAll(async () => {
     testContext = await createTestContext()
     diContainer = testContext.diContainer
+    userRepository = diContainer.cradle.userRepository
   })
 
   beforeEach(async () => {
@@ -26,16 +29,13 @@ describe('UserRepository', () => {
   })
 
   describe('getUser', () => {
-    it('Returns NOT_FOUND for non-existing user', async () => {
-      const { userRepository } = diContainer.cradle
-
+    it('Returns null for non-existing user', async () => {
       const result = await userRepository.getUser(generateUuid7())
 
       expect(result).toBeNull()
     })
 
     it('Returns value for existing user', async () => {
-      const { userRepository } = diContainer.cradle
       const user = await userRepository.createUser({
         ...TEST_USER_1,
         id: generateUuid7(),
@@ -49,8 +49,6 @@ describe('UserRepository', () => {
 
   describe('createUser', () => {
     it('creates user', async () => {
-      const { userRepository } = diContainer.cradle
-
       const user = await userRepository.createUser({
         ...TEST_USER_1,
       })
@@ -59,6 +57,54 @@ describe('UserRepository', () => {
         name: TEST_USER_1.name,
         email: TEST_USER_1.email,
       })
+    })
+  })
+
+  describe('deleteUser', () => {
+    it('deletes user', async () => {
+      const user = await userRepository.createUser({
+        ...TEST_USER_1,
+      })
+
+      const deletedUser = await userRepository.deleteUser(user.id)
+
+      expect(deletedUser).toMatchObject({
+        name: TEST_USER_1.name,
+        email: TEST_USER_1.email,
+      })
+
+      expect(await userRepository.getUser(user.id)).toBeNull()
+    })
+
+    it('returns null for non-existing user to delete', async () => {
+      const deletionResult = await userRepository.deleteUser(generateUuid7())
+
+      expect(deletionResult).toBeNull()
+    })
+  })
+
+  describe('updateUser', () => {
+    it('updates user', async () => {
+      const user = await userRepository.createUser({
+        ...TEST_USER_1,
+      })
+
+      const updatedUser = await userRepository.updateUser(user.id, {
+        name: 'Hello world!',
+      })
+
+      expect(updatedUser).toMatchObject({
+        name: 'Hello world!',
+        email: TEST_USER_1.email,
+      })
+    })
+
+    it('returns null for non-existing user to update', async () => {
+      const updatedUser = await userRepository.updateUser(generateUuid7(), {
+        name: 'Hello world!',
+      })
+
+      expect(updatedUser).toBeNull()
     })
   })
 })
