@@ -3,6 +3,7 @@ import type { RedisConfig } from '@lokalise/node-core'
 
 // biome-ignore lint/correctness/useImportExtensions: Drizzle can't find .js extension
 import type { AwsConfig } from './aws/awsConfig'
+// biome-ignore lint/correctness/useImportExtensions: Drizzle can't find .js extension
 import { getAwsConfig } from './aws/awsConfig'
 
 const configScope: ConfigScope = new ConfigScope()
