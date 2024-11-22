@@ -70,9 +70,10 @@ drizzle: asFunction(
           return drizzle(pg)
         },
         {
+          dispose: (drizzle) => drizzle.$client.end(),
           lifetime: Lifetime.SINGLETON,
         },
-)
+),
 ```
 
 ### Injection

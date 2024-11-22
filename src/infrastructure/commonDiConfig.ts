@@ -175,6 +175,7 @@ export function resolveCommonDiConfig(
         return drizzle(pg)
       },
       {
+        dispose: (drizzle) => drizzle.$client.end(),
         lifetime: Lifetime.SINGLETON,
       },
     ),
