@@ -24,19 +24,17 @@ RUN set -ex; \
       python3 \
       git \
       openssl
-COPY --chown=node:node ./package.json ./package.json prisma ./
+COPY --chown=node:node ./package.json ./package.json ./
 COPY --chown=node:node ./package-lock.json ./package-lock.json
 USER node
 # install production dependencies
 RUN set -ex; \
-    npm ci --ignore-scripts; \
-    npx prisma generate
+    npm ci --ignore-scripts;
 # separate production node_modules
 RUN cp -R node_modules prod_node_modules
 # install ALL node_modules, including 'devDependencies'
 RUN set -ex; \
-    npm install --ignore-scripts ; \
-    npx prisma generate
+    npm install --ignore-scripts ;
 
 # ---- Build ----
 FROM dependencies as build
@@ -48,10 +46,10 @@ RUN node --run build
 FROM base as app
 
 COPY --chown=node:node --from=build /home/node/app/dist .
-COPY --chown=node:node --from=build /home/node/app/prisma prisma
+COPY --chown=node:node --from=build /home/node/app/src/db/migrations src/db/migrations
 COPY --chown=node:node --from=build /home/node/app/prod_node_modules node_modules
 
-# ---- Rrelase ----
+# ---- Release ----
 FROM base as release
 
 COPY --from=build /usr/bin/dumb-init /usr/bin/dumb-init

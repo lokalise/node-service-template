@@ -1,6 +1,5 @@
 import type { Cradle } from '@fastify/awilix'
 import { waitAndRetry } from '@message-queue-toolkit/core'
-import type { PrismaClient } from '@prisma/client'
 import type { Channel } from 'amqplib'
 import type { AwilixContainer } from 'awilix'
 import { asClass } from 'awilix'
@@ -15,6 +14,8 @@ import { SINGLETON_CONFIG } from '../../../infrastructure/parentDiConfig.js'
 import type { PermissionsService } from '../services/PermissionsService.js'
 
 import { generateUuid7 } from '@lokalise/id-utils'
+import type { PostgresJsDatabase } from 'drizzle-orm/postgres-js'
+import { user as userTable } from '../../../db/schema/user.js'
 import type { PublisherManager } from '../../../infrastructure/commonDiConfig.js'
 import { buildQueueMessage } from '../../../utils/queueUtils.js'
 import { PermissionConsumer } from './PermissionConsumer.js'
@@ -23,16 +24,16 @@ const userIds = [generateUuid7(), generateUuid7(), generateUuid7()]
 const perms: [string, ...string[]] = ['perm1', 'perm2']
 const testRequestContext = createRequestContext()
 
-async function createUsers(prisma: PrismaClient, userIdsToCreate: string[]) {
-  await prisma.user.createMany({
-    data: userIdsToCreate.map((userId) => {
+async function createUsers(drizzle: PostgresJsDatabase, userIdsToCreate: string[]) {
+  await drizzle.insert(userTable).values(
+    userIdsToCreate.map((userId) => {
       return {
         id: userId,
         name: userId.toString(),
         email: `test${userId}@email.lt`,
       }
     }),
-  })
+  )
 }
 
 async function resolvePermissions(permissionsService: PermissionsService, userIds: string[]) {
@@ -71,7 +72,7 @@ describe('PermissionsConsumer', () => {
       channel = await (
         await app.diContainer.cradle.amqpConnectionManager.getConnection()
       ).createChannel()
-      await cleanTables(diContainer.cradle.prisma, [DB_MODEL.User])
+      await cleanTables(diContainer.cradle.drizzle, [DB_MODEL.User])
       await app.diContainer.cradle.permissionsService.deleteAll(testRequestContext)
       consumer = app.diContainer.cradle.permissionConsumer
       publisher = app.diContainer.cradle.publisherManager
@@ -83,11 +84,11 @@ describe('PermissionsConsumer', () => {
     })
 
     it('Creates permissions', async () => {
-      const { userService, permissionsService, prisma } = diContainer.cradle
+      const { userService, permissionsService, drizzle } = diContainer.cradle
       const users = await userService.getUsers(testRequestContext, userIds)
       expect(users).toHaveLength(0)
 
-      await createUsers(prisma, userIds)
+      await createUsers(drizzle, userIds)
 
       publisher.publishSync('permissions', {
         id: 'abc',
@@ -111,7 +112,7 @@ describe('PermissionsConsumer', () => {
     })
 
     it('Wait for users to be created and then create permissions', async () => {
-      const { userService, permissionsService, prisma } = diContainer.cradle
+      const { userService, permissionsService, drizzle } = diContainer.cradle
       const users = await userService.getUsers(testRequestContext, userIds)
       expect(users).toHaveLength(0)
 
@@ -131,7 +132,7 @@ describe('PermissionsConsumer', () => {
       const usersFromDb = await resolvePermissions(permissionsService, userIds)
       expect(usersFromDb).toBeNull()
 
-      await createUsers(prisma, userIds)
+      await createUsers(drizzle, userIds)
       await consumer.handlerSpy.waitForMessageWithId('def', 'consumed')
       const usersPermissions = await resolvePermissions(permissionsService, userIds)
 
@@ -144,13 +145,13 @@ describe('PermissionsConsumer', () => {
     })
 
     it('Not all users exist, no permissions were created', async () => {
-      const { userService, permissionsService, prisma } = diContainer.cradle
+      const { userService, permissionsService, drizzle } = diContainer.cradle
       const users = await userService.getUsers(testRequestContext, userIds)
       expect(users).toHaveLength(0)
 
       const partialUsers = [...userIds]
       const missingUser = partialUsers.pop()
-      await createUsers(prisma, partialUsers)
+      await createUsers(drizzle, partialUsers)
 
       publisher.publishSync('permissions', {
         id: 'abcdef',
@@ -168,7 +169,7 @@ describe('PermissionsConsumer', () => {
       const usersFromDb = await resolvePermissions(permissionsService, userIds)
       expect(usersFromDb).toBeNull()
 
-      await createUsers(prisma, [missingUser!])
+      await createUsers(drizzle, [missingUser!])
 
       await consumer.handlerSpy.waitForMessageWithId('abcdef', 'consumed')
       const usersPermissions = await resolvePermissions(permissionsService, userIds)
