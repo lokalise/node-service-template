@@ -60,7 +60,7 @@
     "@prisma/instrumentation": "^5.22.0",
     "@scalar/fastify-api-reference": "^1.25.66",
     "@supercharge/promise-pool": "^3.2.0",
-    "amqplib": "^0.10.4",
+    "amqplib": "^0.10.5",
     "awilix": "^12.0.3",
     "awilix-manager": "^5.5.0",
     "bullmq": "^5.25.4",
