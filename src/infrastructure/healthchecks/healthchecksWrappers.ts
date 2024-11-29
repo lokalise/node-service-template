@@ -2,17 +2,6 @@ import type { HealthChecker } from '@lokalise/fastify-extras'
 import type { Either } from '@lokalise/node-core'
 import type { FastifyInstance } from 'fastify'
 
-import type { AppInstance } from '../../app.js'
-
-export const wrapHealthCheck = (app: AppInstance, healthCheck: HealthChecker) => {
-  return async () => {
-    const response = await healthCheck(app as unknown as FastifyInstance)
-    if (response.error) {
-      throw response.error
-    }
-  }
-}
-
 export const redisHealthCheck: HealthChecker = (
   app: FastifyInstance,
 ): Promise<Either<Error, true>> => {
@@ -37,10 +26,4 @@ export const dbHealthCheck: HealthChecker = (
     })
   }
   return Promise.resolve({ result: true })
-}
-
-export function registerHealthChecks(app: AppInstance) {
-  app.addHealthCheck('heartbeat', () => true)
-  app.addHealthCheck('redis', wrapHealthCheck(app, redisHealthCheck))
-  app.addHealthCheck('postgres', wrapHealthCheck(app, dbHealthCheck))
 }

@@ -13,10 +13,10 @@ import fastifySwagger from '@fastify/swagger'
 import {
   amplitudePlugin,
   bugsnagPlugin,
+  commonHealthcheckPlugin,
   getRequestIdFastifyAppConfig,
   metricsPlugin,
   newrelicTransactionManagerPlugin,
-  publicHealthcheckPlugin,
   requestContextProviderPlugin,
 } from '@lokalise/fastify-extras'
 import { type CommonLogger, resolveLogger } from '@lokalise/node-core'
@@ -25,7 +25,6 @@ import scalarFastifyApiReference from '@scalar/fastify-api-reference'
 import { type AwilixContainer, asFunction } from 'awilix'
 import fastify from 'fastify'
 import type { FastifyInstance } from 'fastify'
-import customHealthCheck from 'fastify-custom-healthcheck'
 import fastifyGracefulShutdown from 'fastify-graceful-shutdown'
 import fastifyNoIcon from 'fastify-no-icon'
 import {
@@ -42,7 +41,6 @@ import { errorHandler } from './infrastructure/errors/errorHandler.js'
 import {
   dbHealthCheck,
   redisHealthCheck,
-  registerHealthChecks,
 } from './infrastructure/healthchecks/healthchecksWrappers.js'
 import { SINGLETON_CONFIG, registerDependencies } from './infrastructure/parentDiConfig.js'
 import type { DependencyOverrides } from './infrastructure/parentDiConfig.js'
@@ -244,20 +242,7 @@ export async function getApp(
   }
 
   if (configOverrides.healthchecksEnabled !== false) {
-    await app.register(customHealthCheck, {
-      path: '/',
-      logLevel: 'warn',
-      info: {
-        env: appConfig.nodeEnv,
-        app_version: appConfig.appVersion,
-        git_commit_sha: appConfig.gitCommitSha,
-      },
-      schema: false,
-      exposeFailure: false,
-    })
-
-    await app.register(publicHealthcheckPlugin, {
-      url: '/health',
+    await app.register(commonHealthcheckPlugin, {
       healthChecks: [
         {
           name: 'postgres',
@@ -317,10 +302,6 @@ export async function getApp(
         app.log.info('Starting graceful shutdown')
         return Promise.resolve()
       })
-    }
-
-    if (configOverrides.healthchecksEnabled !== false) {
-      registerHealthChecks(app)
     }
   })
 
