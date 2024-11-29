@@ -58,7 +58,6 @@ Service template also comes with a curated set of plugins [installed](./src/app.
 - @scalar/fastify-api-reference (OpenAPI specification website)
 - fastify-graceful-shutdown (handling SEGTERM gracefully)
 - fastify-no-icon (avoiding warnings when sending GET calls via browser)
-- fastify-custom-healthcheck (registering app and dependency healthchecks)
 - @lokalise/fastify-extras -> metricsPlugin (exposing Prometheus metrics)
 - @lokalise/fastify-extras -> requestContextProviderPlugin (storing requestId in AsyncLocalStorage and populating
   requestContext on request)
