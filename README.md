@@ -31,7 +31,7 @@ Scaffolding:
 
 Basic building block examples:
 
-- [Repository](./src/modules/users/repositories/UserRepository.ts) (using [prisma](https://www.prisma.io/));
+- [Repository](./src/modules/users/repositories/UserRepository.ts) (using [drizzle](https://orm.drizzle.team/));
 - [Domain service](./src/modules/users/services/UserService.ts);
 - [Controller](./src/modules/users/controllers/UserController.ts);
 - [Route](./src/modules/users/routes/userRoutes.ts);
@@ -97,24 +97,31 @@ are relevant for the technological stack of your organization, and replace `@lok
    ```
 
 5. Run migrations to synchronize your database schema with defined models:
-
    ```shell
-   node --run db:migration:dev
+   node-- run db:apply-migrations
    ```
 
-6. Generate Prisma client for type-safe DB operations:
-
-   ```shell
-   node --run db:update-client
-   ```
-
-7. To run application:
+6. To run application:
 
    ```shell
    node --run start:dev
    ```
 
    > **_NOTE:_** By default all calls to the `node-template` app will require a valid JWT token, hence authentication errors when running the application are expected if you haven't yet followed the steps in [Create jwt for dev usage](#create-jwt-for-dev-usage).
+
+### Drizzle Migrations
+
+We use [Drizzle](https://orm.drizzle.team/) as convenient mechanism for building queries.
+
+In order to automatically generate a new migration,
+
+1. Edit an existing schema file or add a new one to [src/db/schema](./src/db/schema);
+2. Run `node --run db:generate-migrations -- --name {migrationName}`, where `customName` is a short message describing your change separated by underscores (`_`);
+3. Run `node --run db:apply-migrations` to apply your new migration.
+
+In case you need to remove a previously generated migration,
+
+- Run `node --run db:drop-migrations`. It is recommended to use this command instead of deleting files manually, as it could break `drizzle-kit` (see [here](https://orm.drizzle.team/kit-docs/commands#drop-migration)).
 
 ### Tests
 

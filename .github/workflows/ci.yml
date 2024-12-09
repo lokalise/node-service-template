@@ -22,7 +22,6 @@ jobs:
       - name: Install
         run: |
           npm install --ignore-scripts
-          npx prisma generate
 
       - name: Docker start
         run: |
@@ -36,7 +35,7 @@ jobs:
         run: |
           node --run copy:config
           node --run db:wait
-          node --run db:migration:run
+          npm run db:apply-migrations
 
       - name: Run Tests
         run: |

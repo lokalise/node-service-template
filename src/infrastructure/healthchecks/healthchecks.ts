@@ -2,7 +2,8 @@ import { types } from 'node:util'
 import type { Either } from '@lokalise/node-core'
 
 import { AbstractHealthcheck, type Healthcheck } from '@lokalise/healthcheck-utils'
-import type { PrismaClient } from '@prisma/client'
+import { sql } from 'drizzle-orm'
+import type { PostgresJsDatabase } from 'drizzle-orm/postgres-js'
 import type Redis from 'ioredis'
 import type { CommonDependencies } from '../commonDiConfig.js'
 
@@ -47,16 +48,16 @@ export class DbHealthcheck
   extends AbstractHealthcheck<SupportedHealthchecks>
   implements Healthcheck
 {
-  private readonly prisma: PrismaClient
+  private readonly drizzle: PostgresJsDatabase
 
-  constructor({ config, prisma, healthcheckStore }: CommonDependencies) {
+  constructor({ config, drizzle, healthcheckStore }: CommonDependencies) {
     super(
       {
         healthcheckStore,
       },
       config.app.metrics.isEnabled,
     )
-    this.prisma = prisma
+    this.drizzle = drizzle
   }
 
   getId(): SupportedHealthchecks {
@@ -67,7 +68,7 @@ export class DbHealthcheck
     let checkTimeInMsecs: number
     try {
       const startTime = Date.now()
-      const response = await this.prisma.$queryRaw`SELECT 1`
+      const response = await this.drizzle.execute(sql`SELECT 1`)
       checkTimeInMsecs = Date.now() - startTime
       if (!response) {
         return {

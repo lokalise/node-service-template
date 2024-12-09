@@ -1,4 +1,3 @@
-import type { PrismaClient } from '@prisma/client'
 import { asFunction } from 'awilix'
 import type { FastifyInstance } from 'fastify'
 import type Redis from 'ioredis'
@@ -7,6 +6,7 @@ import type { AppInstance } from '../../app.js'
 import { getApp } from '../../app.js'
 
 import { randomUUID } from 'node:crypto'
+import type { PostgresJsDatabase } from 'drizzle-orm/postgres-js'
 import { dbHealthCheck, redisHealthCheck } from './healthchecksWrappers.js'
 
 const createRedisMock = (pingLatency: number, response = 'PONG') =>
@@ -14,9 +14,9 @@ const createRedisMock = (pingLatency: number, response = 'PONG') =>
     ping: () => new Promise((resolve) => setTimeout(resolve, pingLatency, response)),
   }) as Pick<Redis, 'ping'>
 
-const createPrismaMock = (shouldSucceed: boolean) =>
+const createDrizzleMock = (shouldSucceed: boolean) =>
   ({
-    $queryRaw: () => {
+    execute: () => {
       if (shouldSucceed) {
         return Promise.resolve([{ 1: 1n }])
       }
@@ -24,7 +24,7 @@ const createPrismaMock = (shouldSucceed: boolean) =>
         "Can't reach database server at `test-service.server.test`:`1234`\n\nPlease make sure your database server is running at `test-service.server.test`:`1234`.",
       )
     },
-  }) as Pick<PrismaClient, '$queryRaw'>
+  }) as unknown as Pick<PostgresJsDatabase, 'execute'>
 
 describe('healthcheck', () => {
   let app: AppInstance
@@ -42,8 +42,8 @@ describe('healthcheck', () => {
   describe('DB healthcheck', () => {
     it('Fails on unexpected DB response', async () => {
       app.diContainer.register(
-        'prisma',
-        asFunction(() => createPrismaMock(false)),
+        'drizzle',
+        asFunction(() => createDrizzleMock(false)),
       )
 
       await app.diContainer.cradle.healthcheckRefreshJob.process(randomUUID())
@@ -54,8 +54,8 @@ describe('healthcheck', () => {
 
     it('Does not fail on successful DB ping', async () => {
       app.diContainer.register(
-        'prisma',
-        asFunction(() => createPrismaMock(true)),
+        'drizzle',
+        asFunction(() => createDrizzleMock(true)),
       )
 
       await app.diContainer.cradle.healthcheckRefreshJob.process(randomUUID())

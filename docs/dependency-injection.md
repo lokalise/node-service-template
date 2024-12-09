@@ -64,15 +64,16 @@ only parameter (`asFunction` definition).
 Example:
 
 ```ts
-;({ config }: Dependencies) => {
-  return new PrismaClient({
-    datasources: {
-      db: {
-        url: config.db.databaseUrl,
-      },
-    },
-  })
-}
+drizzle: asFunction(
+        ({ config }: CommonDependencies) => {
+          const pg = postgres(config.db.databaseUrl)
+          return drizzle(pg)
+        },
+        {
+          dispose: (drizzle) => drizzle.$client.end(),
+          lifetime: Lifetime.SINGLETON,
+        },
+),
 ```
 
 ### Injection
@@ -89,7 +90,7 @@ export const postCreateUser = async (req: FastifyRequest, reply: FastifyReply) =
 
 // accessing the DI context on the app
 function plugin(fastify: FastifyInstance, opts: unknown, done: () => void) {
-  const { prisma, redis } = fastify.diContainer.cradle
+  const { drizzle, redis } = fastify.diContainer.cradle
   done()
 }
 

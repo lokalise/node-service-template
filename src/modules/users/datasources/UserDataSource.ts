@@ -1,6 +1,6 @@
-import type { User } from '@prisma/client'
 import type { DataSource } from 'layered-loader'
 
+import type { User } from '../../../db/schema/user.js'
 import type { UserRepository } from '../repositories/UserRepository.js'
 import type { UsersInjectableDependencies } from '../userDiConfig.js'
 

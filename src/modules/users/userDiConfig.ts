@@ -1,4 +1,3 @@
-import type { User } from '@prisma/client'
 import type { Resolver } from 'awilix'
 import { Lifetime, asClass, asFunction } from 'awilix'
 import type { InMemoryCacheConfiguration, LoaderConfig } from 'layered-loader'
@@ -9,6 +8,7 @@ import type { DIOptions } from '../../infrastructure/diConfigUtils.js'
 import { isJobEnabled, isQueueEnabled } from '../../infrastructure/diConfigUtils.js'
 import { SINGLETON_CONFIG } from '../../infrastructure/parentDiConfig.js'
 
+import type { User } from '../../db/schema/user.js'
 import { PermissionConsumer } from './consumers/PermissionConsumer.js'
 import { UserDataSource } from './datasources/UserDataSource.js'
 import { UserImportJob } from './job-queue-processors/UserImportJob.js'
