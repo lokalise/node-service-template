@@ -180,6 +180,7 @@ export async function getApp(
   })
 
   await app.register(fastifyAwilixPlugin, {
+    container: diContainer,
     disposeOnClose: true,
     asyncDispose: true,
     asyncInit: true,
