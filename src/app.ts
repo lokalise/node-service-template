@@ -3,7 +3,7 @@ import type http from 'node:http'
 
 import type { ServerZoneType } from '@amplitude/analytics-types'
 import fastifyAuth from '@fastify/auth'
-import { diContainer, fastifyAwilixPlugin } from '@fastify/awilix'
+import { fastifyAwilixPlugin } from '@fastify/awilix'
 import { fastifyCors } from '@fastify/cors'
 import fastifyHelmet from '@fastify/helmet'
 import type { Secret } from '@fastify/jwt'
@@ -22,7 +22,7 @@ import {
 import { type CommonLogger, resolveLogger } from '@lokalise/node-core'
 import { resolveGlobalErrorLogObject } from '@lokalise/node-core'
 import scalarFastifyApiReference from '@scalar/fastify-api-reference'
-import { type AwilixContainer, asFunction } from 'awilix'
+import { type AwilixContainer, asFunction, createContainer } from 'awilix'
 import fastify from 'fastify'
 import type { FastifyInstance } from 'fastify'
 import fastifyGracefulShutdown from 'fastify-graceful-shutdown'
@@ -85,6 +85,12 @@ export async function getApp(
     loggerInstance: logger,
     disableRequestLogging: !enableRequestLogging,
   })
+
+  const diContainer =
+    configOverrides.diContainer ??
+    createContainer({
+      injectionMode: 'PROXY',
+    })
 
   app.setValidatorCompiler(validatorCompiler)
   app.setSerializerCompiler(serializerCompiler)
@@ -174,6 +180,7 @@ export async function getApp(
   })
 
   await app.register(fastifyAwilixPlugin, {
+    container: diContainer,
     disposeOnClose: true,
     asyncDispose: true,
     asyncInit: true,
@@ -216,7 +223,7 @@ export async function getApp(
     : dependencyOverrides
 
   registerDependencies(
-    configOverrides.diContainer ?? diContainer,
+    diContainer,
     {
       app,
       logger: app.log,
