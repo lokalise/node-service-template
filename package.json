@@ -60,7 +60,7 @@
     "@supercharge/promise-pool": "^3.2.0",
     "amqplib": "^0.10.5",
     "awilix": "^12.0.4",
-    "awilix-manager": "^5.6.0",
+    "awilix-manager": "^6.0.0",
     "bullmq": "^5.34.6",
     "drizzle-orm": "^0.38.3",
     "drizzle-zod": "^0.6.1",
