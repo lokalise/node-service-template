@@ -76,7 +76,7 @@ are relevant for the technological stack of your organization, and replace `@lok
 
 ## Getting Started
 
-1. Make sure your node version is compatible with the requirements in [package.json](package.json). We are working with `node >= 20` and recommend using a version manager, such as [nvm](https://github.com/nvm-sh/nvm), to manage multiple Node versions on your device if needed.
+1. Make sure your node version is compatible with the requirements in [package.json](package.json). We are working with `node >= 22` and recommend using a version manager, such as [nvm](https://github.com/nvm-sh/nvm), to manage multiple Node versions on your device if needed.
 
 2. Install all project dependencies:
 
@@ -98,7 +98,7 @@ are relevant for the technological stack of your organization, and replace `@lok
 
 5. Run migrations to synchronize your database schema with defined models:
    ```shell
-   node-- run db:apply-migrations
+   node --run db:apply-migrations
    ```
 
 6. To run application:

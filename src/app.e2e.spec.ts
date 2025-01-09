@@ -81,10 +81,22 @@ describe('app', () => {
       expect(response.statusCode).toBe(200)
     })
 
-    it('Returns OpenAPI information (HTML)', async () => {
+    it('Returns OpenAPI information (Redirect)', async () => {
       const response = await app.inject().get('/documentation').end()
 
       expect(response.statusCode).toBe(302)
+    })
+
+    it('Returns OpenAPI information (HTML)', async () => {
+      const response = await app.inject().get('/documentation/').end()
+
+      expect(response.statusCode).toBe(200)
+    })
+
+    it('Returns OpenAPI information (OpenAPI.json)', async () => {
+      const response = await app.inject().get('/documentation/openapi.json').end()
+
+      expect(response.statusCode).toBe(200)
     })
   })
 
