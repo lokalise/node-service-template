@@ -175,9 +175,6 @@ export async function getApp(
   await app.register(scalarFastifyApiReference, {
     routePrefix: '/documentation',
   })
-  app.get('/documentation/json', { schema: { hide: true } }, () => {
-    return app.swagger()
-  })
 
   await app.register(fastifyAwilixPlugin, {
     container: diContainer,
@@ -204,7 +201,6 @@ export async function getApp(
       '/refresh-token',
       '/documentation',
       '/documentation/',
-      '/documentation/json',
       '/documentation/openapi.json',
       '/documentation/js/scalar.js',
       '/',
