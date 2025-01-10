@@ -137,7 +137,6 @@ export async function getApp(
       skipList: [
         '/documentation/',
         '/documentation/initOAuth',
-        '/documentation/json',
         '/documentation/uiConfig',
         '/documentation/yaml',
         '/documentation/*',

@@ -17,7 +17,7 @@ async function run() {
     monitoringEnabled: false,
   })
 
-  const openApiSpecResponse = await app.inject().get('/documentation/json')
+  const openApiSpecResponse = await app.inject().get('/documentation/openapi.json')
   const openApiSpecAsYaml = toYaml(JSON.parse(openApiSpecResponse.body))
 
   try {
