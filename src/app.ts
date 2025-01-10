@@ -137,7 +137,6 @@ export async function getApp(
       skipList: [
         '/documentation/',
         '/documentation/initOAuth',
-        '/documentation/json',
         '/documentation/uiConfig',
         '/documentation/yaml',
         '/documentation/*',
@@ -175,9 +174,6 @@ export async function getApp(
   await app.register(scalarFastifyApiReference, {
     routePrefix: '/documentation',
   })
-  app.get('/documentation/json', { schema: { hide: true } }, () => {
-    return app.swagger()
-  })
 
   await app.register(fastifyAwilixPlugin, {
     container: diContainer,
@@ -203,8 +199,9 @@ export async function getApp(
       '/access-token',
       '/refresh-token',
       '/documentation',
-      '/documentation/json',
-      '/documentation/@scalar/fastify-api-reference/js/browser.js',
+      '/documentation/',
+      '/documentation/openapi.json',
+      '/documentation/js/scalar.js',
       '/',
       '/health',
       '/metrics',
