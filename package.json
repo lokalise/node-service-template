@@ -43,7 +43,7 @@
     "@fastify/helmet": "^13.0.1",
     "@fastify/jwt": "^9.0.3",
     "@fastify/schedule": "^6.0.0",
-    "@fastify/swagger": "^9.4.1",
+    "@fastify/swagger": "^9.4.2",
     "@lokalise/backend-http-client": "^3.0.0",
     "@lokalise/background-jobs-common": "^9.1.0",
     "@lokalise/fastify-extras": "^26.0.0",
