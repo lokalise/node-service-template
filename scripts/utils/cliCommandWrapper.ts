@@ -16,15 +16,14 @@ const getArgs = () => {
   return values
 }
 
-export type CliCommand = <ArgsSchema extends z.Schema>(
-  dependencies: Dependencies,
-  requestContext: RequestContext,
-  args?: z.infer<ArgsSchema>,
-) => Promise<void> | void
+export type CliCommand<
+  ArgsSchema extends z.Schema | undefined,
+  Args = ArgsSchema extends z.Schema ? z.infer<ArgsSchema> : undefined,
+> = (dependencies: Dependencies, requestContext: RequestContext, args: Args) => Promise<void> | void
 
-export const cliCommandWrapper = async <ArgsSchema extends z.Schema>(
+export const cliCommandWrapper = async <ArgsSchema extends z.Schema | undefined>(
   cliCommandName: string,
-  command: CliCommand,
+  command: CliCommand<ArgsSchema>,
   argsSchema?: ArgsSchema,
 ): Promise<void> => {
   const app = await getApp({
@@ -43,7 +42,7 @@ export const cliCommandWrapper = async <ArgsSchema extends z.Schema>(
     }),
   }
 
-  let args: z.infer<ArgsSchema> | undefined
+  let args = undefined
   if (argsSchema) {
     const parseResult = argsSchema.safeParse(getArgs())
     if (!parseResult.success) {
@@ -56,6 +55,7 @@ export const cliCommandWrapper = async <ArgsSchema extends z.Schema>(
       await app.close()
       process.exit(1)
     }
+
     args = parseResult.data
   }
 

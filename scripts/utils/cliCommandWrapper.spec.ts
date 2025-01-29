@@ -29,7 +29,13 @@ describe('cliCommandWrapper', () => {
     },
     {
       inputArgs: ['--key=value', '-abc', '--flag'],
-      schema: z.object({ key: z.string(), flag: z.boolean(), a: z.boolean(), b: z.boolean(), c: z.boolean() }),
+      schema: z.object({
+        key: z.string(),
+        flag: z.boolean(),
+        a: z.boolean(),
+        b: z.boolean(),
+        c: z.boolean(),
+      }),
       expected: { key: 'value', flag: true, a: true, b: true, c: true },
     },
   ])('should parse arguments', async ({ inputArgs, schema, expected }) => {
@@ -48,20 +54,15 @@ describe('cliCommandWrapper', () => {
 
   it('should fail if arguments are not valid', async () => {
     process.argv = ['node', 'script.js', '--key=value']
-    await cliCommandWrapper(
-      'command',
-      () => undefined,
-      z.object({ key: z.number() }),
-    )
+    await cliCommandWrapper('command', () => undefined, z.object({ key: z.number() }))
     expect(exitSpy).toHaveBeenCalledWith(1)
   })
 
   it('should fail if cli command fail', async () => {
     process.argv = ['node', 'script.js', '--key=value']
-    await cliCommandWrapper(
-      'command',
-      () => { throw new Error()},
-    )
+    await cliCommandWrapper('command', () => {
+      throw new Error()
+    })
     expect(exitSpy).toHaveBeenCalledWith(1)
   })
 })
