@@ -1,5 +1,7 @@
+import type { RequestContext } from '@lokalise/fastify-extras'
 import z from 'zod'
-import { createCliContext, destroyCliContext } from '../utils/cliContextUtils.js'
+import type { Dependencies } from '../../src/infrastructure/parentDiConfig.js'
+import { cliCommandWrapper } from '../utils/cliCommandWrapper.js'
 
 const origin = 'getUserImportJobsCommand'
 const ARGUMENTS_SCHEMA = z.object({
@@ -7,14 +9,15 @@ const ARGUMENTS_SCHEMA = z.object({
 })
 type Arguments = z.infer<typeof ARGUMENTS_SCHEMA>
 
-async function run() {
-  const { app, logger, args } = await createCliContext<Arguments>(ARGUMENTS_SCHEMA, origin)
-  const userImportJob = app.diContainer.cradle.userImportJob
+const command = async (deps: Dependencies, reqContext: RequestContext, args: Arguments) => {
+  const userImportJob = deps.userImportJob
 
   const jobs = await userImportJob.getJobsInQueue([args.queue])
-  logger.info(jobs, `${args.queue} jobs`)
+  reqContext.logger.info(jobs, `${args.queue} jobs`)
+}
 
-  await destroyCliContext(app)
+async function run() {
+  await cliCommandWrapper(origin, command, ARGUMENTS_SCHEMA)
 }
 
 void run()
