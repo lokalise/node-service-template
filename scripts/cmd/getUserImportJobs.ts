@@ -16,8 +16,4 @@ const command = async (deps: Dependencies, reqContext: RequestContext, args: Arg
   reqContext.logger.info(jobs, `${args.queue} jobs`)
 }
 
-async function run() {
-  await cliCommandWrapper(origin, command, ARGUMENTS_SCHEMA)
-}
-
-void run()
+void cliCommandWrapper(origin, command, ARGUMENTS_SCHEMA)
