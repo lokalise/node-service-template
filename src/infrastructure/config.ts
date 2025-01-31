@@ -83,6 +83,7 @@ export type AppConfig = {
   metrics: {
     isEnabled: boolean
   }
+  cliMode: boolean
 }
 
 export function getConfig(): Config {
@@ -205,6 +206,7 @@ export function getAppConfig(): AppConfig {
     metrics: {
       isEnabled: configScope.getOptionalBoolean('METRICS_ENABLED', !configScope.isDevelopment()),
     },
+    cliMode: false, // If a different value is needed, it should be passed to the app directly
   }
 }
 

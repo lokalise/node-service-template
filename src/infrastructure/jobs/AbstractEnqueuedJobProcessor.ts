@@ -27,6 +27,13 @@ export abstract class AbstractEnqueuedJobProcessor<
         queueId: config.queueId,
         queueOptions: config.queueOptions,
         workerOptions: config.workerOptions,
+        /**
+         * autorun allows to decide when to start a worker. While we normally want it to always be running,
+         * in case of CLI commands it is advisable to not start it so that within the script we can add new jobs to
+         * the queue, but they (and existing jobs) will not be processed by the app instance created within the command.
+         * Processing will only be done by the live instance of the application, which is always running.
+         */
+        workerAutoRunEnabled: !dependencies.config.app.cliMode,
         redisConfig: dependencies.config.redis,
       },
     )
