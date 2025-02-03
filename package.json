@@ -45,7 +45,7 @@
     "@fastify/schedule": "^6.0.0",
     "@fastify/swagger": "^9.4.2",
     "@lokalise/backend-http-client": "^3.0.0",
-    "@lokalise/background-jobs-common": "^9.1.0",
+    "@lokalise/background-jobs-common": "^10.0.0",
     "@lokalise/fastify-extras": "^26.0.0",
     "@lokalise/healthcheck-utils": "^1.4.0",
     "@lokalise/id-utils": "^2.2.0",
