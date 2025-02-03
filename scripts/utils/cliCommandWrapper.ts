@@ -31,6 +31,9 @@ export const cliCommandWrapper = async <ArgsSchema extends z.Schema | undefined>
     jobsEnabled: false,
     healthchecksEnabled: false,
     monitoringEnabled: false,
+    app: {
+      cliMode: true,
+    },
   })
 
   const requestId = generateMonotonicUuid()
