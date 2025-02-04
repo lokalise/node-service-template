@@ -41,6 +41,7 @@ export class PermissionConsumer extends AbstractAmqpTopicConsumer<
         errorReporter: dependencies.errorReporter,
         logger: dependencies.logger,
         transactionObservabilityManager: dependencies.transactionObservabilityManager,
+        messageMetricsManager: dependencies.messageProcessingMetricsManager,
       },
       {
         creationConfig: {
