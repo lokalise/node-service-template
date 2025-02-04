@@ -47,6 +47,7 @@ import {
   STALENESS_THRESHOLD_IN_MSECS,
   type SupportedHealthchecks,
 } from './healthchecks/healthchecks.js'
+import { MessageProcessingMetricsManager } from './metrics/MessageProcessingMetricsManager.js'
 import { SINGLETON_CONFIG } from './parentDiConfig.js'
 import type { ExternalDependencies } from './parentDiConfig.js'
 
@@ -276,6 +277,14 @@ export function resolveCommonDiConfig(
     healthchecks: asFunction((dependencies: CommonDependencies) => {
       return [dependencies.redisHealthcheck, dependencies.dbHealthcheck]
     }, SINGLETON_CONFIG),
+
+    messageProcessingMetricsManager: asFunction(
+      () =>
+        dependencies.app?.metrics
+          ? new MessageProcessingMetricsManager(dependencies.app.metrics)
+          : undefined,
+      SINGLETON_CONFIG,
+    ),
   }
 }
 
@@ -308,4 +317,6 @@ export type CommonDependencies = {
   dbHealthcheck: DbHealthcheck
   healthcheckStore: HealthcheckResultsStore<SupportedHealthchecks>
   healthchecks: readonly Healthcheck[]
+
+  messageProcessingMetricsManager?: MessageProcessingMetricsManager
 }

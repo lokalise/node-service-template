@@ -1,10 +1,10 @@
 import type { Cradle } from '@fastify/awilix'
-import { waitAndRetry } from '@message-queue-toolkit/core'
+import { type MessagePublishType, waitAndRetry } from '@message-queue-toolkit/core'
 import type { Channel } from 'amqplib'
 import type { AwilixContainer } from 'awilix'
 import { asClass } from 'awilix'
 
-import { afterEach, beforeEach, describe, expect, it } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { DB_MODEL, cleanTables } from '../../../../test/DbCleaner.js'
 import { FakeConsumerErrorResolver } from '../../../../test/fakes/FakeConsumerErrorResolver.js'
 import { createRequestContext } from '../../../../test/requestUtils.js'
@@ -19,6 +19,7 @@ import { user as userTable } from '../../../db/schema/user.js'
 import type { PublisherManager } from '../../../infrastructure/commonDiConfig.js'
 import { buildQueueMessage } from '../../../utils/queueUtils.js'
 import { PermissionConsumer } from './PermissionConsumer.js'
+import type { PermissionsMessages } from './permissionsMessageSchemas.js'
 
 const userIds = [generateUuid7(), generateUuid7(), generateUuid7()]
 const perms: [string, ...string[]] = ['perm1', 'perm2']
@@ -62,6 +63,7 @@ describe('PermissionsConsumer', () => {
       app = await getApp(
         {
           queuesEnabled: [PermissionConsumer.QUEUE_NAME],
+          monitoringEnabled: true,
         },
         {
           consumerErrorResolver: asClass(FakeConsumerErrorResolver, SINGLETON_CONFIG),
@@ -233,6 +235,50 @@ describe('PermissionsConsumer', () => {
 
       // We fail first when doing real reading, and second one when trying to extract an id
       expect(fakeResolver.handleErrorCallsCount).toBe(2)
+    })
+
+    it('Registers message processing metrics', async () => {
+      // Given
+      const { permissionsService, drizzle } = diContainer.cradle
+      await createUsers(drizzle, userIds)
+
+      expect(diContainer.cradle.messageProcessingMetricsManager).toBeDefined()
+      const metricsSpy = vi.spyOn(
+        diContainer.cradle.messageProcessingMetricsManager!,
+        'registerProcessedMessage',
+      )
+
+      // When
+      const messageId = 'testId'
+      const message = {
+        id: messageId,
+        payload: {
+          userIds,
+          permissions: perms,
+        },
+        type: 'permissions.added',
+      } satisfies MessagePublishType<typeof PermissionsMessages.added>
+      publisher.publishSync('permissions', message)
+
+      // Then
+      await consumer.handlerSpy.waitForMessageWithId(messageId, 'consumed')
+
+      const usersPermissions = await resolvePermissions(permissionsService, userIds)
+
+      expect(usersPermissions).toBeDefined()
+      expect(usersPermissions).not.toBeNull()
+      expect(usersPermissions![0]).toHaveLength(2)
+
+      expect(metricsSpy).toHaveBeenCalledWith({
+        messageId: messageId,
+        messageType: 'permissions.added',
+        processingResult: 'consumed',
+        message: expect.objectContaining(message),
+        queueName: PermissionConsumer.QUEUE_NAME,
+        messageTimestamp: expect.any(Number),
+        messageProcessingStartTimestamp: expect.any(Number),
+        messageProcessingEndTimestamp: expect.any(Number),
+      })
     })
   })
 })
