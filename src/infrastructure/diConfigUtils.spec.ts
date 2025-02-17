@@ -1,78 +1,78 @@
 import { describe, expect, it } from 'vitest'
 
 import {
-  isAmqpConsumerEnabled,
-  isBullmqProcessorEnabled,
-  resolveBullmqQueuesEnabled,
+  isConsumerEnabled,
+  isEnqueuedJobsEnabled,
+  resolveBackgroundQueuesEnabled,
 } from './diConfigUtils.js'
 
 describe('diConfigUtils', () => {
-  describe('resolveBullmqQueuesEnabled', () => {
-    it('returns true when resolveBullmqQueuesEnabled is true', () => {
-      expect(resolveBullmqQueuesEnabled({ bullmqQueuesEnabled: true })).toBeTruthy()
+  describe('resolveBackgroundQueuesEnabled', () => {
+    it('returns true when backgroundQueuesEnabled is true', () => {
+      expect(resolveBackgroundQueuesEnabled({ backgroundQueuesEnabled: true })).toBeTruthy()
     })
 
-    it('returns false when resolveBullmqQueuesEnabled is false', () => {
-      expect(resolveBullmqQueuesEnabled({ bullmqQueuesEnabled: false })).toBeFalsy()
+    it('returns false when backgroundQueuesEnabled is false', () => {
+      expect(resolveBackgroundQueuesEnabled({ backgroundQueuesEnabled: false })).toBeFalsy()
     })
 
-    it('returns false when resolveBullmqQueuesEnabled is undefined', () => {
-      expect(resolveBullmqQueuesEnabled({})).toBeFalsy()
+    it('returns false when backgroundQueuesEnabled is undefined', () => {
+      expect(resolveBackgroundQueuesEnabled({})).toBeFalsy()
     })
 
-    it('returns false when resolveBullmqQueuesEnabled is an empty array', () => {
-      expect(resolveBullmqQueuesEnabled({ bullmqQueuesEnabled: [] })).toBeFalsy()
+    it('returns false when backgroundQueuesEnabled is an empty array', () => {
+      expect(resolveBackgroundQueuesEnabled({ backgroundQueuesEnabled: [] })).toBeFalsy()
     })
 
-    it('returns array when resolveBullmqQueuesEnabled is a valid array', () => {
-      expect(resolveBullmqQueuesEnabled({ bullmqQueuesEnabled: ['e1', 'e2'] })).toEqual([
+    it('returns array when backgroundQueuesEnabled is a valid array', () => {
+      expect(resolveBackgroundQueuesEnabled({ backgroundQueuesEnabled: ['e1', 'e2'] })).toEqual([
         'e1',
         'e2',
       ])
     })
   })
 
-  describe('isBullmqProcessorEnabled', () => {
-    it('returns true when bullmqProcessorsEnabled is true', () => {
-      expect(isBullmqProcessorEnabled({ bullmqProcessorsEnabled: true })).toBeTruthy()
+  describe('isEnqueuedJobsEnabled', () => {
+    it('returns true when enqueuedJobsEnabled is true', () => {
+      expect(isEnqueuedJobsEnabled({ enqueuedJobsEnabled: true })).toBeTruthy()
     })
 
-    it('returns false when bullmqProcessorsEnabled is false', () => {
-      expect(isBullmqProcessorEnabled({ bullmqProcessorsEnabled: false })).toBeFalsy()
+    it('returns false when enqueuedJobsEnabled is false', () => {
+      expect(isEnqueuedJobsEnabled({ enqueuedJobsEnabled: false })).toBeFalsy()
     })
 
-    it('returns false when bullmqProcessorsEnabled is undefined', () => {
-      expect(isBullmqProcessorEnabled({})).toBeFalsy()
+    it('returns false when enqueuedJobsEnabled is undefined', () => {
+      expect(isEnqueuedJobsEnabled({})).toBeFalsy()
     })
 
-    it('returns false when bullmqProcessorsEnabled is an array that includes the queue name', () => {
-      expect(isBullmqProcessorEnabled({ bullmqProcessorsEnabled: ['e1', 'e2'] }, 'e1')).toBeTruthy()
+    it('returns false when enqueuedJobsEnabled is an array that includes the queue name', () => {
+      expect(isEnqueuedJobsEnabled({ enqueuedJobsEnabled: ['e1', 'e2'] }, 'e1')).toBeTruthy()
     })
 
-    it('returns false when bullmqProcessorsEnabled is an array that does not include the queue name', () => {
-      expect(isBullmqProcessorEnabled({ bullmqProcessorsEnabled: ['e1', 'e2'] }, 'e3')).toBeFalsy()
+    it('returns false when enqueuedJobsEnabled is an array that does not include the queue name', () => {
+      expect(isEnqueuedJobsEnabled({ enqueuedJobsEnabled: ['e1', 'e2'] }, 'e3')).toBeFalsy()
     })
   })
 
-  describe('isAmqpConsumerEnabled', () => {
-    it('returns true when sqsConsumersEnabled is true', () => {
-      expect(isAmqpConsumerEnabled({ amqpConsumersEnabled: true })).toBeTruthy()
+  describe('isConsumerEnabled', () => {
+    it('returns true when consumersEnabled is true', () => {
+      expect(isConsumerEnabled({ consumersEnabled: true })).toBeTruthy()
     })
 
-    it('returns false when sqsConsumersEnabled is false', () => {
-      expect(isAmqpConsumerEnabled({ amqpConsumersEnabled: false })).toBeFalsy()
+    it('returns false when consumersEnabled is false', () => {
+      expect(isConsumerEnabled({ consumersEnabled: false })).toBeFalsy()
     })
 
-    it('returns false when sqsConsumersEnabled is undefined', () => {
-      expect(isAmqpConsumerEnabled({})).toBeFalsy()
+    it('returns false when consumersEnabled is undefined', () => {
+      expect(isConsumerEnabled({})).toBeFalsy()
     })
 
-    it('returns true when sqsConsumersEnabled is an array that includes the job name', () => {
-      expect(isAmqpConsumerEnabled({ amqpConsumersEnabled: ['e1', 'e2'] }, 'e1')).toBeTruthy()
+    it('returns true when consumersEnabled is an array that includes the job name', () => {
+      expect(isConsumerEnabled({ consumersEnabled: ['e1', 'e2'] }, 'e1')).toBeTruthy()
     })
 
-    it('returns false when sqsConsumersEnabled is an array that does not include the job name', () => {
-      expect(isAmqpConsumerEnabled({ amqpConsumersEnabled: ['e1', 'e2'] }, 'e3')).toBeFalsy()
+    it('returns false when consumersEnabled is an array that does not include the job name', () => {
+      expect(isConsumerEnabled({ consumersEnabled: ['e1', 'e2'] }, 'e3')).toBeFalsy()
     })
   })
 })

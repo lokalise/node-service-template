@@ -43,9 +43,9 @@ import { getAmqpConfig, getConfig, isTest } from './config.js'
 import type { Config } from './config.js'
 import {
   type DIOptions,
-  isAmqpConsumerEnabled,
-  isBullmqProcessorEnabled,
-  resolveBullmqQueuesEnabled,
+  isConsumerEnabled,
+  isEnqueuedJobsEnabled,
+  resolveBackgroundQueuesEnabled,
 } from './diConfigUtils.js'
 import { FakeAmplitude } from './fakes/FakeAmplitude.js'
 import { FakeNewrelicTransactionManager } from './fakes/FakeNewrelicTransactionManager.js'
@@ -208,7 +208,7 @@ export function resolveCommonDiConfig(
         }),
       {
         ...SINGLETON_CONFIG,
-        asyncInit: (manager) => manager.start(resolveBullmqQueuesEnabled(options)),
+        asyncInit: (manager) => manager.start(resolveBackgroundQueuesEnabled(options)),
         asyncDispose: 'dispose',
         asyncDisposePriority: 20,
       },
@@ -223,7 +223,7 @@ export function resolveCommonDiConfig(
         asyncInit: 'init',
         asyncDispose: 'close',
         asyncDisposePriority: 1,
-        enabled: isAmqpConsumerEnabled(options),
+        enabled: isConsumerEnabled(options),
       },
     ),
     consumerErrorResolver: asFunction(() => {
@@ -292,7 +292,7 @@ export function resolveCommonDiConfig(
       {
         lifetime: Lifetime.SINGLETON,
         eagerInject: 'register',
-        enabled: isBullmqProcessorEnabled(options, HealthcheckRefreshJob.JOB_NAME),
+        enabled: isEnqueuedJobsEnabled(options, HealthcheckRefreshJob.JOB_NAME),
       },
     ),
 

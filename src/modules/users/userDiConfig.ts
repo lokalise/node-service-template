@@ -6,8 +6,8 @@ import { Loader, RedisCache, createNotificationPair } from 'layered-loader'
 import type { CommonDependencies } from '../../infrastructure/commonDiConfig.js'
 import {
   type DIOptions,
-  isAmqpConsumerEnabled,
-  isBullmqProcessorEnabled,
+  isConsumerEnabled,
+  isEnqueuedJobsEnabled,
 } from '../../infrastructure/diConfigUtils.js'
 import { SINGLETON_CONFIG } from '../../infrastructure/parentDiConfig.js'
 
@@ -99,30 +99,30 @@ export function resolveUsersConfig(options: DIOptions): UsersDiConfig {
       asyncInitPriority: 10,
       asyncDispose: 'close',
       asyncDisposePriority: 10,
-      enabled: isAmqpConsumerEnabled(options, PermissionConsumer.QUEUE_NAME),
+      enabled: isConsumerEnabled(options, PermissionConsumer.QUEUE_NAME),
     }),
 
     processLogFilesJob: asClass(ProcessLogFilesJob, {
       lifetime: Lifetime.SINGLETON,
       eagerInject: 'register',
-      enabled: isBullmqProcessorEnabled(options, ProcessLogFilesJob.JOB_NAME),
+      enabled: options.arePeriodicJobsEnabled,
     }),
     deleteOldUsersJob: asClass(DeleteOldUsersJob, {
       lifetime: Lifetime.SINGLETON,
       eagerInject: 'register',
-      enabled: isBullmqProcessorEnabled(options, DeleteOldUsersJob.JOB_NAME),
+      enabled: options.arePeriodicJobsEnabled,
     }),
     sendEmailsJob: asClass(SendEmailsJob, {
       lifetime: Lifetime.SINGLETON,
       eagerInject: 'register',
-      enabled: isBullmqProcessorEnabled(options, SendEmailsJob.JOB_NAME),
+      enabled: options.arePeriodicJobsEnabled,
     }),
 
     userImportJob: asClass(UserImportJob, {
       lifetime: Lifetime.SINGLETON,
       asyncInit: 'start',
       asyncDispose: 'dispose',
-      enabled: isBullmqProcessorEnabled(options, UserImportJob.QUEUE_ID),
+      enabled: isEnqueuedJobsEnabled(options, UserImportJob.QUEUE_ID),
     }),
   }
 }

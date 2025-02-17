@@ -23,9 +23,10 @@ async function start() {
   const config = executeAndHandleGlobalErrors<Config>(getConfig)
   const app = await getApp({
     monitoringEnabled: config.app.metrics.isEnabled,
-    bullmqQueuesEnabled: true,
-    bullmqProcessorsEnabled: true,
-    amqpConsumersEnabled: true,
+    backgroundQueuesEnabled: true,
+    enqueuedJobsEnabled: true,
+    consumersEnabled: true,
+    arePeriodicJobsEnabled: true,
   })
 
   try {

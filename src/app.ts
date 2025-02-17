@@ -230,9 +230,10 @@ export async function getApp(
      * so we avoid doing that unless we intend to actually use them
      */
     {
-      bullmqProcessorsEnabled: configOverrides.bullmqProcessorsEnabled,
-      bullmqQueuesEnabled: configOverrides.bullmqQueuesEnabled,
-      amqpConsumersEnabled: configOverrides.amqpConsumersEnabled,
+      enqueuedJobsEnabled: configOverrides.enqueuedJobsEnabled,
+      backgroundQueuesEnabled: configOverrides.backgroundQueuesEnabled,
+      consumersEnabled: configOverrides.consumersEnabled,
+      arePeriodicJobsEnabled: !!configOverrides.arePeriodicJobsEnabled,
     },
   )
 
