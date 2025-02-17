@@ -1,31 +1,29 @@
-import type { BaseJobPayload } from '@lokalise/background-jobs-common'
+import { BASE_JOB_PAYLOAD_SCHEMA } from '@lokalise/background-jobs-common'
 import type { RequestContext } from '@lokalise/fastify-extras'
 import type { Job } from 'bullmq'
 
+import z from 'zod'
 import { SERVICE_NAME } from '../../../infrastructure/config.js'
 import { AbstractEnqueuedJobProcessor } from '../../../infrastructure/jobs/AbstractEnqueuedJobProcessor.js'
 import type { Dependencies } from '../../../infrastructure/parentDiConfig.js'
 import type { UserService } from '../services/UserService.js'
 
-export type UserImportJobPayload = {
-  payload: {
-    name: string
-    age: number
-    email: string
-  }
-} & BaseJobPayload
+export const USER_IMPORT_JOB_PAYLOAD = BASE_JOB_PAYLOAD_SCHEMA.extend({
+  name: z.string(),
+  age: z.number(),
+  email: z.string(),
+})
+type UserImportJobPayload = z.infer<typeof USER_IMPORT_JOB_PAYLOAD>
 
-export class UserImportJob extends AbstractEnqueuedJobProcessor<UserImportJobPayload> {
+export class UserImportJob extends AbstractEnqueuedJobProcessor<'UserImportJob'> {
   public static QUEUE_ID = 'UserImportJob'
   private readonly userService: UserService
 
   constructor(dependencies: Dependencies) {
     super(dependencies, {
-      queueId: UserImportJob.QUEUE_ID,
+      queueId: 'UserImportJob',
       ownerName: SERVICE_NAME,
-      workerOptions: {
-        concurrency: 10,
-      },
+      workerOptions: { concurrency: 10 },
     })
 
     this.userService = dependencies.userService
@@ -35,7 +33,7 @@ export class UserImportJob extends AbstractEnqueuedJobProcessor<UserImportJobPay
     job: Job<UserImportJobPayload>,
     requestContext: RequestContext,
   ): Promise<void> {
-    const user = await this.userService.createUser(job.data.payload)
+    const user = await this.userService.createUser(job.data)
 
     requestContext.logger.info(
       {

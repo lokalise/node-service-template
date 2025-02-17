@@ -4,8 +4,11 @@ import type { InMemoryCacheConfiguration, LoaderConfig } from 'layered-loader'
 import { Loader, RedisCache, createNotificationPair } from 'layered-loader'
 
 import type { CommonDependencies } from '../../infrastructure/commonDiConfig.js'
-import type { DIOptions } from '../../infrastructure/diConfigUtils.js'
-import { isJobEnabled, isQueueEnabled } from '../../infrastructure/diConfigUtils.js'
+import {
+  type DIOptions,
+  isAmqpConsumerEnabled,
+  isBullmqProcessorEnabled,
+} from '../../infrastructure/diConfigUtils.js'
 import { SINGLETON_CONFIG } from '../../infrastructure/parentDiConfig.js'
 
 import type { User } from '../../db/schema/user.js'
@@ -96,30 +99,30 @@ export function resolveUsersConfig(options: DIOptions): UsersDiConfig {
       asyncInitPriority: 10,
       asyncDispose: 'close',
       asyncDisposePriority: 10,
-      enabled: isQueueEnabled(options, PermissionConsumer.QUEUE_NAME),
+      enabled: isAmqpConsumerEnabled(options, PermissionConsumer.QUEUE_NAME),
     }),
 
     processLogFilesJob: asClass(ProcessLogFilesJob, {
       lifetime: Lifetime.SINGLETON,
       eagerInject: 'register',
-      enabled: isJobEnabled(options, ProcessLogFilesJob.JOB_NAME),
+      enabled: isBullmqProcessorEnabled(options, ProcessLogFilesJob.JOB_NAME),
     }),
     deleteOldUsersJob: asClass(DeleteOldUsersJob, {
       lifetime: Lifetime.SINGLETON,
       eagerInject: 'register',
-      enabled: isJobEnabled(options, DeleteOldUsersJob.JOB_NAME),
+      enabled: isBullmqProcessorEnabled(options, DeleteOldUsersJob.JOB_NAME),
     }),
     sendEmailsJob: asClass(SendEmailsJob, {
       lifetime: Lifetime.SINGLETON,
       eagerInject: 'register',
-      enabled: isJobEnabled(options, SendEmailsJob.JOB_NAME),
+      enabled: isBullmqProcessorEnabled(options, SendEmailsJob.JOB_NAME),
     }),
 
     userImportJob: asClass(UserImportJob, {
       lifetime: Lifetime.SINGLETON,
       asyncInit: 'start',
       asyncDispose: 'dispose',
-      enabled: isJobEnabled(options, UserImportJob.QUEUE_ID),
+      enabled: isBullmqProcessorEnabled(options, UserImportJob.QUEUE_ID),
     }),
   }
 }
