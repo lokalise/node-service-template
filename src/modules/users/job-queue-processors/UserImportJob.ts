@@ -21,7 +21,7 @@ export class UserImportJob extends AbstractEnqueuedJobProcessor<'UserImportJob'>
 
   constructor(dependencies: Dependencies) {
     super(dependencies, {
-      queueId: 'UserImportJob',
+      queueId: UserImportJob.QUEUE_ID,
       ownerName: SERVICE_NAME,
       workerOptions: { concurrency: 10 },
     })
