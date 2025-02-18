@@ -16,7 +16,7 @@ export const USER_IMPORT_JOB_PAYLOAD = BASE_JOB_PAYLOAD_SCHEMA.extend({
 type UserImportJobPayload = z.infer<typeof USER_IMPORT_JOB_PAYLOAD>
 
 export class UserImportJob extends AbstractEnqueuedJobProcessor<'UserImportJob'> {
-  public static QUEUE_ID = 'UserImportJob'
+  public static readonly QUEUE_ID = 'UserImportJob'
   private readonly userService: UserService
 
   constructor(dependencies: Dependencies) {
@@ -39,7 +39,7 @@ export class UserImportJob extends AbstractEnqueuedJobProcessor<'UserImportJob'>
       {
         userId: user.id,
       },
-      `Created new user`,
+      'Created new user',
     )
   }
 }

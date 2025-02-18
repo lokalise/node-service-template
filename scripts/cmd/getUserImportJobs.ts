@@ -10,9 +10,9 @@ const ARGUMENTS_SCHEMA = z.object({
 type Arguments = z.infer<typeof ARGUMENTS_SCHEMA>
 
 const command = async (deps: Dependencies, reqContext: RequestContext, args: Arguments) => {
-  const userImportJob = deps.userImportJob
+  const queueManager = deps.bullmqQueueManager
 
-  const jobs = await userImportJob.getJobsInQueue([args.queue])
+  const jobs = await queueManager.getJobsInQueue('UserImportJob', [args.queue])
   reqContext.logger.info(jobs, `${args.queue} jobs`)
 }
 

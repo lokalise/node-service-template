@@ -1,6 +1,5 @@
 import { EventEmitter } from 'node:events'
 import type http from 'node:http'
-
 import type { ServerZoneType } from '@amplitude/analytics-types'
 import fastifyAuth from '@fastify/auth'
 import { fastifyAwilixPlugin } from '@fastify/awilix'
@@ -33,7 +32,6 @@ import {
   validatorCompiler,
 } from 'fastify-type-provider-zod'
 import type { ZodTypeProvider } from 'fastify-type-provider-zod'
-
 import { merge } from 'ts-deepmerge'
 import type { PartialDeep } from 'type-fest'
 import { type Config, getConfig, isDevelopment } from './infrastructure/config.js'

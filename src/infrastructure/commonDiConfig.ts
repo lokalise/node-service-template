@@ -35,10 +35,7 @@ import { ToadScheduler } from 'toad-scheduler'
 import type z from 'zod'
 import { FakeStoreApiClient } from '../integrations/FakeStoreApiClient.js'
 import { PermissionsMessages } from '../modules/users/consumers/permissionsMessageSchemas.js'
-import {
-  USER_IMPORT_JOB_PAYLOAD,
-  UserImportJob,
-} from '../modules/users/job-queue-processors/UserImportJob.js'
+import { userBullmqQueues } from '../modules/users/userDiConfig.js'
 import { getAmqpConfig, getConfig, isTest } from './config.js'
 import type { Config } from './config.js'
 import {
@@ -72,12 +69,7 @@ export type PublisherManager = AmqpTopicPublisherManager<
   AmqpSupportedMessages
 >
 
-const bullmqSupportedQueues = [
-  {
-    queueId: UserImportJob.QUEUE_ID,
-    jobPayloadSchema: USER_IMPORT_JOB_PAYLOAD,
-  },
-] as const satisfies QueueConfiguration[]
+const bullmqSupportedQueues = [...userBullmqQueues] as const satisfies QueueConfiguration[]
 export type BullmqSupportedQueues = typeof bullmqSupportedQueues
 
 export function resolveCommonDiConfig(

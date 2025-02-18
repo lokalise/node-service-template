@@ -11,10 +11,11 @@ import {
 } from '../../infrastructure/diConfigUtils.js'
 import { SINGLETON_CONFIG } from '../../infrastructure/parentDiConfig.js'
 
+import type { QueueConfiguration } from '@lokalise/background-jobs-common'
 import type { User } from '../../db/schema/user.js'
 import { PermissionConsumer } from './consumers/PermissionConsumer.js'
 import { UserDataSource } from './datasources/UserDataSource.js'
-import { UserImportJob } from './job-queue-processors/UserImportJob.js'
+import { USER_IMPORT_JOB_PAYLOAD, UserImportJob } from './job-queue-processors/UserImportJob.js'
 import { DeleteOldUsersJob } from './periodic-jobs/DeleteOldUsersJob.js'
 import { ProcessLogFilesJob } from './periodic-jobs/ProcessLogFilesJob.js'
 import { SendEmailsJob } from './periodic-jobs/SendEmailsJob.js'
@@ -126,3 +127,10 @@ export function resolveUsersConfig(options: DIOptions): UsersDiConfig {
     }),
   }
 }
+
+export const userBullmqQueues = [
+  {
+    queueId: UserImportJob.QUEUE_ID,
+    jobPayloadSchema: USER_IMPORT_JOB_PAYLOAD,
+  },
+] as const satisfies QueueConfiguration[]

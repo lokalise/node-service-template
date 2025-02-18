@@ -83,7 +83,6 @@ export type AppConfig = {
   metrics: {
     isEnabled: boolean
   }
-  cliMode: boolean
 }
 
 export function getConfig(): Config {
@@ -201,12 +200,11 @@ export function getAppConfig(): AppConfig {
     nodeEnv: configScope.getMandatoryOneOf('NODE_ENV', ['production', 'development', 'test']),
     appEnv: configScope.getMandatoryOneOf('APP_ENV', ['production', 'development', 'staging']),
     appVersion: configScope.getOptional('APP_VERSION', 'VERSION_NOT_SET'),
-    baseUrl: configScope.getOptional('BASE_URL', ``),
+    baseUrl: configScope.getOptional('BASE_URL', ''),
     gitCommitSha: configScope.getOptional('GIT_COMMIT_SHA', 'COMMIT_SHA_NOT_SET'),
     metrics: {
       isEnabled: configScope.getOptionalBoolean('METRICS_ENABLED', !configScope.isDevelopment()),
     },
-    cliMode: false, // If a different value is needed, it should be passed to the app directly
   }
 }
 
