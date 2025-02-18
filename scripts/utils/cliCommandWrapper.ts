@@ -32,7 +32,7 @@ export const cliCommandWrapper = async <ArgsSchema extends z.Schema | undefined>
     arePeriodicJobsEnabled: false,
     amqpConsumersEnabled: false,
     enqueuedJobsEnabled: false,
-    backgroundQueuesEnabled: true,
+    enqueuedJobQueuesEnabled: true,
   })
 
   const requestId = generateMonotonicUuid()

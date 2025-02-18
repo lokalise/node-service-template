@@ -229,7 +229,7 @@ export async function getApp(
      */
     {
       enqueuedJobsEnabled: configOverrides.enqueuedJobsEnabled,
-      backgroundQueuesEnabled: configOverrides.backgroundQueuesEnabled,
+      enqueuedJobQueuesEnabled: configOverrides.enqueuedJobQueuesEnabled,
       amqpConsumersEnabled: configOverrides.amqpConsumersEnabled,
       arePeriodicJobsEnabled: !!configOverrides.arePeriodicJobsEnabled,
     },

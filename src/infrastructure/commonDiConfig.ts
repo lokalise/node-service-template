@@ -42,7 +42,7 @@ import {
   type DIOptions,
   isAmqpConsumerEnabled,
   isEnqueuedJobsEnabled,
-  resolveBackgroundQueuesEnabled,
+  resolveEnqueuedJobQueuesEnabled,
 } from './diConfigUtils.js'
 import { FakeAmplitude } from './fakes/FakeAmplitude.js'
 import { FakeNewrelicTransactionManager } from './fakes/FakeNewrelicTransactionManager.js'
@@ -200,7 +200,7 @@ export function resolveCommonDiConfig(
         }),
       {
         ...SINGLETON_CONFIG,
-        asyncInit: (manager) => manager.start(resolveBackgroundQueuesEnabled(options)),
+        asyncInit: (manager) => manager.start(resolveEnqueuedJobQueuesEnabled(options)),
         asyncDispose: 'dispose',
         asyncDisposePriority: 20,
       },

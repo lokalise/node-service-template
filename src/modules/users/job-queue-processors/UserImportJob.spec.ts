@@ -20,7 +20,7 @@ describe('UserImportJob', () => {
       {},
       {
         enqueuedJobsEnabled: [UserImportJob.QUEUE_ID],
-        backgroundQueuesEnabled: [UserImportJob.QUEUE_ID],
+        enqueuedJobQueuesEnabled: [UserImportJob.QUEUE_ID],
       },
     )
     await cleanRedis(testContext.diContainer.cradle.redis)

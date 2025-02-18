@@ -3,29 +3,29 @@ import { describe, expect, it } from 'vitest'
 import {
   isAmqpConsumerEnabled,
   isEnqueuedJobsEnabled,
-  resolveBackgroundQueuesEnabled,
+  resolveEnqueuedJobQueuesEnabled,
 } from './diConfigUtils.js'
 
 describe('diConfigUtils', () => {
-  describe('resolveBackgroundQueuesEnabled', () => {
-    it('returns true when backgroundQueuesEnabled is true', () => {
-      expect(resolveBackgroundQueuesEnabled({ backgroundQueuesEnabled: true })).toBeTruthy()
+  describe('resolveEnqueuedJobQueuesEnabled', () => {
+    it('returns true when enqueuedJobQueuesEnabled is true', () => {
+      expect(resolveEnqueuedJobQueuesEnabled({ enqueuedJobQueuesEnabled: true })).toBeTruthy()
     })
 
-    it('returns false when backgroundQueuesEnabled is false', () => {
-      expect(resolveBackgroundQueuesEnabled({ backgroundQueuesEnabled: false })).toBeFalsy()
+    it('returns false when enqueuedJobQueuesEnabled is false', () => {
+      expect(resolveEnqueuedJobQueuesEnabled({ enqueuedJobQueuesEnabled: false })).toBeFalsy()
     })
 
-    it('returns false when backgroundQueuesEnabled is undefined', () => {
-      expect(resolveBackgroundQueuesEnabled({})).toBeFalsy()
+    it('returns false when enqueuedJobQueuesEnabled is undefined', () => {
+      expect(resolveEnqueuedJobQueuesEnabled({})).toBeFalsy()
     })
 
-    it('returns false when backgroundQueuesEnabled is an empty array', () => {
-      expect(resolveBackgroundQueuesEnabled({ backgroundQueuesEnabled: [] })).toBeFalsy()
+    it('returns false when enqueuedJobQueuesEnabled is an empty array', () => {
+      expect(resolveEnqueuedJobQueuesEnabled({ enqueuedJobQueuesEnabled: [] })).toBeFalsy()
     })
 
-    it('returns array when backgroundQueuesEnabled is a valid array', () => {
-      expect(resolveBackgroundQueuesEnabled({ backgroundQueuesEnabled: ['e1', 'e2'] })).toEqual([
+    it('returns array when enqueuedJobQueuesEnabled is a valid array', () => {
+      expect(resolveEnqueuedJobQueuesEnabled({ enqueuedJobQueuesEnabled: ['e1', 'e2'] })).toEqual([
         'e1',
         'e2',
       ])
