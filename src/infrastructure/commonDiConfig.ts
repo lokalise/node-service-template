@@ -1,6 +1,13 @@
 import type { JWT } from '@fastify/jwt'
+import { type QueueConfiguration, QueueManager } from '@lokalise/background-jobs-common'
+import { CommonBullmqFactoryNew } from '@lokalise/background-jobs-common/dist/background-job-processor/factories/CommonBullmqFactoryNew'
 import type { Amplitude, NewRelicTransactionManager } from '@lokalise/fastify-extras'
 import { reportErrorToBugsnag } from '@lokalise/fastify-extras'
+import {
+  type Healthcheck,
+  HealthcheckRefreshJob,
+  HealthcheckResultsStore,
+} from '@lokalise/healthcheck-utils'
 import type {
   CommonLogger,
   ErrorReporter,
@@ -15,29 +22,28 @@ import {
   AmqpTopicPublisherManager,
   CommonAmqpTopicPublisherFactory,
 } from '@message-queue-toolkit/amqp'
+import type { CommonAmqpTopicPublisher } from '@message-queue-toolkit/amqp'
+import { CommonMetadataFiller, EventRegistry } from '@message-queue-toolkit/core'
 import type { NameAndRegistrationPair } from 'awilix'
 import { Lifetime, asClass, asFunction } from 'awilix'
+import type { AwilixManager } from 'awilix-manager'
 import { drizzle } from 'drizzle-orm/postgres-js'
+import type { PostgresJsDatabase } from 'drizzle-orm/postgres-js'
 import Redis from 'ioredis'
 import postgres from 'postgres'
 import { ToadScheduler } from 'toad-scheduler'
-
-import { FakeStoreApiClient } from '../integrations/FakeStoreApiClient.js'
-
-import {
-  type Healthcheck,
-  HealthcheckRefreshJob,
-  HealthcheckResultsStore,
-} from '@lokalise/healthcheck-utils'
-import type { CommonAmqpTopicPublisher } from '@message-queue-toolkit/amqp'
-import { CommonMetadataFiller, EventRegistry } from '@message-queue-toolkit/core'
-import type { AwilixManager } from 'awilix-manager'
-import type { PostgresJsDatabase } from 'drizzle-orm/postgres-js'
 import type z from 'zod'
+import { FakeStoreApiClient } from '../integrations/FakeStoreApiClient.js'
 import { PermissionsMessages } from '../modules/users/consumers/permissionsMessageSchemas.js'
+import { userBullmqQueues } from '../modules/users/userDiConfig.js'
 import { getAmqpConfig, getConfig, isTest } from './config.js'
 import type { Config } from './config.js'
-import { type DIOptions, isJobEnabled } from './diConfigUtils.js'
+import {
+  type DIOptions,
+  isAmqpConsumerEnabled,
+  isEnqueuedJobsEnabled,
+  resolveEnqueuedJobQueuesEnabled,
+} from './diConfigUtils.js'
 import { FakeAmplitude } from './fakes/FakeAmplitude.js'
 import { FakeNewrelicTransactionManager } from './fakes/FakeNewrelicTransactionManager.js'
 import {
@@ -51,16 +57,20 @@ import { MessageProcessingMetricsManager } from './metrics/MessageProcessingMetr
 import { SINGLETON_CONFIG } from './parentDiConfig.js'
 import type { ExternalDependencies } from './parentDiConfig.js'
 
-const supportedMessages = [
+const amqpSupportedMessages = [
   ...Object.values(PermissionsMessages),
 ] as const satisfies AmqpAwareEventDefinition[]
+type AmqpSupportedMessages = typeof amqpSupportedMessages
 
-type MessagesPublishPayloadsType = z.infer<(typeof supportedMessages)[number]['publisherSchema']>
+type MessagesPublishPayloadsType = z.infer<AmqpSupportedMessages[number]['publisherSchema']>
 
 export type PublisherManager = AmqpTopicPublisherManager<
   CommonAmqpTopicPublisher<MessagesPublishPayloadsType>,
-  typeof supportedMessages
+  AmqpSupportedMessages
 >
+
+const bullmqSupportedQueues = [...userBullmqQueues] as const satisfies QueueConfiguration[]
+export type BullmqSupportedQueues = typeof bullmqSupportedQueues
 
 export function resolveCommonDiConfig(
   dependencies: ExternalDependencies = { logger: globalLogger },
@@ -181,6 +191,21 @@ export function resolveCommonDiConfig(
       },
     ),
 
+    bullmqQueueManager: asFunction(
+      (deps) =>
+        new QueueManager(new CommonBullmqFactoryNew(), bullmqSupportedQueues, {
+          redisConfig: deps.config.redis,
+          isTest: isTest(),
+          lazyInitEnabled: !isTest(),
+        }),
+      {
+        ...SINGLETON_CONFIG,
+        asyncInit: (manager) => manager.start(resolveEnqueuedJobQueuesEnabled(options)),
+        asyncDispose: 'dispose',
+        asyncDisposePriority: 20,
+      },
+    ),
+
     amqpConnectionManager: asFunction(
       () => {
         return new AmqpConnectionManager(getAmqpConfig(), dependencies.logger)
@@ -190,19 +215,19 @@ export function resolveCommonDiConfig(
         asyncInit: 'init',
         asyncDispose: 'close',
         asyncDisposePriority: 1,
-        enabled: options.queuesEnabled !== false && options.queuesEnabled !== undefined,
+        enabled: isAmqpConsumerEnabled(options),
       },
     ),
     consumerErrorResolver: asFunction(() => {
       return new AmqpConsumerErrorResolver()
     }, SINGLETON_CONFIG),
     eventRegistry: asFunction(() => {
-      return new EventRegistry(supportedMessages)
+      return new EventRegistry(amqpSupportedMessages)
     }, SINGLETON_CONFIG),
     publisherManager: asFunction((dependencies: CommonDependencies) => {
       return new AmqpTopicPublisherManager<
         CommonAmqpTopicPublisher<MessagesPublishPayloadsType>,
-        typeof supportedMessages
+        AmqpSupportedMessages
       >(
         {
           errorReporter: dependencies.errorReporter,
@@ -259,7 +284,7 @@ export function resolveCommonDiConfig(
       {
         lifetime: Lifetime.SINGLETON,
         eagerInject: 'register',
-        enabled: isJobEnabled(options, HealthcheckRefreshJob.JOB_NAME),
+        enabled: isEnqueuedJobsEnabled(options, HealthcheckRefreshJob.JOB_NAME),
       },
     ),
 
@@ -300,13 +325,15 @@ export type CommonDependencies = {
   redisConsumer: Redis
   drizzle: PostgresJsDatabase
 
+  bullmqQueueManager: QueueManager<BullmqSupportedQueues>
+
   amqpConnectionManager: AmqpConnectionManager
 
   // vendor-specific dependencies
   transactionObservabilityManager: TransactionObservabilityManager
   amplitude: Amplitude
 
-  eventRegistry: EventRegistry<typeof supportedMessages>
+  eventRegistry: EventRegistry<AmqpSupportedMessages>
   publisherManager: PublisherManager
   errorReporter: ErrorReporter
   consumerErrorResolver: ErrorResolver

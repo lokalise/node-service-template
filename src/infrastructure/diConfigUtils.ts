@@ -1,14 +1,26 @@
-const isEnabled = (option: boolean | string[] | undefined, name?: string): boolean => {
-  return name && Array.isArray(option) ? option.includes(name) : !!option
+export type DIOptions = {
+  enqueuedJobQueuesEnabled?: boolean | string[]
+  enqueuedJobsEnabled?: boolean | string[]
+  amqpConsumersEnabled?: boolean | string[]
+  arePeriodicJobsEnabled?: boolean
 }
 
-export const isJobEnabled = (options: DIOptions, name?: string): boolean =>
-  isEnabled(options.jobsEnabled, name)
+export const resolveEnqueuedJobQueuesEnabled = (options: DIOptions): boolean | string[] => {
+  const { enqueuedJobQueuesEnabled } = options
+  if (!enqueuedJobQueuesEnabled) return false
+  if (Array.isArray(enqueuedJobQueuesEnabled)) {
+    return enqueuedJobQueuesEnabled.length ? enqueuedJobQueuesEnabled : false
+  }
 
-export const isQueueEnabled = (options: DIOptions, name?: string): boolean =>
-  isEnabled(options.queuesEnabled, name)
+  return enqueuedJobQueuesEnabled
+}
 
-export type DIOptions = {
-  jobsEnabled?: boolean | string[]
-  queuesEnabled?: boolean | string[]
+export const isEnqueuedJobsEnabled = (options: DIOptions, name?: string): boolean =>
+  isEnabled(options.enqueuedJobsEnabled, name)
+
+export const isAmqpConsumerEnabled = (options: DIOptions, name?: string): boolean =>
+  isEnabled(options.amqpConsumersEnabled, name)
+
+const isEnabled = (option: boolean | string[] | undefined, name?: string): boolean => {
+  return name && Array.isArray(option) ? option.includes(name) : !!option
 }

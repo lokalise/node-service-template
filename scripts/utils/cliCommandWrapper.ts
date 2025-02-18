@@ -27,13 +27,12 @@ export const cliCommandWrapper = async <ArgsSchema extends z.Schema | undefined>
   argsSchema?: ArgsSchema,
 ): Promise<void> => {
   const app = await getApp({
-    queuesEnabled: false,
-    jobsEnabled: false,
     healthchecksEnabled: false,
     monitoringEnabled: false,
-    app: {
-      cliMode: true,
-    },
+    arePeriodicJobsEnabled: false,
+    amqpConsumersEnabled: false,
+    enqueuedJobsEnabled: false,
+    enqueuedJobQueuesEnabled: true,
   })
 
   const requestId = generateMonotonicUuid()

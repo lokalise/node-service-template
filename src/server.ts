@@ -23,8 +23,10 @@ async function start() {
   const config = executeAndHandleGlobalErrors<Config>(getConfig)
   const app = await getApp({
     monitoringEnabled: config.app.metrics.isEnabled,
-    jobsEnabled: true,
-    queuesEnabled: true,
+    enqueuedJobQueuesEnabled: true,
+    enqueuedJobsEnabled: true,
+    amqpConsumersEnabled: true,
+    arePeriodicJobsEnabled: true,
   })
 
   try {

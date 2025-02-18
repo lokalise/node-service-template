@@ -60,10 +60,7 @@ export async function createTestContext(
       logger: globalLogger,
     },
     dependencies,
-    {
-      queuesEnabled: !!options.queuesEnabled,
-      jobsEnabled: !!options.jobsEnabled,
-    },
+    { ...options, arePeriodicJobsEnabled: !!options.arePeriodicJobsEnabled },
   )
 
   await awilixManager.executeInit()

@@ -1,6 +1,5 @@
 import { EventEmitter } from 'node:events'
 import type http from 'node:http'
-
 import type { ServerZoneType } from '@amplitude/analytics-types'
 import fastifyAuth from '@fastify/auth'
 import { fastifyAwilixPlugin } from '@fastify/awilix'
@@ -33,10 +32,10 @@ import {
   validatorCompiler,
 } from 'fastify-type-provider-zod'
 import type { ZodTypeProvider } from 'fastify-type-provider-zod'
-
 import { merge } from 'ts-deepmerge'
 import type { PartialDeep } from 'type-fest'
 import { type Config, getConfig, isDevelopment } from './infrastructure/config.js'
+import type { DIOptions } from './infrastructure/diConfigUtils.js'
 import { errorHandler } from './infrastructure/errors/errorHandler.js'
 import {
   dbHealthCheck,
@@ -58,14 +57,12 @@ export type AppInstance = FastifyInstance<
   CommonLogger
 >
 
-export type ConfigOverrides = {
+export type ConfigOverrides = DIOptions & {
   diContainer?: AwilixContainer
   jwtKeys?: {
     public: Secret
     private: Secret
   }
-  queuesEnabled?: boolean | string[]
-  jobsEnabled?: boolean | string[]
   healthchecksEnabled?: boolean
   monitoringEnabled?: boolean
 } & PartialDeep<Config>
@@ -231,8 +228,10 @@ export async function getApp(
      * so we avoid doing that unless we intend to actually use them
      */
     {
-      queuesEnabled: !!configOverrides.queuesEnabled,
-      jobsEnabled: !!configOverrides.jobsEnabled,
+      enqueuedJobsEnabled: configOverrides.enqueuedJobsEnabled,
+      enqueuedJobQueuesEnabled: configOverrides.enqueuedJobQueuesEnabled,
+      amqpConsumersEnabled: configOverrides.amqpConsumersEnabled,
+      arePeriodicJobsEnabled: !!configOverrides.arePeriodicJobsEnabled,
     },
   )
 

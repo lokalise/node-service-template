@@ -4,14 +4,18 @@ import type { InMemoryCacheConfiguration, LoaderConfig } from 'layered-loader'
 import { Loader, RedisCache, createNotificationPair } from 'layered-loader'
 
 import type { CommonDependencies } from '../../infrastructure/commonDiConfig.js'
-import type { DIOptions } from '../../infrastructure/diConfigUtils.js'
-import { isJobEnabled, isQueueEnabled } from '../../infrastructure/diConfigUtils.js'
+import {
+  type DIOptions,
+  isAmqpConsumerEnabled,
+  isEnqueuedJobsEnabled,
+} from '../../infrastructure/diConfigUtils.js'
 import { SINGLETON_CONFIG } from '../../infrastructure/parentDiConfig.js'
 
+import type { QueueConfiguration } from '@lokalise/background-jobs-common'
 import type { User } from '../../db/schema/user.js'
 import { PermissionConsumer } from './consumers/PermissionConsumer.js'
 import { UserDataSource } from './datasources/UserDataSource.js'
-import { UserImportJob } from './job-queue-processors/UserImportJob.js'
+import { USER_IMPORT_JOB_PAYLOAD, UserImportJob } from './job-queue-processors/UserImportJob.js'
 import { DeleteOldUsersJob } from './periodic-jobs/DeleteOldUsersJob.js'
 import { ProcessLogFilesJob } from './periodic-jobs/ProcessLogFilesJob.js'
 import { SendEmailsJob } from './periodic-jobs/SendEmailsJob.js'
@@ -96,30 +100,37 @@ export function resolveUsersConfig(options: DIOptions): UsersDiConfig {
       asyncInitPriority: 10,
       asyncDispose: 'close',
       asyncDisposePriority: 10,
-      enabled: isQueueEnabled(options, PermissionConsumer.QUEUE_NAME),
+      enabled: isAmqpConsumerEnabled(options, PermissionConsumer.QUEUE_NAME),
     }),
 
     processLogFilesJob: asClass(ProcessLogFilesJob, {
       lifetime: Lifetime.SINGLETON,
       eagerInject: 'register',
-      enabled: isJobEnabled(options, ProcessLogFilesJob.JOB_NAME),
+      enabled: options.arePeriodicJobsEnabled,
     }),
     deleteOldUsersJob: asClass(DeleteOldUsersJob, {
       lifetime: Lifetime.SINGLETON,
       eagerInject: 'register',
-      enabled: isJobEnabled(options, DeleteOldUsersJob.JOB_NAME),
+      enabled: options.arePeriodicJobsEnabled,
     }),
     sendEmailsJob: asClass(SendEmailsJob, {
       lifetime: Lifetime.SINGLETON,
       eagerInject: 'register',
-      enabled: isJobEnabled(options, SendEmailsJob.JOB_NAME),
+      enabled: options.arePeriodicJobsEnabled,
     }),
 
     userImportJob: asClass(UserImportJob, {
       lifetime: Lifetime.SINGLETON,
       asyncInit: 'start',
       asyncDispose: 'dispose',
-      enabled: isJobEnabled(options, UserImportJob.QUEUE_ID),
+      enabled: isEnqueuedJobsEnabled(options, UserImportJob.QUEUE_ID),
     }),
   }
 }
+
+export const userBullmqQueues = [
+  {
+    queueId: UserImportJob.QUEUE_ID,
+    jobPayloadSchema: USER_IMPORT_JOB_PAYLOAD,
+  },
+] as const satisfies QueueConfiguration[]

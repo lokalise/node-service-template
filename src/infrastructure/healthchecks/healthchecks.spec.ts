@@ -29,9 +29,7 @@ const createDrizzleMock = (shouldSucceed: boolean) =>
 describe('healthcheck', () => {
   let app: AppInstance
   beforeEach(async () => {
-    app = await getApp({
-      jobsEnabled: false,
-    })
+    app = await getApp()
     app.diContainer.cradle.healthcheckStore.resetHealthcheckStores()
   })
 
