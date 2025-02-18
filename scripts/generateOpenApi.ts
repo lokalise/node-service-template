@@ -14,7 +14,7 @@ async function run() {
     healthchecksEnabled: false,
     monitoringEnabled: false,
     arePeriodicJobsEnabled: false,
-    consumersEnabled: false,
+    amqpConsumersEnabled: false,
     enqueuedJobsEnabled: false,
     backgroundQueuesEnabled: false,
   })

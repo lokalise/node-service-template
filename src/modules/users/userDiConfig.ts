@@ -6,7 +6,7 @@ import { Loader, RedisCache, createNotificationPair } from 'layered-loader'
 import type { CommonDependencies } from '../../infrastructure/commonDiConfig.js'
 import {
   type DIOptions,
-  isConsumerEnabled,
+  isAmqpConsumerEnabled,
   isEnqueuedJobsEnabled,
 } from '../../infrastructure/diConfigUtils.js'
 import { SINGLETON_CONFIG } from '../../infrastructure/parentDiConfig.js'
@@ -100,7 +100,7 @@ export function resolveUsersConfig(options: DIOptions): UsersDiConfig {
       asyncInitPriority: 10,
       asyncDispose: 'close',
       asyncDisposePriority: 10,
-      enabled: isConsumerEnabled(options, PermissionConsumer.QUEUE_NAME),
+      enabled: isAmqpConsumerEnabled(options, PermissionConsumer.QUEUE_NAME),
     }),
 
     processLogFilesJob: asClass(ProcessLogFilesJob, {

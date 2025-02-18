@@ -1,7 +1,7 @@
 export type DIOptions = {
   backgroundQueuesEnabled?: boolean | string[]
   enqueuedJobsEnabled?: boolean | string[]
-  consumersEnabled?: boolean | string[]
+  amqpConsumersEnabled?: boolean | string[]
   arePeriodicJobsEnabled?: boolean
 }
 
@@ -18,8 +18,8 @@ export const resolveBackgroundQueuesEnabled = (options: DIOptions): boolean | st
 export const isEnqueuedJobsEnabled = (options: DIOptions, name?: string): boolean =>
   isEnabled(options.enqueuedJobsEnabled, name)
 
-export const isConsumerEnabled = (options: DIOptions, name?: string): boolean =>
-  isEnabled(options.consumersEnabled, name)
+export const isAmqpConsumerEnabled = (options: DIOptions, name?: string): boolean =>
+  isEnabled(options.amqpConsumersEnabled, name)
 
 const isEnabled = (option: boolean | string[] | undefined, name?: string): boolean => {
   return name && Array.isArray(option) ? option.includes(name) : !!option

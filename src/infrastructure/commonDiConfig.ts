@@ -40,7 +40,7 @@ import { getAmqpConfig, getConfig, isTest } from './config.js'
 import type { Config } from './config.js'
 import {
   type DIOptions,
-  isConsumerEnabled,
+  isAmqpConsumerEnabled,
   isEnqueuedJobsEnabled,
   resolveBackgroundQueuesEnabled,
 } from './diConfigUtils.js'
@@ -215,7 +215,7 @@ export function resolveCommonDiConfig(
         asyncInit: 'init',
         asyncDispose: 'close',
         asyncDisposePriority: 1,
-        enabled: isConsumerEnabled(options),
+        enabled: isAmqpConsumerEnabled(options),
       },
     ),
     consumerErrorResolver: asFunction(() => {

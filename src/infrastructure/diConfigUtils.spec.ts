@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 
 import {
-  isConsumerEnabled,
+  isAmqpConsumerEnabled,
   isEnqueuedJobsEnabled,
   resolveBackgroundQueuesEnabled,
 } from './diConfigUtils.js'
@@ -54,25 +54,25 @@ describe('diConfigUtils', () => {
     })
   })
 
-  describe('isConsumerEnabled', () => {
-    it('returns true when consumersEnabled is true', () => {
-      expect(isConsumerEnabled({ consumersEnabled: true })).toBeTruthy()
+  describe('isAmqpConsumerEnabled', () => {
+    it('returns true when amqpConsumersEnabled is true', () => {
+      expect(isAmqpConsumerEnabled({ amqpConsumersEnabled: true })).toBeTruthy()
     })
 
-    it('returns false when consumersEnabled is false', () => {
-      expect(isConsumerEnabled({ consumersEnabled: false })).toBeFalsy()
+    it('returns false when amqpConsumersEnabled is false', () => {
+      expect(isAmqpConsumerEnabled({ amqpConsumersEnabled: false })).toBeFalsy()
     })
 
-    it('returns false when consumersEnabled is undefined', () => {
-      expect(isConsumerEnabled({})).toBeFalsy()
+    it('returns false when amqpConsumersEnabled is undefined', () => {
+      expect(isAmqpConsumerEnabled({})).toBeFalsy()
     })
 
-    it('returns true when consumersEnabled is an array that includes the job name', () => {
-      expect(isConsumerEnabled({ consumersEnabled: ['e1', 'e2'] }, 'e1')).toBeTruthy()
+    it('returns true when amqpConsumersEnabled is an array that includes the job name', () => {
+      expect(isAmqpConsumerEnabled({ amqpConsumersEnabled: ['e1', 'e2'] }, 'e1')).toBeTruthy()
     })
 
-    it('returns false when consumersEnabled is an array that does not include the job name', () => {
-      expect(isConsumerEnabled({ consumersEnabled: ['e1', 'e2'] }, 'e3')).toBeFalsy()
+    it('returns false when amqpConsumersEnabled is an array that does not include the job name', () => {
+      expect(isAmqpConsumerEnabled({ amqpConsumersEnabled: ['e1', 'e2'] }, 'e3')).toBeFalsy()
     })
   })
 })

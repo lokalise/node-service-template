@@ -25,7 +25,7 @@ async function start() {
     monitoringEnabled: config.app.metrics.isEnabled,
     backgroundQueuesEnabled: true,
     enqueuedJobsEnabled: true,
-    consumersEnabled: true,
+    amqpConsumersEnabled: true,
     arePeriodicJobsEnabled: true,
   })
 

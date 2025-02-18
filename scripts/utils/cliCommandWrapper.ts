@@ -30,7 +30,7 @@ export const cliCommandWrapper = async <ArgsSchema extends z.Schema | undefined>
     healthchecksEnabled: false,
     monitoringEnabled: false,
     arePeriodicJobsEnabled: false,
-    consumersEnabled: false,
+    amqpConsumersEnabled: false,
     enqueuedJobsEnabled: false,
     backgroundQueuesEnabled: true,
   })
