@@ -16,7 +16,7 @@ async function run() {
     arePeriodicJobsEnabled: false,
     consumersEnabled: false,
     enqueuedJobsEnabled: false,
-    backgroundQueuesEnabled: true,
+    backgroundQueuesEnabled: false,
   })
 
   const openApiSpecResponse = await app.inject().get('/documentation/openapi.json')
