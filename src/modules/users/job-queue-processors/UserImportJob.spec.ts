@@ -15,7 +15,7 @@ describe('UserImportJob', () => {
     testContext = await createTestContext(
       {},
       {
-        jobsEnabled: [UserImportJob.QUEUE_ID],
+        enqueuedJobsEnabled: [UserImportJob.QUEUE_ID],
       },
     )
     await cleanRedis(testContext.diContainer.cradle.redis)
