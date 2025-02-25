@@ -1,6 +1,6 @@
 services:
   postgres:
-    image: postgres:17.0
+    image: postgres:17.3
     # see https://www.postgresql.org/docs/current/non-durability.html
     command: '-c full_page_writes=off -c fsync=off -c synchronous_commit=off'
     ports:
@@ -21,7 +21,7 @@ services:
       - redis_data:/redis/data:cached
 
   rabbitmq:
-    image: rabbitmq:3.12.13-management
+    image: rabbitmq:3.13.7-management
     ports:
       - ${DOCKER_RABBITMQ_CLIENT_PORT:-5672}:5672
       - ${DOCKER_RABBITMQ_MANAGEMENT_PORT:-15672}:15672
@@ -29,7 +29,7 @@ services:
       - rabbit_data:/var/lib/rabbitmq
 
   localstack:
-    image: localstack/localstack:3.8.1
+    image: localstack/localstack:4.1.1
     hostname: localstack
     ports:
       - '4566:4566'
