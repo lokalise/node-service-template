@@ -38,3 +38,6 @@ updates:
         patterns:
           - 'awilix'
           - 'awilix-*'
+      aws:
+        patterns:
+          - '@aws-sdk/*'
