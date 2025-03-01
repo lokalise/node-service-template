@@ -5,7 +5,7 @@ import {
 } from '@lokalise/background-jobs-common'
 import { CommonBullmqFactoryNew } from '@lokalise/background-jobs-common/dist/background-job-processor/factories/CommonBullmqFactoryNew'
 import type { BullmqSupportedQueues } from '../commonDiConfig.js'
-import { SERVICE_NAME, isTest } from '../config.js'
+import { SERVICE_NAME } from '../config.js'
 import type { Dependencies } from '../parentDiConfig.js'
 
 type AbstractEnqueuedJobProcessorConfig<QueueId extends SupportedQueueIds<BullmqSupportedQueues>> =
@@ -28,10 +28,8 @@ export abstract class AbstractEnqueuedJobProcessor<
       },
       {
         queueId: config.queueId,
-        isTest: isTest(),
         ownerName: SERVICE_NAME,
         workerOptions: config.workerOptions,
-        redisConfig: dependencies.config.redis,
       },
     )
   }
