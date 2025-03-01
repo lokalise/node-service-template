@@ -28,10 +28,8 @@ export abstract class AbstractEnqueuedJobProcessor<
       },
       {
         queueId: config.queueId,
-        isTest: isTest(),
         ownerName: SERVICE_NAME,
         workerOptions: config.workerOptions,
-        redisConfig: dependencies.config.redis,
       },
     )
   }
