@@ -6,7 +6,7 @@
     "importHelpers": true,
     "esModuleInterop": true,
     "isolatedModules": true,
-    "moduleDetection": "force",
+    "moduleDetection": "auto",
     "resolveJsonModule": true,
     "verbatimModuleSyntax": true,
     "erasableSyntaxOnly": true,
