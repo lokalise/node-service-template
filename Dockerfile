@@ -37,13 +37,17 @@ FROM base AS runner
 
 COPY --from=builder /usr/bin/dumb-init /usr/bin/dumb-init
 
-USER node
-
 COPY --chown=node:node --from=builder /home/node/app/dist .
 COPY --chown=node:node --from=builder /home/node/app/prisma prisma
 COPY --chown=node:node --from=builder /home/node/app/prod_node_modules node_modules
 
+ARG GIT_COMMIT_SHA=""
+ARG APP_VERSION=""
+
+ENV GIT_COMMIT_SHA=${GIT_COMMIT_SHA}
+ENV APP_VERSION=${APP_VERSION}
 ENV NODE_ENV=production
 ENV NODE_PATH=.
 
+USER node
 CMD [ "dumb-init", "node", "/home/node/app/src/server.js" ]
