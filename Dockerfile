@@ -1,17 +1,21 @@
-FROM node:22-alpine AS base
+# ---- Base Node ----
+FROM node:22.14.0-bookworm-slim as base
 
-RUN set -ex && \
-    apk update && \
-    apk add --no-cache libssl3 openssl
+RUN set -ex;\
+    apt-get update -y; \
+    apt-get install -y --no-install-recommends libssl3; \
+    rm -rf /var/lib/apt/lists/*;
 
 RUN mkdir -p /home/node/app
 RUN chown -R node:node /home/node && chmod -R 770 /home/node
 WORKDIR /home/node/app
 
-FROM base AS builder
-RUN set -ex && \
-    apk update && \
-    apk add --no-cache \
+# ---- Dependencies ----
+FROM base AS dependencies
+
+RUN set -ex; \
+    apt-get update -y ; \
+    apt-get install -y --no-install-recommends \
       ca-certificates \
       dumb-init \
       make \
@@ -20,26 +24,36 @@ RUN set -ex && \
       python3 \
       git \
       openssl
+COPY --chown=node:node ./package.json ./package.json ./
+COPY --chown=node:node ./package-lock.json ./package-lock.json
+USER node
+# install production dependencies
+RUN set -ex; \
+    npm ci --ignore-scripts --omit dev;
+# separate production node_modules
+RUN cp -R node_modules prod_node_modules
+# install ALL node_modules, including 'devDependencies'
+RUN set -ex; \
+    npm install --ignore-scripts ;
 
-COPY prisma ./prisma
-COPY scripts ./scripts
-COPY src ./src
-COPY package.json package-lock.json tsconfig.json ./
+# ---- Build ----
+FROM dependencies as build
 
-RUN set -ex && \
-    npm ci --ignore-scripts --omit dev && \
-    npx prisma generate && \
-    cp -R node_modules prod_node_modules && \
-    npm install --ignore-scripts && \
-    npm run build
+COPY --chown=node:node . .
+RUN node --run build
 
-FROM base AS runner
+# ---- App ----
+FROM base as app
 
-COPY --from=builder /usr/bin/dumb-init /usr/bin/dumb-init
+COPY --chown=node:node --from=build /home/node/app/dist .
+COPY --chown=node:node --from=build /home/node/app/src/db/migrations src/db/migrations
+COPY --chown=node:node --from=build /home/node/app/prod_node_modules node_modules
 
-COPY --chown=node:node --from=builder /home/node/app/dist .
-COPY --chown=node:node --from=builder /home/node/app/prisma prisma
-COPY --chown=node:node --from=builder /home/node/app/prod_node_modules node_modules
+# ---- Release ----
+FROM base as release
+
+COPY --from=build /usr/bin/dumb-init /usr/bin/dumb-init
+COPY --chown=node:node --from=app /home/node/app /home/node/app
 
 ARG GIT_COMMIT_SHA=""
 ARG APP_VERSION=""
