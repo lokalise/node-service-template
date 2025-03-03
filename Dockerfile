@@ -29,7 +29,7 @@ COPY --chown=node:node ./package-lock.json ./package-lock.json
 USER node
 # install production dependencies
 RUN set -ex; \
-    npm ci --ignore-scripts;
+    npm ci --ignore-scripts --omit dev;
 # separate production node_modules
 RUN cp -R node_modules prod_node_modules
 # install ALL node_modules, including 'devDependencies'
