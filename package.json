@@ -100,7 +100,7 @@
     "oas-validator": "^5.0.8",
     "ts-deepmerge": "^7.0.2",
     "tsx": "^4.19.3",
-    "type-fest": "^4.36.0",
+    "type-fest": "^4.37.0",
     "typescript": "5.8.2",
     "vitest": "^3.0.7",
     "yaml": "^2.7.0"
