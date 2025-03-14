@@ -64,4 +64,5 @@ ENV NODE_ENV=production
 ENV NODE_PATH=.
 
 USER node
-CMD [ "dumb-init", "node", "/home/node/app/src/server.js" ]
+
+CMD ["dumb-init", "node", "--experimental-loader", "newrelic/esm-loader.mjs", "-r", "newrelic", "/home/node/app/src/server.js"]
