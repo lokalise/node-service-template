@@ -49,7 +49,7 @@ export async function createTestContext(
   })
 
   const fakeApp: Partial<AppInstance> = {
-    newrelicTransactionManager: new NewRelicTransactionManager(false),
+    newrelicTransactionManager: await NewRelicTransactionManager.create(false),
     awilixManager,
   }
 

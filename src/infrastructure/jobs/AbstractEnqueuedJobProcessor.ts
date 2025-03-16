@@ -3,7 +3,7 @@ import {
   type BackgroundJobProcessorConfigNew,
   type SupportedQueueIds,
 } from '@lokalise/background-jobs-common'
-import { CommonBullmqFactoryNew } from '@lokalise/background-jobs-common/dist/background-job-processor/factories/CommonBullmqFactoryNew'
+import { CommonBullmqFactoryNew } from '@lokalise/background-jobs-common'
 import type { BullmqSupportedQueues } from '../commonDiConfig.js'
 import { SERVICE_NAME } from '../config.js'
 import type { Dependencies } from '../parentDiConfig.js'

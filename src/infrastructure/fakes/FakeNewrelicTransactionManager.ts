@@ -1,13 +1,11 @@
-import { NewRelicTransactionManager } from '@lokalise/fastify-extras'
+import type { TransactionObservabilityManager } from '@lokalise/node-core'
 
-export class FakeNewrelicTransactionManager extends NewRelicTransactionManager {
-  constructor() {
-    super(false)
-  }
+export class FakeNewrelicTransactionManager implements TransactionObservabilityManager {
+  start(): void {}
 
-  override addCustomAttribute(): void {}
+  stop(): void {}
 
-  override start(): void {}
+  startWithGroup(): void {}
 
-  override stop(): void {}
+  addCustomAttributes(): void {}
 }

@@ -168,6 +168,10 @@ export async function getApp(
     },
   })
 
+  await app.register(newrelicTransactionManagerPlugin, {
+    isEnabled: config.vendors.newrelic.isEnabled,
+  })
+
   await app.register(scalarFastifyApiReference, {
     routePrefix: '/documentation',
   })
@@ -267,10 +271,6 @@ export async function getApp(
   await app.register(requestContextProviderPlugin)
 
   // Vendor-specific plugins
-  await app.register(newrelicTransactionManagerPlugin, {
-    isEnabled: config.vendors.newrelic.isEnabled,
-  })
-
   await app.register(bugsnagPlugin, {
     isEnabled: config.vendors.bugsnag.isEnabled,
     bugsnag: {
