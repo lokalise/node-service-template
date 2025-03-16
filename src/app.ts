@@ -168,6 +168,7 @@ export async function getApp(
     },
   })
 
+  // Since DI config relies on having app-scoped NewRelic instance to be set by the plugin, we instantiate it earlier than we run the DI initialization.
   await app.register(newrelicTransactionManagerPlugin, {
     isEnabled: config.vendors.newrelic.isEnabled,
   })
