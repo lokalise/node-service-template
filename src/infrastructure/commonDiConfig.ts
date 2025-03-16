@@ -1,7 +1,7 @@
 import type { JWT } from '@fastify/jwt'
 import { type QueueConfiguration, QueueManager } from '@lokalise/background-jobs-common'
-import { CommonBullmqFactoryNew } from '@lokalise/background-jobs-common/dist/background-job-processor/factories/CommonBullmqFactoryNew'
-import type { Amplitude, NewRelicTransactionManager } from '@lokalise/fastify-extras'
+import { CommonBullmqFactoryNew } from '@lokalise/background-jobs-common'
+import type { Amplitude } from '@lokalise/fastify-extras'
 import { reportErrorToBugsnag } from '@lokalise/fastify-extras'
 import {
   type Healthcheck,
@@ -45,7 +45,6 @@ import {
   resolveEnqueuedJobQueuesEnabled,
 } from './diConfigUtils.js'
 import { FakeAmplitude } from './fakes/FakeAmplitude.js'
-import { FakeNewrelicTransactionManager } from './fakes/FakeNewrelicTransactionManager.js'
 import {
   DbHealthcheck,
   HEALTHCHECK_TTL_IN_MSECS,
@@ -262,10 +261,7 @@ export function resolveCommonDiConfig(
 
     // vendor-specific dependencies
     transactionObservabilityManager: asFunction(() => {
-      return (
-        dependencies.app?.newrelicTransactionManager ??
-        (new FakeNewrelicTransactionManager() as NewRelicTransactionManager)
-      )
+      return dependencies.app?.newrelicTransactionManager!
     }, SINGLETON_CONFIG),
     amplitude: asFunction(() => {
       return dependencies.app?.amplitude ?? new FakeAmplitude()

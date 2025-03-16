@@ -1,12 +1,12 @@
 import type { ConsumerBaseMessageType, ProcessedMessageMetadata } from '@message-queue-toolkit/core'
 import {
-  MessageLifetimeMetric,
-  MessageProcessingMultiMetrics,
-  MessageProcessingTimeMetric,
+  MessageMultiMetricManager,
+  PrometheusMessageLifetimeMetric,
+  PrometheusMessageProcessingTimeMetric,
 } from '@message-queue-toolkit/metrics'
 import type { IFastifyMetrics } from 'fastify-metrics'
 
-export class MessageProcessingMetricsManager extends MessageProcessingMultiMetrics<ConsumerBaseMessageType> {
+export class MessageProcessingMetricsManager extends MessageMultiMetricManager<ConsumerBaseMessageType> {
   constructor(appMetrics: IFastifyMetrics) {
     const buckets = [100, 200, 300, 500, 1000, 3000, 10000, 50000, 100000]
     const messageVersionResolver = (
@@ -16,7 +16,7 @@ export class MessageProcessingMetricsManager extends MessageProcessingMultiMetri
     }
 
     super([
-      new MessageProcessingTimeMetric(
+      new PrometheusMessageProcessingTimeMetric(
         {
           name: 'message_processing_milliseconds',
           helpDescription: 'Message processing time in milliseconds',
@@ -25,7 +25,7 @@ export class MessageProcessingMetricsManager extends MessageProcessingMultiMetri
         },
         appMetrics.client,
       ),
-      new MessageLifetimeMetric(
+      new PrometheusMessageLifetimeMetric(
         {
           name: 'message_lifetime_milliseconds',
           helpDescription: 'Message lifetime in milliseconds',

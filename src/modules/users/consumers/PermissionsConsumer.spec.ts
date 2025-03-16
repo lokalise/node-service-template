@@ -102,7 +102,9 @@ describe('PermissionsConsumer', () => {
       })
 
       const messageResult = await consumer.handlerSpy.waitForMessageWithId('abc')
-      expect(messageResult.processingResult).toBe('consumed')
+      expect(messageResult.processingResult).toEqual({
+        status: 'consumed',
+      })
       const usersPermissions = await resolvePermissions(permissionsService, userIds)
 
       if (null === usersPermissions) {
@@ -128,7 +130,9 @@ describe('PermissionsConsumer', () => {
       })
 
       const messageResult = await consumer.handlerSpy.waitForMessageWithId('def')
-      expect(messageResult.processingResult).toBe('retryLater')
+      expect(messageResult.processingResult).toEqual({
+        status: 'retryLater',
+      })
 
       // no users in the database, so message will go back to the queue
       const usersFromDb = await resolvePermissions(permissionsService, userIds)
@@ -165,7 +169,9 @@ describe('PermissionsConsumer', () => {
       })
 
       const messageResult = await consumer.handlerSpy.waitForMessageWithId('abcdef', 'retryLater')
-      expect(messageResult.processingResult).toBe('retryLater')
+      expect(messageResult.processingResult).toEqual({
+        status: 'retryLater',
+      })
 
       // not all users are in the database, so message will go back to the queue
       const usersFromDb = await resolvePermissions(permissionsService, userIds)
@@ -219,7 +225,10 @@ describe('PermissionsConsumer', () => {
       const messageResult = await consumer.handlerSpy.waitForMessage({
         id: 'errorMessage',
       })
-      expect(messageResult.processingResult).toBe('invalid_message')
+      expect(messageResult.processingResult).toEqual({
+        errorReason: 'invalidMessage',
+        status: 'error',
+      })
 
       expect(fakeResolver.handleErrorCallsCount).toBe(1)
     })
@@ -272,7 +281,9 @@ describe('PermissionsConsumer', () => {
       expect(metricsSpy).toHaveBeenCalledWith({
         messageId: messageId,
         messageType: 'permissions.added',
-        processingResult: 'consumed',
+        processingResult: {
+          status: 'consumed',
+        },
         message: expect.objectContaining(message),
         queueName: PermissionConsumer.QUEUE_NAME,
         messageTimestamp: expect.any(Number),
