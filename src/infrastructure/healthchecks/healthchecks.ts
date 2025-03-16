@@ -4,7 +4,7 @@ import type { Either } from '@lokalise/node-core'
 import { AbstractHealthcheck, type Healthcheck } from '@lokalise/healthcheck-utils'
 import { sql } from 'drizzle-orm'
 import type { PostgresJsDatabase } from 'drizzle-orm/postgres-js'
-import type Redis from 'ioredis'
+import type { Redis } from 'ioredis'
 import type { CommonDependencies } from '../commonDiConfig.js'
 
 export type SupportedHealthchecks = 'redis' | 'postgres'

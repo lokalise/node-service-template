@@ -4,8 +4,6 @@ import {
   resolveGlobalErrorLogObject,
 } from '@lokalise/node-core'
 
-import packageJson from '../package.json' with { type: 'json' }
-
 import { getApp } from './app.js'
 import { getConfig } from './infrastructure/config.js'
 
@@ -25,7 +23,7 @@ async function start() {
       host: config.app.bindAddress,
       port: config.app.port,
       listenTextResolver: (address) => {
-        return `${packageJson.name} listening at ${address}`
+        return `node-service-template app listening at ${address}`
       },
     })
   } catch (err) {

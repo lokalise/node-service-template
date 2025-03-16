@@ -27,19 +27,19 @@ export const getUserRoutes = (): {
       },
       {
         method: 'GET',
-        url: `/users/:userId`,
+        url: '/users/:userId',
         handler: getUser,
         schema: { params: GET_USER_PARAMS_SCHEMA, describe: 'Get user' },
       },
       {
         method: 'DELETE',
-        url: `/users/:userId`,
+        url: '/users/:userId',
         handler: deleteUser,
         schema: { params: DELETE_USER_PARAMS_SCHEMA, describe: 'Delete user' },
       },
       {
         method: 'PATCH',
-        url: `/users/:userId`,
+        url: '/users/:userId',
         handler: patchUpdateUser,
         schema: {
           params: UPDATE_USER_PARAMS_SCHEMA,

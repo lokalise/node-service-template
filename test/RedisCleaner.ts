@@ -1,4 +1,4 @@
-import type Redis from 'ioredis'
+import type { Redis } from 'ioredis'
 
 export async function cleanRedis(redis: Redis) {
   await redis.flushall('SYNC')
