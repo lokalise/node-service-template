@@ -126,7 +126,7 @@ export async function getApp(
     })
   }
 
-  await app.register(fastifyNoIcon)
+  await app.register(fastifyNoIcon.default)
 
   await app.register(fastifyAuth)
   await app.register(fastifySwagger, {

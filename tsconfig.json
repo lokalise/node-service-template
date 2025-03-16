@@ -1,24 +1,10 @@
 {
-  "compilerOptions": {
-    "outDir": "dist",
-    "module": "ESNext",
-    "moduleResolution": "Bundler",
-    "importHelpers": true,
-    "esModuleInterop": true,
-    "isolatedModules": true,
-    "moduleDetection": "auto",
-    "resolveJsonModule": true,
-    "verbatimModuleSyntax": true,
-    "erasableSyntaxOnly": true,
-    "target": "ES2022",
-    "lib": ["ES2022"],
-    "sourceMap": true,
-    "types": ["node"],
-    "strict": true,
-    "libReplacement": false,
-    "noImplicitOverride": true,
-    "skipLibCheck": true,
-  },
-  "include": ["src/**/*", "scripts/**/*"],
-  "exclude": ["node_modules", "dist", "test/**/*.ts", "**/*.spec.ts"]
+    "extends": "@lokalise/tsconfig/tsc",
+    "compilerOptions": {
+        "types": ["node", "vitest/globals"],
+        "noUncheckedIndexedAccess": false,
+        "verbatimModuleSyntax": false,
+        "isolatedModules": true
+    },
+    "include": ["src/**/*", "scripts/**/*", "test/**/*", "vitest.config.mts"]
 }

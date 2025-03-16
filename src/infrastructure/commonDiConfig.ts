@@ -29,7 +29,7 @@ import { Lifetime, asClass, asFunction } from 'awilix'
 import type { AwilixManager } from 'awilix-manager'
 import { drizzle } from 'drizzle-orm/postgres-js'
 import type { PostgresJsDatabase } from 'drizzle-orm/postgres-js'
-import Redis from 'ioredis'
+import { Redis } from 'ioredis'
 import postgres from 'postgres'
 import { ToadScheduler } from 'toad-scheduler'
 import type z from 'zod'
@@ -261,7 +261,11 @@ export function resolveCommonDiConfig(
 
     // vendor-specific dependencies
     transactionObservabilityManager: asFunction(() => {
-      return dependencies.app?.newrelicTransactionManager!
+      if (!dependencies.app?.newrelicTransactionManager) {
+        throw new Error('Observability manager is not set')
+      }
+
+      return dependencies.app?.newrelicTransactionManager
     }, SINGLETON_CONFIG),
     amplitude: asFunction(() => {
       return dependencies.app?.amplitude ?? new FakeAmplitude()

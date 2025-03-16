@@ -3,7 +3,7 @@ import { randomUUID } from 'node:crypto'
 import type { ErrorReporter, TransactionObservabilityManager } from '@lokalise/node-core'
 import { resolveGlobalErrorLogObject } from '@lokalise/node-core'
 import type { FastifyBaseLogger } from 'fastify'
-import type Redis from 'ioredis'
+import type { Redis } from 'ioredis'
 import { stdSerializers } from 'pino'
 import type { LockOptions } from 'redis-semaphore'
 import { Mutex } from 'redis-semaphore'
@@ -151,14 +151,14 @@ export abstract class AbstractPeriodicJob {
       })
 
       if (!this.singleConsumerLock) {
-        logger.debug(`Periodic job skipped: unable to acquire single consumer lock`)
+        logger.debug('Periodic job skipped: unable to acquire single consumer lock')
         return
       }
     }
 
     try {
       this.transactionObservabilityManager.start(this.options.jobId, executionUuid)
-      if (this.options.shouldLogExecution) logger.info(`Periodic job started`)
+      if (this.options.shouldLogExecution) logger.info('Periodic job started')
 
       await this.processInternal(executionUuid)
     } catch (err) {
@@ -185,7 +185,7 @@ export abstract class AbstractPeriodicJob {
         this.singleConsumerLock.stopRefresh()
       }
 
-      if (this.options.shouldLogExecution) logger.info(`Periodic job finished`)
+      if (this.options.shouldLogExecution) logger.info('Periodic job finished')
       this.transactionObservabilityManager.stop(executionUuid)
     }
   }
