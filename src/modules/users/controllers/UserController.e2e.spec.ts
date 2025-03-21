@@ -10,7 +10,7 @@ import {
   getUserContract,
   patchUpdateUserContract,
   postCreateUserContract,
-} from './UserController.js'
+} from '../schemas/userApiContracts.js'
 
 describe('UserController', () => {
   let app: AppInstance
