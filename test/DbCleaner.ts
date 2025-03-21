@@ -6,7 +6,7 @@ import { user } from '../src/db/schema/user.js'
 export const DB_MODEL = {
   User: user,
   Post: post,
-} satisfies Record<string, PgTable>
+} as const satisfies Record<string, PgTable>
 
 export async function cleanTables(drizzle: PostgresJsDatabase, modelNames: PgTable[]) {
   for (const modelName of modelNames) {
