@@ -44,6 +44,7 @@ export class UserRepository {
   async createUser(user: NewUser): Promise<User> {
     const [result] = await this.drizzle.insert(userTable).values(user).returning()
 
-    return result
+    // biome-ignore lint/style/noNonNullAssertion: Insert should fail if no result is returned
+    return result!
   }
 }
