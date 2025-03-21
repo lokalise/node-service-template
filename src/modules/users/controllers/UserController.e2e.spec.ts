@@ -1,15 +1,16 @@
 import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest'
 
+import { injectGet, injectPatch, injectPost } from '@lokalise/fastify-api-contracts'
 import { DB_MODEL, cleanTables } from '../../../../test/DbCleaner.js'
 import { getTestConfigurationOverrides } from '../../../../test/jwtUtils.js'
 import type { AppInstance } from '../../../app.js'
 import { getApp } from '../../../app.js'
 import { generateJwtToken } from '../../../infrastructure/tokenUtils.js'
-import type {
-  CREATE_USER_BODY_SCHEMA_TYPE,
-  GET_USER_SCHEMA_RESPONSE_SCHEMA_TYPE,
-  UPDATE_USER_BODY_SCHEMA_TYPE,
-} from '../schemas/userSchemas.js'
+import {
+  getUserContract,
+  patchUpdateUserContract,
+  postCreateUserContract,
+} from './UserController.js'
 
 describe('UserController', () => {
   let app: AppInstance
@@ -26,14 +27,12 @@ describe('UserController', () => {
   describe('POST /users', () => {
     it('validates email format', async () => {
       const token = await generateJwtToken(app.jwt, { userId: 1 }, 9999)
-      const response = await app
-        .inject()
-        .post('/users')
-        .headers({
+      const response = await injectPost(app, postCreateUserContract, {
+        headers: {
           authorization: `Bearer ${token}`,
-        })
-        .body({ name: 'dummy', email: 'test' } as CREATE_USER_BODY_SCHEMA_TYPE)
-        .end()
+        },
+        body: { name: 'dummy', email: 'test' },
+      })
 
       expect(response.statusCode).toBe(400)
       expect(response.json()).toMatchInlineSnapshot(`
@@ -69,32 +68,33 @@ describe('UserController', () => {
     it('returns user when requested twice', async () => {
       const token = await generateJwtToken(app.jwt, { userId: '1' }, 9999)
 
-      const response = await app
-        .inject()
-        .post('/users')
-        .headers({
+      const response = await injectPost(app, postCreateUserContract, {
+        headers: {
           authorization: `Bearer ${token}`,
-        })
-        .body({ name: 'dummy', email: 'email@test.com' } satisfies CREATE_USER_BODY_SCHEMA_TYPE)
-        .end()
+        },
+        body: { name: 'dummy', email: 'email@test.com' },
+      })
+
       expect(response.statusCode).toBe(201)
-      const { id } = response.json<GET_USER_SCHEMA_RESPONSE_SCHEMA_TYPE>().data
+      const { id } = response.json().data
 
-      const response1 = await app
-        .inject()
-        .get(`/users/${id}`)
-        .headers({
+      const response1 = await injectGet(app, getUserContract, {
+        headers: {
           authorization: `Bearer ${token}`,
-        })
-        .end()
+        },
+        pathParams: {
+          userId: id,
+        },
+      })
 
-      const response2 = await app
-        .inject()
-        .get(`/users/${id}`)
-        .headers({
+      const response2 = await injectGet(app, getUserContract, {
+        headers: {
           authorization: `Bearer ${token}`,
-        })
-        .end()
+        },
+        pathParams: {
+          userId: id,
+        },
+      })
 
       expect(response1.statusCode).toBe(200)
       expect(response2.statusCode).toBe(200)
@@ -107,24 +107,24 @@ describe('UserController', () => {
     it('resets cache after deletion', async () => {
       const token = await generateJwtToken(app.jwt, { userId: '1' }, 9999)
 
-      const response = await app
-        .inject()
-        .post('/users')
-        .headers({
+      const response = await injectPost(app, postCreateUserContract, {
+        headers: {
           authorization: `Bearer ${token}`,
-        })
-        .body({ name: 'dummy', email: 'email@test.com' } as CREATE_USER_BODY_SCHEMA_TYPE)
-        .end()
-      expect(response.statusCode).toBe(201)
-      const { id } = response.json<GET_USER_SCHEMA_RESPONSE_SCHEMA_TYPE>().data
+        },
+        body: { name: 'dummy', email: 'email@test.com' },
+      })
 
-      const response1 = await app
-        .inject()
-        .get(`/users/${id}`)
-        .headers({
+      expect(response.statusCode).toBe(201)
+      const { id } = response.json().data
+
+      const response1 = await injectGet(app, getUserContract, {
+        headers: {
           authorization: `Bearer ${token}`,
-        })
-        .end()
+        },
+        pathParams: {
+          userId: id,
+        },
+      })
 
       await app
         .inject()
@@ -134,13 +134,14 @@ describe('UserController', () => {
         })
         .end()
 
-      const response2 = await app
-        .inject()
-        .get(`/users/${id}`)
-        .headers({
+      const response2 = await injectGet(app, getUserContract, {
+        headers: {
           authorization: `Bearer ${token}`,
-        })
-        .end()
+        },
+        pathParams: {
+          userId: id,
+        },
+      })
 
       expect(response1.statusCode).toBe(200)
       expect(response2.statusCode).toBe(404)
@@ -152,43 +153,45 @@ describe('UserController', () => {
     it('resets cache after update', async () => {
       const token = await generateJwtToken(app.jwt, { userId: 1 }, 9999)
 
-      const response = await app
-        .inject()
-        .post('/users')
-        .headers({
+      const response = await injectPost(app, postCreateUserContract, {
+        headers: {
           authorization: `Bearer ${token}`,
-        })
-        .body({ name: 'dummy', email: 'email@test.com' } as CREATE_USER_BODY_SCHEMA_TYPE)
-        .end()
+        },
+        body: { name: 'dummy', email: 'email@test.com' },
+      })
+
       expect(response.statusCode).toBe(201)
-      const { id } = response.json<GET_USER_SCHEMA_RESPONSE_SCHEMA_TYPE>().data
+      const { id } = response.json().data
 
-      const response1 = await app
-        .inject()
-        .get(`/users/${id}`)
-        .headers({
+      const response1 = await injectGet(app, getUserContract, {
+        headers: {
           authorization: `Bearer ${token}`,
-        })
-        .end()
+        },
+        pathParams: {
+          userId: id,
+        },
+      })
 
-      const updateResponse = await app
-        .inject()
-        .patch(`/users/${id}`)
-        .body({
+      const updateResponse = await injectPatch(app, patchUpdateUserContract, {
+        body: {
           name: 'updated',
-        } satisfies UPDATE_USER_BODY_SCHEMA_TYPE)
-        .headers({
+        },
+        pathParams: {
+          userId: id,
+        },
+        headers: {
           authorization: `Bearer ${token}`,
-        })
-        .end()
+        },
+      })
 
-      const response2 = await app
-        .inject()
-        .get(`/users/${id}`)
-        .headers({
+      const response2 = await injectGet(app, getUserContract, {
+        headers: {
           authorization: `Bearer ${token}`,
-        })
-        .end()
+        },
+        pathParams: {
+          userId: id,
+        },
+      })
 
       expect(updateResponse.statusCode).toBe(204)
       expect(response1.statusCode).toBe(200)

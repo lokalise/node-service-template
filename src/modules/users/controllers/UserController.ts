@@ -1,36 +1,61 @@
-import type { FastifyReply, FastifyRequest } from 'fastify'
-
-import type {
-  CREATE_USER_BODY_SCHEMA_TYPE,
-  DELETE_USER_PARAMS_SCHEMA_TYPE,
-  GET_USER_PARAMS_SCHEMA_TYPE,
-  UPDATE_USER_BODY_SCHEMA_TYPE,
-  UPDATE_USER_PARAMS_SCHEMA_TYPE,
+import {
+  buildFastifyNoPayloadRoute,
+  buildFastifyPayloadRoute,
+} from '@lokalise/fastify-api-contracts'
+import {
+  buildDeleteRoute,
+  buildGetRoute,
+  buildPayloadRoute,
+} from '@lokalise/universal-ts-utils/api-contracts/apiContracts'
+import z from 'zod'
+import {
+  AUTH_HEADERS,
+  CREATE_USER_BODY_SCHEMA,
+  CREATE_USER_RESPONSE_BODY_SCHEMA,
+  DELETE_USER_PARAMS_SCHEMA,
+  GET_USER_PARAMS_SCHEMA,
+  GET_USER_SCHEMA_RESPONSE_SCHEMA,
+  UPDATE_USER_BODY_SCHEMA,
+  UPDATE_USER_PARAMS_SCHEMA,
 } from '../schemas/userSchemas.js'
 
-export const postCreateUser = async (
-  req: FastifyRequest<{ Body: CREATE_USER_BODY_SCHEMA_TYPE }>,
-  reply: FastifyReply,
-): Promise<void> => {
-  const { name, email, age } = req.body
+export const postCreateUserContract = buildPayloadRoute({
+  method: 'post', // can also be 'patch' or 'post'
+  successResponseBodySchema: CREATE_USER_RESPONSE_BODY_SCHEMA,
+  requestHeaderSchema: AUTH_HEADERS,
+  requestBodySchema: CREATE_USER_BODY_SCHEMA,
+  pathResolver: () => '/users',
+  description: 'Create user',
+})
 
-  const { userService } = req.diScope.cradle
+export const postCreateUserRoute = buildFastifyPayloadRoute(
+  postCreateUserContract,
+  async (req, reply) => {
+    const { name, email, age } = req.body
 
-  const createdUser = await userService.createUser({
-    name,
-    email,
-    age,
-  })
+    const { userService } = req.diScope.cradle
 
-  return reply.status(201).send({
-    data: createdUser,
-  })
-}
+    const createdUser = await userService.createUser({
+      name,
+      email,
+      age,
+    })
 
-export const getUser = async (
-  req: FastifyRequest<{ Params: GET_USER_PARAMS_SCHEMA_TYPE }>,
-  reply: FastifyReply,
-): Promise<void> => {
+    return reply.status(201).send({
+      data: createdUser,
+    })
+  },
+)
+
+export const getUserContract = buildGetRoute({
+  successResponseBodySchema: GET_USER_SCHEMA_RESPONSE_SCHEMA,
+  requestPathParamsSchema: GET_USER_PARAMS_SCHEMA,
+  requestHeaderSchema: AUTH_HEADERS,
+  pathResolver: (params) => `/users/${params.userId}`,
+  description: 'Get user',
+})
+
+export const getUserRoute = buildFastifyNoPayloadRoute(getUserContract, async (req, reply) => {
   const { userId } = req.params
   const { reqContext } = req
 
@@ -41,36 +66,51 @@ export const getUser = async (
   return reply.send({
     data: user,
   })
-}
+})
 
-export const deleteUser = async (
-  req: FastifyRequest<{ Params: DELETE_USER_PARAMS_SCHEMA_TYPE }>,
-  reply: FastifyReply,
-): Promise<void> => {
-  const { userId } = req.params
-  const { reqContext } = req
+export const deleteUserContract = buildDeleteRoute({
+  successResponseBodySchema: z.undefined(),
+  requestPathParamsSchema: DELETE_USER_PARAMS_SCHEMA,
+  pathResolver: (params) => `/users/${params.userId}`,
+  description: 'Delete user',
+})
 
-  const { userService } = req.diScope.cradle
+export const deleteUserRoute = buildFastifyNoPayloadRoute(
+  deleteUserContract,
+  async (req, reply) => {
+    const { userId } = req.params
+    const { reqContext } = req
 
-  await userService.deleteUser(reqContext, userId)
+    const { userService } = req.diScope.cradle
 
-  return reply.status(204).send()
-}
+    await userService.deleteUser(reqContext, userId)
 
-export const patchUpdateUser = async (
-  req: FastifyRequest<{
-    Params: UPDATE_USER_PARAMS_SCHEMA_TYPE
-    Body: UPDATE_USER_BODY_SCHEMA_TYPE
-  }>,
-  reply: FastifyReply,
-): Promise<void> => {
-  const { userId } = req.params
-  const updatedUser = req.body
-  const { reqContext } = req
+    return reply.status(204).send()
+  },
+)
 
-  const { userService } = req.diScope.cradle
+export const patchUpdateUserContract = buildPayloadRoute({
+  method: 'patch', // can also be 'patch' or 'post'
+  successResponseBodySchema: z.undefined(),
+  isEmptyResponseExpected: true,
+  requestBodySchema: UPDATE_USER_BODY_SCHEMA,
+  requestPathParamsSchema: UPDATE_USER_PARAMS_SCHEMA,
+  requestHeaderSchema: AUTH_HEADERS,
+  pathResolver: (params) => `/users/${params.userId}`,
+  description: 'Update user',
+})
 
-  await userService.updateUser(reqContext, userId, updatedUser)
+export const patchUpdateUserRoute = buildFastifyPayloadRoute(
+  patchUpdateUserContract,
+  async (req, reply) => {
+    const { userId } = req.params
+    const updatedUser = req.body
+    const { reqContext } = req
 
-  return reply.status(204).send()
-}
+    const { userService } = req.diScope.cradle
+
+    await userService.updateUser(reqContext, userId, updatedUser)
+
+    return reply.status(204).send()
+  },
+)
