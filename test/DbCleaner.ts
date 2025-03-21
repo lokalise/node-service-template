@@ -3,10 +3,10 @@ import type { PostgresJsDatabase } from 'drizzle-orm/postgres-js'
 import { post } from '../src/db/schema/post.js'
 import { user } from '../src/db/schema/user.js'
 
-export const DB_MODEL: Record<string, PgTable> = {
+export const DB_MODEL = {
   User: user,
   Post: post,
-}
+} as const
 
 export async function cleanTables(drizzle: PostgresJsDatabase, modelNames: PgTable[]) {
   for (const modelName of modelNames) {
