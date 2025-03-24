@@ -64,7 +64,7 @@
         "amqplib": "^0.10.5",
         "awilix": "^12.0.5",
         "awilix-manager": "^6.1.0",
-        "bullmq": "^5.43.1",
+        "bullmq": "^5.44.3",
         "drizzle-orm": "^0.41.0",
         "drizzle-zod": "^0.7.0",
         "fastify": "^5.2.1",
