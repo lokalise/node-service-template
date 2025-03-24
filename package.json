@@ -47,6 +47,7 @@
         "@fastify/swagger": "^9.4.2",
         "@lokalise/backend-http-client": "^4.1.1",
         "@lokalise/background-jobs-common": "^12.0.1",
+        "@lokalise/fastify-api-contracts": "^1.4.4",
         "@lokalise/fastify-extras": "^27.2.0",
         "@lokalise/healthcheck-utils": "^2.0.0",
         "@lokalise/id-utils": "^3.0.0",
