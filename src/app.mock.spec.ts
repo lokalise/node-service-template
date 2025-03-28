@@ -5,8 +5,7 @@ import { createRequestContext } from '../test/requestUtils.js'
 import type { AppInstance } from './app.js'
 import { getApp } from './app.js'
 import type { User } from './db/schema/user.js'
-import type { Dependencies } from './infrastructure/parentDiConfig.js'
-import { SINGLETON_CONFIG } from './infrastructure/parentDiConfig.js'
+import { type Dependencies, SINGLETON_CONFIG } from './infrastructure/CommonModule.js'
 import { UserService } from './modules/users/services/UserService.js'
 
 class FakeUserService extends UserService {

@@ -2,10 +2,11 @@ import { parseArgs } from 'node:util'
 import type { RequestContext } from '@lokalise/fastify-extras'
 import { generateMonotonicUuid } from '@lokalise/id-utils'
 import { isError } from '@lokalise/universal-ts-utils/node'
+import { ENABLE_ALL } from 'opinionated-machine'
 import pino from 'pino'
 import type z from 'zod'
 import { getApp } from '../../src/app.js'
-import type { Dependencies } from '../../src/infrastructure/parentDiConfig.js'
+import type { Dependencies } from '../../src/infrastructure/CommonModule.js'
 
 const getArgs = () => {
   const { values } = parseArgs({
@@ -29,10 +30,10 @@ export const cliCommandWrapper = async <ArgsSchema extends z.Schema | undefined>
   const app = await getApp({
     healthchecksEnabled: false,
     monitoringEnabled: false,
-    arePeriodicJobsEnabled: false,
-    amqpConsumersEnabled: false,
-    enqueuedJobsEnabled: false,
-    enqueuedJobQueuesEnabled: true,
+    periodicJobsEnabled: false,
+    messageQueueConsumersEnabled: false,
+    jobWorkersEnabled: false,
+    jobQueuesEnabled: ENABLE_ALL,
   })
 
   const requestId = generateMonotonicUuid()

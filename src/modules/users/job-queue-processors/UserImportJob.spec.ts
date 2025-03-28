@@ -6,7 +6,7 @@ import { createTestContext, destroyTestContext } from '../../../../test/TestCont
 
 import type { QueueManager } from '@lokalise/background-jobs-common'
 import { user as userTable } from '../../../db/schema/user.js'
-import type { BullmqSupportedQueues } from '../../../infrastructure/commonDiConfig.js'
+import type { BullmqSupportedQueues } from '../../../infrastructure/CommonModule.js'
 import { UserImportJob } from './UserImportJob.js'
 
 describe('UserImportJob', () => {

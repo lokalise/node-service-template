@@ -32,18 +32,24 @@ import {
   validatorCompiler,
 } from 'fastify-type-provider-zod'
 import type { ZodTypeProvider } from 'fastify-type-provider-zod'
+import { DIContext, type DependencyInjectionOptions } from 'opinionated-machine'
 import { merge } from 'ts-deepmerge'
 import type { PartialDeep } from 'type-fest'
+import {
+  CommonModule,
+  type Dependencies,
+  type DependencyOverrides,
+  type ExternalDependencies,
+  SINGLETON_CONFIG,
+} from './infrastructure/CommonModule.js'
 import { type Config, getConfig, isDevelopment } from './infrastructure/config.js'
-import type { DIOptions } from './infrastructure/diConfigUtils.js'
 import { errorHandler } from './infrastructure/errors/errorHandler.js'
 import {
   dbHealthCheck,
   redisHealthCheck,
 } from './infrastructure/healthchecks/healthchecksWrappers.js'
-import { SINGLETON_CONFIG, registerDependencies } from './infrastructure/parentDiConfig.js'
-import type { DependencyOverrides } from './infrastructure/parentDiConfig.js'
 import { getRoutes } from './modules/routes.js'
+import { UserModule } from './modules/users/UserModule.js'
 import { jwtTokenPlugin } from './plugins/jwtTokenPlugin.js'
 
 EventEmitter.defaultMaxListeners = 12
@@ -57,7 +63,7 @@ export type AppInstance = FastifyInstance<
   CommonLogger
 >
 
-export type ConfigOverrides = DIOptions & {
+export type ConfigOverrides = DependencyInjectionOptions & {
   diContainer?: AwilixContainer
   jwtKeys?: {
     public: Secret
@@ -70,7 +76,7 @@ export type ConfigOverrides = DIOptions & {
 // do not delete // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: This is intentional. Don't remove.
 export async function getApp(
   configOverrides: ConfigOverrides = {},
-  dependencyOverrides: DependencyOverrides = {},
+  _dependencyOverrides: DependencyOverrides = {},
 ): Promise<AppInstance> {
   const config = getConfig()
   const appConfig = config.app
@@ -212,32 +218,42 @@ export async function getApp(
 
   app.setErrorHandler(errorHandler)
 
-  const dependencies: DependencyOverrides = configOverrides
+  const dependencyOverrides: DependencyOverrides = configOverrides
     ? {
-        ...dependencyOverrides,
+        ..._dependencyOverrides,
         config: asFunction(() => {
           return merge(getConfig(), configOverrides) as Config
         }, SINGLETON_CONFIG),
       }
-    : dependencyOverrides
+    : _dependencyOverrides
 
-  registerDependencies(
+  const diContext = new DIContext<Dependencies, ExternalDependencies>(
     diContainer,
-    {
-      app,
-      logger: app.log,
-    },
-    dependencies,
     /**
      * Running consumers and jobs introduces additional overhead and fragility when running tests,
      * so we avoid doing that unless we intend to actually use them
      */
     {
-      enqueuedJobsEnabled: configOverrides.enqueuedJobsEnabled,
-      enqueuedJobQueuesEnabled: configOverrides.enqueuedJobQueuesEnabled,
-      amqpConsumersEnabled: configOverrides.amqpConsumersEnabled,
-      arePeriodicJobsEnabled: !!configOverrides.arePeriodicJobsEnabled,
+      jobWorkersEnabled: configOverrides.jobWorkersEnabled,
+      messageQueueConsumersEnabled: configOverrides.messageQueueConsumersEnabled,
+      jobQueuesEnabled: configOverrides.jobQueuesEnabled,
+      //periodicJobsEnabled: !!configOverrides.periodicJobsEnabled,
     },
+  )
+
+  const externalDependencies: ExternalDependencies = {
+    app,
+    logger: app.log,
+  }
+
+  const commonModule = new CommonModule()
+  const userModule = new UserModule()
+  diContext.registerDependencies(
+    {
+      modules: [commonModule, userModule],
+      dependencyOverrides,
+    },
+    externalDependencies,
   )
 
   if (configOverrides.monitoringEnabled) {
