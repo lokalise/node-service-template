@@ -31,7 +31,6 @@ import {
   serializerCompiler,
   validatorCompiler,
 } from 'fastify-type-provider-zod'
-import type { ZodTypeProvider } from 'fastify-type-provider-zod'
 import {
   type AbstractModule,
   DIContext,
@@ -50,7 +49,6 @@ import {
   dbHealthCheck,
   redisHealthCheck,
 } from './infrastructure/healthchecks/healthchecksWrappers.js'
-import { getRoutes } from './modules/routes.js'
 import { UserModule } from './modules/users/UserModule.js'
 import { jwtTokenPlugin } from './plugins/jwtTokenPlugin.js'
 
@@ -306,10 +304,7 @@ export async function getApp(
 
   app.after(() => {
     // Register routes
-    const { routes } = getRoutes()
-    for (const route of routes) {
-      app.withTypeProvider<ZodTypeProvider>().route(route)
-    }
+    diContext.registerRoutes(app)
 
     // Graceful shutdown hook
     if (!isDevelopment()) {

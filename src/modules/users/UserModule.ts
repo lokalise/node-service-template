@@ -10,6 +10,7 @@ import {
   AbstractModule,
   type DependencyInjectionOptions,
   type MandatoryNameAndRegistrationPair,
+  asControllerClass,
   asEnqueuedJobWorkerClass,
   asMessageQueueHandlerClass,
   asPeriodicJobClass,
@@ -20,6 +21,7 @@ import {
 import type { User } from '../../db/schema/user.js'
 import type { CommonDependencies } from '../../infrastructure/CommonModule.js'
 import { PermissionConsumer } from './consumers/PermissionConsumer.js'
+import { UserController } from './controllers/UserController.js'
 import { UserDataSource } from './datasources/UserDataSource.js'
 import { USER_IMPORT_JOB_PAYLOAD, UserImportJob } from './job-queue-processors/UserImportJob.js'
 import { DeleteOldUsersJob } from './periodic-jobs/DeleteOldUsersJob.js'
@@ -130,6 +132,8 @@ export class UserModule extends AbstractModule<UsersModuleDependencies> {
   }
 
   resolveControllers(): MandatoryNameAndRegistrationPair<unknown> {
-    return {}
+    return {
+      userController: asControllerClass(UserController),
+    }
   }
 }
