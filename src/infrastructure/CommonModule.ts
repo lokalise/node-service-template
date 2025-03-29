@@ -26,7 +26,7 @@ import {
 } from '@message-queue-toolkit/amqp'
 import { CommonMetadataFiller, EventRegistry } from '@message-queue-toolkit/core'
 import type { Connection } from 'amqplib'
-import { Lifetime, type NameAndRegistrationPair, asFunction } from 'awilix'
+import { Lifetime, type NameAndRegistrationPair } from 'awilix'
 import type { AwilixManager } from 'awilix-manager'
 import { drizzle } from 'drizzle-orm/postgres-js'
 import type { PostgresJsDatabase } from 'drizzle-orm/postgres-js'
@@ -58,8 +58,6 @@ import {
   type SupportedHealthchecks,
 } from './healthchecks/healthchecks.js'
 import { MessageProcessingMetricsManager } from './metrics/MessageProcessingMetricsManager.js'
-
-export const SINGLETON_CONFIG = { lifetime: 'SINGLETON' } as const
 
 export type ExternalDependencies = {
   app?: AppInstance
@@ -237,7 +235,7 @@ export class CommonModule extends AbstractModule<CommonDependencies, ExternalDep
         },
       ),
 
-      consumerErrorResolver: asFunction(() => {
+      consumerErrorResolver: asSingletonFunction(() => {
         return new AmqpConsumerErrorResolver()
       }),
 

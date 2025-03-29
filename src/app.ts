@@ -21,7 +21,7 @@ import {
 import { type CommonLogger, resolveLogger } from '@lokalise/node-core'
 import { resolveGlobalErrorLogObject } from '@lokalise/node-core'
 import scalarFastifyApiReference from '@scalar/fastify-api-reference'
-import { type AwilixContainer, asFunction, createContainer } from 'awilix'
+import { type AwilixContainer, createContainer } from 'awilix'
 import fastify from 'fastify'
 import type { FastifyInstance } from 'fastify'
 import fastifyGracefulShutdown from 'fastify-graceful-shutdown'
@@ -33,14 +33,12 @@ import {
 } from 'fastify-type-provider-zod'
 import type { ZodTypeProvider } from 'fastify-type-provider-zod'
 import { DIContext, type DependencyInjectionOptions } from 'opinionated-machine'
-import { merge } from 'ts-deepmerge'
 import type { PartialDeep } from 'type-fest'
 import {
   CommonModule,
   type Dependencies,
   type DependencyOverrides,
   type ExternalDependencies,
-  SINGLETON_CONFIG,
 } from './infrastructure/CommonModule.js'
 import { type Config, getConfig, isDevelopment } from './infrastructure/config.js'
 import { errorHandler } from './infrastructure/errors/errorHandler.js'
@@ -76,7 +74,7 @@ export type ConfigOverrides = DependencyInjectionOptions & {
 // do not delete // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: This is intentional. Don't remove.
 export async function getApp(
   configOverrides: ConfigOverrides = {},
-  _dependencyOverrides: DependencyOverrides = {},
+  dependencyOverrides: DependencyOverrides = {},
 ): Promise<AppInstance> {
   const config = getConfig()
   const appConfig = config.app
@@ -218,17 +216,7 @@ export async function getApp(
 
   app.setErrorHandler(errorHandler)
 
-  // ToDo move this logic into opinionated-machine
-  const dependencyOverrides: DependencyOverrides = configOverrides
-    ? {
-        ..._dependencyOverrides,
-        config: asFunction(() => {
-          return merge(getConfig(), configOverrides) as Config
-        }, SINGLETON_CONFIG),
-      }
-    : _dependencyOverrides
-
-  const diContext = new DIContext<Dependencies, ExternalDependencies>(
+  const diContext = new DIContext<Dependencies, Config, ExternalDependencies>(
     diContainer,
     /**
      * Running consumers and jobs introduces additional overhead and fragility when running tests,
@@ -240,6 +228,7 @@ export async function getApp(
       jobQueuesEnabled: configOverrides.jobQueuesEnabled,
       periodicJobsEnabled: configOverrides.periodicJobsEnabled,
     },
+    config,
   )
 
   const externalDependencies: ExternalDependencies = {
@@ -253,6 +242,7 @@ export async function getApp(
     {
       modules: [commonModule, userModule],
       dependencyOverrides,
+      configOverrides,
     },
     externalDependencies,
   )

@@ -2,7 +2,6 @@ import type { Cradle } from '@fastify/awilix'
 import { type MessagePublishType, waitAndRetry } from '@message-queue-toolkit/core'
 import type { Channel } from 'amqplib'
 import type { AwilixContainer } from 'awilix'
-import { asClass } from 'awilix'
 
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { DB_MODEL, cleanTables } from '../../../../test/DbCleaner.js'
@@ -14,8 +13,9 @@ import type { PermissionsService } from '../services/PermissionsService.js'
 
 import { generateUuid7 } from '@lokalise/id-utils'
 import type { PostgresJsDatabase } from 'drizzle-orm/postgres-js'
+import { asSingletonClass } from 'opinionated-machine'
 import { user as userTable } from '../../../db/schema/user.js'
-import { type PublisherManager, SINGLETON_CONFIG } from '../../../infrastructure/CommonModule.js'
+import type { PublisherManager } from '../../../infrastructure/CommonModule.js'
 import { buildQueueMessage } from '../../../utils/queueUtils.js'
 import { PermissionConsumer } from './PermissionConsumer.js'
 import type { PermissionsMessages } from './permissionsMessageSchemas.js'
@@ -65,7 +65,7 @@ describe('PermissionsConsumer', () => {
           monitoringEnabled: true,
         },
         {
-          consumerErrorResolver: asClass(FakeConsumerErrorResolver, SINGLETON_CONFIG),
+          consumerErrorResolver: asSingletonClass(FakeConsumerErrorResolver),
         },
       )
       diContainer = app.diContainer

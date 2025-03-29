@@ -13,7 +13,7 @@ import type { Config } from '../src/infrastructure/config.js'
 import { getConfig } from '../src/infrastructure/config.js'
 import { UserModule } from '../src/modules/users/UserModule.js'
 
-export type TestContext = DIContext<Dependencies, ExternalDependencies>
+export type TestContext = DIContext<Dependencies, Config, ExternalDependencies>
 
 class TestContextFactory extends AbstractTestContextFactory<
   Dependencies,
