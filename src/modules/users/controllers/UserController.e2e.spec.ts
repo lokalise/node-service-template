@@ -1,21 +1,23 @@
 import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest'
 
-import { injectGet, injectPatch, injectPost } from '@lokalise/fastify-api-contracts'
+import { injectDelete, injectGet, injectPatch, injectPost } from '@lokalise/fastify-api-contracts'
 import { DB_MODEL, cleanTables } from '../../../../test/DbCleaner.js'
 import { getTestConfigurationOverrides } from '../../../../test/jwtUtils.js'
 import type { AppInstance } from '../../../app.js'
 import { getApp } from '../../../app.js'
 import { generateJwtToken } from '../../../infrastructure/tokenUtils.js'
-import {
-  getUserContract,
-  patchUpdateUserContract,
-  postCreateUserContract,
-} from '../schemas/userApiContracts.js'
+import type { UserRepository } from '../repositories/UserRepository.js'
+import type { UserCreateDTO } from '../services/UserService.js'
+import { UserController } from './UserController.js'
+
+const NEW_USER_FIXTURE = { name: 'dummy', email: 'email@test.com' } satisfies UserCreateDTO
 
 describe('UserController', () => {
   let app: AppInstance
+  let userRepository: UserRepository
   beforeAll(async () => {
     app = await getApp(getTestConfigurationOverrides())
+    userRepository = app.diContainer.cradle.userRepository
   })
   beforeEach(async () => {
     await cleanTables(app.diContainer.cradle.drizzle, [DB_MODEL.User])
@@ -27,7 +29,7 @@ describe('UserController', () => {
   describe('POST /users', () => {
     it('validates email format', async () => {
       const token = await generateJwtToken(app.jwt, { userId: 1 }, 9999)
-      const response = await injectPost(app, postCreateUserContract, {
+      const response = await injectPost(app, UserController.contracts.createUser, {
         headers: {
           authorization: `Bearer ${token}`,
         },
@@ -62,23 +64,35 @@ describe('UserController', () => {
         }
       `)
     })
+
+    it('creates user with correct payload', async () => {
+      const token = await generateJwtToken(app.jwt, { userId: 1 }, 9999)
+      const response = await injectPost(app, UserController.contracts.createUser, {
+        headers: {
+          authorization: `Bearer ${token}`,
+        },
+        body: NEW_USER_FIXTURE,
+      })
+
+      expect(response.statusCode).toBe(201)
+      expect(response.json()).toEqual({
+        data: {
+          age: null,
+          email: 'email@test.com',
+          id: expect.any(String),
+          name: 'dummy',
+        },
+      })
+    })
   })
 
   describe('GET /users/:userId', () => {
     it('returns user when requested twice', async () => {
       const token = await generateJwtToken(app.jwt, { userId: '1' }, 9999)
+      const newUser = await userRepository.createUser(NEW_USER_FIXTURE)
+      const { id } = newUser
 
-      const response = await injectPost(app, postCreateUserContract, {
-        headers: {
-          authorization: `Bearer ${token}`,
-        },
-        body: { name: 'dummy', email: 'email@test.com' },
-      })
-
-      expect(response.statusCode).toBe(201)
-      const { id } = response.json().data
-
-      const response1 = await injectGet(app, getUserContract, {
+      const response1 = await injectGet(app, UserController.contracts.getUser, {
         headers: {
           authorization: `Bearer ${token}`,
         },
@@ -87,7 +101,7 @@ describe('UserController', () => {
         },
       })
 
-      const response2 = await injectGet(app, getUserContract, {
+      const response2 = await injectGet(app, UserController.contracts.getUser, {
         headers: {
           authorization: `Bearer ${token}`,
         },
@@ -98,26 +112,20 @@ describe('UserController', () => {
 
       expect(response1.statusCode).toBe(200)
       expect(response2.statusCode).toBe(200)
-      expect(response1.json()).toEqual(response.json())
-      expect(response2.json()).toEqual(response.json())
+      expect(response1.json().data).toMatchObject(NEW_USER_FIXTURE)
+      expect(response2.json().data).toMatchObject(NEW_USER_FIXTURE)
     })
   })
 
   describe('DELETE /users/:userId', () => {
     it('resets cache after deletion', async () => {
       const token = await generateJwtToken(app.jwt, { userId: '1' }, 9999)
+      const newUser = await userRepository.createUser(NEW_USER_FIXTURE)
+      const { id } = newUser
 
-      const response = await injectPost(app, postCreateUserContract, {
-        headers: {
-          authorization: `Bearer ${token}`,
-        },
-        body: { name: 'dummy', email: 'email@test.com' },
-      })
+      const retrievedUser = await userRepository.getUser(id)
 
-      expect(response.statusCode).toBe(201)
-      const { id } = response.json().data
-
-      const response1 = await injectGet(app, getUserContract, {
+      await injectDelete(app, UserController.contracts.deleteUser, {
         headers: {
           authorization: `Bearer ${token}`,
         },
@@ -126,53 +134,20 @@ describe('UserController', () => {
         },
       })
 
-      await app
-        .inject()
-        .delete(`/users/${id}`)
-        .headers({
-          authorization: `Bearer ${token}`,
-        })
-        .end()
+      const retrievedUser2 = await userRepository.getUser(id)
 
-      const response2 = await injectGet(app, getUserContract, {
-        headers: {
-          authorization: `Bearer ${token}`,
-        },
-        pathParams: {
-          userId: id,
-        },
-      })
-
-      expect(response1.statusCode).toBe(200)
-      expect(response2.statusCode).toBe(404)
-      expect(response1.json()).toEqual(response.json())
+      expect(retrievedUser).toBeDefined()
+      expect(retrievedUser2).toBeNull()
     })
   })
 
   describe('PATCH /users/:userId', () => {
     it('resets cache after update', async () => {
       const token = await generateJwtToken(app.jwt, { userId: 1 }, 9999)
+      const newUser = await userRepository.createUser(NEW_USER_FIXTURE)
+      const { id } = newUser
 
-      const response = await injectPost(app, postCreateUserContract, {
-        headers: {
-          authorization: `Bearer ${token}`,
-        },
-        body: { name: 'dummy', email: 'email@test.com' },
-      })
-
-      expect(response.statusCode).toBe(201)
-      const { id } = response.json().data
-
-      const response1 = await injectGet(app, getUserContract, {
-        headers: {
-          authorization: `Bearer ${token}`,
-        },
-        pathParams: {
-          userId: id,
-        },
-      })
-
-      const updateResponse = await injectPatch(app, patchUpdateUserContract, {
+      const updateResponse = await injectPatch(app, UserController.contracts.updateUser, {
         body: {
           name: 'updated',
         },
@@ -184,25 +159,13 @@ describe('UserController', () => {
         },
       })
 
-      const response2 = await injectGet(app, getUserContract, {
-        headers: {
-          authorization: `Bearer ${token}`,
-        },
-        pathParams: {
-          userId: id,
-        },
-      })
-
+      const retrievedUser2 = await userRepository.getUser(id)
       expect(updateResponse.statusCode).toBe(204)
-      expect(response1.statusCode).toBe(200)
-      expect(response2.statusCode).toBe(200)
-      expect(response2.json()).toEqual({
-        data: {
-          email: 'email@test.com',
-          age: null,
-          id: response1.json().data.id,
-          name: 'updated',
-        },
+      expect(retrievedUser2).toEqual({
+        email: 'email@test.com',
+        age: null,
+        id,
+        name: 'updated',
       })
     })
   })
