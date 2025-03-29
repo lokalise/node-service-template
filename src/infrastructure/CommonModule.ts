@@ -26,7 +26,7 @@ import {
 } from '@message-queue-toolkit/amqp'
 import { CommonMetadataFiller, EventRegistry } from '@message-queue-toolkit/core'
 import type { Connection } from 'amqplib'
-import { Lifetime, type NameAndRegistrationPair, asClass, asFunction } from 'awilix'
+import { Lifetime, type NameAndRegistrationPair, asFunction } from 'awilix'
 import type { AwilixManager } from 'awilix-manager'
 import { drizzle } from 'drizzle-orm/postgres-js'
 import type { PostgresJsDatabase } from 'drizzle-orm/postgres-js'
@@ -34,6 +34,7 @@ import { Redis } from 'ioredis'
 import {
   AbstractModule,
   type DependencyInjectionOptions,
+  asSingletonClass,
   asSingletonFunction,
   isAnyMessageQueueConsumerEnabled,
   isJobWorkersEnabled,
@@ -235,13 +236,16 @@ export class CommonModule extends AbstractModule<CommonDependencies, ExternalDep
           enabled: isAnyMessageQueueConsumerEnabled(diOptions),
         },
       ),
+
       consumerErrorResolver: asFunction(() => {
         return new AmqpConsumerErrorResolver()
-      }, SINGLETON_CONFIG),
-      eventRegistry: asFunction(() => {
+      }),
+
+      eventRegistry: asSingletonFunction(() => {
         return new EventRegistry(amqpSupportedMessages)
-      }, SINGLETON_CONFIG),
-      publisherManager: asFunction((dependencies: CommonDependencies) => {
+      }),
+
+      publisherManager: asSingletonFunction((dependencies: CommonDependencies) => {
         return new AmqpTopicPublisherManager<
           CommonAmqpTopicPublisher<MessagesPublishPayloadsType>,
           AmqpSupportedMessages
@@ -271,31 +275,34 @@ export class CommonModule extends AbstractModule<CommonDependencies, ExternalDep
             },
           },
         )
-      }, SINGLETON_CONFIG),
+      }),
 
-      config: asFunction(() => {
+      config: asSingletonFunction(() => {
         return getConfig()
-      }, SINGLETON_CONFIG),
+      }),
 
       // vendor-specific dependencies
-      transactionObservabilityManager: asFunction(() => {
+      transactionObservabilityManager: asSingletonFunction(() => {
         if (!externalDependencies.app?.newrelicTransactionManager) {
           throw new Error('Observability manager is not set')
         }
 
         return externalDependencies.app?.newrelicTransactionManager
-      }, SINGLETON_CONFIG),
-      amplitude: asFunction(() => {
+      }),
+
+      amplitude: asSingletonFunction(() => {
         return externalDependencies.app?.amplitude ?? new FakeAmplitude()
-      }, SINGLETON_CONFIG),
-      errorReporter: asFunction(() => {
+      }),
+
+      errorReporter: asSingletonFunction(() => {
         return {
           report: (report) => reportErrorToBugsnag(report),
         } satisfies ErrorReporter
-      }, SINGLETON_CONFIG),
-      fakeStoreApiClient: asClass(FakeStoreApiClient, SINGLETON_CONFIG),
+      }),
 
-      healthcheckRefreshJob: asFunction(
+      fakeStoreApiClient: asSingletonClass(FakeStoreApiClient),
+
+      healthcheckRefreshJob: asSingletonFunction(
         (dependencies: CommonDependencies) => {
           return new HealthcheckRefreshJob(dependencies, dependencies.healthchecks)
         },
@@ -306,27 +313,25 @@ export class CommonModule extends AbstractModule<CommonDependencies, ExternalDep
         },
       ),
 
-      dbHealthcheck: asClass(DbHealthcheck, SINGLETON_CONFIG),
-      redisHealthcheck: asClass(RedisHealthcheck, SINGLETON_CONFIG),
+      dbHealthcheck: asSingletonClass(DbHealthcheck),
+      redisHealthcheck: asSingletonClass(RedisHealthcheck),
 
-      healthcheckStore: asFunction(() => {
+      healthcheckStore: asSingletonFunction(() => {
         return new HealthcheckResultsStore({
           maxHealthcheckNumber: 10,
           stalenessThresholdInMsecs: STALENESS_THRESHOLD_IN_MSECS,
           healthCheckResultTtlInMsecs: HEALTHCHECK_TTL_IN_MSECS,
         })
-      }, SINGLETON_CONFIG),
+      }),
 
-      healthchecks: asFunction((dependencies: CommonDependencies) => {
+      healthchecks: asSingletonFunction((dependencies: CommonDependencies) => {
         return [dependencies.redisHealthcheck, dependencies.dbHealthcheck]
-      }, SINGLETON_CONFIG),
+      }),
 
-      messageProcessingMetricsManager: asFunction(
-        () =>
-          externalDependencies.app?.metrics
-            ? new MessageProcessingMetricsManager(externalDependencies.app.metrics)
-            : undefined,
-        SINGLETON_CONFIG,
+      messageProcessingMetricsManager: asSingletonFunction(() =>
+        externalDependencies.app?.metrics
+          ? new MessageProcessingMetricsManager(externalDependencies.app.metrics)
+          : undefined,
       ),
     }
   }
