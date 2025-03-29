@@ -4,13 +4,13 @@ import type { Loader } from 'layered-loader'
 import type z from 'zod'
 import type { User } from '../../../db/schema/user.js'
 import { EntityNotFoundError } from '../../../infrastructure/errors/publicErrors.js'
+import type { UsersInjectableDependencies } from '../UserModule.js'
 import type { UserRepository } from '../repositories/UserRepository.js'
 import type {
   CREATE_USER_BODY_SCHEMA,
   UPDATE_USER_BODY_SCHEMA,
   USER_SCHEMA_TYPE,
 } from '../schemas/userSchemas.js'
-import type { UsersInjectableDependencies } from '../userDiConfig.js'
 
 export type UserDTO = USER_SCHEMA_TYPE
 export type UserCreateDTO = z.infer<typeof CREATE_USER_BODY_SCHEMA>

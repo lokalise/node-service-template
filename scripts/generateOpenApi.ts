@@ -13,10 +13,10 @@ async function run() {
   const app = await getApp({
     healthchecksEnabled: false,
     monitoringEnabled: false,
-    arePeriodicJobsEnabled: false,
-    amqpConsumersEnabled: false,
-    enqueuedJobsEnabled: false,
-    enqueuedJobQueuesEnabled: false,
+    periodicJobsEnabled: false,
+    messageQueueConsumersEnabled: false,
+    jobWorkersEnabled: false,
+    jobQueuesEnabled: false,
   })
 
   const openApiSpecResponse = await app.inject().get('/documentation/openapi.json')

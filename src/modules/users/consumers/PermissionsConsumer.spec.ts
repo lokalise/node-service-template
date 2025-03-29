@@ -1,8 +1,7 @@
 import type { Cradle } from '@fastify/awilix'
 import { type MessagePublishType, waitAndRetry } from '@message-queue-toolkit/core'
-import type { Channel, ChannelModel } from 'amqplib'
+import type { Channel } from 'amqplib'
 import type { AwilixContainer } from 'awilix'
-import { asClass } from 'awilix'
 
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { DB_MODEL, cleanTables } from '../../../../test/DbCleaner.js'
@@ -10,13 +9,13 @@ import { FakeConsumerErrorResolver } from '../../../../test/fakes/FakeConsumerEr
 import { createRequestContext } from '../../../../test/requestUtils.js'
 import type { AppInstance } from '../../../app.js'
 import { getApp } from '../../../app.js'
-import { SINGLETON_CONFIG } from '../../../infrastructure/parentDiConfig.js'
 import type { PermissionsService } from '../services/PermissionsService.js'
 
 import { generateUuid7 } from '@lokalise/id-utils'
 import type { PostgresJsDatabase } from 'drizzle-orm/postgres-js'
+import { asSingletonClass } from 'opinionated-machine'
 import { user as userTable } from '../../../db/schema/user.js'
-import type { PublisherManager } from '../../../infrastructure/commonDiConfig.js'
+import type { PublisherManager } from '../../../infrastructure/CommonModule.js'
 import { buildQueueMessage } from '../../../utils/queueUtils.js'
 import { PermissionConsumer } from './PermissionConsumer.js'
 import type { PermissionsMessages } from './permissionsMessageSchemas.js'
@@ -62,18 +61,18 @@ describe('PermissionsConsumer', () => {
     beforeEach(async () => {
       app = await getApp(
         {
-          amqpConsumersEnabled: [PermissionConsumer.QUEUE_NAME],
+          messageQueueConsumersEnabled: [PermissionConsumer.QUEUE_NAME],
           monitoringEnabled: true,
         },
         {
-          consumerErrorResolver: asClass(FakeConsumerErrorResolver, SINGLETON_CONFIG),
+          consumerErrorResolver: asSingletonClass(FakeConsumerErrorResolver),
         },
       )
       diContainer = app.diContainer
 
       const connection = await app.diContainer.cradle.amqpConnectionManager.getConnection()
 
-      channel = await (connection as unknown as ChannelModel).createChannel()
+      channel = await connection.createChannel()
       await cleanTables(diContainer.cradle.drizzle, [DB_MODEL.User])
       await app.diContainer.cradle.permissionsService.deleteAll(testRequestContext)
       consumer = app.diContainer.cradle.permissionConsumer

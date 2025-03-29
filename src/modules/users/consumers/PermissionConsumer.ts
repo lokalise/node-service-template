@@ -6,7 +6,6 @@ import type { RequestContextPreHandlerOutput } from '../../../infrastructure/pre
 import { createRequestContextPreHandler } from '../../../infrastructure/prehandlers/requestContextPrehandler.js'
 import type { PermissionsService } from '../services/PermissionsService.js'
 import type { UserService } from '../services/UserService.js'
-import type { UsersInjectableDependencies } from '../userDiConfig.js'
 import {
   PERMISSIONS_EXCHANGE,
   PermissionsMessages,
@@ -14,6 +13,7 @@ import {
 } from './permissionsMessageSchemas.js'
 
 import type z from 'zod'
+import type { UsersInjectableDependencies } from '../UserModule.js'
 import { addPermissionsHandler } from './handlers/AddPermissionsHandler.js'
 import { removePermissionsHandler } from './handlers/RemovePermissionsHandler.js'
 

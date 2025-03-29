@@ -1,11 +1,12 @@
 import { TEST_OPTIONS, buildClient, sendGet } from '@lokalise/backend-http-client'
-import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest'
+import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it } from 'vitest'
 
-import { createTestContext } from '../test/TestContext.js'
+import { type TestContext, testContextFactory } from '../test/TestContext.js'
 
 import { randomUUID } from 'node:crypto'
 import type { AppInstance } from './app.js'
 import { getApp } from './app.js'
+import { CommonModule } from './infrastructure/CommonModule.js'
 import type { Config } from './infrastructure/config.js'
 
 describe('app', () => {
@@ -97,10 +98,16 @@ describe('app', () => {
   describe('config overrides in tests', () => {
     describe('when not overwritten', () => {
       let config: Config
+      let testContext: TestContext
 
       beforeEach(async () => {
-        const testContext = await createTestContext({}, {})
+        testContext = await testContextFactory.createTestContext({
+          modules: [new CommonModule()],
+        })
         config = testContext.diContainer.cradle.config
+      })
+      afterEach(async () => {
+        await testContext.destroy()
       })
 
       it('resolves to default value', () => {
@@ -112,14 +119,17 @@ describe('app', () => {
 
     describe('when overwritten', () => {
       let config: Config
+      let testContext: TestContext
 
       beforeEach(async () => {
-        const testContext = await createTestContext(
-          {},
-          {},
-          { vendors: { amplitude: { serverZone: 'US' } } },
-        )
+        testContext = await testContextFactory.createTestContext({
+          configOverrides: { vendors: { amplitude: { serverZone: 'US' } } },
+          modules: [new CommonModule()],
+        })
         config = testContext.diContainer.cradle.config
+      })
+      afterEach(async () => {
+        await testContext.destroy()
       })
 
       it('resolves to override value', () => {

@@ -4,8 +4,7 @@ import type { AwilixContainer } from 'awilix'
 import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest'
 
 import { DB_MODEL, cleanTables } from '../../../../test/DbCleaner.js'
-import type { TestContext } from '../../../../test/TestContext.js'
-import { createTestContext, destroyTestContext } from '../../../../test/TestContext.js'
+import { type TestContext, testContextFactory } from '../../../../test/TestContext.js'
 import { TEST_USER_1 } from '../../../../test/fixtures/testUsers.js'
 import type { UserRepository } from './UserRepository.js'
 
@@ -15,7 +14,7 @@ describe('UserRepository', () => {
   let userRepository: UserRepository
 
   beforeAll(async () => {
-    testContext = await createTestContext()
+    testContext = await testContextFactory.createTestContext()
     diContainer = testContext.diContainer
     userRepository = diContainer.cradle.userRepository
   })
@@ -25,7 +24,7 @@ describe('UserRepository', () => {
   })
 
   afterAll(async () => {
-    await destroyTestContext(testContext)
+    await testContext.destroy()
   })
 
   describe('getUser', () => {

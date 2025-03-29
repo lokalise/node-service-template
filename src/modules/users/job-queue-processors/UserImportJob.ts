@@ -3,9 +3,9 @@ import type { RequestContext } from '@lokalise/fastify-extras'
 import type { Job } from 'bullmq'
 
 import z from 'zod'
+import type { Dependencies } from '../../../infrastructure/CommonModule.js'
 import { SERVICE_NAME } from '../../../infrastructure/config.js'
 import { AbstractEnqueuedJobProcessor } from '../../../infrastructure/jobs/AbstractEnqueuedJobProcessor.js'
-import type { Dependencies } from '../../../infrastructure/parentDiConfig.js'
 import type { UserService } from '../services/UserService.js'
 
 export const USER_IMPORT_JOB_PAYLOAD = BASE_JOB_PAYLOAD_SCHEMA.extend({

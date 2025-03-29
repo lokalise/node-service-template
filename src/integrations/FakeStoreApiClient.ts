@@ -1,8 +1,7 @@
 import { buildClient, sendGet } from '@lokalise/backend-http-client'
 import type { Client } from 'undici'
 import z from 'zod'
-
-import type { CommonDependencies } from '../infrastructure/commonDiConfig.js'
+import type { CommonDependencies } from '../infrastructure/CommonModule.js'
 
 const GET_PRODUCT_RESPONSE_SCHEMA = z.object({
   id: z.number(),

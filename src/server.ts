@@ -4,6 +4,7 @@ import {
   resolveGlobalErrorLogObject,
 } from '@lokalise/node-core'
 
+import { ENABLE_ALL } from 'opinionated-machine'
 import { getApp } from './app.js'
 import { getConfig } from './infrastructure/config.js'
 
@@ -12,10 +13,10 @@ async function start() {
   const config = executeAndHandleGlobalErrors(getConfig)
   const app = await getApp({
     monitoringEnabled: config.app.metrics.isEnabled,
-    enqueuedJobQueuesEnabled: true,
-    enqueuedJobsEnabled: true,
-    amqpConsumersEnabled: true,
-    arePeriodicJobsEnabled: true,
+    jobQueuesEnabled: ENABLE_ALL,
+    jobWorkersEnabled: ENABLE_ALL,
+    messageQueueConsumersEnabled: ENABLE_ALL,
+    periodicJobsEnabled: ENABLE_ALL,
   })
 
   try {
