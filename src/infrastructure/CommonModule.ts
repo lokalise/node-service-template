@@ -34,8 +34,9 @@ import { Redis } from 'ioredis'
 import {
   AbstractModule,
   type DependencyInjectionOptions,
+  asSingletonFunction,
+  isAnyMessageQueueConsumerEnabled,
   isJobWorkersEnabled,
-  isMessageQueueConsumerEnabled,
   resolveJobQueuesEnabled,
 } from 'opinionated-machine'
 import postgres from 'postgres'
@@ -97,28 +98,28 @@ export class CommonModule extends AbstractModule<CommonDependencies, ExternalDep
     externalDependencies: ExternalDependencies,
   ) {
     return {
-      jwt: asFunction(() => {
+      jwt: asSingletonFunction(() => {
         if (!externalDependencies.app) {
           throw new Error('app with JWT set is necessary to use JWT as a dependency')
         }
         return externalDependencies.app.jwt
-      }, SINGLETON_CONFIG),
-      logger: asFunction(() => externalDependencies.logger, SINGLETON_CONFIG),
+      }),
+      logger: asSingletonFunction(() => externalDependencies.logger),
 
-      scheduler: asFunction(() => {
+      scheduler: asSingletonFunction(() => {
         return externalDependencies.app?.scheduler ?? new ToadScheduler()
-      }, SINGLETON_CONFIG),
+      }),
 
-      awilixManager: asFunction(() => {
+      awilixManager: asSingletonFunction(() => {
         if (!externalDependencies.app) {
           throw new Error(
             'app with awilixManager set is necessary to use awilixManager as a dependency',
           )
         }
         return externalDependencies.app?.awilixManager
-      }, SINGLETON_CONFIG),
+      }),
 
-      redis: asFunction(
+      redis: asSingletonFunction(
         ({ config }: CommonDependencies) => {
           const redisConfig = config.redis
 
@@ -142,11 +143,10 @@ export class CommonModule extends AbstractModule<CommonDependencies, ExternalDep
               })
             })
           },
-          lifetime: Lifetime.SINGLETON,
         },
       ),
 
-      redisPublisher: asFunction(
+      redisPublisher: asSingletonFunction(
         ({ config }: CommonDependencies) => {
           const redisConfig = config.redis
 
@@ -169,11 +169,10 @@ export class CommonModule extends AbstractModule<CommonDependencies, ExternalDep
               })
             })
           },
-          lifetime: Lifetime.SINGLETON,
         },
       ),
 
-      redisConsumer: asFunction(
+      redisConsumer: asSingletonFunction(
         ({ config }: CommonDependencies) => {
           const redisConfig = config.redis
 
@@ -196,22 +195,20 @@ export class CommonModule extends AbstractModule<CommonDependencies, ExternalDep
               })
             })
           },
-          lifetime: Lifetime.SINGLETON,
         },
       ),
 
-      drizzle: asFunction(
+      drizzle: asSingletonFunction(
         ({ config }: CommonDependencies) => {
           const pg = postgres(config.db.databaseUrl)
           return drizzle(pg)
         },
         {
           dispose: (drizzle) => drizzle.$client.end(),
-          lifetime: Lifetime.SINGLETON,
         },
       ),
 
-      bullmqQueueManager: asFunction(
+      bullmqQueueManager: asSingletonFunction(
         (deps) =>
           new QueueManager(new CommonBullmqFactoryNew(), bullmqSupportedQueues, {
             redisConfig: deps.config.redis,
@@ -219,14 +216,13 @@ export class CommonModule extends AbstractModule<CommonDependencies, ExternalDep
             lazyInitEnabled: !isTest(),
           }),
         {
-          ...SINGLETON_CONFIG,
           asyncInit: (manager) => manager.start(resolveJobQueuesEnabled(diOptions)),
           asyncDispose: 'dispose',
           asyncDisposePriority: 20,
         },
       ),
 
-      amqpConnectionManager: asFunction(
+      amqpConnectionManager: asSingletonFunction(
         () => {
           return new AmqpConnectionManager(getAmqpConfig(), externalDependencies.logger)
         },
@@ -234,8 +230,9 @@ export class CommonModule extends AbstractModule<CommonDependencies, ExternalDep
           lifetime: Lifetime.SINGLETON,
           asyncInit: 'init',
           asyncDispose: 'close',
+          asyncInitPriority: 1,
           asyncDisposePriority: 1,
-          enabled: isMessageQueueConsumerEnabled(diOptions.messageQueueConsumersEnabled),
+          enabled: isAnyMessageQueueConsumerEnabled(diOptions),
         },
       ),
       consumerErrorResolver: asFunction(() => {

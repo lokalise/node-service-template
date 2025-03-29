@@ -218,6 +218,7 @@ export async function getApp(
 
   app.setErrorHandler(errorHandler)
 
+  // ToDo move this logic into opinionated-machine
   const dependencyOverrides: DependencyOverrides = configOverrides
     ? {
         ..._dependencyOverrides,
@@ -237,7 +238,7 @@ export async function getApp(
       jobWorkersEnabled: configOverrides.jobWorkersEnabled,
       messageQueueConsumersEnabled: configOverrides.messageQueueConsumersEnabled,
       jobQueuesEnabled: configOverrides.jobQueuesEnabled,
-      //periodicJobsEnabled: !!configOverrides.periodicJobsEnabled,
+      periodicJobsEnabled: configOverrides.periodicJobsEnabled,
     },
   )
 

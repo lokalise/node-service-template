@@ -1,6 +1,6 @@
 import type { Cradle } from '@fastify/awilix'
 import { type MessagePublishType, waitAndRetry } from '@message-queue-toolkit/core'
-import type { Channel, ChannelModel } from 'amqplib'
+import type { Channel } from 'amqplib'
 import type { AwilixContainer } from 'awilix'
 import { asClass } from 'awilix'
 
@@ -72,7 +72,7 @@ describe('PermissionsConsumer', () => {
 
       const connection = await app.diContainer.cradle.amqpConnectionManager.getConnection()
 
-      channel = await (connection as unknown as ChannelModel).createChannel()
+      channel = await connection.createChannel()
       await cleanTables(diContainer.cradle.drizzle, [DB_MODEL.User])
       await app.diContainer.cradle.permissionsService.deleteAll(testRequestContext)
       consumer = app.diContainer.cradle.permissionConsumer

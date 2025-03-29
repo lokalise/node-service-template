@@ -1,5 +1,4 @@
 import type { QueueConfiguration } from '@lokalise/background-jobs-common'
-import { Lifetime, asClass, asFunction } from 'awilix'
 import {
   type InMemoryCacheConfiguration,
   Loader,
@@ -11,13 +10,15 @@ import {
   AbstractModule,
   type DependencyInjectionOptions,
   type MandatoryNameAndRegistrationPair,
-  isJobWorkersEnabled,
-  isMessageQueueConsumerEnabled,
-  isPeriodicJobEnabled,
+  asJobWorkerClass,
+  asMessageQueueHandlerClass,
+  asPeriodicJobClass,
+  asRepositoryClass,
+  asServiceClass,
+  asSingletonFunction,
 } from 'opinionated-machine'
 import type { User } from '../../db/schema/user.js'
-import { SINGLETON_CONFIG } from '../../infrastructure/CommonModule.js'
-import type { CommonDependencies } from '../../infrastructure/commonDiConfig.js'
+import type { CommonDependencies } from '../../infrastructure/CommonModule.js'
 import { PermissionConsumer } from './consumers/PermissionConsumer.js'
 import { UserDataSource } from './datasources/UserDataSource.js'
 import { USER_IMPORT_JOB_PAYLOAD, UserImportJob } from './job-queue-processors/UserImportJob.js'
@@ -71,74 +72,59 @@ export class UserModule extends AbstractModule<UsersModuleDependencies> {
     diOptions: DependencyInjectionOptions,
   ): MandatoryNameAndRegistrationPair<UsersModuleDependencies> {
     return {
-      userRepository: asClass(UserRepository, SINGLETON_CONFIG),
-      userService: asClass(UserService, SINGLETON_CONFIG),
+      userRepository: asRepositoryClass(UserRepository),
+      userService: asServiceClass(UserService),
 
-      userLoader: asFunction(
-        (deps: UsersInjectableDependencies) => {
-          const { publisher: notificationPublisher, consumer: notificationConsumer } =
-            createNotificationPair<User>({
-              channel: 'user-cache-notifications',
-              consumerRedis: deps.redisConsumer,
-              publisherRedis: deps.redisPublisher,
-            })
+      userLoader: asSingletonFunction((deps: UsersInjectableDependencies) => {
+        const { publisher: notificationPublisher, consumer: notificationConsumer } =
+          createNotificationPair<User>({
+            channel: 'user-cache-notifications',
+            consumerRedis: deps.redisConsumer,
+            publisherRedis: deps.redisPublisher,
+          })
 
-          const config: LoaderConfig<User> = {
-            inMemoryCache: {
-              ...IN_MEMORY_CONFIGURATION_BASE,
-              maxItems: 1000,
-            },
-            asyncCache: new RedisCache<User>(deps.redis, {
-              json: true,
-              prefix: 'layered-loader:users:',
-              ttlInMsecs: 1000 * 60 * 60,
-            }),
-            dataSources: [new UserDataSource(deps)],
-            notificationConsumer,
-            notificationPublisher,
-            logger: deps.logger,
-          }
-          return new Loader(config)
-        },
-        {
-          lifetime: Lifetime.SINGLETON,
-        },
-      ),
-
-      permissionsService: asClass(PermissionsService, SINGLETON_CONFIG),
-      permissionConsumer: asClass(PermissionConsumer, {
-        lifetime: Lifetime.SINGLETON,
-        asyncInit: 'start',
-        asyncInitPriority: 10,
-        asyncDispose: 'close',
-        asyncDisposePriority: 10,
-        enabled: isMessageQueueConsumerEnabled(
-          diOptions.messageQueueConsumersEnabled,
-          PermissionConsumer.QUEUE_NAME,
-        ),
+        const config: LoaderConfig<User> = {
+          inMemoryCache: {
+            ...IN_MEMORY_CONFIGURATION_BASE,
+            maxItems: 1000,
+          },
+          asyncCache: new RedisCache<User>(deps.redis, {
+            json: true,
+            prefix: 'layered-loader:users:',
+            ttlInMsecs: 1000 * 60 * 60,
+          }),
+          dataSources: [new UserDataSource(deps)],
+          notificationConsumer,
+          notificationPublisher,
+          logger: deps.logger,
+        }
+        return new Loader(config)
       }),
 
-      processLogFilesJob: asClass(ProcessLogFilesJob, {
-        lifetime: Lifetime.SINGLETON,
-        eagerInject: 'register',
-        enabled: isPeriodicJobEnabled(diOptions.periodicJobsEnabled, ProcessLogFilesJob.JOB_NAME),
-      }),
-      deleteOldUsersJob: asClass(DeleteOldUsersJob, {
-        lifetime: Lifetime.SINGLETON,
-        eagerInject: 'register',
-        enabled: isPeriodicJobEnabled(diOptions.periodicJobsEnabled, DeleteOldUsersJob.JOB_NAME),
-      }),
-      sendEmailsJob: asClass(SendEmailsJob, {
-        lifetime: Lifetime.SINGLETON,
-        eagerInject: 'register',
-        enabled: isPeriodicJobEnabled(diOptions.periodicJobsEnabled, SendEmailsJob.JOB_NAME),
+      permissionsService: asServiceClass(PermissionsService),
+      permissionConsumer: asMessageQueueHandlerClass(PermissionConsumer, {
+        diOptions,
+        queueName: PermissionConsumer.QUEUE_NAME,
       }),
 
-      userImportJob: asClass(UserImportJob, {
-        lifetime: Lifetime.SINGLETON,
-        asyncInit: 'start',
-        asyncDispose: 'dispose',
-        enabled: isJobWorkersEnabled(diOptions.jobWorkersEnabled, UserImportJob.QUEUE_ID),
+      processLogFilesJob: asPeriodicJobClass(ProcessLogFilesJob, {
+        diOptions,
+        jobName: ProcessLogFilesJob.JOB_NAME,
+      }),
+
+      deleteOldUsersJob: asPeriodicJobClass(DeleteOldUsersJob, {
+        diOptions,
+        jobName: DeleteOldUsersJob.JOB_NAME,
+      }),
+
+      sendEmailsJob: asPeriodicJobClass(SendEmailsJob, {
+        diOptions,
+        jobName: SendEmailsJob.JOB_NAME,
+      }),
+
+      userImportJob: asJobWorkerClass(UserImportJob, {
+        diOptions,
+        queueName: UserImportJob.QUEUE_ID,
       }),
     }
   }
