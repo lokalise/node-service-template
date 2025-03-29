@@ -1,7 +1,7 @@
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 import { DB_MODEL, cleanTables } from '../../../../test/DbCleaner.js'
 import { cleanRedis } from '../../../../test/RedisCleaner.js'
-import { type TestContext, testContextFactory } from "../../../../test/TestContext.js";
+import { type TestContext, testContextFactory } from '../../../../test/TestContext.js'
 
 import type { QueueManager } from '@lokalise/background-jobs-common'
 import { user as userTable } from '../../../db/schema/user.js'
@@ -16,10 +16,11 @@ describe('UserImportJob', () => {
 
   beforeAll(async () => {
     testContext = await testContextFactory.createTestContext({
-        diOptions: {
+      diOptions: {
         jobWorkersEnabled: [UserImportJob.QUEUE_ID],
         jobQueuesEnabled: [UserImportJob.QUEUE_ID],
-      }})
+      },
+    })
 
     await cleanRedis(testContext.diContainer.cradle.redis)
     await cleanTables(testContext.diContainer.cradle.drizzle, [DB_MODEL.User])

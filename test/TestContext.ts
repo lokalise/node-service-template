@@ -1,21 +1,29 @@
-import type { Config } from "../src/infrastructure/config.js";
+import { NewRelicTransactionManager } from '@lokalise/fastify-extras'
+import { globalLogger } from '@lokalise/node-core'
+import { createContainer } from 'awilix'
+import { AwilixManager } from 'awilix-manager'
+import { AbstractTestContextFactory, type DIContext } from 'opinionated-machine'
+import type { AppInstance } from '../src/app.js'
+import {
+  CommonModule,
+  type Dependencies,
+  type ExternalDependencies,
+} from '../src/infrastructure/CommonModule.js'
+import type { Config } from '../src/infrastructure/config.js'
 import { getConfig } from '../src/infrastructure/config.js'
-import { AbstractTestContextFactory, type DIContext } from "opinionated-machine";
-import { CommonModule, type Dependencies, type ExternalDependencies } from "../src/infrastructure/CommonModule.js";
-import type { AppInstance } from "../src/app";
-import { NewRelicTransactionManager } from "@lokalise/fastify-extras";
-import { AwilixManager } from "awilix-manager";
-import { createContainer } from "awilix";
-import { UserModule } from "../src/modules/users/UserModule";
-import { globalLogger } from "@lokalise/node-core";
+import { UserModule } from '../src/modules/users/UserModule.js'
 
 export type TestContext = DIContext<Dependencies, ExternalDependencies>
 
-class TestContextFactory extends AbstractTestContextFactory<Dependencies, ExternalDependencies, Config> {
+class TestContextFactory extends AbstractTestContextFactory<
+  Dependencies,
+  ExternalDependencies,
+  Config
+> {
   constructor() {
     const diContainer = createContainer({
       injectionMode: 'PROXY',
-    });
+    })
 
     const awilixManager = new AwilixManager({
       diContainer,
@@ -29,10 +37,14 @@ class TestContextFactory extends AbstractTestContextFactory<Dependencies, Extern
       awilixManager,
     }
 
-    super({
-      app: fakeApp,
-      logger: globalLogger,
-    }, [new CommonModule(), new UserModule()], diContainer)
+    super(
+      {
+        app: fakeApp as AppInstance,
+        logger: globalLogger,
+      },
+      [new CommonModule(), new UserModule()],
+      diContainer,
+    )
   }
 
   resolveBaseAppConfig() {

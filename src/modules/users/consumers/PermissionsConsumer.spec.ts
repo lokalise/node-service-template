@@ -61,7 +61,7 @@ describe('PermissionsConsumer', () => {
     beforeEach(async () => {
       app = await getApp(
         {
-          amqpConsumersEnabled: [PermissionConsumer.QUEUE_NAME],
+          messageQueueConsumersEnabled: [PermissionConsumer.QUEUE_NAME],
           monitoringEnabled: true,
         },
         {
