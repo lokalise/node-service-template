@@ -1,8 +1,7 @@
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 import { DB_MODEL, cleanTables } from '../../../../test/DbCleaner.js'
 import { cleanRedis } from '../../../../test/RedisCleaner.js'
-import type { TestContext } from '../../../../test/TestContext.js'
-import { createTestContext, destroyTestContext } from '../../../../test/TestContext.js'
+import { type TestContext, testContextFactory } from "../../../../test/TestContext.js";
 
 import type { QueueManager } from '@lokalise/background-jobs-common'
 import { user as userTable } from '../../../db/schema/user.js'
@@ -16,13 +15,12 @@ describe('UserImportJob', () => {
   let bullmqQueueManager: QueueManager<BullmqSupportedQueues>
 
   beforeAll(async () => {
-    testContext = await createTestContext(
-      {},
-      {
-        enqueuedJobsEnabled: [UserImportJob.QUEUE_ID],
-        enqueuedJobQueuesEnabled: [UserImportJob.QUEUE_ID],
-      },
-    )
+    testContext = await testContextFactory.createTestContext({
+        diOptions: {
+        jobWorkersEnabled: [UserImportJob.QUEUE_ID],
+        jobQueuesEnabled: [UserImportJob.QUEUE_ID],
+      }})
+
     await cleanRedis(testContext.diContainer.cradle.redis)
     await cleanTables(testContext.diContainer.cradle.drizzle, [DB_MODEL.User])
     userImportJob = testContext.diContainer.cradle.userImportJob
@@ -30,7 +28,7 @@ describe('UserImportJob', () => {
   })
 
   afterAll(async () => {
-    await destroyTestContext(testContext)
+    await testContext.destroy()
   })
 
   it('creates a user', async () => {

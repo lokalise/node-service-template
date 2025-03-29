@@ -1,19 +1,18 @@
 import { randomUUID } from 'node:crypto'
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 import { cleanRedis } from '../../../../test/RedisCleaner.js'
-import type { TestContext } from '../../../../test/TestContext.js'
-import { createTestContext, destroyTestContext } from '../../../../test/TestContext.js'
+import { type TestContext, testContextFactory } from "../../../../test/TestContext.js";
 
 describe('DeleteOldUsersJob', () => {
   let testContext: TestContext
 
   beforeAll(async () => {
-    testContext = await createTestContext()
+    testContext = await testContextFactory.createTestContext()
     await cleanRedis(testContext.diContainer.cradle.redis)
   })
 
   afterAll(async () => {
-    await destroyTestContext(testContext)
+    await testContext.destroy()
   })
 
   it('smoke test', async () => {
