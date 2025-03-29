@@ -77,7 +77,7 @@
         "jsonwebtoken": "^9.0.2",
         "layered-loader": "^14.0.1",
         "newrelic": "12.16.0",
-        "opinionated-machine": "^2.7.1",
+        "opinionated-machine": "^2.7.2",
         "pino": "^9.6.0",
         "pino-pretty": "^13.0.0",
         "postgres": "^3.4.5",

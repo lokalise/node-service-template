@@ -223,7 +223,7 @@ export async function getApp(
      * so we avoid doing that unless we intend to actually use them
      */
     {
-      jobWorkersEnabled: configOverrides.jobWorkersEnabled,
+      enqueuedJobWorkersEnabled: configOverrides.enqueuedJobWorkersEnabled,
       messageQueueConsumersEnabled: configOverrides.messageQueueConsumersEnabled,
       jobQueuesEnabled: configOverrides.jobQueuesEnabled,
       periodicJobsEnabled: configOverrides.periodicJobsEnabled,

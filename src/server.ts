@@ -14,7 +14,7 @@ async function start() {
   const app = await getApp({
     monitoringEnabled: config.app.metrics.isEnabled,
     jobQueuesEnabled: ENABLE_ALL,
-    jobWorkersEnabled: ENABLE_ALL,
+    enqueuedJobWorkersEnabled: ENABLE_ALL,
     messageQueueConsumersEnabled: ENABLE_ALL,
     periodicJobsEnabled: ENABLE_ALL,
   })

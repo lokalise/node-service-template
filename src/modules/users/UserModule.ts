@@ -10,7 +10,7 @@ import {
   AbstractModule,
   type DependencyInjectionOptions,
   type MandatoryNameAndRegistrationPair,
-  asJobWorkerClass,
+  asEnqueuedJobWorkerClass,
   asMessageQueueHandlerClass,
   asPeriodicJobClass,
   asRepositoryClass,
@@ -122,7 +122,7 @@ export class UserModule extends AbstractModule<UsersModuleDependencies> {
         jobName: SendEmailsJob.JOB_NAME,
       }),
 
-      userImportJob: asJobWorkerClass(UserImportJob, {
+      userImportJob: asEnqueuedJobWorkerClass(UserImportJob, {
         diOptions,
         queueName: UserImportJob.QUEUE_ID,
       }),

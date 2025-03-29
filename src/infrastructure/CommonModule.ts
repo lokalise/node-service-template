@@ -37,7 +37,7 @@ import {
   asSingletonClass,
   asSingletonFunction,
   isAnyMessageQueueConsumerEnabled,
-  isJobWorkersEnabled,
+  isEnqueuedJobWorkersEnabled,
   resolveJobQueuesEnabled,
 } from 'opinionated-machine'
 import postgres from 'postgres'
@@ -307,7 +307,10 @@ export class CommonModule extends AbstractModule<CommonDependencies, ExternalDep
         {
           lifetime: Lifetime.SINGLETON,
           eagerInject: 'register',
-          enabled: isJobWorkersEnabled(diOptions.jobWorkersEnabled, HealthcheckRefreshJob.JOB_NAME),
+          enabled: isEnqueuedJobWorkersEnabled(
+            diOptions.enqueuedJobWorkersEnabled,
+            HealthcheckRefreshJob.JOB_NAME,
+          ),
         },
       ),
 

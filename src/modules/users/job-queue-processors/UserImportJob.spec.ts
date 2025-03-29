@@ -17,7 +17,7 @@ describe('UserImportJob', () => {
   beforeAll(async () => {
     testContext = await testContextFactory.createTestContext({
       diOptions: {
-        jobWorkersEnabled: [UserImportJob.QUEUE_ID],
+        enqueuedJobWorkersEnabled: [UserImportJob.QUEUE_ID],
         jobQueuesEnabled: [UserImportJob.QUEUE_ID],
       },
     })
