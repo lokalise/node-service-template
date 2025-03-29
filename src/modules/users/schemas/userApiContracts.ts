@@ -35,6 +35,7 @@ export const getUserContract = buildGetRoute({
 export const deleteUserContract = buildDeleteRoute({
   successResponseBodySchema: z.undefined(),
   requestPathParamsSchema: DELETE_USER_PARAMS_SCHEMA,
+  requestHeaderSchema: AUTH_HEADERS,
   pathResolver: (params) => `/users/${params.userId}`,
   description: 'Delete user',
 })
