@@ -15,7 +15,7 @@ async function run() {
     monitoringEnabled: false,
     periodicJobsEnabled: false,
     messageQueueConsumersEnabled: false,
-    jobWorkersEnabled: false,
+    enqueuedJobWorkersEnabled: false,
     jobQueuesEnabled: false,
   })
 

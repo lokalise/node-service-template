@@ -32,7 +32,11 @@ import {
   validatorCompiler,
 } from 'fastify-type-provider-zod'
 import type { ZodTypeProvider } from 'fastify-type-provider-zod'
-import { DIContext, type DependencyInjectionOptions } from 'opinionated-machine'
+import {
+  type AbstractModule,
+  DIContext,
+  type DependencyInjectionOptions,
+} from 'opinionated-machine'
 import type { PartialDeep } from 'type-fest'
 import {
   CommonModule,
@@ -75,6 +79,7 @@ export type ConfigOverrides = DependencyInjectionOptions & {
 export async function getApp(
   configOverrides: ConfigOverrides = {},
   dependencyOverrides: DependencyOverrides = {},
+  modules?: readonly AbstractModule<unknown>[],
 ): Promise<AppInstance> {
   const config = getConfig()
   const appConfig = config.app
@@ -236,11 +241,10 @@ export async function getApp(
     logger: app.log,
   }
 
-  const commonModule = new CommonModule()
-  const userModule = new UserModule()
+  const resolvedModules = modules ?? [new CommonModule(), new UserModule()]
   diContext.registerDependencies(
     {
-      modules: [commonModule, userModule],
+      modules: resolvedModules,
       dependencyOverrides,
       configOverrides,
     },

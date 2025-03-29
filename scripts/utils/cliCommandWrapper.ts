@@ -32,7 +32,7 @@ export const cliCommandWrapper = async <ArgsSchema extends z.Schema | undefined>
     monitoringEnabled: false,
     periodicJobsEnabled: false,
     messageQueueConsumersEnabled: false,
-    jobWorkersEnabled: false,
+    enqueuedJobWorkersEnabled: false,
     jobQueuesEnabled: ENABLE_ALL,
   })
 
