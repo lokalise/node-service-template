@@ -4,9 +4,8 @@ import {
   type SupportedQueueIds,
 } from '@lokalise/background-jobs-common'
 import { CommonBullmqFactoryNew } from '@lokalise/background-jobs-common'
-import type { BullmqSupportedQueues } from '../commonDiConfig.js'
+import type { BullmqSupportedQueues, Dependencies } from '../CommonModule.js'
 import { SERVICE_NAME } from '../config.js'
-import type { Dependencies } from '../parentDiConfig.js'
 
 type AbstractEnqueuedJobProcessorConfig<QueueId extends SupportedQueueIds<BullmqSupportedQueues>> =
   Omit<BackgroundJobProcessorConfigNew<BullmqSupportedQueues, QueueId>, 'isTest' | 'redisConfig'>

@@ -21,7 +21,7 @@ import {
 import { type CommonLogger, resolveLogger } from '@lokalise/node-core'
 import { resolveGlobalErrorLogObject } from '@lokalise/node-core'
 import scalarFastifyApiReference from '@scalar/fastify-api-reference'
-import { type AwilixContainer, asFunction, createContainer } from 'awilix'
+import { type AwilixContainer, createContainer } from 'awilix'
 import fastify from 'fastify'
 import type { FastifyInstance } from 'fastify'
 import fastifyGracefulShutdown from 'fastify-graceful-shutdown'
@@ -32,18 +32,26 @@ import {
   validatorCompiler,
 } from 'fastify-type-provider-zod'
 import type { ZodTypeProvider } from 'fastify-type-provider-zod'
-import { merge } from 'ts-deepmerge'
+import {
+  type AbstractModule,
+  DIContext,
+  type DependencyInjectionOptions,
+} from 'opinionated-machine'
 import type { PartialDeep } from 'type-fest'
+import {
+  CommonModule,
+  type Dependencies,
+  type DependencyOverrides,
+  type ExternalDependencies,
+} from './infrastructure/CommonModule.js'
 import { type Config, getConfig, isDevelopment } from './infrastructure/config.js'
-import type { DIOptions } from './infrastructure/diConfigUtils.js'
 import { errorHandler } from './infrastructure/errors/errorHandler.js'
 import {
   dbHealthCheck,
   redisHealthCheck,
 } from './infrastructure/healthchecks/healthchecksWrappers.js'
-import { SINGLETON_CONFIG, registerDependencies } from './infrastructure/parentDiConfig.js'
-import type { DependencyOverrides } from './infrastructure/parentDiConfig.js'
 import { getRoutes } from './modules/routes.js'
+import { UserModule } from './modules/users/UserModule.js'
 import { jwtTokenPlugin } from './plugins/jwtTokenPlugin.js'
 
 EventEmitter.defaultMaxListeners = 12
@@ -57,7 +65,7 @@ export type AppInstance = FastifyInstance<
   CommonLogger
 >
 
-export type ConfigOverrides = DIOptions & {
+export type ConfigOverrides = DependencyInjectionOptions & {
   diContainer?: AwilixContainer
   jwtKeys?: {
     public: Secret
@@ -71,6 +79,7 @@ export type ConfigOverrides = DIOptions & {
 export async function getApp(
   configOverrides: ConfigOverrides = {},
   dependencyOverrides: DependencyOverrides = {},
+  modules?: readonly AbstractModule<unknown>[],
 ): Promise<AppInstance> {
   const config = getConfig()
   const appConfig = config.app
@@ -212,32 +221,34 @@ export async function getApp(
 
   app.setErrorHandler(errorHandler)
 
-  const dependencies: DependencyOverrides = configOverrides
-    ? {
-        ...dependencyOverrides,
-        config: asFunction(() => {
-          return merge(getConfig(), configOverrides) as Config
-        }, SINGLETON_CONFIG),
-      }
-    : dependencyOverrides
-
-  registerDependencies(
+  const diContext = new DIContext<Dependencies, Config, ExternalDependencies>(
     diContainer,
-    {
-      app,
-      logger: app.log,
-    },
-    dependencies,
     /**
      * Running consumers and jobs introduces additional overhead and fragility when running tests,
      * so we avoid doing that unless we intend to actually use them
      */
     {
-      enqueuedJobsEnabled: configOverrides.enqueuedJobsEnabled,
-      enqueuedJobQueuesEnabled: configOverrides.enqueuedJobQueuesEnabled,
-      amqpConsumersEnabled: configOverrides.amqpConsumersEnabled,
-      arePeriodicJobsEnabled: !!configOverrides.arePeriodicJobsEnabled,
+      enqueuedJobWorkersEnabled: configOverrides.enqueuedJobWorkersEnabled,
+      messageQueueConsumersEnabled: configOverrides.messageQueueConsumersEnabled,
+      jobQueuesEnabled: configOverrides.jobQueuesEnabled,
+      periodicJobsEnabled: configOverrides.periodicJobsEnabled,
     },
+    config,
+  )
+
+  const externalDependencies: ExternalDependencies = {
+    app,
+    logger: app.log,
+  }
+
+  const resolvedModules = modules ?? [new CommonModule(), new UserModule()]
+  diContext.registerDependencies(
+    {
+      modules: resolvedModules,
+      dependencyOverrides,
+      configOverrides,
+    },
+    externalDependencies,
   )
 
   if (configOverrides.monitoringEnabled) {

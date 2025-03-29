@@ -1,8 +1,7 @@
 import { getLocal } from 'mockttp'
 
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it } from 'vitest'
-import type { TestContext } from '../../test/TestContext.js'
-import { createTestContext, destroyTestContext } from '../../test/TestContext.js'
+import { type TestContext, testContextFactory } from '../../test/TestContext.js'
 
 const JSON_HEADERS = {
   'content-type': 'application/json',
@@ -14,7 +13,7 @@ describe('FakeStoreApiClient', () => {
   let testContext: TestContext
 
   beforeAll(async () => {
-    testContext = await createTestContext()
+    testContext = await testContextFactory.createTestContext()
     testContext.diContainer.cradle.config.integrations.fakeStore.baseUrl = BASE_URL
   })
 
@@ -27,7 +26,7 @@ describe('FakeStoreApiClient', () => {
   })
 
   afterAll(async () => {
-    await destroyTestContext(testContext)
+    await testContext.destroy()
   })
 
   describe('getProduct', () => {

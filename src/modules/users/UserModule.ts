@@ -1,18 +1,24 @@
-import type { Resolver } from 'awilix'
-import { Lifetime, asClass, asFunction } from 'awilix'
-import type { InMemoryCacheConfiguration, LoaderConfig } from 'layered-loader'
-import { Loader, RedisCache, createNotificationPair } from 'layered-loader'
-
-import type { CommonDependencies } from '../../infrastructure/commonDiConfig.js'
-import {
-  type DIOptions,
-  isAmqpConsumerEnabled,
-  isEnqueuedJobsEnabled,
-} from '../../infrastructure/diConfigUtils.js'
-import { SINGLETON_CONFIG } from '../../infrastructure/parentDiConfig.js'
-
 import type { QueueConfiguration } from '@lokalise/background-jobs-common'
+import {
+  type InMemoryCacheConfiguration,
+  Loader,
+  type LoaderConfig,
+  RedisCache,
+  createNotificationPair,
+} from 'layered-loader'
+import {
+  AbstractModule,
+  type DependencyInjectionOptions,
+  type MandatoryNameAndRegistrationPair,
+  asEnqueuedJobWorkerClass,
+  asMessageQueueHandlerClass,
+  asPeriodicJobClass,
+  asRepositoryClass,
+  asServiceClass,
+  asSingletonFunction,
+} from 'opinionated-machine'
 import type { User } from '../../db/schema/user.js'
+import type { CommonDependencies } from '../../infrastructure/CommonModule.js'
 import { PermissionConsumer } from './consumers/PermissionConsumer.js'
 import { UserDataSource } from './datasources/UserDataSource.js'
 import { USER_IMPORT_JOB_PAYLOAD, UserImportJob } from './job-queue-processors/UserImportJob.js'
@@ -31,9 +37,6 @@ const IN_MEMORY_CONFIGURATION_BASE: InMemoryCacheConfiguration = {
   ttlLeftBeforeRefreshInMsecs: IN_MEMORY_TTL_BEFORE_REFRESH,
   cacheType: 'fifo-object',
 }
-
-// biome-ignore lint/suspicious/noExplicitAny: it's ok
-type UsersDiConfig = Record<keyof UsersModuleDependencies, Resolver<any>>
 
 export type UsersModuleDependencies = {
   userRepository: UserRepository
@@ -57,13 +60,22 @@ export type UsersPublicDependencies = Pick<
   'userService' | 'permissionsService'
 >
 
-export function resolveUsersConfig(options: DIOptions): UsersDiConfig {
-  return {
-    userRepository: asClass(UserRepository, SINGLETON_CONFIG),
-    userService: asClass(UserService, SINGLETON_CONFIG),
+export const userBullmqQueues = [
+  {
+    queueId: UserImportJob.QUEUE_ID,
+    jobPayloadSchema: USER_IMPORT_JOB_PAYLOAD,
+  },
+] as const satisfies QueueConfiguration[]
 
-    userLoader: asFunction(
-      (deps: UsersInjectableDependencies) => {
+export class UserModule extends AbstractModule<UsersModuleDependencies> {
+  resolveDependencies(
+    diOptions: DependencyInjectionOptions,
+  ): MandatoryNameAndRegistrationPair<UsersModuleDependencies> {
+    return {
+      userRepository: asRepositoryClass(UserRepository),
+      userService: asServiceClass(UserService),
+
+      userLoader: asSingletonFunction((deps: UsersInjectableDependencies) => {
         const { publisher: notificationPublisher, consumer: notificationConsumer } =
           createNotificationPair<User>({
             channel: 'user-cache-notifications',
@@ -87,50 +99,37 @@ export function resolveUsersConfig(options: DIOptions): UsersDiConfig {
           logger: deps.logger,
         }
         return new Loader(config)
-      },
-      {
-        lifetime: Lifetime.SINGLETON,
-      },
-    ),
+      }),
 
-    permissionsService: asClass(PermissionsService, SINGLETON_CONFIG),
-    permissionConsumer: asClass(PermissionConsumer, {
-      lifetime: Lifetime.SINGLETON,
-      asyncInit: 'start',
-      asyncInitPriority: 10,
-      asyncDispose: 'close',
-      asyncDisposePriority: 10,
-      enabled: isAmqpConsumerEnabled(options, PermissionConsumer.QUEUE_NAME),
-    }),
+      permissionsService: asServiceClass(PermissionsService),
+      permissionConsumer: asMessageQueueHandlerClass(PermissionConsumer, {
+        diOptions,
+        queueName: PermissionConsumer.QUEUE_NAME,
+      }),
 
-    processLogFilesJob: asClass(ProcessLogFilesJob, {
-      lifetime: Lifetime.SINGLETON,
-      eagerInject: 'register',
-      enabled: options.arePeriodicJobsEnabled,
-    }),
-    deleteOldUsersJob: asClass(DeleteOldUsersJob, {
-      lifetime: Lifetime.SINGLETON,
-      eagerInject: 'register',
-      enabled: options.arePeriodicJobsEnabled,
-    }),
-    sendEmailsJob: asClass(SendEmailsJob, {
-      lifetime: Lifetime.SINGLETON,
-      eagerInject: 'register',
-      enabled: options.arePeriodicJobsEnabled,
-    }),
+      processLogFilesJob: asPeriodicJobClass(ProcessLogFilesJob, {
+        diOptions,
+        jobName: ProcessLogFilesJob.JOB_NAME,
+      }),
 
-    userImportJob: asClass(UserImportJob, {
-      lifetime: Lifetime.SINGLETON,
-      asyncInit: 'start',
-      asyncDispose: 'dispose',
-      enabled: isEnqueuedJobsEnabled(options, UserImportJob.QUEUE_ID),
-    }),
+      deleteOldUsersJob: asPeriodicJobClass(DeleteOldUsersJob, {
+        diOptions,
+        jobName: DeleteOldUsersJob.JOB_NAME,
+      }),
+
+      sendEmailsJob: asPeriodicJobClass(SendEmailsJob, {
+        diOptions,
+        jobName: SendEmailsJob.JOB_NAME,
+      }),
+
+      userImportJob: asEnqueuedJobWorkerClass(UserImportJob, {
+        diOptions,
+        queueName: UserImportJob.QUEUE_ID,
+      }),
+    }
+  }
+
+  resolveControllers(): MandatoryNameAndRegistrationPair<unknown> {
+    return {}
   }
 }
-
-export const userBullmqQueues = [
-  {
-    queueId: UserImportJob.QUEUE_ID,
-    jobPayloadSchema: USER_IMPORT_JOB_PAYLOAD,
-  },
-] as const satisfies QueueConfiguration[]

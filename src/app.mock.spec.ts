@@ -1,12 +1,10 @@
-import { asClass } from 'awilix'
-
+import { asServiceClass } from 'opinionated-machine'
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 import { createRequestContext } from '../test/requestUtils.js'
 import type { AppInstance } from './app.js'
 import { getApp } from './app.js'
 import type { User } from './db/schema/user.js'
-import type { Dependencies } from './infrastructure/parentDiConfig.js'
-import { SINGLETON_CONFIG } from './infrastructure/parentDiConfig.js'
+import type { Dependencies } from './infrastructure/CommonModule.js'
 import { UserService } from './modules/users/services/UserService.js'
 
 class FakeUserService extends UserService {
@@ -30,7 +28,7 @@ describe('dependency mocking', () => {
     app = await getApp(
       {},
       {
-        userService: asClass(FakeUserService, SINGLETON_CONFIG),
+        userService: asServiceClass(FakeUserService),
       },
     )
   })

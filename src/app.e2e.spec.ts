@@ -1,7 +1,5 @@
 import { TEST_OPTIONS, buildClient, sendGet } from '@lokalise/backend-http-client'
-import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest'
-
-import { createTestContext } from '../test/TestContext.js'
+import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it } from 'vitest'
 
 import { randomUUID } from 'node:crypto'
 import type { AppInstance } from './app.js'
@@ -97,10 +95,14 @@ describe('app', () => {
   describe('config overrides in tests', () => {
     describe('when not overwritten', () => {
       let config: Config
-
+      let app: AppInstance
       beforeEach(async () => {
-        const testContext = await createTestContext({}, {})
-        config = testContext.diContainer.cradle.config
+        app = await getApp()
+        config = app.diContainer.cradle.config
+      })
+
+      afterEach(async () => {
+        await app.close()
       })
 
       it('resolves to default value', () => {
@@ -112,14 +114,13 @@ describe('app', () => {
 
     describe('when overwritten', () => {
       let config: Config
-
+      let app: AppInstance
       beforeEach(async () => {
-        const testContext = await createTestContext(
-          {},
-          {},
-          { vendors: { amplitude: { serverZone: 'US' } } },
-        )
-        config = testContext.diContainer.cradle.config
+        app = await getApp({ vendors: { amplitude: { serverZone: 'US' } } })
+        config = app.diContainer.cradle.config
+      })
+      afterEach(async () => {
+        await app.close()
       })
 
       it('resolves to override value', () => {
