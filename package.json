@@ -31,8 +31,7 @@
         "spec:validate": "cross-env NODE_ENV=development tsx --env-file=.env scripts/validateOpenApi.ts",
         "prepublishOnly": "node --run build",
         "jwt:generate": "cross-env NODE_ENV=development tsx scripts/generateJwt.ts",
-        "cmd:getUserImportJobs:dev": "cross-env NODE_ENV=development tsx --env-file=.env scripts/cmd/getUserImportJobs.ts",
-        "cmd:getUserImportJobs:prod": "node --env-file-if-exists=.env scripts/cmd/getUserImportJobs.js"
+        "cmd:getUserImportJobs": "cross-env NODE_ENV=development node --experimental-strip-types --env-file-if-exists=.env scripts/cmd/getUserImportJobs.ts"
     },
     "dependencies": {
         "@aws-sdk/client-sns": "^3.777.0",
