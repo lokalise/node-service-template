@@ -4,14 +4,10 @@ import { createContainer } from 'awilix'
 import { AwilixManager } from 'awilix-manager'
 import { AbstractTestContextFactory, type DIContext } from 'opinionated-machine'
 import type { AppInstance } from '../src/app.js'
-import {
-  CommonModule,
-  type Dependencies,
-  type ExternalDependencies,
-} from '../src/infrastructure/CommonModule.js'
+import type { Dependencies, ExternalDependencies } from '../src/infrastructure/CommonModule.js'
 import type { Config } from '../src/infrastructure/config.js'
 import { getConfig } from '../src/infrastructure/config.js'
-import { UserModule } from '../src/modules/users/UserModule.js'
+import { ALL_MODULES } from '../src/modules.js'
 
 export type TestContext = DIContext<Dependencies, Config, ExternalDependencies>
 
@@ -42,7 +38,7 @@ class TestContextFactory extends AbstractTestContextFactory<
         app: fakeApp as AppInstance,
         logger: globalLogger,
       },
-      [new CommonModule(), new UserModule()],
+      ALL_MODULES,
       diContainer,
     )
   }

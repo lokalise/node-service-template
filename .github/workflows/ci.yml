@@ -45,13 +45,14 @@ jobs:
         run: |
           node --run lint   
 
+      - name: Generate and validate OpenAPI schema
+        run: |
+          node --run spec:generate
+
       - name: DB stop
         run: |
           docker compose down
 
-      - name: Generate and validate OpenAPI schema
-        run: |
-          node --run spec:generate
 
   automerge:
     needs: build

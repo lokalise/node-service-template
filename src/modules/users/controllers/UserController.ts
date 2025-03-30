@@ -11,6 +11,7 @@ import {
   patchUpdateUserContract,
   postCreateUserContract,
 } from '../schemas/userApiContracts.js'
+import type { UserService } from '../services/UserService.js'
 
 export class UserController extends AbstractController<typeof UserController.contracts> {
   public static contracts = {
@@ -20,9 +21,11 @@ export class UserController extends AbstractController<typeof UserController.con
     updateUser: patchUpdateUserContract,
   } as const
 
-  // cannot inject userService here, because that will start requiring infra dependencies on OpenAPI spec generation step
-  constructor(_dependencies: UsersInjectableDependencies) {
+  private readonly userService: UserService
+
+  constructor(dependencies: UsersInjectableDependencies) {
     super()
+    this.userService = dependencies.userService
   }
 
   private createUser = buildFastifyPayloadRoute(postCreateUserContract, async (req, reply) => {
@@ -43,9 +46,8 @@ export class UserController extends AbstractController<typeof UserController.con
   private getUser = buildFastifyNoPayloadRoute(getUserContract, async (req, reply) => {
     const { userId } = req.params
     const { reqContext } = req
-    const { userService } = req.diScope.cradle
 
-    const user = await userService.getUser(reqContext, userId)
+    const user = await this.userService.getUser(reqContext, userId)
 
     return reply.send({
       data: user,
@@ -55,9 +57,8 @@ export class UserController extends AbstractController<typeof UserController.con
   private deleteUser = buildFastifyNoPayloadRoute(deleteUserContract, async (req, reply) => {
     const { userId } = req.params
     const { reqContext } = req
-    const { userService } = req.diScope.cradle
 
-    await userService.deleteUser(reqContext, userId)
+    await this.userService.deleteUser(reqContext, userId)
 
     return reply.status(204).send()
   })
@@ -66,9 +67,8 @@ export class UserController extends AbstractController<typeof UserController.con
     const { userId } = req.params
     const updatedUser = req.body
     const { reqContext } = req
-    const { userService } = req.diScope.cradle
 
-    await userService.updateUser(reqContext, userId, updatedUser)
+    await this.userService.updateUser(reqContext, userId, updatedUser)
 
     return reply.status(204).send()
   })

@@ -37,11 +37,10 @@ import {
   type DependencyInjectionOptions,
 } from 'opinionated-machine'
 import type { PartialDeep } from 'type-fest'
-import {
-  CommonModule,
-  type Dependencies,
-  type DependencyOverrides,
-  type ExternalDependencies,
+import type {
+  Dependencies,
+  DependencyOverrides,
+  ExternalDependencies,
 } from './infrastructure/CommonModule.js'
 import { type Config, getConfig, isDevelopment } from './infrastructure/config.js'
 import { errorHandler } from './infrastructure/errors/errorHandler.js'
@@ -49,12 +48,13 @@ import {
   dbHealthCheck,
   redisHealthCheck,
 } from './infrastructure/healthchecks/healthchecksWrappers.js'
-import { UserModule } from './modules/users/UserModule.js'
+import { ALL_MODULES } from './modules.js'
 import { jwtTokenPlugin } from './plugins/jwtTokenPlugin.js'
 
 EventEmitter.defaultMaxListeners = 12
 
 const GRACEFUL_SHUTDOWN_TIMEOUT_IN_MSECS = 10000
+const REQUEST_LOGGING_LEVELS = ['debug', 'trace']
 
 export type AppInstance = FastifyInstance<
   http.Server,
@@ -77,12 +77,13 @@ export type ConfigOverrides = DependencyInjectionOptions & {
 export async function getApp(
   configOverrides: ConfigOverrides = {},
   dependencyOverrides: DependencyOverrides = {},
-  modules?: readonly AbstractModule<unknown>[],
+  primaryModules: readonly AbstractModule<unknown>[] = ALL_MODULES,
+  secondaryModules?: readonly AbstractModule<unknown>[],
 ): Promise<AppInstance> {
   const config = getConfig()
   const appConfig = config.app
   const logger = resolveLogger(appConfig)
-  const enableRequestLogging = ['debug', 'trace'].includes(appConfig.logLevel)
+  const enableRequestLogging = REQUEST_LOGGING_LEVELS.includes(appConfig.logLevel)
 
   const app = fastify<http.Server, http.IncomingMessage, http.ServerResponse, CommonLogger>({
     ...getRequestIdFastifyAppConfig(),
@@ -239,10 +240,10 @@ export async function getApp(
     logger: app.log,
   }
 
-  const resolvedModules = modules ?? [new CommonModule(), new UserModule()]
   diContext.registerDependencies(
     {
-      modules: resolvedModules,
+      modules: primaryModules,
+      secondaryModules,
       dependencyOverrides,
       configOverrides,
     },
