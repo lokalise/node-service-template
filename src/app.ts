@@ -35,8 +35,8 @@ import {
   type AbstractModule,
   DIContext,
   type DependencyInjectionOptions,
+  type NestedPartial,
 } from 'opinionated-machine'
-import type { PartialDeep } from 'type-fest'
 import type {
   Dependencies,
   DependencyOverrides,
@@ -71,7 +71,7 @@ export type ConfigOverrides = DependencyInjectionOptions & {
   }
   healthchecksEnabled?: boolean
   monitoringEnabled?: boolean
-} & PartialDeep<Config>
+} & NestedPartial<Config>
 
 // do not delete // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: This is intentional. Don't remove.
 export async function getApp(
