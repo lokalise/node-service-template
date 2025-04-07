@@ -77,7 +77,7 @@
         "ioredis": "^5.6.0",
         "jsonwebtoken": "^9.0.2",
         "layered-loader": "^14.0.1",
-        "newrelic": "12.16.1",
+        "newrelic": "12.17.0",
         "opinionated-machine": "^2.8.0",
         "pino": "^9.6.0",
         "pino-pretty": "^13.0.0",
