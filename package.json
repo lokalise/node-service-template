@@ -94,6 +94,7 @@
         "@biomejs/biome": "1.9.4",
         "@lokalise/biome-config": "^1.6.1",
         "@lokalise/tsconfig": "^1.1.0",
+        "@lokalise/universal-testing-utils": "^1.1.0",
         "@types/amqplib": "^0.10.7",
         "@types/jsonwebtoken": "^9.0.9",
         "@types/newrelic": "^9.14.8",
