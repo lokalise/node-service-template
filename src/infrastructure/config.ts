@@ -87,7 +87,15 @@ export type AppConfig = {
   }
 }
 
+let config: Config
 export function getConfig(): Config {
+  if (!config) {
+    config = generateConfig()
+  }
+  return config
+}
+
+export function generateConfig(): Config {
   return {
     app: getAppConfig(),
     db: getDbConfig(),
