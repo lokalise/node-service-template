@@ -4,13 +4,13 @@ import { MessageHandlerConfigBuilder } from '@message-queue-toolkit/core'
 import { isTest } from '../../../infrastructure/config.js'
 import type { RequestContextPreHandlerOutput } from '../../../infrastructure/prehandlers/requestContextPrehandler.js'
 import { createRequestContextPreHandler } from '../../../infrastructure/prehandlers/requestContextPrehandler.js'
-import type { PermissionsService } from '../services/PermissionsService.js'
-import type { UserService } from '../services/UserService.js'
+import type { UserService } from '../features/crud/services/UserService.js'
 import {
   PERMISSIONS_EXCHANGE,
   PermissionsMessages,
   SERVICE_TEMPLATE_PERMISSIONS_QUEUE,
-} from './permissionsMessageSchemas.js'
+} from '../schemas/permissionsMessageSchemas.js'
+import type { PermissionsService } from '../services/PermissionsService.js'
 
 import type z from 'zod'
 import type { UsersInjectableDependencies } from '../UserModule.js'

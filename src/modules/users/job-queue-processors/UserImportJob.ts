@@ -6,7 +6,7 @@ import z from 'zod'
 import type { Dependencies } from '../../../infrastructure/CommonModule.js'
 import { SERVICE_NAME } from '../../../infrastructure/config.js'
 import { AbstractEnqueuedJobProcessor } from '../../../infrastructure/jobs/AbstractEnqueuedJobProcessor.js'
-import type { UserService } from '../services/UserService.js'
+import type { UserService } from '../features/crud/services/UserService.js'
 
 export const USER_IMPORT_JOB_PAYLOAD = BASE_JOB_PAYLOAD_SCHEMA.extend({
   name: z.string(),

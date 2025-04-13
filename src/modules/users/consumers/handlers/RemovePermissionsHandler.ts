@@ -3,7 +3,7 @@ import type { PreHandlingOutputs } from '@message-queue-toolkit/core'
 
 import type z from 'zod'
 import type { RequestContextPreHandlerOutput } from '../../../../infrastructure/prehandlers/requestContextPrehandler.js'
-import type { PermissionsMessages } from '../permissionsMessageSchemas.js'
+import type { PermissionsMessages } from '../../schemas/permissionsMessageSchemas.js'
 
 export function removePermissionsHandler(
   _message: z.infer<typeof PermissionsMessages.removed.consumerSchema>,

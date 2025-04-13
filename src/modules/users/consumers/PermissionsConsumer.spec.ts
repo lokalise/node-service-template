@@ -17,8 +17,8 @@ import { asSingletonClass } from 'opinionated-machine'
 import { user as userTable } from '../../../db/schema/user.js'
 import type { PublisherManager } from '../../../infrastructure/CommonModule.js'
 import { buildQueueMessage } from '../../../utils/queueUtils.js'
+import type { PermissionsMessages } from '../schemas/permissionsMessageSchemas.js'
 import { PermissionConsumer } from './PermissionConsumer.js'
-import type { PermissionsMessages } from './permissionsMessageSchemas.js'
 
 const userIds = [generateUuid7(), generateUuid7(), generateUuid7()]
 const perms: [string, ...string[]] = ['perm1', 'perm2']

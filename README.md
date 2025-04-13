@@ -31,12 +31,12 @@ Scaffolding:
 
 Basic building block examples:
 
-- [Repository](./src/modules/users/repositories/UserRepository.ts) (using [drizzle](https://orm.drizzle.team/));
-- [Domain service](./src/modules/users/services/UserService.ts);
-- [Controller](./src/modules/users/controllers/UserController.ts);
+- [Repository](src/modules/users/features/crud/repositories/UserRepository.ts) (using [drizzle](https://orm.drizzle.team/));
+- [Domain service](src/modules/users/features/crud/services/UserService.ts);
+- [Controller](src/modules/users/features/crud/controllers/UserController.ts);
 - [Route](./src/modules/users/routes/userRoutes.ts);
 - [Schema](src/modules/users/schemas/userSchemas.ts);
-- [e2e test](./src/modules/users/controllers/UserController.e2e.spec.ts);
+- [e2e test](src/modules/users/features/crud/controllers/UserController.e2e.spec.ts);
 
 Plugins:
 

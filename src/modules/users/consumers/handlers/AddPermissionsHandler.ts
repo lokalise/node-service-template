@@ -3,9 +3,9 @@ import type { PreHandlingOutputs } from '@message-queue-toolkit/core'
 
 import type z from 'zod'
 import type { RequestContextPreHandlerOutput } from '../../../../infrastructure/prehandlers/requestContextPrehandler.js'
+import type { UserService } from '../../features/crud/services/UserService.js'
+import type { PermissionsMessages } from '../../schemas/permissionsMessageSchemas.js'
 import type { PermissionsService } from '../../services/PermissionsService.js'
-import type { UserService } from '../../services/UserService.js'
-import type { PermissionsMessages } from '../permissionsMessageSchemas.js'
 
 export type AddPermissionsContext = {
   userService: UserService
