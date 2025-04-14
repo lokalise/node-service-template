@@ -56,16 +56,15 @@ Service template also comes with a curated set of plugins [installed](./src/app.
 - `@fastify/schedule` (scheduling background jobs)
 - `@fastify/auth` (authentication)
 - `@scalar/fastify-api-reference` (OpenAPI specification website)
-- `fastify-graceful-shutdown` (handling SEGTERM gracefully)
+- `fastify-graceful-shutdown` (handling `SEGTERM` gracefully)
 - `fastify-no-icon` (avoiding warnings when sending GET calls via browser)
-- `@lokalise/fastify-extras` -> metricsPlugin (exposing Prometheus metrics)
-- `@lokalise/fastify-extras` -> requestContextProviderPlugin (storing requestId in AsyncLocalStorage and populating
+- `@lokalise/fastify-extras` -> `metricsPlugin` (exposing Prometheus metrics)
+- `@lokalise/fastify-extras` -> `requestContextProviderPlugin` (storing requestId in AsyncLocalStorage and populating
   requestContext on request)
-- `@lokalise/fastify-extras` -> newRelicTransactionManagerPlugin (creating custom NewRelic spans for background jobs)
-- `@lokalise/fastify-extras` -> bugsnagPlugin (reporting errors to BugSnag)
-- `@lokalise/fastify-extras` -> amplitudePlugin (tracking events in Amplitude)
-- `@lokalise/fastify-extras` -> prismaOtelTracingPlugin (generating OpenTelemetry metrics for DB operations using prisma)
-- `@lokalise/fastify-extras` -> publicHealthcheckPlugin (registering public healthchecks)
+- `@lokalise/fastify-extras` -> `newRelicTransactionManagerPlugin` (creating custom NewRelic spans for background jobs)
+- `@lokalise/fastify-extras` -> `bugsnagPlugin` (reporting errors to BugSnag)
+- `@lokalise/fastify-extras` -> `amplitudePlugin` (tracking events in Amplitude)
+- `@lokalise/fastify-extras` -> `commonHealthcheckPlugin` (registering public healthchecks)
 
 Note that some of the fastify-extras plugins may not be relevant for you (e. g. if you are not using Prometheus, New
 Relic or Bugsnag). In that case you should remove the plugins and delete everything that breaks when you attempt to
