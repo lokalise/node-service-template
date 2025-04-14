@@ -3,6 +3,7 @@ import { buildClient, sendByGetRoute } from '@lokalise/backend-http-client'
 import type { Client } from 'undici'
 import z from 'zod'
 import type { CommonDependencies } from '../infrastructure/CommonModule.js'
+import { commonRetryConfig } from './commonRetryConfig.js'
 
 const GET_PRODUCT_RESPONSE_SCHEMA = z.object({
   id: z.number(),
@@ -39,12 +40,7 @@ export class FakeStoreApiClient {
       },
       {
         requestLabel: 'GET product from FakeStoreAPI',
-        retryConfig: {
-          statusCodesToRetry: [500, 502, 503],
-          retryOnTimeout: false,
-          maxAttempts: 5,
-          delayBetweenAttemptsInMsecs: 200,
-        },
+        retryConfig: commonRetryConfig,
       },
     )
 
