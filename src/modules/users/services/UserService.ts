@@ -80,4 +80,10 @@ export class UserService {
     requestContext.logger.debug({ id }, 'User does not exist')
     return null
   }
+
+  async isUserAdmin(id: string): Promise<boolean> {
+    const result = await this.userRepository.getUser(id)
+
+    return result ? result.role === 'Admin' : false
+  }
 }
