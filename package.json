@@ -29,6 +29,7 @@
         "db:wait": "while ! bash -c \"echo > /dev/tcp/127.0.0.1/5432\"; do sleep 1; done",
         "spec:generate": "cross-env NODE_ENV=development tsx --env-file=.env scripts/generateOpenApi.ts && node --run spec:validate",
         "spec:validate": "cross-env NODE_ENV=development tsx --env-file=.env scripts/validateOpenApi.ts",
+        "docs:validate": "cross-env NODE_ENV=development tsx scripts/validateEnvVarDoc.ts",
         "prepublishOnly": "node --run build",
         "jwt:generate": "cross-env NODE_ENV=development tsx scripts/generateJwt.ts",
         "cmd:getUserImportJobs:dev": "cross-env NODE_ENV=development tsx --env-file=.env scripts/cmd/getUserImportJobs.ts",

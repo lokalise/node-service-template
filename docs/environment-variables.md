@@ -103,3 +103,11 @@ For tests there are some overrides defined in [envSetupHook.ts](../test/envSetup
 - (OPTIONAL) `AMPLITUDE_FLUSH_INTERVAL_MILLIS` - Sets the interval of uploading events to Amplitude in milliseconds. (`10000`)
 - (OPTIONAL) `AMPLITUDE_FLUSH_QUEUE_SIZE` - Sets the maximum number of events that are batched in a single upload attempt. (`300`)
 - (OPTIONAL) `AMPLITUDE_FLUSH_MAX_RETRIES` - Sets the maximum number of retries for failed upload attempts. This is only applicable to retry-able errors. (`12`)
+
+### Jobs
+- (OPTIONAL) `SEND_EMAILS_JOB_CRON` - send emails job cron expression
+- `PROCESS_LOGS_FILES_JOB_PERIOD_IN_SECS` - period in seconds for processing logs files job
+- `DELETE_OLD_USERS_JOB_PERIOD_IN_SECS` - period in seconds for deleting old users job
+
+### Integrations
+- (OPTIONAL) `SAMPLE_FAKE_STORE_BASE_URL` - fake store base URL

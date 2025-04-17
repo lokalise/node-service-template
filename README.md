@@ -47,6 +47,7 @@ Scripts:
 - [Generate](./scripts/generateOpenApi.ts) OpenAPI specification from your route definitions;
 - [Validate](./scripts/validateOpenApi.ts) your OpenAPI specification;
 - [GenerateJwt](./scripts/generateJwt.ts) generate jwt for dev usage.
+- [ValidateEnvDoc](./scripts/validateEnvVarDoc.ts) validate environment variables documentation;
 
 Service template also comes with a curated set of plugins [installed](./src/app.ts):
 
@@ -182,6 +183,24 @@ You have multiple options to ease your development:
   ```
 
 - Use your token to authenticate through bearer authentication in your requests
+
+#### Validate env var doc script
+
+- Script will get all environment variables used in [config.ts](./src/infrastructure/config.ts) and validate that 
+all are documented in [docs](./docs/environment-variables.md)
+
+  ```shell
+  node --run docs:validate
+  ```
+On successful validation, the script will print a message to the console:
+```
+✅ All environment variables are documented!
+```
+If any variable is not documented you will see a list of undocumented ones:
+```
+❌ Missing documentation for the following environment variables:
+- VARIABLE_NAME
+```
 
 ## Troubleshooting
 
