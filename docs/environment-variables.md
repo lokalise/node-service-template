@@ -110,4 +110,4 @@ For tests there are some overrides defined in [envSetupHook.ts](../test/envSetup
 - `DELETE_OLD_USERS_JOB_PERIOD_IN_SECS` - period in seconds for deleting old users job
 
 ### Integrations
-
+- (OPTIONAL) `SAMPLE_FAKE_STORE_BASE_URL` - fake store base URL
