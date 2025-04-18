@@ -43,21 +43,21 @@ import {
 import postgres from 'postgres'
 import { ToadScheduler } from 'toad-scheduler'
 import type { z } from 'zod'
-import type { AppInstance } from '../app.js'
-import { FakeStoreApiClient } from '../integrations/FakeStoreApiClient.js'
-import { type UsersModuleDependencies, userBullmqQueues } from '../modules/users/UserModule.js'
-import { PermissionsMessages } from '../modules/users/consumers/permissionsMessageSchemas.js'
-import { getAmqpConfig, getConfig, isTest } from './config.js'
-import type { Config } from './config.js'
-import { FakeAmplitude } from './fakes/FakeAmplitude.js'
+import type { AppInstance } from '../app.ts'
+import { FakeStoreApiClient } from '../integrations/FakeStoreApiClient.ts'
+import { type UsersModuleDependencies, userBullmqQueues } from '../modules/users/UserModule.ts'
+import { PermissionsMessages } from '../modules/users/consumers/permissionsMessageSchemas.ts'
+import { getAmqpConfig, getConfig, isTest } from './config.ts'
+import type { Config } from './config.ts'
+import { FakeAmplitude } from './fakes/FakeAmplitude.ts'
 import {
   DbHealthcheck,
   HEALTHCHECK_TTL_IN_MSECS,
   RedisHealthcheck,
   STALENESS_THRESHOLD_IN_MSECS,
   type SupportedHealthchecks,
-} from './healthchecks/healthchecks.js'
-import { MessageProcessingMetricsManager } from './metrics/MessageProcessingMetricsManager.js'
+} from './healthchecks/healthchecks.ts'
+import { MessageProcessingMetricsManager } from './metrics/MessageProcessingMetricsManager.ts'
 
 export type ExternalDependencies = {
   app?: AppInstance

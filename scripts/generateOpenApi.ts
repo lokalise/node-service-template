@@ -3,9 +3,9 @@ import { resolve } from 'node:path'
 
 import { stringify as toYaml } from 'yaml'
 
-import { getApp } from '../src/app.js'
+import { getApp } from '../src/app.ts'
 
-import { getRootDirectory } from './utils/pathUtils.js'
+import { getRootDirectory } from './utils/pathUtils.ts'
 
 const targetPath = resolve(getRootDirectory(), 'openApiSpec.yaml')
 

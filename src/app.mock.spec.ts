@@ -1,11 +1,11 @@
 import { asServiceClass } from 'opinionated-machine'
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
-import { createRequestContext } from '../test/requestUtils.js'
-import type { AppInstance } from './app.js'
-import { getApp } from './app.js'
-import type { User } from './db/schema/user.js'
-import type { Dependencies } from './infrastructure/CommonModule.js'
-import { UserService } from './modules/users/services/UserService.js'
+import { createRequestContext } from '../test/requestUtils.ts'
+import type { AppInstance } from './app.ts'
+import { getApp } from './app.ts'
+import type { User } from './db/schema/user.ts'
+import type { Dependencies } from './infrastructure/CommonModule.ts'
+import { UserService } from './modules/users/services/UserService.ts'
 
 class FakeUserService extends UserService {
   constructor() {

@@ -1,7 +1,7 @@
 import { readFile } from 'node:fs/promises'
 import { resolve } from 'node:path'
-import { consoleLog } from './utils/loggingUtils.js'
-import { getRootDirectory } from './utils/pathUtils.js'
+import { consoleLog } from './utils/loggingUtils.ts'
+import { getRootDirectory } from './utils/pathUtils.ts'
 
 const codeBasePath = resolve(getRootDirectory(), 'src/infrastructure/config.ts')
 const docPath = resolve(getRootDirectory(), 'docs/environment-variables.md')

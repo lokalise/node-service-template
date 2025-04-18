@@ -7,7 +7,7 @@ const config = getConfig()
 
 // biome-ignore lint/style/noDefaultExport: drizzle expects default export
 export default defineConfig({
-  schema: isProduction() ? './src/db/schema/*.js' : './src/db/schema/*.ts',
+  schema: isProduction() ? './src/db/schema/*.ts' : './src/db/schema/*.ts',
   out: './src/db/migrations',
   dialect: 'postgresql',
   dbCredentials: {

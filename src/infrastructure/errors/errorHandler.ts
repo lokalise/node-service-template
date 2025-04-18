@@ -12,7 +12,7 @@ import {
   hasZodFastifySchemaValidationErrors,
   isResponseSerializationError,
 } from 'fastify-type-provider-zod'
-import type { AppInstance } from '../../app.js'
+import type { AppInstance } from '../../app.ts'
 
 const knownAuthErrors = new Set([
   'FST_JWT_NO_AUTHORIZATION_IN_HEADER',

@@ -2,9 +2,9 @@ import { TEST_OPTIONS, buildClient, sendGet } from '@lokalise/backend-http-clien
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it } from 'vitest'
 
 import { randomUUID } from 'node:crypto'
-import type { AppInstance } from './app.js'
-import { getApp } from './app.js'
-import type { Config } from './infrastructure/config.js'
+import type { AppInstance } from './app.ts'
+import { getApp } from './app.ts'
+import type { Config } from './infrastructure/config.ts'
 
 describe('app', () => {
   let app: AppInstance

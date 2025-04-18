@@ -2,8 +2,8 @@ import { getLocal } from 'mockttp'
 
 import { MockttpHelper } from '@lokalise/universal-testing-utils'
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it } from 'vitest'
-import { type TestContext, testContextFactory } from '../../test/TestContext.js'
-import { GET_PRODUCT_CONTRACT } from './FakeStoreApiClient.js'
+import { type TestContext, testContextFactory } from '../../test/TestContext.ts'
+import { GET_PRODUCT_CONTRACT } from './FakeStoreApiClient.ts'
 
 const mockServer = getLocal()
 const mockttpHelper = new MockttpHelper(mockServer)

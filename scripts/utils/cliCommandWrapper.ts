@@ -5,8 +5,8 @@ import { isError } from '@lokalise/universal-ts-utils/node'
 import { ENABLE_ALL } from 'opinionated-machine'
 import pino from 'pino'
 import type z from 'zod'
-import { getApp } from '../../src/app.js'
-import type { Dependencies } from '../../src/infrastructure/CommonModule.js'
+import { getApp } from '../../src/app.ts'
+import type { Dependencies } from '../../src/infrastructure/CommonModule.ts'
 
 const getArgs = () => {
   const { values } = parseArgs({

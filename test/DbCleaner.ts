@@ -1,7 +1,7 @@
 import type { PgTable } from 'drizzle-orm/pg-core'
 import type { PostgresJsDatabase } from 'drizzle-orm/postgres-js'
-import { post } from '../src/db/schema/post.js'
-import { user } from '../src/db/schema/user.js'
+import { post } from '../src/db/schema/post.ts'
+import { user } from '../src/db/schema/user.ts'
 
 export const DB_MODEL = {
   User: user,

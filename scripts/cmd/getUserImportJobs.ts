@@ -1,7 +1,7 @@
 import type { RequestContext } from '@lokalise/fastify-extras'
 import z from 'zod'
-import type { Dependencies } from '../../src/infrastructure/CommonModule.js'
-import { cliCommandWrapper } from '../utils/cliCommandWrapper.js'
+import type { Dependencies } from '../../src/infrastructure/CommonModule.ts'
+import { cliCommandWrapper } from '../utils/cliCommandWrapper.ts'
 
 const origin = 'getUserImportJobsCommand'
 const ARGUMENTS_SCHEMA = z.object({

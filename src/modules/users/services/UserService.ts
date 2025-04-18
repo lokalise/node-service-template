@@ -2,15 +2,15 @@ import type { RequestContext } from '@lokalise/fastify-extras'
 import type { Loader } from 'layered-loader'
 
 import type z from 'zod'
-import type { User } from '../../../db/schema/user.js'
-import { EntityNotFoundError } from '../../../infrastructure/errors/publicErrors.js'
-import type { UsersInjectableDependencies } from '../UserModule.js'
-import type { UserRepository } from '../repositories/UserRepository.js'
+import type { User } from '../../../db/schema/user.ts'
+import { EntityNotFoundError } from '../../../infrastructure/errors/publicErrors.ts'
+import type { UsersInjectableDependencies } from '../UserModule.ts'
+import type { UserRepository } from '../repositories/UserRepository.ts'
 import type {
   CREATE_USER_BODY_SCHEMA,
   UPDATE_USER_BODY_SCHEMA,
   USER_SCHEMA_TYPE,
-} from '../schemas/userSchemas.js'
+} from '../schemas/userSchemas.ts'
 
 export type UserDTO = USER_SCHEMA_TYPE
 export type UserCreateDTO = z.infer<typeof CREATE_USER_BODY_SCHEMA>

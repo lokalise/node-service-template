@@ -1,14 +1,14 @@
 import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest'
 
 import { injectDelete, injectGet, injectPatch, injectPost } from '@lokalise/fastify-api-contracts'
-import { DB_MODEL, cleanTables } from '../../../../test/DbCleaner.js'
-import { getTestConfigurationOverrides } from '../../../../test/jwtUtils.js'
-import type { AppInstance } from '../../../app.js'
-import { getApp } from '../../../app.js'
-import { generateJwtToken } from '../../../infrastructure/tokenUtils.js'
-import type { UserRepository } from '../repositories/UserRepository.js'
-import type { UserCreateDTO } from '../services/UserService.js'
-import { UserController } from './UserController.js'
+import { DB_MODEL, cleanTables } from '../../../../test/DbCleaner.ts'
+import { getTestConfigurationOverrides } from '../../../../test/jwtUtils.ts'
+import type { AppInstance } from '../../../app.ts'
+import { getApp } from '../../../app.ts'
+import { generateJwtToken } from '../../../infrastructure/tokenUtils.ts'
+import type { UserRepository } from '../repositories/UserRepository.ts'
+import type { UserCreateDTO } from '../services/UserService.ts'
+import { UserController } from './UserController.ts'
 
 const NEW_USER_FIXTURE = { name: 'dummy', email: 'email@test.com' } satisfies UserCreateDTO
 

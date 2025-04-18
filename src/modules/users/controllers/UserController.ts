@@ -4,14 +4,14 @@ import {
   buildFastifyPayloadRoute,
 } from '@lokalise/fastify-api-contracts'
 import { AbstractController } from 'opinionated-machine'
-import type { UsersInjectableDependencies } from '../UserModule.js'
+import type { UsersInjectableDependencies } from '../UserModule.ts'
 import {
   deleteUserContract,
   getUserContract,
   patchUpdateUserContract,
   postCreateUserContract,
-} from '../schemas/userApiContracts.js'
-import type { UserService } from '../services/UserService.js'
+} from '../schemas/userApiContracts.ts'
+import type { UserService } from '../services/UserService.ts'
 
 export class UserController extends AbstractController<typeof UserController.contracts> {
   public static contracts = {

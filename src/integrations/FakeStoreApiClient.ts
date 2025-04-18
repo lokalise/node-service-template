@@ -2,8 +2,8 @@ import { buildGetRoute } from '@lokalise/api-contracts'
 import { buildClient, sendByGetRoute } from '@lokalise/backend-http-client'
 import type { Client } from 'undici'
 import z from 'zod'
-import type { CommonDependencies } from '../infrastructure/CommonModule.js'
-import { commonRetryConfig } from './commonRetryConfig.js'
+import type { CommonDependencies } from '../infrastructure/CommonModule.ts'
+import { commonRetryConfig } from './commonRetryConfig.ts'
 
 const GET_PRODUCT_RESPONSE_SCHEMA = z.object({
   id: z.number(),

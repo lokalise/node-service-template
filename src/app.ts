@@ -41,15 +41,15 @@ import type {
   Dependencies,
   DependencyOverrides,
   ExternalDependencies,
-} from './infrastructure/CommonModule.js'
-import { type Config, getConfig, isDevelopment } from './infrastructure/config.js'
-import { errorHandler } from './infrastructure/errors/errorHandler.js'
+} from './infrastructure/CommonModule.ts'
+import { type Config, getConfig, isDevelopment } from './infrastructure/config.ts'
+import { errorHandler } from './infrastructure/errors/errorHandler.ts'
 import {
   dbHealthCheck,
   redisHealthCheck,
-} from './infrastructure/healthchecks/healthchecksWrappers.js'
-import { ALL_MODULES } from './modules.js'
-import { jwtTokenPlugin } from './plugins/jwtTokenPlugin.js'
+} from './infrastructure/healthchecks/healthchecksWrappers.ts'
+import { ALL_MODULES } from './modules.ts'
+import { jwtTokenPlugin } from './plugins/jwtTokenPlugin.ts'
 
 EventEmitter.defaultMaxListeners = 12
 
@@ -211,7 +211,7 @@ export async function getApp(
       '/documentation',
       '/documentation/',
       '/documentation/openapi.json',
-      '/documentation/js/scalar.js',
+      '/documentation/js/scalar.ts',
       '/',
       '/health',
       '/metrics',

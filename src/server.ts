@@ -5,8 +5,8 @@ import {
 } from '@lokalise/node-core'
 
 import { ENABLE_ALL } from 'opinionated-machine'
-import { getApp } from './app.js'
-import { getConfig } from './infrastructure/config.js'
+import { getApp } from './app.ts'
+import { getConfig } from './infrastructure/config.ts'
 
 async function start() {
   globalLogger.info('Starting application...')

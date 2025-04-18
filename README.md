@@ -225,11 +225,11 @@ Create a new command in the `scripts` section of `package.json`:
 To run a command locally, use `node --run {npmScriptName} -- {arguments}`. Example:
 
 ```shell
-node --run cmd:getUserImportJobs:dev -- --queue=active
+node --run cmd:getUserImportJobs -- --queue=active
 ```
 
 To run a command in a run-command pipeline, use `{npmScriptName} -- {arguments}` as a command argument. Example:
 
 ```shell
-cmd:getUserImportJobs:prod -- --queue=active
+cmd:getUserImportJobs -- --queue=active
 ```
