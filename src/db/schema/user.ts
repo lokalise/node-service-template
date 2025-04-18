@@ -5,11 +5,14 @@ import z from 'zod'
 
 export const userSchema = pgSchema('user')
 
+export const userRoleEnum = userSchema.enum('user_role', ['Admin', 'Writer', 'Reader'])
+
 export const user = userSchema.table('user', {
   id: uuid('id').primaryKey().defaultRandom().notNull(),
   age: integer('age'),
   email: varchar('email').unique().notNull(),
   name: varchar('name').notNull(),
+  role: userRoleEnum('role').notNull(),
 })
 
 const selectUserSchema = createSelectSchema(user)
