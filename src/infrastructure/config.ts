@@ -203,7 +203,11 @@ export function getAppConfig(): AppConfig {
       'trace',
       'silent',
     ]),
-    nodeEnv: configScope.getMandatoryOneOf('NODE_ENV', ['production', 'development', 'test']),
+    nodeEnv: configScope.getOptionalOneOf('NODE_ENV', 'production', [
+      'production',
+      'development',
+      'test',
+    ]),
     appEnv: configScope.getMandatoryOneOf('APP_ENV', ['production', 'development', 'staging']),
     appVersion: configScope.getOptional('APP_VERSION', 'VERSION_NOT_SET'),
     baseUrl: configScope.getOptional('BASE_URL', ''),
