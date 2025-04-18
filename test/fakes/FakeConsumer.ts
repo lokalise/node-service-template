@@ -2,8 +2,8 @@ import { AbstractAmqpTopicConsumer } from '@message-queue-toolkit/amqp'
 import { MessageHandlerConfigBuilder } from '@message-queue-toolkit/core'
 import type { ZodType } from 'zod'
 
-import type { Dependencies } from '../../src/infrastructure/CommonModule.js'
-import { PermissionsMessages } from '../../src/modules/users/consumers/permissionsMessageSchemas.js'
+import type { Dependencies } from '../../src/infrastructure/CommonModule.ts'
+import { PermissionsMessages } from '../../src/modules/users/consumers/permissionsMessageSchemas.ts'
 
 export class FakeConsumer<T extends object> extends AbstractAmqpTopicConsumer<T, unknown> {
   constructor(

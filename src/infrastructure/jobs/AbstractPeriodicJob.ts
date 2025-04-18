@@ -9,7 +9,7 @@ import type { LockOptions } from 'redis-semaphore'
 import { Mutex } from 'redis-semaphore'
 import type { ToadScheduler } from 'toad-scheduler'
 import { AsyncTask, SimpleIntervalJob } from 'toad-scheduler'
-import type { CommonDependencies } from '../CommonModule.js'
+import type { CommonDependencies } from '../CommonModule.ts'
 
 const DEFAULT_LOCK_NAME = 'exclusive'
 const DEFAULT_JOB_INTERVAL = 60000

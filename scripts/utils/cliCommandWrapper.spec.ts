@@ -1,6 +1,6 @@
 import { type MockInstance, afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import z from 'zod'
-import { cliCommandWrapper } from './cliCommandWrapper.js'
+import { cliCommandWrapper } from './cliCommandWrapper.ts'
 
 describe('cliCommandWrapper', () => {
   let exitSpy: MockInstance
@@ -39,7 +39,7 @@ describe('cliCommandWrapper', () => {
       expected: { key: 'value', flag: true, a: true, b: true, c: true },
     },
   ])('should parse arguments', async ({ inputArgs, schema, expected }) => {
-    process.argv = ['node', 'script.js', ...inputArgs]
+    process.argv = ['node', 'script.ts', ...inputArgs]
     await cliCommandWrapper(
       'command',
       (dependencies, requestContext, args) => {
@@ -53,13 +53,13 @@ describe('cliCommandWrapper', () => {
   })
 
   it('should fail if arguments are not valid', async () => {
-    process.argv = ['node', 'script.js', '--key=value']
+    process.argv = ['node', 'script.ts', '--key=value']
     await cliCommandWrapper('command', () => undefined, z.object({ key: z.number() }))
     expect(exitSpy).toHaveBeenCalledWith(1)
   })
 
   it('should fail if cli command fail', async () => {
-    process.argv = ['node', 'script.js', '--key=value']
+    process.argv = ['node', 'script.ts', '--key=value']
     await cliCommandWrapper('command', () => {
       throw new Error()
     })

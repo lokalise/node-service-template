@@ -3,8 +3,8 @@ import { join, resolve } from 'node:path'
 
 import { createSigner, createVerifier } from 'fast-jwt'
 
-import { consoleLog } from './utils/loggingUtils.js'
-import { getRootDirectory } from './utils/pathUtils.js'
+import { consoleLog } from './utils/loggingUtils.ts'
+import { getRootDirectory } from './utils/pathUtils.ts'
 
 const scriptsPath = resolve(getRootDirectory(), 'scripts')
 const keysPath = join(scriptsPath, 'keys')

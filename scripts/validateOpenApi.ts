@@ -4,8 +4,8 @@ import { resolve } from 'node:path'
 import { validate } from 'oas-validator'
 import { parse as fromYaml } from 'yaml'
 
-import { consoleLog } from './utils/loggingUtils.js'
-import { getRootDirectory } from './utils/pathUtils.js'
+import { consoleLog } from './utils/loggingUtils.ts'
+import { getRootDirectory } from './utils/pathUtils.ts'
 
 const targetPath = resolve(getRootDirectory(), 'openApiSpec.yaml')
 

@@ -2,10 +2,10 @@ import type { Either } from '@lokalise/node-core'
 import type { PreHandlingOutputs } from '@message-queue-toolkit/core'
 
 import type z from 'zod'
-import type { RequestContextPreHandlerOutput } from '../../../../infrastructure/prehandlers/requestContextPrehandler.js'
-import type { PermissionsService } from '../../services/PermissionsService.js'
-import type { UserService } from '../../services/UserService.js'
-import type { PermissionsMessages } from '../permissionsMessageSchemas.js'
+import type { RequestContextPreHandlerOutput } from '../../../../infrastructure/prehandlers/requestContextPrehandler.ts'
+import type { PermissionsService } from '../../services/PermissionsService.ts'
+import type { UserService } from '../../services/UserService.ts'
+import type { PermissionsMessages } from '../permissionsMessageSchemas.ts'
 
 export type AddPermissionsContext = {
   userService: UserService

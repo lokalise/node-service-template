@@ -3,8 +3,8 @@ import fastify from 'fastify'
 import { describe, expect, it } from 'vitest'
 const ACCESS_TOKEN_TTL_IN_SECONDS = 60
 
-import { EmptyTokenError } from './errors/publicErrors.js'
-import { decodeJwtToken, generateJwtToken } from './tokenUtils.js'
+import { EmptyTokenError } from './errors/publicErrors.ts'
+import { decodeJwtToken, generateJwtToken } from './tokenUtils.ts'
 
 type Token = {
   exp: number

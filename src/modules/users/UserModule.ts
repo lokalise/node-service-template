@@ -18,18 +18,18 @@ import {
   asServiceClass,
   asSingletonFunction,
 } from 'opinionated-machine'
-import type { User } from '../../db/schema/user.js'
-import type { CommonDependencies } from '../../infrastructure/CommonModule.js'
-import { PermissionConsumer } from './consumers/PermissionConsumer.js'
-import { UserController } from './controllers/UserController.js'
-import { UserDataSource } from './datasources/UserDataSource.js'
-import { USER_IMPORT_JOB_PAYLOAD, UserImportJob } from './job-queue-processors/UserImportJob.js'
-import { DeleteOldUsersJob } from './periodic-jobs/DeleteOldUsersJob.js'
-import { ProcessLogFilesJob } from './periodic-jobs/ProcessLogFilesJob.js'
-import { SendEmailsJob } from './periodic-jobs/SendEmailsJob.js'
-import { UserRepository } from './repositories/UserRepository.js'
-import { PermissionsService } from './services/PermissionsService.js'
-import { UserService } from './services/UserService.js'
+import type { User } from '../../db/schema/user.ts'
+import type { CommonDependencies } from '../../infrastructure/CommonModule.ts'
+import { PermissionConsumer } from './consumers/PermissionConsumer.ts'
+import { UserController } from './controllers/UserController.ts'
+import { UserDataSource } from './datasources/UserDataSource.ts'
+import { USER_IMPORT_JOB_PAYLOAD, UserImportJob } from './job-queue-processors/UserImportJob.ts'
+import { DeleteOldUsersJob } from './periodic-jobs/DeleteOldUsersJob.ts'
+import { ProcessLogFilesJob } from './periodic-jobs/ProcessLogFilesJob.ts'
+import { SendEmailsJob } from './periodic-jobs/SendEmailsJob.ts'
+import { UserRepository } from './repositories/UserRepository.ts'
+import { PermissionsService } from './services/PermissionsService.ts'
+import { UserService } from './services/UserService.ts'
 
 const IN_MEMORY_CACHE_TTL = 1000 * 60 * 5
 const IN_MEMORY_TTL_BEFORE_REFRESH = 1000 * 25

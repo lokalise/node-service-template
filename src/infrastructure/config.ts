@@ -1,12 +1,8 @@
 import { ConfigScope } from '@lokalise/node-core'
 import type { RedisConfig } from '@lokalise/node-core'
 
-// @ts-expect-error see below
-// biome-ignore lint/correctness/useImportExtensions: Drizzle can't find .js extension
-import type { AwsConfig } from './aws/awsConfig'
-// @ts-expect-error see below
-// biome-ignore lint/correctness/useImportExtensions: Drizzle can't find .js extension
-import { getAwsConfig } from './aws/awsConfig'
+import type { AwsConfig } from './aws/awsConfig.ts'
+import { getAwsConfig } from './aws/awsConfig.ts'
 
 const configScope: ConfigScope = new ConfigScope()
 export const SERVICE_NAME = 'node-service-template'
