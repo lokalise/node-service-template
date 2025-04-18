@@ -20,5 +20,7 @@ describe('DeleteOldUsersJob', () => {
     expect.assertions(0)
     const { deleteOldUsersJob } = testContext.diContainer.cradle
     await deleteOldUsersJob.process(randomUUID())
+    deleteOldUsersJob.register()
+    await deleteOldUsersJob.dispose()
   })
 })

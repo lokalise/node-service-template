@@ -20,5 +20,7 @@ describe('ProcessLogFilesJob', () => {
     expect.assertions(0)
     const { processLogFilesJob } = testContext.diContainer.cradle
     await processLogFilesJob.process(randomUUID())
+    processLogFilesJob.register()
+    await processLogFilesJob.dispose()
   })
 })

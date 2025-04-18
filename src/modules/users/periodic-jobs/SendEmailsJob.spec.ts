@@ -20,5 +20,7 @@ describe('SendEmailsJob', () => {
     expect.assertions(0)
     const { sendEmailsJob } = testContext.diContainer.cradle
     await sendEmailsJob.process(randomUUID())
+    sendEmailsJob.register()
+    await sendEmailsJob.dispose()
   })
 })

@@ -3,6 +3,7 @@ import fastify from 'fastify'
 import { describe, expect, it } from 'vitest'
 const ACCESS_TOKEN_TTL_IN_SECONDS = 60
 
+import { EmptyTokenError } from './errors/publicErrors.js'
 import { decodeJwtToken, generateJwtToken } from './tokenUtils.js'
 
 type Token = {
@@ -61,6 +62,28 @@ describe('tokenUtils', () => {
 
       await app.close()
       await app2.close()
+    })
+
+    it('rejects if jwt.sign returns an error', async () => {
+      const mockPayload = { foo: 'bar' }
+      const ttl = 60
+
+      const fakeError = new Error('sign failed')
+      const jwt = {
+        sign: vi.fn((_payload, _opts, cb) => cb(fakeError)),
+      } as any
+
+      await expect(generateJwtToken(jwt, mockPayload, ttl)).rejects.toBe(fakeError)
+    })
+
+    it('rejects with EmptyTokenError if encoded is undefined', async () => {
+      const mockPayload = { wonder: 'wall' }
+      const jwt = {
+        sign: vi.fn((_payload, _opts, cb) => cb(null, undefined)), // encoded is undefined
+      } as any
+
+      const promise = generateJwtToken(jwt, mockPayload, 60)
+      await expect(promise).rejects.toBeInstanceOf(EmptyTokenError)
     })
   })
 })
