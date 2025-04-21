@@ -68,7 +68,7 @@
         "awilix-manager": "^6.1.0",
         "bullmq": "^5.49.2",
         "drizzle-kit": "^0.31.0",
-        "drizzle-orm": "^0.41.0",
+        "drizzle-orm": "^0.42.0",
         "drizzle-zod": "^0.7.1",
         "fastify": "^5.3.2",
         "fastify-graceful-shutdown": "^4.0.1",
