@@ -48,7 +48,7 @@
         "@lokalise/api-contracts": "^4.3.0",
         "@lokalise/backend-http-client": "^5.0.0",
         "@lokalise/background-jobs-common": "^12.2.0",
-        "@lokalise/fastify-api-contracts": "^2.1.2",
+        "@lokalise/fastify-api-contracts": "^2.2.0",
         "@lokalise/fastify-extras": "^27.3.0",
         "@lokalise/healthcheck-utils": "^2.0.0",
         "@lokalise/id-utils": "^3.0.1",
