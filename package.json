@@ -50,7 +50,7 @@
         "@lokalise/background-jobs-common": "^12.2.0",
         "@lokalise/fastify-api-contracts": "^2.1.2",
         "@lokalise/fastify-extras": "^27.3.0",
-        "@lokalise/healthcheck-utils": "^2.0.0",
+        "@lokalise/healthcheck-utils": "^3.0.0",
         "@lokalise/id-utils": "^3.0.1",
         "@lokalise/node-core": "^13.6.0",
         "@lokalise/universal-ts-utils": "^4.4.1",
