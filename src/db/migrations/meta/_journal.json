@@ -8,6 +8,13 @@
             "when": 1731603966543,
             "tag": "0000_init_user_post_tables",
             "breakpoints": true
+        },
+        {
+            "idx": 1,
+            "version": "7",
+            "when": 1744730504852,
+            "tag": "0001_add_user_role",
+            "breakpoints": true
         }
     ]
 }
