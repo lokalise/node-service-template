@@ -2,6 +2,7 @@ import { TEST_OPTIONS, buildClient, sendGet } from '@lokalise/backend-http-clien
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it } from 'vitest'
 
 import { randomUUID } from 'node:crypto'
+import { HealthcheckRefreshJob } from '@lokalise/healthcheck-utils'
 import type { AppInstance } from './app.ts'
 import { getApp } from './app.ts'
 import type { Config } from './infrastructure/config.ts'
@@ -11,13 +12,14 @@ describe('app', () => {
   beforeAll(async () => {
     app = await getApp({
       monitoringEnabled: true,
+      healthchecksEnabled: true,
+      periodicJobsEnabled: [HealthcheckRefreshJob.JOB_NAME],
       app: {
         metrics: {
           isEnabled: true,
         },
       },
     })
-    app.diContainer.cradle.healthcheckStore.resetHealthcheckStores()
   })
 
   afterAll(async () => {

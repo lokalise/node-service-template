@@ -37,7 +37,7 @@ import {
   asSingletonClass,
   asSingletonFunction,
   isAnyMessageQueueConsumerEnabled,
-  isEnqueuedJobWorkersEnabled,
+  isPeriodicJobEnabled,
   resolveJobQueuesEnabled,
 } from 'opinionated-machine'
 import postgres from 'postgres'
@@ -54,7 +54,6 @@ import {
   DbHealthcheck,
   HEALTHCHECK_TTL_IN_MSECS,
   RedisHealthcheck,
-  STALENESS_THRESHOLD_IN_MSECS,
   type SupportedHealthchecks,
 } from './healthchecks/healthchecks.ts'
 import { MessageProcessingMetricsManager } from './metrics/MessageProcessingMetricsManager.ts'
@@ -69,10 +68,7 @@ export type Dependencies = CommonDependencies & UsersModuleDependencies
 type DiConfig = NameAndRegistrationPair<Dependencies>
 
 declare module '@fastify/awilix' {
-  // eslint-disable-next-line @typescript-eslint/no-empty-interface
   interface Cradle extends Dependencies {}
-
-  // eslint-disable-next-line @typescript-eslint/no-empty-interface
   interface RequestCradle extends Dependencies {}
 }
 
@@ -305,10 +301,9 @@ export class CommonModule extends AbstractModule<CommonDependencies, ExternalDep
           return new HealthcheckRefreshJob(dependencies, dependencies.healthchecks)
         },
         {
-          lifetime: Lifetime.SINGLETON,
-          eagerInject: 'register',
-          enabled: isEnqueuedJobWorkersEnabled(
-            diOptions.enqueuedJobWorkersEnabled,
+          asyncInit: 'asyncRegister',
+          enabled: isPeriodicJobEnabled(
+            diOptions.periodicJobsEnabled,
             HealthcheckRefreshJob.JOB_NAME,
           ),
         },
@@ -320,7 +315,6 @@ export class CommonModule extends AbstractModule<CommonDependencies, ExternalDep
       healthcheckStore: asSingletonFunction(() => {
         return new HealthcheckResultsStore({
           maxHealthcheckNumber: 10,
-          stalenessThresholdInMsecs: STALENESS_THRESHOLD_IN_MSECS,
           healthCheckResultTtlInMsecs: HEALTHCHECK_TTL_IN_MSECS,
         })
       }),

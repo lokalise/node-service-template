@@ -9,7 +9,7 @@ export const redisHealthCheck: HealthChecker = (
 
   if (checkResult === false) {
     return Promise.resolve({
-      error: new Error('Redis did not respond with PONG'),
+      error: new Error('Redis healthcheck not positive in store'),
     })
   }
   return Promise.resolve({ result: true })
@@ -22,7 +22,7 @@ export const dbHealthCheck: HealthChecker = (
 
   if (checkResult === false) {
     return Promise.resolve({
-      error: new Error('DB healthcheck got an unexpected response'),
+      error: new Error('DB healthcheck not positive in store'),
     })
   }
   return Promise.resolve({ result: true })
