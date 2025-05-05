@@ -30,7 +30,6 @@ describe('healthcheck', () => {
   let app: AppInstance
   beforeEach(async () => {
     app = await getApp()
-    app.diContainer.cradle.healthcheckStore.resetHealthcheckStores()
   })
 
   afterEach(async () => {
@@ -73,7 +72,7 @@ describe('healthcheck', () => {
       await app.diContainer.cradle.healthcheckRefreshJob.process(randomUUID())
       const result = await redisHealthCheck(app as unknown as FastifyInstance)
       expect(result).toMatchObject({
-        error: new Error('Redis did not respond with PONG'),
+        error: new Error('Redis healthcheck not positive in store'),
       })
     })
 
@@ -87,7 +86,7 @@ describe('healthcheck', () => {
       const promise = redisHealthCheck(app as unknown as FastifyInstance)
 
       await expect(promise).resolves.toMatchObject({
-        error: new Error('Redis did not respond with PONG'),
+        error: new Error('Redis healthcheck not positive in store'),
       })
     })
 
