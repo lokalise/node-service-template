@@ -9,9 +9,6 @@ import type { CommonDependencies } from '../CommonModule.ts'
 
 export type SupportedHealthchecks = 'redis' | 'postgres'
 
-export const STALENESS_THRESHOLD_IN_MSECS = 30000 // 30 seconds
-export const HEALTHCHECK_TTL_IN_MSECS = 20000
-
 export class RedisHealthcheck
   extends AbstractHealthcheck<SupportedHealthchecks>
   implements Healthcheck

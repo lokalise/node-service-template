@@ -52,7 +52,6 @@ import type { Config } from './config.ts'
 import { FakeAmplitude } from './fakes/FakeAmplitude.ts'
 import {
   DbHealthcheck,
-  HEALTHCHECK_TTL_IN_MSECS,
   RedisHealthcheck,
   type SupportedHealthchecks,
 } from './healthchecks/healthchecks.ts'
@@ -315,7 +314,6 @@ export class CommonModule extends AbstractModule<CommonDependencies, ExternalDep
       healthcheckStore: asSingletonFunction(() => {
         return new HealthcheckResultsStore({
           maxHealthcheckNumber: 10,
-          healthCheckResultTtlInMsecs: HEALTHCHECK_TTL_IN_MSECS,
         })
       }),
 
