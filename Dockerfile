@@ -1,9 +1,10 @@
 # ---- Base Node ----
 FROM node:22.14.0-bookworm-slim as base
 
-RUN set -ex;\
-    apt-get update -y; \
-    apt-get install -y --no-install-recommends libssl3; \
+RUN set -ex &&\
+    apt-get update && \
+    apt-get install -y --no-install-recommends libssl3 && \
+    apt-get clean && \
     rm -rf /var/lib/apt/lists/*;
 
 RUN mkdir -p /home/node/app
@@ -13,17 +14,19 @@ WORKDIR /home/node/app
 # ---- Dependencies ----
 FROM base AS dependencies
 
-RUN set -ex; \
-    apt-get update -y ; \
+RUN set -ex && \
+    apt-get update && \
     apt-get install -y --no-install-recommends \
       ca-certificates \
       dumb-init \
-      make \
-      gcc \
       g++ \
-      python3 \
+      gcc \
       git \
-      openssl
+      make \
+      openssl \
+      python3 \
+    && apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
 COPY --chown=node:node ./package.json ./package.json ./
 COPY --chown=node:node ./package-lock.json ./package-lock.json
 USER node
