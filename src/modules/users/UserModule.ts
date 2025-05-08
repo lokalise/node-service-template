@@ -30,8 +30,9 @@ import { SendEmailsJob } from './periodic-jobs/SendEmailsJob.ts'
 import { UserRepository } from './repositories/UserRepository.ts'
 import { PermissionsService } from './services/PermissionsService.ts'
 import { UserService } from './services/UserService.ts'
-import { KafkaConsumer } from './kafka/KafkaConsumer.ts'
+import { PlatformaticKafkaConsumer } from './kafka/PlatformaticKafkaConsumer.ts'
 import { asClass } from 'awilix'
+import { KafkaJsConsumer } from './kafka/KafkaJsConsumer.ts'
 
 const IN_MEMORY_CACHE_TTL = 1000 * 60 * 5
 const IN_MEMORY_TTL_BEFORE_REFRESH = 1000 * 25
@@ -43,7 +44,8 @@ const IN_MEMORY_CONFIGURATION_BASE: InMemoryCacheConfiguration = {
 }
 
 export type UsersModuleDependencies = {
-  kafkaConsumer: KafkaConsumer
+  platformaticKafkaConsumer: PlatformaticKafkaConsumer
+  kafkaJsConsumer: KafkaJsConsumer
 
   userRepository: UserRepository
   userService: UserService
@@ -78,10 +80,17 @@ export class UserModule extends AbstractModule<UsersModuleDependencies> {
     diOptions: DependencyInjectionOptions,
   ): MandatoryNameAndRegistrationPair<UsersModuleDependencies> {
     return {
-      kafkaConsumer: asClass(KafkaConsumer, {
+      platformaticKafkaConsumer: asClass(PlatformaticKafkaConsumer, {
         lifetime: 'SINGLETON',
         asyncInit: 'connect',
         asyncDispose: 'disconnect',
+        enabled: false,
+      }),
+      kafkaJsConsumer: asClass(KafkaJsConsumer, {
+        lifetime: 'SINGLETON',
+        asyncInit: 'connect',
+        asyncDispose: 'disconnect',
+        enabled: false,
       }),
 
       userRepository: asRepositoryClass(UserRepository),

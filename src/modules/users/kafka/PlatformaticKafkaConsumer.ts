@@ -8,7 +8,7 @@ import type { UsersInjectableDependencies } from '../UserModule.js'
 import type { CommonLogger } from '@lokalise/node-core'
 import type { Config } from '../../../infrastructure/config.ts'
 
-export class KafkaConsumer {
+export class PlatformaticKafkaConsumer {
   private readonly logger: CommonLogger
   private readonly kafkaConfig: Config['kafka']
 
@@ -56,7 +56,7 @@ export class KafkaConsumer {
     await this.consumer?.close()
   }
 
-  consume(message: Message<string, string, string, string>) {
+  private consume(message: Message<string, string, string, string>) {
     this.logger.info(`Received message: ${message.value}`)
   }
 }
