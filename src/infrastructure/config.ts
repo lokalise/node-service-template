@@ -149,8 +149,8 @@ export function generateConfig(): Config {
       brokers: configScope.getMandatory('KAFKA_BROKERS').split(','),
       sasl: {
         mechanism: configScope.getOptionalOneOf('KAFKA_SASL_MECHANISM', 'SHA-512', ['SHA-512']),
-        username: configScope.getMandatory('KAFKA_SASL_USERNAME'),
-        password: configScope.getMandatory('KAFKA_SASL_PASSWORD'),
+        username: configScope.getOptional('KAFKA_SASL_USERNAME', ''),
+        password: configScope.getOptional('KAFKA_SASL_PASSWORD', ''),
       },
     },
   }
