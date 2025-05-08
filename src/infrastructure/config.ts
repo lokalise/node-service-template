@@ -47,6 +47,13 @@ export type Config = {
       flushQueueSize?: number
     }
   }
+  kafka: {
+    brokers: string[]
+    sasl: {
+      username: string
+      password: string
+    }
+  }
 }
 
 export type JobConfig = {
@@ -135,6 +142,13 @@ export function generateConfig(): Config {
         ),
         flushQueueSize: configScope.getOptionalInteger('AMPLITUDE_FLUSH_QUEUE_SIZE', 300),
         flushMaxRetries: configScope.getOptionalInteger('AMPLITUDE_FLUSH_MAX_RETRIES', 12),
+      },
+    },
+    kafka: {
+      brokers: configScope.getMandatory('KAFKA_BROKERS').split(','),
+      sasl: {
+        username: configScope.getOptional('KAFKA_SASL_USERNAME', ''),
+        password: configScope.getOptional('KAFKA_SASL_PASSWORD', ''),
       },
     },
   }
