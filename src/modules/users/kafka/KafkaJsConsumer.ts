@@ -43,7 +43,11 @@ export class KafkaJsConsumer {
 
   private consume({ message, topic }: EachMessagePayload): Promise<void> {
     const messageValue = message.value?.toString('utf8')
-    this.logger.info(`${topic} received message: ${messageValue}`)
+    if (!messageValue || messageValue.length === 0 || messageValue.includes('resolved')) {
+      return Promise.resolve()
+    }
+
+    this.logger.info(`${topic} Received message ${messageValue} `)
     return Promise.resolve()
   }
 }
