@@ -90,7 +90,7 @@ export class UserModule extends AbstractModule<UsersModuleDependencies> {
         lifetime: 'SINGLETON',
         asyncInit: 'connect',
         asyncDispose: 'disconnect',
-        enabled: false,
+        enabled: true,
       }),
 
       userRepository: asRepositoryClass(UserRepository),

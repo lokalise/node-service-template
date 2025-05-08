@@ -50,7 +50,6 @@ export type Config = {
   kafka: {
     brokers: string[]
     sasl: {
-      mechanism: string
       username: string
       password: string
     }
@@ -148,7 +147,6 @@ export function generateConfig(): Config {
     kafka: {
       brokers: configScope.getMandatory('KAFKA_BROKERS').split(','),
       sasl: {
-        mechanism: configScope.getOptionalOneOf('KAFKA_SASL_MECHANISM', 'SHA-512', ['SHA-512']),
         username: configScope.getOptional('KAFKA_SASL_USERNAME', ''),
         password: configScope.getOptional('KAFKA_SASL_PASSWORD', ''),
       },
