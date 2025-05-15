@@ -12,6 +12,7 @@ export const USER_IMPORT_JOB_PAYLOAD = BASE_JOB_PAYLOAD_SCHEMA.extend({
   name: z.string(),
   age: z.number(),
   email: z.string(),
+  role: z.enum(['Admin', 'Writer', 'Reader']),
 })
 type UserImportJobPayload = z.infer<typeof USER_IMPORT_JOB_PAYLOAD>
 

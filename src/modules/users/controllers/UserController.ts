@@ -29,13 +29,14 @@ export class UserController extends AbstractController<typeof UserController.con
   }
 
   private createUser = buildFastifyPayloadRoute(postCreateUserContract, async (req, reply) => {
-    const { name, email, age } = req.body
+    const { name, email, age, role } = req.body
     const { userService } = req.diScope.cradle
 
     const createdUser = await userService.createUser({
       name,
       email,
       age,
+      role,
     })
 
     return reply.status(201).send({

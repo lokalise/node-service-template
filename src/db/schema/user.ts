@@ -25,6 +25,7 @@ const updateUserSchema = createInsertSchema(user, {
   age: z.number().optional(),
   email: z.string().optional(),
   name: z.string().optional(),
+  role: z.enum(['Admin', 'Writer', 'Reader']).optional(),
 }).omit({ id: true })
 export type UpdatedUser = z.infer<typeof updateUserSchema>
 
