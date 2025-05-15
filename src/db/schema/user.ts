@@ -2,6 +2,7 @@ import { relations } from 'drizzle-orm'
 import { integer, pgSchema, uuid, varchar } from 'drizzle-orm/pg-core'
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod'
 import z from 'zod'
+import { USER_ROLE_ENUM } from '../../modules/users/schemas/userSchemas.js'
 
 export const userSchema = pgSchema('user')
 
@@ -25,7 +26,7 @@ const updateUserSchema = createInsertSchema(user, {
   age: z.number().optional(),
   email: z.string().optional(),
   name: z.string().optional(),
-  role: z.enum(['Admin', 'Writer', 'Reader']).optional(),
+  role: USER_ROLE_ENUM.optional(),
 }).omit({ id: true })
 export type UpdatedUser = z.infer<typeof updateUserSchema>
 

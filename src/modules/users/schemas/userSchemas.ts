@@ -2,6 +2,7 @@ import { toNumberPreprocessor } from '@lokalise/zod-extras'
 import z from 'zod'
 
 export const USER_ROLE_ENUM = z.enum(['Admin', 'Writer', 'Reader'])
+export type UserRole = z.infer<typeof USER_ROLE_ENUM>
 
 export const USER_SCHEMA = z.object({
   id: z.string(),
