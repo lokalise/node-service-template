@@ -1,9 +1,8 @@
 import {
-  type RouteType,
   buildFastifyNoPayloadRoute,
   buildFastifyPayloadRoute,
 } from '@lokalise/fastify-api-contracts'
-import { AbstractController } from 'opinionated-machine'
+import { AbstractController, type BuildRoutesReturnType } from 'opinionated-machine'
 import type { UsersInjectableDependencies } from '../UserModule.ts'
 import {
   deleteUserContract,
@@ -13,7 +12,9 @@ import {
 } from '../schemas/userApiContracts.ts'
 import type { UserService } from '../services/UserService.ts'
 
-export class UserController extends AbstractController<typeof UserController.contracts> {
+type UserControllerContractsType = typeof UserController.contracts
+
+export class UserController extends AbstractController<UserControllerContractsType> {
   public static contracts = {
     createUser: postCreateUserContract,
     getUser: getUserContract,
@@ -73,7 +74,7 @@ export class UserController extends AbstractController<typeof UserController.con
     return reply.status(204).send()
   })
 
-  buildRoutes(): Record<keyof typeof UserController.contracts, RouteType> {
+  buildRoutes(): BuildRoutesReturnType<UserControllerContractsType> {
     return {
       createUser: this.createUser,
       getUser: this.getUser,
