@@ -49,6 +49,8 @@ export type Config = {
   }
   kafka: {
     brokers: string[]
+    clientId: string
+    groupId: string
     sasl: {
       username: string
       password: string
@@ -146,6 +148,8 @@ export function generateConfig(): Config {
     },
     kafka: {
       brokers: configScope.getMandatory('KAFKA_BROKERS').split(','),
+      clientId: configScope.getMandatory('KAFKA_CLIENT_ID'),
+      groupId: configScope.getMandatory('KAFKA_GROUP_ID'),
       sasl: {
         username: configScope.getOptional('KAFKA_SASL_USERNAME', ''),
         password: configScope.getOptional('KAFKA_SASL_PASSWORD', ''),

@@ -3,7 +3,6 @@ import type { CommonLogger } from '@lokalise/node-core'
 import type { Config } from '../../../infrastructure/config.ts'
 import { KafkaJS } from '@confluentinc/kafka-javascript'
 
-
 export class ConfluentKafkaConsumer {
   private readonly logger: CommonLogger
   private readonly kafkaConfig: Config['kafka']
@@ -15,7 +14,7 @@ export class ConfluentKafkaConsumer {
     this.kafkaConfig = deps.config.kafka
 
     this.kafkaClient = new KafkaJS.Kafka({
-      'client.id': 'crdb.next_gen.test',
+      'client.id': this.kafkaConfig.clientId,
       'bootstrap.servers': this.kafkaConfig.brokers.join(','),
       'sasl.mechanism': 'SCRAM-SHA-512',
       'security.protocol': 'sasl_ssl',
@@ -37,7 +36,9 @@ export class ConfluentKafkaConsumer {
   }
 
   async connect() {
-    this.consumer = this.kafkaClient.consumer({ kafkaJS: { groupId: 'crdb.next_gen.test', fromBeginning: false } })
+    this.consumer = this.kafkaClient.consumer({
+      kafkaJS: { groupId: this.kafkaConfig.groupId, fromBeginning: false },
+    })
 
     await this.consumer.connect()
     await this.consumer.subscribe({

@@ -14,7 +14,7 @@ export class KafkaJsConsumer {
     this.kafkaConfig = deps.config.kafka
 
     this.kafkaClient = new Kafka({
-      clientId: 'crdb.next_gen.test',
+      clientId: this.kafkaConfig.clientId,
       brokers: this.kafkaConfig.brokers,
       ssl: true,
       sasl: {
@@ -26,7 +26,7 @@ export class KafkaJsConsumer {
   }
 
   async connect() {
-    this.consumer = this.kafkaClient.consumer({ groupId: 'crdb.next_gen.test' })
+    this.consumer = this.kafkaClient.consumer({ groupId: this.kafkaConfig.groupId })
 
     await this.consumer.connect()
     await this.consumer.subscribe({
