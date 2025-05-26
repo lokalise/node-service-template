@@ -33,7 +33,7 @@ import { UserService } from './services/UserService.ts'
 import { PlatformaticKafkaConsumer } from './kafka/PlatformaticKafkaConsumer.ts'
 import { asClass } from 'awilix'
 import { KafkaJsConsumer } from './kafka/KafkaJsConsumer.ts'
-import { ConfluentKafkaConsumer } from './kafka/ConfluentKafkaConsumer.ts';
+import { ConfluentKafkaConsumer } from './kafka/ConfluentKafkaConsumer.ts'
 
 const IN_MEMORY_CACHE_TTL = 1000 * 60 * 5
 const IN_MEMORY_TTL_BEFORE_REFRESH = 1000 * 25
@@ -86,7 +86,7 @@ export class UserModule extends AbstractModule<UsersModuleDependencies> {
         lifetime: 'SINGLETON',
         asyncInit: 'connect',
         asyncDispose: 'disconnect',
-        enabled: false,
+        enabled: true,
       }),
       kafkaJsConsumer: asClass(KafkaJsConsumer, {
         lifetime: 'SINGLETON',
@@ -98,7 +98,7 @@ export class UserModule extends AbstractModule<UsersModuleDependencies> {
         lifetime: 'SINGLETON',
         asyncInit: 'connect',
         asyncDispose: 'disconnect',
-        enabled: true,
+        enabled: false,
       }),
 
       userRepository: asRepositoryClass(UserRepository),

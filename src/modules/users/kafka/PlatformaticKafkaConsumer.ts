@@ -1,16 +1,17 @@
 import {
-  Connection,
   Consumer,
-  saslAuthenticateV2,
-  saslHandshakeV1,
-  stringDeserializers,
   type Message,
   type MessagesStream,
+  Connection,
+  saslHandshakeV1,
   saslScramSha,
+  saslAuthenticateV2,
+  stringDeserializers,
 } from '@platformatic/kafka'
 import type { UsersInjectableDependencies } from '../UserModule.js'
 import type { CommonLogger } from '@lokalise/node-core'
 import type { Config } from '../../../infrastructure/config.ts'
+import { randomUUID } from 'node:crypto'
 
 /**
  * NOTE: this is not working yet, it's only a playground for testing connection
@@ -27,18 +28,15 @@ export class PlatformaticKafkaConsumer {
     this.kafkaConfig = deps.config.kafka
   }
 
-  async connect() {
-    const clientId = 'crdb.next_gen.test'
-    const groupId = 'crdb.next_gen.test'
-
+  private async manualAuth() {
     const [kafkaHost, kafkaPort] = (() => {
+      // biome-ignore lint/style/noNonNullAssertion: <explanation>
       const [host, port] = this.kafkaConfig.brokers[0]!.split(':')
       return [host, Number(port)] as [string, number]
     })()
 
-
-    const connection = new Connection(clientId, {
-      tls: {} // Required to use TLS connection strategy
+    const connection = new Connection(this.kafkaConfig.clientId, {
+      tls: {}, // Required to use TLS connection strategy
     })
     const connectPromise = connection.connect(kafkaHost, kafkaPort)
     const readyPromise = connection.ready()
@@ -46,15 +44,18 @@ export class PlatformaticKafkaConsumer {
     await readyPromise
     await connectPromise
 
-    this.logger.info({
-      host: kafkaHost,
-      port: kafkaPort,
-      connectionStatus: connection.status,
-    }, 'Kafka connection established')
+    this.logger.info(
+      {
+        host: kafkaHost,
+        port: kafkaPort,
+        connectionStatus: connection.status,
+      },
+      'Kafka connection established',
+    )
 
-    const handshakeResponse = await saslHandshakeV1.api.async(connection, 'SCRAM-SHA-512')
+    const _handshakeResponse = await saslHandshakeV1.api.async(connection, 'SCRAM-SHA-512')
 
-    const authResponse = await saslScramSha.authenticate(
+    const _authResponse = await saslScramSha.authenticate(
       saslAuthenticateV2.api,
       connection,
       'SHA-512',
@@ -62,26 +63,52 @@ export class PlatformaticKafkaConsumer {
       this.kafkaConfig.sasl.password,
     )
 
-    this.logger.info({
-      connectionStatus: connection.status,
-    }, 'Kafka connection authenticated')
+    this.logger.info(
+      {
+        connectionStatus: connection.status,
+      },
+      'Kafka connection authenticated',
+    )
+  }
 
-    // TODO Figure out how to use authorization in Consumer
-    this.consumer = new Consumer({
-      clientId,
-      groupId,
+  async connect() {
+    /*
+    const base = new Base({
+      clientId: this.kafkaConfig.clientId,
       bootstrapBrokers: this.kafkaConfig.brokers,
-      deserializers: stringDeserializers,
-      // protocols: [
-      // {
-      //   name: 'SaslAuthenticate',
-      //   version: 1,
-      //   metadata: '',
-      // },
-      // ],
+      retries: 0,
+      tls: {},
+      sasl: {
+        mechanism: 'SCRAM-SHA-512',
+        username: this.kafkaConfig.sasl.username,
+        password: this.kafkaConfig.sasl.password,
+      },
     })
 
-    this.stream = await this.consumer.consume({ topics: ['crdb.next_gen.autopilot.translation.segment'] })
+    // biome-ignore lint/suspicious/noConsoleLog: <explanation>
+    console.log((await base.metadata({ topics: [] })).brokers)
+     */
+
+    this.consumer = new Consumer({
+      clientId: this.kafkaConfig.clientId,
+      groupId: this.kafkaConfig.groupId + randomUUID(),
+      bootstrapBrokers: this.kafkaConfig.brokers,
+      deserializers: stringDeserializers,
+      tls: {}, // <- this is required for whatever reason
+      sasl: {
+        mechanism: 'SCRAM-SHA-512',
+        username: this.kafkaConfig.sasl.username,
+        password: this.kafkaConfig.sasl.password,
+      },
+    })
+
+    this.stream = await this.consumer.consume({
+      topics: ['crdb.next_gen.autopilot.translation.segment'],
+      mode: 'latest',
+    })
+    this.stream.on('error', (error) => {
+      this.logger.error({ error }, 'Error in Kafka stream')
+    })
     this.stream.on('data', (message) => {
       this.consume(message)
     })
