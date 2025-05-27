@@ -72,23 +72,6 @@ export class PlatformaticKafkaConsumer {
   }
 
   async connect() {
-    /*
-    const base = new Base({
-      clientId: this.kafkaConfig.clientId,
-      bootstrapBrokers: this.kafkaConfig.brokers,
-      retries: 0,
-      tls: {},
-      sasl: {
-        mechanism: 'SCRAM-SHA-512',
-        username: this.kafkaConfig.sasl.username,
-        password: this.kafkaConfig.sasl.password,
-      },
-    })
-
-    // biome-ignore lint/suspicious/noConsoleLog: <explanation>
-    console.log((await base.metadata({ topics: [] })).brokers)
-     */
-
     this.consumer = new Consumer({
       clientId: this.kafkaConfig.clientId,
       groupId: this.kafkaConfig.groupId + randomUUID(),
