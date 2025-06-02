@@ -79,7 +79,7 @@
         "jsonwebtoken": "^9.0.2",
         "layered-loader": "^14.0.1",
         "newrelic": "12.20.0",
-        "opinionated-machine": "^3.0.1",
+        "opinionated-machine": "^3.1.0",
         "pino": "^9.7.0",
         "pino-pretty": "^13.0.0",
         "postgres": "^3.4.7",
