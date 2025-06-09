@@ -61,7 +61,7 @@
         "@message-queue-toolkit/sns": "^22.2.0",
         "@message-queue-toolkit/sqs": "^21.0.1",
         "@message-queue-toolkit/metrics": "^4.0.1",
-        "@scalar/fastify-api-reference": "^1.31.2",
+        "@scalar/fastify-api-reference": "^1.31.8",
         "@supercharge/promise-pool": "^3.2.0",
         "amqplib": "^0.10.8",
         "awilix": "^12.0.5",
