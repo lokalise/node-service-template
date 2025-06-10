@@ -16,7 +16,7 @@ For tests there are some overrides defined in [envSetupHook.ts](../test/envSetup
 - (OPTIONAL) `APP_VERSION` - application version, exposed via healthcheck endpoint (`VERSION_NOT_SET`)
 - (OPTIONAL) `BASE_URL` - URL where the app is available externally, used in OpenAPI specification (default: `http://${APP_BIND_ADDRESS}:{APP_PORT}`)
 - (OPTIONAL) `GIT_COMMIT_SHA` - SHA of a last commit of the deployed version (`COMMIT_SHA_NOT_SET`)
-- `DATABASE_URL` - full DB connection URL. e. g. 'postgresql://serviceuser:pass@localhost:5432/service_db'
+- `DATABASE_URL` - full DB connection URL. e. g. 'postgresql://serviceuser:pass@localhost:5432/service_db?application_name=new_service'
 - `JWT_PUBLIC_KEY` - full public key for JWT token validation, with '||' replaced with new lines, e. g.
   ```
     -----BEGIN PUBLIC KEY-----
