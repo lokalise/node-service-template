@@ -45,7 +45,7 @@
         "@fastify/jwt": "^9.1.0",
         "@fastify/schedule": "^6.0.0",
         "@fastify/swagger": "^9.5.1",
-        "@lokalise/api-contracts": "^4.3.0",
+        "@lokalise/api-contracts": "^5.0.0",
         "@lokalise/backend-http-client": "^5.0.0",
         "@lokalise/background-jobs-common": "^12.6.0",
         "@lokalise/fastify-api-contracts": "^2.2.0",
