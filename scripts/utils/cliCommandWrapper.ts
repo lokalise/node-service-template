@@ -4,7 +4,7 @@ import { generateMonotonicUuid } from '@lokalise/id-utils'
 import { isError } from '@lokalise/universal-ts-utils/node'
 import { ENABLE_ALL } from 'opinionated-machine'
 import pino from 'pino'
-import type z from 'zod'
+import type z from 'zod/v4'
 import { getApp } from '../../src/app.ts'
 import type { Dependencies } from '../../src/infrastructure/CommonModule.ts'
 

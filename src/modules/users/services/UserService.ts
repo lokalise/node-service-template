@@ -1,7 +1,7 @@
 import type { RequestContext } from '@lokalise/fastify-extras'
 import type { Loader } from 'layered-loader'
 
-import type z from 'zod'
+import type z from 'zod/v4'
 import type { User } from '../../../db/schema/user.ts'
 import { EntityNotFoundError } from '../../../infrastructure/errors/publicErrors.ts'
 import type { UsersInjectableDependencies } from '../UserModule.ts'

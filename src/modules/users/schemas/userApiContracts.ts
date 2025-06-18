@@ -1,5 +1,5 @@
 import { buildDeleteRoute, buildGetRoute, buildPayloadRoute } from '@lokalise/api-contracts'
-import z from 'zod'
+import z from 'zod/v4'
 import {
   AUTH_HEADERS,
   CREATE_USER_BODY_SCHEMA,
@@ -34,6 +34,9 @@ export const deleteUserContract = buildDeleteRoute({
   requestHeaderSchema: AUTH_HEADERS,
   pathResolver: (params) => `/users/${params.userId}`,
   description: 'Delete user',
+  metadata: {
+    preHandler: 'frfr'
+  }
 })
 
 export const patchUpdateUserContract = buildPayloadRoute({

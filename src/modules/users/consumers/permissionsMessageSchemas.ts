@@ -1,6 +1,6 @@
 import type { AmqpAwareEventDefinition } from '@message-queue-toolkit/amqp'
 import { enrichMessageSchemaWithBase } from '@message-queue-toolkit/core'
-import z from 'zod'
+import z from 'zod/v4'
 
 // Rename into consumer service name when using in real code
 export const SERVICE_TEMPLATE_PERMISSIONS_QUEUE = 'service_template.user_permissions'

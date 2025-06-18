@@ -1,7 +1,7 @@
 import { relations } from 'drizzle-orm'
 import { integer, pgSchema, uuid, varchar } from 'drizzle-orm/pg-core'
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod'
-import z from 'zod'
+import { z } from 'zod/v4'
 
 export const userSchema = pgSchema('user')
 

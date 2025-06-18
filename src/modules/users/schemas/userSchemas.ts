@@ -1,5 +1,5 @@
 import { toNumberPreprocessor } from '@lokalise/zod-extras'
-import z from 'zod'
+import z from 'zod/v4'
 
 export const USER_SCHEMA = z.object({
   id: z.string(),

@@ -1,7 +1,7 @@
 import { buildGetRoute } from '@lokalise/api-contracts'
 import { buildClient, sendByGetRoute } from '@lokalise/backend-http-client'
 import type { Client } from 'undici'
-import z from 'zod'
+import z from 'zod/v4'
 import type { CommonDependencies } from '../infrastructure/CommonModule.ts'
 import { commonRetryConfig } from './commonRetryConfig.ts'
 
