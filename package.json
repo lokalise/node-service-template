@@ -100,7 +100,7 @@
         "@types/jsonwebtoken": "^9.0.9",
         "@types/newrelic": "^9.14.8",
         "@types/node": "^24.0.1",
-        "@vitest/coverage-v8": "^3.2.3",
+        "@vitest/coverage-v8": "^3.2.4",
         "cpy-cli": "^5.0.0",
         "cross-env": "^7.0.3",
         "mockttp": "^3.17.1",
