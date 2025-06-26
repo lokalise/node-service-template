@@ -6,12 +6,14 @@ import z from 'zod'
 import type { Dependencies } from '../../../infrastructure/CommonModule.ts'
 import { SERVICE_NAME } from '../../../infrastructure/config.ts'
 import { AbstractEnqueuedJobProcessor } from '../../../infrastructure/jobs/AbstractEnqueuedJobProcessor.ts'
+import { USER_ROLE_ENUM } from '../schemas/userSchemas.js'
 import type { UserService } from '../services/UserService.ts'
 
 export const USER_IMPORT_JOB_PAYLOAD = BASE_JOB_PAYLOAD_SCHEMA.extend({
   name: z.string(),
   age: z.number(),
   email: z.string(),
+  role: USER_ROLE_ENUM,
 })
 type UserImportJobPayload = z.infer<typeof USER_IMPORT_JOB_PAYLOAD>
 

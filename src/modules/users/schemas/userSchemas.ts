@@ -1,6 +1,9 @@
 import { toNumberPreprocessor } from '@lokalise/zod-extras'
 import z from 'zod'
 
+export const USER_ROLE_ENUM = z.enum(['Admin', 'Writer', 'Reader'])
+export type UserRole = z.infer<typeof USER_ROLE_ENUM>
+
 export const USER_SCHEMA = z.object({
   id: z.string(),
   name: z.string(),
@@ -12,6 +15,7 @@ export const CREATE_USER_BODY_SCHEMA = z.object({
   name: z.string(),
   age: z.optional(z.nullable(z.preprocess(toNumberPreprocessor, z.number()))),
   email: z.string().email(),
+  role: USER_ROLE_ENUM,
 })
 
 export const CREATE_USER_RESPONSE_BODY_SCHEMA = z.object({
@@ -21,6 +25,7 @@ export const CREATE_USER_RESPONSE_BODY_SCHEMA = z.object({
 export const UPDATE_USER_BODY_SCHEMA = z.object({
   name: z.optional(z.string()),
   email: z.optional(z.string().email()),
+  role: z.optional(USER_ROLE_ENUM),
 })
 
 export const GET_USER_PARAMS_SCHEMA = z.object({

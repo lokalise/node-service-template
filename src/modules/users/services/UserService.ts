@@ -30,6 +30,7 @@ export class UserService {
       name: user.name ?? null,
       age: user.age ?? null,
       email: user.email,
+      role: user.role,
     })
     await this.userLoader.invalidateCacheFor(newUser.id.toString())
     return newUser
@@ -79,5 +80,11 @@ export class UserService {
 
     requestContext.logger.debug({ id }, 'User does not exist')
     return null
+  }
+
+  async isUserAdmin(id: string): Promise<boolean> {
+    const result = await this.userRepository.getUser(id)
+
+    return result ? result.role === 'Admin' : false
   }
 }
