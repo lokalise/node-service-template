@@ -1,10 +1,10 @@
 import { parseArgs } from 'node:util'
 import type { RequestContext } from '@lokalise/fastify-extras'
 import { generateMonotonicUuid } from '@lokalise/id-utils'
-import { isError } from '@lokalise/universal-ts-utils/node'
+import { isError } from '@lokalise/node-core'
 import { ENABLE_ALL } from 'opinionated-machine'
 import pino from 'pino'
-import type z from 'zod'
+import type z from 'zod/v4'
 import { getApp } from '../../src/app.ts'
 import type { Dependencies } from '../../src/infrastructure/CommonModule.ts'
 
@@ -51,7 +51,7 @@ export const cliCommandWrapper = async <ArgsSchema extends z.Schema | undefined>
     if (!parseResult.success) {
       reqContext.logger.error(
         {
-          errors: JSON.stringify(parseResult.error.errors),
+          errors: JSON.stringify(parseResult.error.issues),
         },
         'Invalid arguments',
       )
@@ -64,7 +64,11 @@ export const cliCommandWrapper = async <ArgsSchema extends z.Schema | undefined>
 
   let isSuccess = true
   try {
-    await command(app.diContainer.cradle, reqContext, args)
+    await command(
+      app.diContainer.cradle,
+      reqContext,
+      args as ArgsSchema extends z.Schema ? z.infer<ArgsSchema> : undefined,
+    )
   } catch (err) {
     isSuccess = false
     reqContext.logger.error(
