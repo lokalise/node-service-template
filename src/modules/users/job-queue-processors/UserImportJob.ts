@@ -2,7 +2,7 @@ import { BASE_JOB_PAYLOAD_SCHEMA } from '@lokalise/background-jobs-common'
 import type { RequestContext } from '@lokalise/fastify-extras'
 import type { Job } from 'bullmq'
 
-import z from 'zod'
+import z from 'zod/v4'
 import type { Dependencies } from '../../../infrastructure/CommonModule.ts'
 import { SERVICE_NAME } from '../../../infrastructure/config.ts'
 import { AbstractEnqueuedJobProcessor } from '../../../infrastructure/jobs/AbstractEnqueuedJobProcessor.ts'

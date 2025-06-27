@@ -1,5 +1,5 @@
 import type { RequestContext } from '@lokalise/fastify-extras'
-import z from 'zod'
+import z from 'zod/v4'
 import type { Dependencies } from '../../src/infrastructure/CommonModule.ts'
 import { cliCommandWrapper } from '../utils/cliCommandWrapper.ts'
 

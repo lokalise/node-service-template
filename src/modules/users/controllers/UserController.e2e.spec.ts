@@ -43,19 +43,14 @@ describe('UserController', () => {
             "error": [
               {
                 "instancePath": "/email",
-                "keyword": "invalid_string",
-                "message": "Invalid email",
+                "keyword": "invalid_format",
+                "message": "Invalid email address",
                 "params": {
-                  "issue": {
-                    "code": "invalid_string",
-                    "message": "Invalid email",
-                    "path": [
-                      "email",
-                    ],
-                    "validation": "email",
-                  },
+                  "format": "email",
+                  "origin": "string",
+                  "pattern": "/^(?!\\.)(?!.*\\.\\.)([A-Za-z0-9_'+\\-\\.]*)[A-Za-z0-9_+-]@([A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$/",
                 },
-                "schemaPath": "#/email/invalid_string",
+                "schemaPath": "#/email/invalid_format",
               },
             ],
           },

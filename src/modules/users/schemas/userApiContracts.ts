@@ -1,5 +1,5 @@
 import { buildDeleteRoute, buildGetRoute, buildPayloadRoute } from '@lokalise/api-contracts'
-import z from 'zod'
+import z from 'zod/v4'
 import {
   AUTH_HEADERS,
   CREATE_USER_BODY_SCHEMA,
