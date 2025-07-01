@@ -67,7 +67,7 @@ export const cliCommandWrapper = async <ArgsSchema extends z.Schema | undefined>
     await command(
       app.diContainer.cradle,
       reqContext,
-      args as ArgsSchema extends z.Schema ? z.infer<ArgsSchema> : undefined,
+      args as ArgsSchema extends z.Schema ? z.output<ArgsSchema> : undefined,
     )
   } catch (err) {
     isSuccess = false
