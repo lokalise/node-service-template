@@ -54,7 +54,7 @@
         "@lokalise/id-utils": "^3.0.1",
         "@lokalise/node-core": "^14.1.0",
         "@lokalise/universal-ts-utils": "^4.4.1",
-        "@lokalise/zod-extras": "^2.1.0",
+        "@lokalise/zod-extras": "^3.0.0",
         "@message-queue-toolkit/amqp": "^22.0.0",
         "@message-queue-toolkit/core": "^23.0.0",
         "@message-queue-toolkit/schemas": "^7.0.0",
