@@ -42,7 +42,7 @@ import {
 } from 'opinionated-machine'
 import postgres from 'postgres'
 import { ToadScheduler } from 'toad-scheduler'
-import type { z } from 'zod'
+import type { z } from 'zod/v4'
 import type { AppInstance } from '../app.ts'
 import { FakeStoreApiClient } from '../integrations/FakeStoreApiClient.ts'
 import { type UsersModuleDependencies, userBullmqQueues } from '../modules/users/UserModule.ts'

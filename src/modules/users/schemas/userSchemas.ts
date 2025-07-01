@@ -10,7 +10,8 @@ export const USER_SCHEMA = z.object({
 
 export const CREATE_USER_BODY_SCHEMA = z.object({
   name: z.string(),
-  //age: z.optional(z.nullable(z.preprocess(toNumberPreprocessor, z.number()))), TODO Fix age validation, generateOpenApi.ts script fails with this.
+  //age: z.optional(z.nullable(z.preprocess(toNumberPreprocessor, z.number()))), // TODO Fix age validation, generateOpenApi.ts script fails with this.
+  age: z.number().optional(),
   email: z.email(),
 })
 
