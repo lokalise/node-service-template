@@ -1,6 +1,6 @@
 import { AbstractAmqpTopicConsumer } from '@message-queue-toolkit/amqp'
 import { MessageHandlerConfigBuilder } from '@message-queue-toolkit/core'
-import type { ZodType } from 'zod' // TODO upgrade to 'zod/v4'
+import type { ZodType } from 'zod/v4'
 
 import type { Dependencies } from '../../src/infrastructure/CommonModule.ts'
 import { PermissionsMessages } from '../../src/modules/users/consumers/permissionsMessageSchemas.ts'

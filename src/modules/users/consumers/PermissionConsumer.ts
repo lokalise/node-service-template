@@ -12,7 +12,7 @@ import {
   SERVICE_TEMPLATE_PERMISSIONS_QUEUE,
 } from './permissionsMessageSchemas.ts'
 
-import type z from 'zod' // TODO upgrade to 'zod/v4'
+import type z from 'zod/v4'
 import type { UsersInjectableDependencies } from '../UserModule.ts'
 import { addPermissionsHandler } from './handlers/AddPermissionsHandler.ts'
 import { removePermissionsHandler } from './handlers/RemovePermissionsHandler.ts'
