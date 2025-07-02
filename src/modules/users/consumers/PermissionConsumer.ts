@@ -1,21 +1,19 @@
 import { AbstractAmqpTopicConsumer } from '@message-queue-toolkit/amqp'
 import { MessageHandlerConfigBuilder } from '@message-queue-toolkit/core'
-
+import type z from 'zod/v4'
 import { isTest } from '../../../infrastructure/config.ts'
 import type { RequestContextPreHandlerOutput } from '../../../infrastructure/prehandlers/requestContextPrehandler.ts'
 import { createRequestContextPreHandler } from '../../../infrastructure/prehandlers/requestContextPrehandler.ts'
 import type { PermissionsService } from '../services/PermissionsService.ts'
 import type { UserService } from '../services/UserService.ts'
+import type { UsersInjectableDependencies } from '../UserModule.ts'
+import { addPermissionsHandler } from './handlers/AddPermissionsHandler.ts'
+import { removePermissionsHandler } from './handlers/RemovePermissionsHandler.ts'
 import {
   PERMISSIONS_EXCHANGE,
   PermissionsMessages,
   SERVICE_TEMPLATE_PERMISSIONS_QUEUE,
 } from './permissionsMessageSchemas.ts'
-
-import type z from 'zod/v4'
-import type { UsersInjectableDependencies } from '../UserModule.ts'
-import { addPermissionsHandler } from './handlers/AddPermissionsHandler.ts'
-import { removePermissionsHandler } from './handlers/RemovePermissionsHandler.ts'
 
 type SupportedMessages =
   | z.infer<typeof PermissionsMessages.added.consumerSchema>

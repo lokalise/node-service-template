@@ -1,5 +1,5 @@
-import { ConfigScope } from '@lokalise/node-core'
 import type { RedisConfig } from '@lokalise/node-core'
+import { ConfigScope } from '@lokalise/node-core'
 
 import type { AwsConfig } from './aws/awsConfig.ts'
 import { getAwsConfig } from './aws/awsConfig.ts'

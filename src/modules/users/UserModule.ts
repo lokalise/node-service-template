@@ -1,15 +1,13 @@
 import type { QueueConfiguration } from '@lokalise/background-jobs-common'
 import {
+  createNotificationPair,
   type InMemoryCacheConfiguration,
   Loader,
   type LoaderConfig,
   RedisCache,
-  createNotificationPair,
 } from 'layered-loader'
 import {
   AbstractModule,
-  type DependencyInjectionOptions,
-  type MandatoryNameAndRegistrationPair,
   asControllerClass,
   asEnqueuedJobWorkerClass,
   asMessageQueueHandlerClass,
@@ -17,6 +15,8 @@ import {
   asRepositoryClass,
   asServiceClass,
   asSingletonFunction,
+  type DependencyInjectionOptions,
+  type MandatoryNameAndRegistrationPair,
 } from 'opinionated-machine'
 import type { User } from '../../db/schema/user.ts'
 import type { CommonDependencies } from '../../infrastructure/CommonModule.ts'

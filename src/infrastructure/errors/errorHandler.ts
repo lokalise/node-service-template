@@ -6,12 +6,11 @@ import {
   isStandardizedError,
 } from '@lokalise/node-core'
 import type { FastifyReply, FastifyRequest } from 'fastify'
-import pino from 'pino'
-
 import {
   hasZodFastifySchemaValidationErrors,
   isResponseSerializationError,
 } from 'fastify-type-provider-zod'
+import pino from 'pino'
 import type { AppInstance } from '../../app.ts'
 
 const knownAuthErrors = new Set([

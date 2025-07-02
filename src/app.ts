@@ -18,12 +18,11 @@ import {
   newrelicTransactionManagerPlugin,
   requestContextProviderPlugin,
 } from '@lokalise/fastify-extras'
-import { type CommonLogger, resolveLogger } from '@lokalise/node-core'
-import { resolveGlobalErrorLogObject } from '@lokalise/node-core'
+import { type CommonLogger, resolveGlobalErrorLogObject, resolveLogger } from '@lokalise/node-core'
 import scalarFastifyApiReference from '@scalar/fastify-api-reference'
 import { type AwilixContainer, createContainer } from 'awilix'
-import fastify from 'fastify'
 import type { FastifyInstance } from 'fastify'
+import fastify from 'fastify'
 import fastifyGracefulShutdown from 'fastify-graceful-shutdown'
 import fastifyNoIcon from 'fastify-no-icon'
 import {
@@ -33,8 +32,8 @@ import {
 } from 'fastify-type-provider-zod'
 import {
   type AbstractModule,
-  DIContext,
   type DependencyInjectionOptions,
+  DIContext,
   type NestedPartial,
 } from 'opinionated-machine'
 import type {

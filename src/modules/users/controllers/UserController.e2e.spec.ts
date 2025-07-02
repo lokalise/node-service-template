@@ -1,7 +1,6 @@
-import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest'
-
 import { injectDelete, injectGet, injectPatch, injectPost } from '@lokalise/fastify-api-contracts'
-import { DB_MODEL, cleanTables } from '../../../../test/DbCleaner.ts'
+import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest'
+import { cleanTables, DB_MODEL } from '../../../../test/DbCleaner.ts'
 import { getTestConfigurationOverrides } from '../../../../test/jwtUtils.ts'
 import type { AppInstance } from '../../../app.ts'
 import { getApp } from '../../../app.ts'

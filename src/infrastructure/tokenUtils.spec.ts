@@ -1,6 +1,7 @@
 import fastifyJWT from '@fastify/jwt'
 import fastify from 'fastify'
 import { describe, expect, it } from 'vitest'
+
 const ACCESS_TOKEN_TTL_IN_SECONDS = 60
 
 import { EmptyTokenError } from './errors/publicErrors.ts'

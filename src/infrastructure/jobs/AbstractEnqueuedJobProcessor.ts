@@ -1,9 +1,9 @@
 import {
   AbstractBackgroundJobProcessorNew,
   type BackgroundJobProcessorConfigNew,
+  CommonBullmqFactoryNew,
   type SupportedQueueIds,
 } from '@lokalise/background-jobs-common'
-import { CommonBullmqFactoryNew } from '@lokalise/background-jobs-common'
 import type { BullmqSupportedQueues, Dependencies } from '../CommonModule.ts'
 import { SERVICE_NAME } from '../config.ts'
 
