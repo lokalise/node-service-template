@@ -45,7 +45,7 @@ export const cliCommandWrapper = async <ArgsSchema extends z.Schema | undefined>
     }),
   }
 
-  let args = undefined
+  let args = undefined as ArgsSchema extends z.Schema ? z.infer<ArgsSchema> : undefined
   if (argsSchema) {
     const parseResult = argsSchema.safeParse(getArgs())
     if (!parseResult.success) {
@@ -59,16 +59,12 @@ export const cliCommandWrapper = async <ArgsSchema extends z.Schema | undefined>
       process.exit(1)
     }
 
-    args = parseResult.data
+    args = parseResult.data as ArgsSchema extends z.Schema ? z.infer<ArgsSchema> : undefined
   }
 
   let isSuccess = true
   try {
-    await command(
-      app.diContainer.cradle,
-      reqContext,
-      args as ArgsSchema extends z.Schema ? z.output<ArgsSchema> : undefined,
-    )
+    await command(app.diContainer.cradle, reqContext, args)
   } catch (err) {
     isSuccess = false
     reqContext.logger.error(
