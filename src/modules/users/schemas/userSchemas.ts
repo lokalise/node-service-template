@@ -1,17 +1,17 @@
 import { toNumberPreprocessor } from '@lokalise/zod-extras'
-import z from 'zod'
+import z from 'zod/v4'
 
 export const USER_SCHEMA = z.object({
   id: z.string(),
   name: z.string(),
   age: z.optional(z.nullable(z.preprocess(toNumberPreprocessor, z.number()))),
-  email: z.string().email(),
+  email: z.email(),
 })
 
 export const CREATE_USER_BODY_SCHEMA = z.object({
   name: z.string(),
-  age: z.optional(z.nullable(z.preprocess(toNumberPreprocessor, z.number()))),
-  email: z.string().email(),
+  age: z.number().optional(), // Remove nullable to fix OpenAPI generation
+  email: z.email(),
 })
 
 export const CREATE_USER_RESPONSE_BODY_SCHEMA = z.object({
@@ -20,7 +20,7 @@ export const CREATE_USER_RESPONSE_BODY_SCHEMA = z.object({
 
 export const UPDATE_USER_BODY_SCHEMA = z.object({
   name: z.optional(z.string()),
-  email: z.optional(z.string().email()),
+  email: z.optional(z.email()),
 })
 
 export const GET_USER_PARAMS_SCHEMA = z.object({

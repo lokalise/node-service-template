@@ -205,14 +205,13 @@ describe('PermissionsConsumer', () => {
       ).toThrowErrorMatchingInlineSnapshot(`
         [ZodError: [
           {
-            "code": "invalid_type",
             "expected": "array",
-            "received": "undefined",
+            "code": "invalid_type",
             "path": [
               "payload",
               "userIds"
             ],
-            "message": "Required"
+            "message": "Invalid input: expected array, received undefined"
           }
         ]]
       `)

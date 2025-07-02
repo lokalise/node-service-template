@@ -1,6 +1,6 @@
 import { boolean, index, pgSchema, timestamp, uuid, varchar } from 'drizzle-orm/pg-core'
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod'
-import type z from 'zod'
+import type z from 'zod/v4'
 
 export const postSchema = pgSchema('post')
 
