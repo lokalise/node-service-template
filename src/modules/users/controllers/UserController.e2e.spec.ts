@@ -10,7 +10,11 @@ import type { UserRepository } from '../repositories/UserRepository.ts'
 import type { UserCreateDTO } from '../services/UserService.ts'
 import { UserController } from './UserController.ts'
 
-const NEW_USER_FIXTURE = { name: 'dummy', email: 'email@test.com' } satisfies UserCreateDTO
+const NEW_USER_FIXTURE = {
+  name: 'dummy',
+  email: 'email@test.com',
+  role: 'Reader',
+} satisfies UserCreateDTO
 
 describe('UserController', () => {
   let app: AppInstance
@@ -33,7 +37,7 @@ describe('UserController', () => {
         headers: {
           authorization: `Bearer ${token}`,
         },
-        body: { name: 'dummy', email: 'test' },
+        body: { name: 'dummy', email: 'test', role: 'Admin' },
       })
 
       expect(response.statusCode).toBe(400)
@@ -81,6 +85,7 @@ describe('UserController', () => {
           email: 'email@test.com',
           id: expect.any(String),
           name: 'dummy',
+          role: 'Reader',
         },
       })
     })
@@ -150,6 +155,7 @@ describe('UserController', () => {
       const updateResponse = await injectPatch(app, UserController.contracts.updateUser, {
         body: {
           name: 'updated',
+          role: 'Admin',
         },
         pathParams: {
           userId: id,
@@ -166,6 +172,7 @@ describe('UserController', () => {
         age: null,
         id,
         name: 'updated',
+        role: 'Admin',
       })
     })
   })

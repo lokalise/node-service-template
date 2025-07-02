@@ -17,6 +17,7 @@ import { asSingletonClass } from 'opinionated-machine'
 import { user as userTable } from '../../../db/schema/user.ts'
 import type { PublisherManager } from '../../../infrastructure/CommonModule.ts'
 import { buildQueueMessage } from '../../../utils/queueUtils.ts'
+import type { UserRole } from '../schemas/userSchemas.js'
 import { PermissionConsumer } from './PermissionConsumer.ts'
 import type { PermissionsMessages } from './permissionsMessageSchemas.ts'
 
@@ -31,6 +32,7 @@ async function createUsers(drizzle: PostgresJsDatabase, userIdsToCreate: string[
         id: userId,
         name: userId.toString(),
         email: `test${userId}@email.lt`,
+        role: 'Reader' as UserRole,
       }
     }),
   )

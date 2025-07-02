@@ -18,6 +18,7 @@ class FakeUserService extends UserService {
       age: null,
       email: 'dummy',
       name: 'dummy',
+      role: 'Reader',
     })
   }
 }

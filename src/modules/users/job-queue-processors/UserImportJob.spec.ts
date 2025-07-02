@@ -6,6 +6,7 @@ import { type TestContext, testContextFactory } from '../../../../test/TestConte
 import type { QueueManager } from '@lokalise/background-jobs-common'
 import { user as userTable } from '../../../db/schema/user.ts'
 import type { BullmqSupportedQueues } from '../../../infrastructure/CommonModule.ts'
+import type { UserRole } from '../schemas/userSchemas.js'
 import { UserImportJob } from './UserImportJob.ts'
 
 describe('UserImportJob', () => {
@@ -37,6 +38,7 @@ describe('UserImportJob', () => {
       name: 'name',
       age: 33,
       email: 'test@email.lt',
+      role: 'Admin' as UserRole,
     }
 
     const jobId = await bullmqQueueManager.schedule('UserImportJob', {
