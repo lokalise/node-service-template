@@ -1,12 +1,11 @@
+import { randomUUID } from 'node:crypto'
 import { asFunction } from 'awilix'
+import type { PostgresJsDatabase } from 'drizzle-orm/postgres-js'
 import type { FastifyInstance } from 'fastify'
 import type { Redis } from 'ioredis'
 import { afterEach, beforeEach, describe, expect, it } from 'vitest'
 import type { AppInstance } from '../../app.ts'
 import { getApp } from '../../app.ts'
-
-import { randomUUID } from 'node:crypto'
-import type { PostgresJsDatabase } from 'drizzle-orm/postgres-js'
 import { dbHealthCheck, redisHealthCheck } from './healthchecksWrappers.ts'
 
 const createRedisMock = (pingLatency: number, response = 'PONG') =>

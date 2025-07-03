@@ -3,7 +3,6 @@ import {
   buildFastifyPayloadRoute,
 } from '@lokalise/fastify-api-contracts'
 import { AbstractController, type BuildRoutesReturnType } from 'opinionated-machine'
-import type { UsersInjectableDependencies } from '../UserModule.ts'
 import {
   deleteUserContract,
   getUserContract,
@@ -11,6 +10,7 @@ import {
   postCreateUserContract,
 } from '../schemas/userApiContracts.ts'
 import type { UserService } from '../services/UserService.ts'
+import type { UsersInjectableDependencies } from '../UserModule.ts'
 
 type UserControllerContractsType = typeof UserController.contracts
 

@@ -15,6 +15,7 @@ export class PermissionsService {
     return Promise.resolve()
   }
 
+  // biome-ignore lint/suspicious/useAwait: <biomev2 migration>
   async getUserPermissionsBulk(requestContext: RequestContext, userIds: string[]) {
     const result = Object.entries(this.permissions)
       .filter((entry) => {

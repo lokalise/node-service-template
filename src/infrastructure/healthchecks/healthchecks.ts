@@ -1,7 +1,6 @@
 import { types } from 'node:util'
-import type { Either } from '@lokalise/node-core'
-
 import { AbstractHealthcheck, type Healthcheck } from '@lokalise/healthcheck-utils'
+import type { Either } from '@lokalise/node-core'
 import { sql } from 'drizzle-orm'
 import type { PostgresJsDatabase } from 'drizzle-orm/postgres-js'
 import type { Redis } from 'ioredis'

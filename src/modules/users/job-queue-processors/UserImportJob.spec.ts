@@ -1,9 +1,8 @@
+import type { QueueManager } from '@lokalise/background-jobs-common'
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
-import { DB_MODEL, cleanTables } from '../../../../test/DbCleaner.ts'
+import { cleanTables, DB_MODEL } from '../../../../test/DbCleaner.ts'
 import { cleanRedis } from '../../../../test/RedisCleaner.ts'
 import { type TestContext, testContextFactory } from '../../../../test/TestContext.ts'
-
-import type { QueueManager } from '@lokalise/background-jobs-common'
 import { user as userTable } from '../../../db/schema/user.ts'
 import type { BullmqSupportedQueues } from '../../../infrastructure/CommonModule.ts'
 import { UserImportJob } from './UserImportJob.ts'

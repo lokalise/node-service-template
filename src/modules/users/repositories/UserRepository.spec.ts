@@ -3,9 +3,9 @@ import { generateUuid7 } from '@lokalise/id-utils'
 import type { AwilixContainer } from 'awilix'
 import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest'
 
-import { DB_MODEL, cleanTables } from '../../../../test/DbCleaner.ts'
-import { type TestContext, testContextFactory } from '../../../../test/TestContext.ts'
+import { cleanTables, DB_MODEL } from '../../../../test/DbCleaner.ts'
 import { TEST_USER_1 } from '../../../../test/fixtures/testUsers.ts'
+import { type TestContext, testContextFactory } from '../../../../test/TestContext.ts'
 import type { UserRepository } from './UserRepository.ts'
 
 describe('UserRepository', () => {

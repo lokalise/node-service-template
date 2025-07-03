@@ -1,4 +1,4 @@
-import { type MockInstance, afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it, type MockInstance, vi } from 'vitest'
 import z from 'zod/v4'
 import { cliCommandWrapper } from './cliCommandWrapper.ts'
 

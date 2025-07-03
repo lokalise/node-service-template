@@ -1,6 +1,5 @@
-import { getLocal } from 'mockttp'
-
 import { MockttpHelper } from '@lokalise/universal-testing-utils'
+import { getLocal } from 'mockttp'
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it } from 'vitest'
 import { type TestContext, testContextFactory } from '../../test/TestContext.ts'
 import { GET_PRODUCT_CONTRACT } from './FakeStoreApiClient.ts'

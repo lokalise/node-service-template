@@ -38,8 +38,10 @@ async function run() {
   const missing = [...varsInFile].filter((v) => !documentedVars.has(v))
 
   if (missing.length > 0) {
+    // biome-ignore lint/suspicious/noConsole: <biomev2 migration>
     console.error('❌ Missing documentation for the following environment variables:')
     for (const v of missing) {
+      // biome-ignore lint/suspicious/noConsole: <biomev2 migration>
       console.error(`- ${v}`)
     }
     throw new Error('Environment variable documentation validation failed')

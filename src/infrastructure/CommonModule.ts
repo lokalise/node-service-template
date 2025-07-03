@@ -28,14 +28,14 @@ import { CommonMetadataFiller, EventRegistry } from '@message-queue-toolkit/core
 import type { Connection } from 'amqplib'
 import { Lifetime, type NameAndRegistrationPair } from 'awilix'
 import type { AwilixManager } from 'awilix-manager'
-import { drizzle } from 'drizzle-orm/postgres-js'
 import type { PostgresJsDatabase } from 'drizzle-orm/postgres-js'
+import { drizzle } from 'drizzle-orm/postgres-js'
 import { Redis } from 'ioredis'
 import {
   AbstractModule,
-  type DependencyInjectionOptions,
   asSingletonClass,
   asSingletonFunction,
+  type DependencyInjectionOptions,
   isAnyMessageQueueConsumerEnabled,
   isPeriodicJobEnabled,
   resolveJobQueuesEnabled,
@@ -45,10 +45,10 @@ import { ToadScheduler } from 'toad-scheduler'
 import type { z } from 'zod/v4'
 import type { AppInstance } from '../app.ts'
 import { FakeStoreApiClient } from '../integrations/FakeStoreApiClient.ts'
-import { type UsersModuleDependencies, userBullmqQueues } from '../modules/users/UserModule.ts'
 import { PermissionsMessages } from '../modules/users/consumers/permissionsMessageSchemas.ts'
-import { getAmqpConfig, getConfig, isTest } from './config.ts'
+import { type UsersModuleDependencies, userBullmqQueues } from '../modules/users/UserModule.ts'
 import type { Config } from './config.ts'
+import { getAmqpConfig, getConfig, isTest } from './config.ts'
 import { FakeAmplitude } from './fakes/FakeAmplitude.ts'
 import {
   DbHealthcheck,
