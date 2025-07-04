@@ -1,5 +1,5 @@
 # ---- Base Node ----
-FROM node:22.15.0-bookworm-slim as base
+FROM node:22.17.0-bookworm-slim as base
 
 RUN set -ex &&\
     apt-get update && \
