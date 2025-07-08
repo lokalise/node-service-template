@@ -10,7 +10,7 @@ export const USER_SCHEMA = z.object({
 
 export const CREATE_USER_BODY_SCHEMA = z.object({
   name: z.string(),
-  age: z.number().optional(), // Remove nullable to fix OpenAPI generation
+  age: z.optional(z.nullable(z.preprocess(toNumberPreprocessor, z.number()))),
   email: z.email(),
 })
 
