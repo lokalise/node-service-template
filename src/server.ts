@@ -1,3 +1,5 @@
+await import('./otel.ts')
+
 import {
   executeAndHandleGlobalErrors,
   globalLogger,

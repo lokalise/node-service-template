@@ -48,6 +48,7 @@ import {
   redisHealthCheck,
 } from './infrastructure/healthchecks/healthchecksWrappers.ts'
 import { ALL_MODULES } from './modules.ts'
+import { gracefulOtelShutdown } from './otel.ts'
 import { jwtTokenPlugin } from './plugins/jwtTokenPlugin.ts'
 
 EventEmitter.defaultMaxListeners = 12
@@ -308,9 +309,9 @@ export async function getApp(
 
     // Graceful shutdown hook
     if (!isDevelopment()) {
-      app.gracefulShutdown((_signal) => {
+      app.gracefulShutdown(async (_signal) => {
         app.log.info('Starting graceful shutdown')
-        return Promise.resolve()
+        await gracefulOtelShutdown()
       })
     }
   })
