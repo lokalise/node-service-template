@@ -137,6 +137,12 @@ To initialize your test database and/or apply your latest schema changes.
 
 You can access OpenAPI specification of your application, while it is running, by opening [/documentation](http://localhost:3000/documentation)
 
+### OpenTelemetry instrumentation
+
+There is an OpenTelemetry integration included, using the gRPC exporter. See [environment variable configuration]() for the details on configuring it.
+
+It should work out-of-the-box for all incoming HTTP requests, as long as correct exporter URL is configured.
+
 ### Create jwt for dev usage
 
 You have multiple options to ease your development:

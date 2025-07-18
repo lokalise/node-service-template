@@ -1,6 +1,5 @@
 import { defineConfig } from 'drizzle-kit'
 // @ts-expect-error see below
-// biome-ignore lint/correctness/useImportExtensions: Drizzle can't find .js extension
 import { getConfig, isProduction } from '../infrastructure/config'
 
 const config = getConfig()

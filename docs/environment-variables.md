@@ -111,3 +111,7 @@ For tests there are some overrides defined in [envSetupHook.ts](../test/envSetup
 
 ### Integrations
 - (OPTIONAL) `SAMPLE_FAKE_STORE_BASE_URL` - fake store base URL
+
+### OpenTelemetry
+- (OPTIONAL) `OPEN_TELEMETRY_ENABLED` - whether to produce OpenTelemetry traces for requests. Default is "true"
+- (OPTIONAL) `OPEN_TELEMETRY_EXPORTER_URL` - OpenTelemetry exporter URL. Default is "grpc://localhost:4317"
