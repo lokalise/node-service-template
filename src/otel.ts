@@ -12,15 +12,35 @@ if (isOpenTelemetryEnabled) {
   // Optional diagnostics
   diag.setLogger(new DiagConsoleLogger(), DiagLogLevel.INFO)
 
-  // If you need to test OTel locally, use `new ConsoleSpanExporter()` traceExporter from "@opentelemetry/sdk-trace-node"
+  // If you need to test OTel locally, use this exporter
+  // const consoleSpanExporter = new ConsoleSpanExporter()
+
   const traceExporter = new OTLPTraceExporterGrpc({
     url: process.env.OPEN_TELEMETRY_EXPORTER_URL || 'grpc://localhost:4317',
   })
 
+  // const skippedPaths = ['/health', '/metrics', '/']
+
   // Setup SDK
   sdk = new NodeSDK({
     traceExporter,
-    instrumentations: [getNodeAutoInstrumentations()],
+    instrumentations: [
+      getNodeAutoInstrumentations(
+        // ToDo Restore this when https://github.com/open-telemetry/opentelemetry-js-contrib/issues/2944 is implemented
+        /*
+        {
+        '@opentelemetry/instrumentation-fastify': {
+          ignoreIncomingRequestHook: (req) => {
+            if (!req.url) return false
+            // Ignore path and query string, if needed
+            const path = req.url.split('?')[0]
+            return skippedPaths.includes(path!)
+          },
+        },
+      }
+         */
+      ),
+    ],
   })
 
   sdk.start()
