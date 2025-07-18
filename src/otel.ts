@@ -3,6 +3,8 @@ import { getNodeAutoInstrumentations } from '@opentelemetry/auto-instrumentation
 import { OTLPTraceExporter as OTLPTraceExporterGrpc } from '@opentelemetry/exporter-trace-otlp-grpc'
 import { NodeSDK } from '@opentelemetry/sdk-node'
 
+// This needs to be imported and run before any other code in your app
+
 const isOpenTelemetryEnabled = process.env.OPEN_TELEMETRY_ENABLED?.toLowerCase() !== 'false'
 let sdk: NodeSDK | undefined
 
