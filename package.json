@@ -57,7 +57,7 @@
         "@lokalise/zod-extras": "^3.0.0",
         "@message-queue-toolkit/amqp": "^22.0.0",
         "@message-queue-toolkit/core": "^23.1.0",
-        "@message-queue-toolkit/metrics": "^4.1.0",
+        "@message-queue-toolkit/metrics": "^4.1.1",
         "@message-queue-toolkit/schemas": "^7.0.0",
         "@message-queue-toolkit/sns": "^23.0.0",
         "@message-queue-toolkit/sqs": "^22.0.0",
