@@ -107,7 +107,7 @@
         "@types/node": "^24.1.0",
         "@vitest/coverage-v8": "^3.2.4",
         "cpy-cli": "^5.0.0",
-        "cross-env": "^7.0.3",
+        "cross-env": "^10.0.0",
         "mockttp": "^4.1.0",
         "oas-validator": "^5.0.8",
         "typescript": "5.8.3",
