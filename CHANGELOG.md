@@ -1,11 +1,17 @@
+# Changelog
+
 ## 30.07.2025
+
 ### Changes
+
 `@lokalise/healthcheck-utils` `v4.0.1` -> `v5.1.0`
 
 With this update, we simplified the work with healthcheck wrappers.
+
 Before the wrapper looked like this:
-```typescript
-export const redisHealthCheck: HealthChecker = (
+
+ ```typescript
+ export const redisHealthCheck: HealthChecker = (
     app: FastifyInstance,
 ): Promise<Either<Error, true>> => {
     const checkResult = app.diContainer.cradle.healthcheckStore.getHealthcheckResult('redis')
@@ -28,6 +34,6 @@ export const redisHealthCheck: HealthChecker = (
 }
 ```
 
-To migrate you simply need to replace `getHealthcheckResult` with `getAsyncHealthCheckResult` in your healthcheck wrappers.
+To migrate, you need to replace `getHealthcheckResult` with `getAsyncHealthCheckResult` in your healthcheck wrappers.
 
-Another thing that comes with this update is that now the getAsyncHealthCheckResult doesn't return only `true` or `false`, but also an error if the healthcheck failed. This means that you can now return a more descriptive error message in your healthcheck wrappers.
+Another thing that comes with this update is that now the `getHealthcheckResult` internally doesn't return only `true/false`, but also an error if the healthcheck failed. This means that you can now return a more descriptive error message in your healthcheck wrappers.
