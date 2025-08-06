@@ -30,6 +30,7 @@ import { SendEmailsJob } from './periodic-jobs/SendEmailsJob.ts'
 import { UserRepository } from './repositories/UserRepository.ts'
 import { PermissionsService } from './services/PermissionsService.ts'
 import { UserService } from './services/UserService.ts'
+import { TestController } from './controllers/testController.ts'
 
 const IN_MEMORY_CACHE_TTL = 1000 * 60 * 5
 const IN_MEMORY_TTL_BEFORE_REFRESH = 1000 * 25
@@ -134,6 +135,7 @@ export class UserModule extends AbstractModule<UsersModuleDependencies> {
   resolveControllers(): MandatoryNameAndRegistrationPair<unknown> {
     return {
       userController: asControllerClass(UserController),
+      testController: asControllerClass(TestController)
     }
   }
 }
