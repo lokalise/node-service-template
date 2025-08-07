@@ -1,0 +1,63 @@
+---
+# =============================================================================
+# REVIEW SETTINGS
+# =============================================================================
+reviews:
+  # Review Behavior
+  profile: chill                    # Less aggressive review style
+  request_changes_workflow: false
+  high_level_summary: true
+  high_level_summary_placeholder: "@coderabbitai summary"
+  high_level_summary_in_walkthrough: true
+  auto_title_placeholder: "@coderabbitai"
+  auto_title_instructions: |
+    - Avoid overly verbose descriptions or unnecessary details
+    - Use the following format: "TICKET-ID Commit Message", you can grab the ticket ID from branch name
+
+  # Status & Notifications
+  review_status: true              # Adds a comment when starting a review with its status
+  commit_status: true              # Shows the status in GitHub Checks
+  fail_commit_status: true
+  collapse_walkthrough: true
+  changed_files_summary: false
+
+  # Enhanced Features
+  sequence_diagrams: true           # Generate diagrams for complex changes
+  assess_linked_issues: true        # Verifies if the acceptance criteria from the Jira issue were met
+  related_issues: true
+  related_prs: true
+  suggested_labels: true
+  auto_apply_labels: false
+  suggested_reviewers: true
+  auto_assign_reviewers: false
+  estimate_code_review_effort: true
+  poem: false
+  abort_on_close: false
+  disable_cache: false
+
+  # Custom Labeling Rules
+  labeling_instructions:
+    - label: "migration"
+      instructions: "Apply when there is a database migration in the pull request"
+
+  # Path-Specific Review Instructions
+  path_filters: []
+  path_instructions:
+    - path: ""
+      instructions: ""
+
+  # Automatic Review Settings
+  auto_review:
+    enabled: true
+    auto_incremental_review: false
+    ignore_title_keywords: []
+    labels: []
+    drafts: false
+    base_branches: []
+
+  # Code Enhancement Features
+  finishing_touches:
+    docstrings:
+      enabled: true
+    unit_tests:
+      enabled: true

@@ -1,0 +1,61 @@
+---
+# Usage Options:
+# - enabled:  enabled for both: public and private repositories
+# - disabled: disabled for both: public and private repositories
+# - auto:     enabled for private repositories,
+#             disabled for public repositories
+
+# Scope Options:
+# - global: uses data from all organization's repositories
+# - local:  uses data ONLY from this repository
+# - auto:   as "global" for private repositories,
+#           as "local" for public repositories
+
+# =============================================================================
+# CHAT FEATURES
+# =============================================================================
+chat:
+  auto_reply: true
+  integrations:
+    jira:
+      usage: auto
+    linear:
+      usage: disabled
+
+# =============================================================================
+# KNOWLEDGE BASE AND LEARNING
+# =============================================================================
+
+knowledge_base:
+  opt_out: false          # If you change it to "true" all knowledge base data (e.g.: learnings) will be removed
+  web_search:
+    enabled: true
+  code_guidelines:
+    enabled: true
+    filePatterns: []
+  learnings:
+    scope: local
+  pull_requests:
+    scope: local
+  issues:
+    scope: local
+  jira:
+    usage: auto
+    project_keys: []
+  linear:
+    usage: disabled
+    team_keys: []
+
+# =============================================================================
+# CODE GENERATION SETTINGS
+# =============================================================================
+code_generation:
+  docstrings:
+    language: en-US
+    path_instructions:
+      - path: ""
+        instructions: ""
+  unit_tests:
+    path_instructions:
+      - path: ""
+        instructions: ""

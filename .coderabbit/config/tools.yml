@@ -1,0 +1,161 @@
+---
+# =============================================================================
+# LINTING AND ANALYSIS TOOLS
+# Only enabled tools - disabled tools are omitted (false by default)
+# =============================================================================
+tools:
+  # -------------------------------------------------------------------------
+  # Code Analysis & AST Tools
+  # -------------------------------------------------------------------------
+  ast-grep:
+    rule_dirs: []
+    util_dirs: []
+    essential_rules: true
+    packages: []
+
+  # -------------------------------------------------------------------------
+  # Security Tools
+  # -------------------------------------------------------------------------
+  gitleaks:              # Secret detection
+    enabled: true
+  checkov:               # Infrastructure security
+    enabled: true
+  semgrep:               # Static analysis security
+    enabled: true
+    config_file: ""
+
+  # -------------------------------------------------------------------------
+  # PHP Tools
+  # -------------------------------------------------------------------------
+  phpstan:               # PHP static analysis
+    enabled: true
+    level: default
+  phpmd:                 # PHP mess detector
+    enabled: true
+  phpcs:                 # PHP code sniffer
+    enabled: true
+
+  # -------------------------------------------------------------------------
+  # JavaScript/TypeScript Tools
+  # -------------------------------------------------------------------------
+  eslint:                # JS/TS linting
+    enabled: true
+  biome:                 # JS/TS formatter
+    enabled: true
+  oxc:                   # JS/TS checker
+    enabled: true
+
+  # -------------------------------------------------------------------------
+  # Infrastructure & DevOps Tools
+  # -------------------------------------------------------------------------
+  shellcheck:            # Shell script linting
+    enabled: true
+  hadolint:              # Dockerfile linting
+    enabled: true
+  yamllint:              # YAML formatting
+    enabled: true
+  actionlint:            # GitHub Actions linting
+    enabled: true
+  checkmake:             # Makefile validation
+    enabled: true
+
+  # -------------------------------------------------------------------------
+  # Documentation & Content Tools
+  # -------------------------------------------------------------------------
+  markdownlint:          # Markdown formatting
+    enabled: true
+  languagetool:          # Grammar and style checking
+    enabled: true
+    enabled_rules: []
+    disabled_rules: []
+    enabled_categories: []
+    disabled_categories: []
+    enabled_only: false
+    level: default
+  htmlhint:              # HTML validation
+    enabled: true
+
+  # -------------------------------------------------------------------------
+  # Database & Configuration Tools
+  # -------------------------------------------------------------------------
+  sqlfluff:              # SQL formatting
+    enabled: true
+  dotenvLint:            # Environment file validation
+    enabled: true
+
+  # -------------------------------------------------------------------------
+  # Python Tools
+  # -------------------------------------------------------------------------
+  ruff:                  # Python linting (fast, replaces flake8/pylint)
+    enabled: false
+  flake8:                # Python code quality checker
+    enabled: false
+  pylint:                # Python static analysis
+    enabled: false
+
+  # -------------------------------------------------------------------------
+  # Mobile & Cross-Platform Tools
+  # -------------------------------------------------------------------------
+  swiftlint:             # Swift code style and conventions
+    enabled: false
+    config_file: ""
+  detekt:                # Kotlin static analysis
+    enabled: false
+    config_file: ""
+
+  # -------------------------------------------------------------------------
+  # Go Tools
+  # -------------------------------------------------------------------------
+  golangci-lint:         # Go linters aggregator
+    enabled: false
+    config_file: ""
+
+  # -------------------------------------------------------------------------
+  # Ruby Tools
+  # -------------------------------------------------------------------------
+  rubocop:               # Ruby static code analyzer
+    enabled: false
+  brakeman:              # Ruby security scanner
+    enabled: false
+
+  # -------------------------------------------------------------------------
+  # Java Tools
+  # -------------------------------------------------------------------------
+  pmd:                   # Java source code analyzer
+    enabled: false
+    config_file: ""
+
+  # -------------------------------------------------------------------------
+  # C++ Tools
+  # -------------------------------------------------------------------------
+  cppcheck:              # C/C++ static analysis
+    enabled: false
+  clippy:                # Rust linter
+    enabled: false
+
+  # -------------------------------------------------------------------------
+  # Specialized Tools
+  # -------------------------------------------------------------------------
+  buf:                   # Protocol buffer linter
+    enabled: false
+  regal:                 # Rego/OPA policy linter
+    enabled: false
+  prismaLint:            # Prisma schema linter
+    enabled: false
+  shopifyThemeCheck:     # Shopify Liquid template linter
+    enabled: false
+  luacheck:              # Lua static analyzer
+    enabled: false
+
+  # -------------------------------------------------------------------------
+  # CI/CD Tools
+  # -------------------------------------------------------------------------
+  circleci:              # CircleCI config validation
+    enabled: false
+
+  # -------------------------------------------------------------------------
+  # GitHub Integration
+  # -------------------------------------------------------------------------
+  github-checks:         # GitHub Actions validation
+    enabled: true
+    timeout_ms: 300000   # 5 minutes
