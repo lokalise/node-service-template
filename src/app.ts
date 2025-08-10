@@ -36,6 +36,7 @@ import {
   DIContext,
   type NestedPartial,
 } from 'opinionated-machine'
+import { stdSerializers } from 'pino'
 import type {
   Dependencies,
   DependencyOverrides,
@@ -319,7 +320,7 @@ export async function getApp(
   try {
     await app.ready()
   } catch (err) {
-    app.log.error('Error while initializing app: ', err)
+    app.log.error({ error: stdSerializers.err(err as Error) }, 'Error while initializing app: ')
     throw err
   }
 

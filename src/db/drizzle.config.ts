@@ -1,6 +1,5 @@
 import { defineConfig } from 'drizzle-kit'
-// @ts-expect-error see below
-import { getConfig, isProduction } from '../infrastructure/config'
+import { getConfig, isProduction } from '../infrastructure/config.ts'
 
 const config = getConfig()
 
