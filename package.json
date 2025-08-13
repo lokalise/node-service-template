@@ -2,7 +2,7 @@
     "name": "node-service-template",
     "version": "1.0.0",
     "engines": {
-        "node": ">=22.18.0"
+        "node": ">=24.5.0"
     },
     "type": "module",
     "scripts": {
