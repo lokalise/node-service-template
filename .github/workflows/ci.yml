@@ -30,7 +30,7 @@ jobs:
       - name: Docker start
         run: |
           docker compose up -d --quiet-pull
-          docker compose wait
+          docker compose wait postgres
 
       - name: Build TS
         run: |
