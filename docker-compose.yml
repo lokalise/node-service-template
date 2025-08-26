@@ -46,7 +46,7 @@ services:
       DOCKER_HOST: unix:///var/run/docker.sock
       LOCALSTACK_HOST: localstack
     healthcheck:
-      test: [ "CMD", "awslocal", "sns", "list-topics" ]
+      test: [ "CMD-SHELL", "awslocal sns list-topics" ]
       interval: 2s # run the check every 2 seconds
       timeout: 5s  # fail the check if it takes longer than 5 seconds
       retries: 10  # require 10 consecutive failures before marking unhealthy
