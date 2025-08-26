@@ -93,7 +93,7 @@ are relevant for the technological stack of your organization, and replace `@lok
 4. Launch all the infrastructural dependencies locally:
 
    ```shell
-   docker compose up -d
+   docker compose up -d && docker compose wait
    ```
 
 5. Run migrations to synchronize your database schema with defined models:

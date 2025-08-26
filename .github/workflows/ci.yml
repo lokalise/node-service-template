@@ -30,6 +30,7 @@ jobs:
       - name: Docker start
         run: |
           docker compose up -d --quiet-pull
+          docker compose wait
 
       - name: Build TS
         run: |
