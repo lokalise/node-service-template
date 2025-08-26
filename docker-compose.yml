@@ -9,6 +9,11 @@ services:
       - POSTGRES_USER=serviceuser
       - POSTGRES_PASSWORD=pass
       - POSTGRES_DB=service_db
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -h localhost -p 5432"]
+      interval: 1s # run the check every 2 seconds
+      timeout: 5s  # fail the check if it takes longer than 5 seconds
+      retries: 10   # require 10 consecutive failures before marking unhealthy
     volumes:
       - ./scripts/db/init-dbs.sh:/docker-entrypoint-initdb.d/init-dbs.sh
 
@@ -40,6 +45,11 @@ services:
       DATA_DIR: ${DATA_DIR-}
       DOCKER_HOST: unix:///var/run/docker.sock
       LOCALSTACK_HOST: localstack
+    healthcheck:
+      test: [ "CMD-SHELL", "awslocal sns list-topics"]
+      interval: 1s # run the check every 2 seconds
+      timeout: 5s  # fail the check if it takes longer than 5 seconds
+      retries: 10  # require 10 consecutive failures before marking unhealthy
     volumes:
       - ${TMPDIR:-/tmp}/localstack:/var/log/localstack
       - /var/run/docker.sock:/var/run/docker.sock

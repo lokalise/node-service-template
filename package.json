@@ -26,7 +26,6 @@
         "db:generate-migrations": "cross-env NODE_ENV=development npx drizzle-kit generate --config=./src/db/drizzle.config.ts",
         "db:apply-migrations": "cross-env NODE_ENV=development npx drizzle-kit migrate --config=./src/db/drizzle.config.ts",
         "db:drop-migrations": "cross-env NODE_ENV=development npx drizzle-kit drop --config=./src/db/drizzle.config.ts",
-        "db:wait": "while ! bash -c \"echo > /dev/tcp/127.0.0.1/5432\"; do sleep 1; done",
         "spec:generate": "node --env-file-if-exists=.env  scripts/generateOpenApi.ts && node --run spec:validate",
         "spec:validate": "node --env-file-if-exists=.env  scripts/validateOpenApi.ts",
         "docs:validate": "node --env-file-if-exists=.env  scripts/validateEnvVarDoc.ts",
