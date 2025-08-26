@@ -38,7 +38,6 @@ jobs:
       - name: Schema preparation
         run: |
           node --run copy:config
-          node --run db:wait
           npm run db:apply-migrations
 
       - name: Run Tests
