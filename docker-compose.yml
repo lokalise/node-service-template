@@ -10,7 +10,7 @@ services:
       - POSTGRES_PASSWORD=pass
       - POSTGRES_DB=service_db
     healthcheck:
-      test: [ 'CMD-SHELL', 'pg_isready -U serviceuser -d service_db' ]
+      test: [ 'CMD', 'pg_isready', '-U', 'serviceuser' ]
       interval: 2s # run the check every 2 seconds
       timeout: 5s  # fail the check if it takes longer than 5 seconds
       retries: 10   # require 10 consecutive failures before marking unhealthy
