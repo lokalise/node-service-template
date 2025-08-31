@@ -1,6 +1,6 @@
 import { readFile } from 'node:fs/promises'
 import { resolve } from 'node:path'
-import { validate } from '@readme/openapi-parser'
+import { compileErrors, validate } from '@readme/openapi-parser'
 import { parse as fromYaml } from 'yaml'
 import { consoleLog } from './utils/loggingUtils.ts'
 import { getRootDirectory } from './utils/pathUtils.ts'
@@ -13,8 +13,10 @@ async function run() {
   if (validationResult.valid) {
     consoleLog('Document is valid')
   } else {
-    consoleLog(`Errors: ${JSON.stringify(validationResult.errors)})`)
-    consoleLog(`Warnings: ${JSON.stringify(validationResult.warnings)})`)
+    consoleLog(`Errors:\n${compileErrors(validationResult)}`)
+    if (validationResult.warnings?.length) {
+      consoleLog(`Warnings: ${JSON.stringify(validationResult.warnings)}`)
+    }
     throw new Error('Specification validation has failed')
   }
 }
