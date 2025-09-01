@@ -48,7 +48,7 @@
         "@lokalise/backend-http-client": "^7.0.0",
         "@lokalise/background-jobs-common": "^14.0.2",
         "@lokalise/fastify-api-contracts": "^4.0.0",
-        "@lokalise/fastify-extras": "^29.0.1",
+        "@lokalise/fastify-extras": "^30.0.0",
         "@lokalise/healthcheck-utils": "^6.0.0",
         "@lokalise/id-utils": "^3.0.1",
         "@lokalise/node-core": "^14.4.1",
