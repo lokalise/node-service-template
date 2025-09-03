@@ -1,3 +1,4 @@
+import { describeContract } from '@lokalise/api-contracts'
 import { injectDelete, injectGet, injectPatch, injectPost } from '@lokalise/fastify-api-contracts'
 import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest'
 import { cleanTables, DB_MODEL } from '../../../../test/DbCleaner.ts'
@@ -25,7 +26,7 @@ describe('UserController', () => {
     await app.close()
   })
 
-  describe('POST /users', () => {
+  describe(describeContract(UserController.contracts.createUser), () => {
     it('validates email format', async () => {
       const token = await generateJwtToken(app.jwt, { userId: 1 }, 9999)
       const response = await injectPost(app, UserController.contracts.createUser, {
@@ -80,7 +81,7 @@ describe('UserController', () => {
     })
   })
 
-  describe('GET /users/:userId', () => {
+  describe(describeContract(UserController.contracts.getUser), () => {
     it('returns user when requested twice', async () => {
       const token = await generateJwtToken(app.jwt, { userId: '1' }, 9999)
       const newUser = await userRepository.createUser(NEW_USER_FIXTURE)
@@ -111,7 +112,7 @@ describe('UserController', () => {
     })
   })
 
-  describe('DELETE /users/:userId', () => {
+  describe(describeContract(UserController.contracts.deleteUser), () => {
     it('resets cache after deletion', async () => {
       const token = await generateJwtToken(app.jwt, { userId: '1' }, 9999)
       const newUser = await userRepository.createUser(NEW_USER_FIXTURE)
@@ -135,7 +136,7 @@ describe('UserController', () => {
     })
   })
 
-  describe('PATCH /users/:userId', () => {
+  describe(describeContract(UserController.contracts.updateUser), () => {
     it('resets cache after update', async () => {
       const token = await generateJwtToken(app.jwt, { userId: 1 }, 9999)
       const newUser = await userRepository.createUser(NEW_USER_FIXTURE)
