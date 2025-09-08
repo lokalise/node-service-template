@@ -83,7 +83,7 @@
         "layered-loader": "^14.0.1",
         "newrelic": "13.2.1",
         "opinionated-machine": "^4.0.0",
-        "pino": "^9.9.0",
+        "pino": "^9.9.4",
         "pino-pretty": "^13.1.1",
         "postgres": "^3.4.7",
         "prom-client": "^15.1.3",
