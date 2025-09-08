@@ -97,7 +97,7 @@
         "@amplitude/analytics-types": "^2.10.0",
         "@biomejs/biome": "2.2.2",
         "@lokalise/biome-config": "^3.1.0",
-        "@lokalise/tsconfig": "^2.0.0",
+        "@lokalise/tsconfig": "^3.0.0",
         "@lokalise/universal-testing-utils": "^2.3.0",
         "@opentelemetry/sdk-trace-node": "^2.0.1",
         "@readme/openapi-parser": "^5.0.1",
