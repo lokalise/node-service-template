@@ -99,7 +99,7 @@
         "@lokalise/biome-config": "^3.1.0",
         "@lokalise/tsconfig": "^3.0.0",
         "@lokalise/universal-testing-utils": "^2.3.0",
-        "@opentelemetry/sdk-trace-node": "^2.0.1",
+        "@opentelemetry/sdk-trace-node": "^2.1.0",
         "@readme/openapi-parser": "^5.0.1",
         "@types/amqplib": "^0.10.7",
         "@types/jsonwebtoken": "^9.0.10",
