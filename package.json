@@ -63,7 +63,7 @@
         "@opentelemetry/api": "^1.9.0",
         "@opentelemetry/auto-instrumentations-node": "^0.62.2",
         "@opentelemetry/exporter-trace-otlp-grpc": "^0.203.0",
-        "@opentelemetry/sdk-node": "^0.203.0",
+        "@opentelemetry/sdk-node": "^0.204.0",
         "@scalar/fastify-api-reference": "^1.34.6",
         "@supercharge/promise-pool": "^3.2.0",
         "amqplib": "^0.10.9",
