@@ -81,6 +81,9 @@ export async function getApp(
   primaryModules: readonly AbstractModule<unknown>[] = ALL_MODULES,
   secondaryModules?: readonly AbstractModule<unknown>[],
 ): Promise<AppInstance> {
+  throw new Error('break app')
+
+  // biome-ignore lint/correctness/noUnreachable: todo
   const config = getConfig()
   const appConfig = config.app
   const logger = resolveLogger(appConfig)
