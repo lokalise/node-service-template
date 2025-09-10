@@ -40,6 +40,18 @@ jobs:
           node --run copy:config
           npm run db:apply-migrations
 
+      - name: Run Tests
+        run: |
+          node --run test:ci
+
+      - name: Run lint
+        run: |
+          node --run lint   
+
+      - name: Generate and validate OpenAPI schema
+        run: |
+          node --run spec:generate
+
       - name: Smoketest the application
         run: |
           node --run start:prod:smoke-test
