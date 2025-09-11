@@ -1,5 +1,11 @@
 # node-service-template
 
+## Versioning
+
+Please bump the version in `package.json` and add description of changes into `CHANGELOG.md` when making changes.
+
+When synchronizing services built with the template with the upstream changes, please bump the version in `package.json` to reflect the step up to which the changes are synchronized.
+
 ## Overview
 
 `node-service-template` provides a "battery-included" starter template for building enterprise Node.js webservices.

@@ -1,5 +1,9 @@
 # Changelog
 
+## 11.09.2025
+
+Smoketest script added into CI, now it will start an application and wait for the healthcheck to pass, and shutdown the application, or timeout in 15 seconds.
+
 ## 30.07.2025
 
 ### Changes
