@@ -7,7 +7,7 @@ export const postSchema = pgSchema('post')
 export const post = postSchema.table(
   'post',
   {
-    id: uuid('id').primaryKey().defaultRandom().notNull(),
+    id: uuid('id').primaryKey().notNull(),
     createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
     updatedAt: timestamp('updated_at', { withTimezone: true }),
     title: varchar('title', { length: 256 }).notNull(),
