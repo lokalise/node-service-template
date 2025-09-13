@@ -7,7 +7,7 @@ export const userSchema = pgSchema('user')
 export const user = userSchema.table(
   'user',
   {
-    id: uuid('id').primaryKey().defaultRandom().notNull(),
+    id: uuid('id').primaryKey().notNull(),
     age: integer('age'),
     email: varchar('email').notNull(),
     name: varchar('name').notNull(),
@@ -22,7 +22,7 @@ export const user = userSchema.table(
 export const profile = userSchema.table(
   'profile',
   {
-    id: uuid('id').primaryKey().defaultRandom().notNull(),
+    id: uuid('id').primaryKey().notNull(),
     bio: varchar('bio'),
     age: integer('age'),
     email: varchar('email').notNull(),
