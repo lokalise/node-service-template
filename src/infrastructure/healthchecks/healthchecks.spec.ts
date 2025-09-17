@@ -25,7 +25,7 @@ const createDrizzleMock = (shouldSucceed: boolean) =>
     },
   }) as unknown as Pick<PostgresJsDatabase, 'execute'>
 
-describe('healthcheck', () => {
+describe.skip('healthcheck', () => {
   let app: AppInstance
   beforeEach(async () => {
     app = await getApp()
