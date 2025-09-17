@@ -5,10 +5,7 @@ import type { FastifyInstance } from 'fastify'
 export const redisHealthCheck: HealthChecker = (
   app: FastifyInstance,
 ): Promise<Either<Error, true>> => {
-  return Promise.resolve({
-    error: new Error('bam'),
-  })
-  //return app.diContainer.cradle.healthcheckStore.getAsyncHealthCheckResult('redis')
+  return app.diContainer.cradle.healthcheckStore.getAsyncHealthCheckResult('redis')
 }
 
 export const dbHealthCheck: HealthChecker = (

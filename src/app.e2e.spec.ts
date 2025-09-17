@@ -6,7 +6,7 @@ import type { AppInstance } from './app.ts'
 import { getApp } from './app.ts'
 import type { Config } from './infrastructure/config.ts'
 
-describe.skip('app', () => {
+describe('app', () => {
   let app: AppInstance
   beforeAll(async () => {
     app = await getApp({
