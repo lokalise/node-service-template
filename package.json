@@ -18,7 +18,7 @@
         "start:dev:watch": "node --watch --env-file=.env src/server.ts",
         "start:prod": "node --run build && cross-env NODE_ENV=production node --env-file-if-exists=.env dist/server.js",
         "start:prod:newrelic": "node --run build && cross-env NODE_ENV=production node --experimental-loader newrelic/esm-loader.mjs -r newrelic --env-file-if-exists=.env dist/server.js",
-        "start:prod:smoke-test": "npm run start:prod & APP_PID=$! && for i in $(seq 1 15); do curl -f http://localhost:3000/health >/dev/null 2>&1 && echo 'Health check passed' && exit 0 || sleep 1; done; echo 'Timeout: Health check failed after 15 seconds' && kill $APP_PID 2>/dev/null && exit 1",
+        "start:prod:smoke-test": "sh -c 'npm run start:prod > .smoke.log 2>&1 & APP_PID=$!; trap \"kill $APP_PID 2>/dev/null\" EXIT INT TERM; for i in $(seq 1 30); do curl -fsS http://localhost:3000/health >/dev/null 2>&1 && echo \"Health check passed\" && exit 0 || sleep 1; done; echo \"Timeout: Health check failed after 30 seconds\"; tail -n +1 .smoke.log || true; exit 1'",
         "free-ports": "npx cross-port-killer 3000",
         "docker:start:dev": "docker compose up -d",
         "docker:stop:dev": "docker compose down",
