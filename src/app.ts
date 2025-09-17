@@ -12,7 +12,7 @@ import fastifySwagger from '@fastify/swagger'
 import {
   amplitudePlugin,
   bugsnagPlugin,
-  commonHealthcheckPlugin,
+  commonSyncHealthcheckPlugin,
   getRequestIdFastifyAppConfig,
   metricsPlugin,
   newrelicTransactionManagerPlugin,
@@ -261,7 +261,7 @@ export async function getApp(
   }
 
   if (configOverrides.healthchecksEnabled !== false) {
-    await app.register(commonHealthcheckPlugin, {
+    await app.register(commonSyncHealthcheckPlugin, {
       healthChecks: [
         {
           name: 'postgres',
