@@ -1,6 +1,6 @@
 {
     "name": "node-service-template",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "engines": {
         "node": ">=24.5.0"
     },
@@ -16,8 +16,9 @@
         "lint:fix": "biome check --write .",
         "start:dev": "node --env-file=.env src/server.ts",
         "start:dev:watch": "node --watch --env-file=.env src/server.ts",
-        "start:prod": "tsc && cross-env NODE_ENV=production node --env-file-if-exists=.env dist/src/server.js",
-        "start:prod:newrelic": "tsc && cross-env NODE_ENV=production node --experimental-loader newrelic/esm-loader.mjs -r newrelic --env-file-if-exists=.env dist/src/server.js",
+        "start:prod": "node --run build && cross-env NODE_ENV=production node --env-file-if-exists=.env dist/server.js",
+        "start:prod:newrelic": "node --run build && cross-env NODE_ENV=production node --experimental-loader newrelic/esm-loader.mjs -r newrelic --env-file-if-exists=.env dist/server.js",
+        "start:prod:smoke-test": "sh -c 'npm run start:prod > .smoke.log 2>&1 & APP_PID=$!; trap \"kill $APP_PID 2>/dev/null\" EXIT INT TERM; for i in $(seq 1 30); do curl -fsS http://localhost:3000/health >/dev/null 2>&1 && echo \"Health check passed\" && exit 0 || sleep 1; done; echo \"Timeout: Health check failed after 30 seconds\"; tail -n +1 .smoke.log || true; exit 1'",
         "free-ports": "npx cross-port-killer 3000",
         "docker:start:dev": "docker compose up -d",
         "docker:stop:dev": "docker compose down",
