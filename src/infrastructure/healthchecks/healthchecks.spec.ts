@@ -94,10 +94,8 @@ describe('healthcheck', () => {
       )
 
       await app.diContainer.cradle.healthcheckRefreshJob.process(randomUUID())
-      const result = await redisHealthCheck(app as unknown as FastifyInstance)
-      expect(result).toMatchObject({
-        result: true,
-      })
+      const result = redisHealthCheck(app as unknown as FastifyInstance)
+      expect(result).toBeNull()
     })
   })
 })
