@@ -92,7 +92,7 @@
         "toad-scheduler": "^3.1.0",
         "undici": "^7.16.0",
         "validation-utils": "11.0.1",
-        "zod": "^4.1.9"
+        "zod": "^4.1.11"
     },
     "devDependencies": {
         "@amplitude/analytics-types": "^2.10.0",
