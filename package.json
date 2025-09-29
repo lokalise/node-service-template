@@ -53,7 +53,7 @@
         "@lokalise/healthcheck-utils": "^6.0.0",
         "@lokalise/id-utils": "^3.0.1",
         "@lokalise/node-core": "^14.4.1",
-        "@lokalise/universal-ts-utils": "^4.5.1",
+        "@lokalise/universal-ts-utils": "^4.6.0",
         "@lokalise/zod-extras": "^3.0.0",
         "@message-queue-toolkit/amqp": "^22.1.0",
         "@message-queue-toolkit/core": "^23.2.0",
