@@ -79,7 +79,7 @@
         "fastify-metrics": "^12.1.0",
         "fastify-no-icon": "^7.0.0",
         "fastify-type-provider-zod": "^6.0.0",
-        "ioredis": "^5.7.0",
+        "ioredis": "^5.8.0",
         "jsonwebtoken": "^9.0.2",
         "layered-loader": "^14.0.1",
         "newrelic": "13.3.2",
