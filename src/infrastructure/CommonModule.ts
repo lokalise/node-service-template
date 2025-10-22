@@ -301,6 +301,7 @@ export class CommonModule extends AbstractModule<CommonDependencies, ExternalDep
         },
         {
           asyncInit: 'asyncRegister',
+          asyncDispose: 'dispose',
           enabled: isPeriodicJobEnabled(
             diOptions.periodicJobsEnabled,
             HealthcheckRefreshJob.JOB_NAME,

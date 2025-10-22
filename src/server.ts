@@ -16,6 +16,7 @@ async function start() {
   const config = executeAndHandleGlobalErrors(getConfig)
   const app = await getApp({
     monitoringEnabled: config.app.metrics.isEnabled,
+    healthchecksEnabled: true,
     jobQueuesEnabled: ENABLE_ALL,
     enqueuedJobWorkersEnabled: ENABLE_ALL,
     messageQueueConsumersEnabled: ENABLE_ALL,
