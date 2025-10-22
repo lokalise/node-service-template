@@ -260,7 +260,7 @@ export async function getApp(
     })
   }
 
-  if (configOverrides.healthchecksEnabled !== false) {
+  if (configOverrides.healthchecksEnabled) {
     await app.register(commonSyncHealthcheckPlugin, {
       healthChecks: [
         {
