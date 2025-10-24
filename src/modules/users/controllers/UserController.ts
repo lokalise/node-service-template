@@ -10,7 +10,7 @@ import {
   postCreateUserContract,
 } from '../schemas/userApiContracts.ts'
 import type { UserService } from '../services/UserService.ts'
-import type { UsersInjectableDependencies } from '../UserModule.ts'
+import type { UsersInjectableDependencies } from '../UsersModule.ts'
 
 type UserControllerContractsType = typeof UserController.contracts
 

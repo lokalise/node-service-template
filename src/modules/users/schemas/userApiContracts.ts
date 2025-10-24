@@ -9,7 +9,7 @@ import {
   GET_USER_SCHEMA_RESPONSE_SCHEMA,
   UPDATE_USER_BODY_SCHEMA,
   UPDATE_USER_PARAMS_SCHEMA,
-} from './userSchemas.ts'
+} from './usersSchemas.ts'
 
 export const postCreateUserContract = buildPayloadRoute({
   method: 'post', // can also be 'patch' or 'post'

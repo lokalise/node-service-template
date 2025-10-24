@@ -41,7 +41,7 @@ Basic building block examples:
 - [Domain service](./src/modules/users/services/UserService.ts);
 - [Controller](./src/modules/users/controllers/UserController.ts);
 - [Route](./src/modules/users/routes/userRoutes.ts);
-- [Schema](src/modules/users/schemas/userSchemas.ts);
+- [Schema](src/modules/users/schemas/usersSchemas.ts);
 - [e2e test](./src/modules/users/controllers/UserController.e2e.spec.ts);
 
 Plugins:

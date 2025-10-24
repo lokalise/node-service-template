@@ -6,7 +6,7 @@ import {
   type User,
   user as userTable,
 } from '../../../db/schema/user.ts'
-import type { UsersInjectableDependencies } from '../UserModule.ts'
+import type { UsersInjectableDependencies } from '../UsersModule.ts'
 
 export class UserRepository {
   private readonly drizzle: PostgresJsDatabase

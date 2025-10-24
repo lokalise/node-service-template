@@ -5,7 +5,7 @@ import {
   AbstractPeriodicJob,
   createTask,
 } from '../../../infrastructure/jobs/AbstractPeriodicJob.ts'
-import type { UsersInjectableDependencies } from '../UserModule.ts'
+import type { UsersInjectableDependencies } from '../UsersModule.ts'
 
 const LOCK_TIMEOUT_IN_MSECS = 60 * 1000
 const LOCK_REFRESH_IN_MSECS = 10 * 1000

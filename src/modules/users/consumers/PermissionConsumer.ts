@@ -6,7 +6,7 @@ import type { RequestContextPreHandlerOutput } from '../../../infrastructure/pre
 import { createRequestContextPreHandler } from '../../../infrastructure/prehandlers/requestContextPrehandler.ts'
 import type { PermissionsService } from '../services/PermissionsService.ts'
 import type { UserService } from '../services/UserService.ts'
-import type { UsersInjectableDependencies } from '../UserModule.ts'
+import type { UsersInjectableDependencies } from '../UsersModule.ts'
 import { addPermissionsHandler } from './handlers/AddPermissionsHandler.ts'
 import { removePermissionsHandler } from './handlers/RemovePermissionsHandler.ts'
 import {

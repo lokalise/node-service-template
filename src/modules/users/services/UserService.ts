@@ -9,8 +9,8 @@ import type {
   CREATE_USER_BODY_SCHEMA,
   UPDATE_USER_BODY_SCHEMA,
   USER_SCHEMA_TYPE,
-} from '../schemas/userSchemas.ts'
-import type { UsersInjectableDependencies } from '../UserModule.ts'
+} from '../schemas/usersSchemas.ts'
+import type { UsersInjectableDependencies } from '../UsersModule.ts'
 
 export type UserDTO = USER_SCHEMA_TYPE
 export type UserCreateDTO = z.infer<typeof CREATE_USER_BODY_SCHEMA>

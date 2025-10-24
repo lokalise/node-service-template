@@ -69,7 +69,7 @@ export const userBullmqQueues = [
   },
 ] as const satisfies QueueConfiguration[]
 
-export class UserModule extends AbstractModule<UsersModuleDependencies> {
+export class UsersModule extends AbstractModule<UsersModuleDependencies> {
   resolveDependencies(
     diOptions: DependencyInjectionOptions,
   ): MandatoryNameAndRegistrationPair<UsersModuleDependencies> {
