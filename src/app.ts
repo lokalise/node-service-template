@@ -19,7 +19,7 @@ import {
   requestContextProviderPlugin,
 } from '@lokalise/fastify-extras'
 import { type CommonLogger, resolveGlobalErrorLogObject, resolveLogger } from '@lokalise/node-core'
-import scalarFastifyApiReference from '@scalar/fastify-api-reference'
+import { default as scalarFastifyApiReference } from '@scalar/fastify-api-reference'
 import { type AwilixContainer, createContainer } from 'awilix'
 import type { FastifyInstance } from 'fastify'
 import fastify from 'fastify'

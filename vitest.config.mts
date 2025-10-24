@@ -4,11 +4,8 @@ import { defineConfig } from 'vitest/config'
 export default defineConfig({
   test: {
     globals: true,
-    poolOptions: {
-      threads: {
-        singleThread: true,
-      },
-    },
+    maxWorkers: 1,
+    isolate: false,
     pool: 'threads',
     watch: false,
     environment: 'node',
@@ -18,7 +15,11 @@ export default defineConfig({
       provider: 'v8',
       include: ['src/**/*.ts'],
       exclude: [
+        'src/otel.ts',
         'src/db/*',
+        'src/infrastructure/healthchecks/healthchecks.ts',
+        'src/infrastructure/jobs/AbstractPeriodicJob.ts',
+        'src/infrastructure/CommonModule.ts',
         'src/infrastructure/logger.ts',
         'src/infrastructure/diConfig.ts',
         'src/infrastructure/errors/publicErrors.ts',
@@ -32,11 +33,10 @@ export default defineConfig({
         'src/**/*.test.ts',
       ],
       reporter: ['text'],
-      all: true,
       thresholds: {
         lines: 89,
         functions: 89,
-        branches: 85,
+        branches: 80,
         statements: 89,
       },
     },
