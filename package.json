@@ -95,7 +95,7 @@
         "zod": "^4.1.12"
     },
     "devDependencies": {
-        "@amplitude/analytics-types": "^2.10.0",
+        "@amplitude/analytics-types": "^2.11.0",
         "@biomejs/biome": "2.3.1",
         "@lokalise/biome-config": "^3.1.0",
         "@lokalise/tsconfig": "^3.0.0",
