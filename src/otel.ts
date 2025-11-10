@@ -28,6 +28,11 @@ if (isOpenTelemetryEnabled && !isInstrumentationRegistered) {
   sdk = new NodeSDK({
     traceExporter,
     instrumentations: [
+      getNodeAutoInstrumentations({
+        '@opentelemetry/instrumentation-fastify': {
+          enabled: false,
+        },
+      }),
       new FastifyOtelInstrumentation({
         registerOnInitialization: true,
         ignorePaths: (req) => {
@@ -36,11 +41,6 @@ if (isOpenTelemetryEnabled && !isInstrumentationRegistered) {
           const path = req.url.split('?')[0]
           // biome-ignore lint/style/noNonNullAssertion: there will always be some path
           return skippedPaths.includes(path!)
-        },
-      }),
-      getNodeAutoInstrumentations({
-        '@opentelemetry/instrumentation-fastify': {
-          enabled: false,
         },
       }),
     ],
