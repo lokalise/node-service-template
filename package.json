@@ -97,6 +97,7 @@
     "devDependencies": {
         "@amplitude/analytics-types": "^2.11.0",
         "@biomejs/biome": "2.3.4",
+        "@fastify/otel": "^0.13.1",
         "@lokalise/biome-config": "^3.1.0",
         "@lokalise/tsconfig": "^3.0.0",
         "@lokalise/universal-testing-utils": "^3.0.0",

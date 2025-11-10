@@ -1,3 +1,4 @@
+import { FastifyOtelInstrumentation } from '@fastify/otel'
 import { DiagConsoleLogger, DiagLogLevel, diag } from '@opentelemetry/api'
 import { getNodeAutoInstrumentations } from '@opentelemetry/auto-instrumentations-node'
 import { OTLPTraceExporter as OTLPTraceExporterGrpc } from '@opentelemetry/exporter-trace-otlp-grpc'
@@ -19,27 +20,27 @@ if (isOpenTelemetryEnabled) {
     url: process.env.OPEN_TELEMETRY_EXPORTER_URL || 'grpc://localhost:4317',
   })
 
-  // const skippedPaths = ['/health', '/metrics', '/']
+  const skippedPaths = ['/health', '/metrics', '/']
 
   // Setup SDK
   sdk = new NodeSDK({
     traceExporter,
     instrumentations: [
-      getNodeAutoInstrumentations(
-        // ToDo Restore this when https://github.com/open-telemetry/opentelemetry-js-contrib/issues/2944 is implemented
-        /*
-        {
-        '@opentelemetry/instrumentation-fastify': {
-          ignoreIncomingRequestHook: (req) => {
-            if (!req.url) return false
-            // Ignore path and query string, if needed
-            const path = req.url.split('?')[0]
-            return skippedPaths.includes(path!)
-          },
+      new FastifyOtelInstrumentation({
+        registerOnInitialization: true,
+        ignorePaths: (req) => {
+          if (!req.url) return false
+          // Ignore path and query string, if needed
+          const path = req.url.split('?')[0]
+          // biome-ignore lint/style/noNonNullAssertion: there will always be some path
+          return skippedPaths.includes(path!)
         },
-      }
-         */
-      ),
+      }),
+      getNodeAutoInstrumentations({
+        '@opentelemetry/instrumentation-fastify': {
+          enabled: false,
+        },
+      }),
     ],
   })
 

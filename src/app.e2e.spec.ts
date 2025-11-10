@@ -77,7 +77,7 @@ describe('app', () => {
     it('Returns OpenAPI information (Redirect)', async () => {
       const response = await app.inject().get('/documentation').end()
 
-      expect(response.statusCode).toBe(302)
+      expect(response.statusCode).toBe(301)
     })
 
     it('Returns OpenAPI information (HTML)', async () => {
