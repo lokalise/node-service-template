@@ -6,10 +6,12 @@ import { NodeSDK } from '@opentelemetry/sdk-node'
 
 // This needs to be imported and run before any other code in your app
 
-const isOpenTelemetryEnabled = process.env.OPEN_TELEMETRY_ENABLED?.toLowerCase() !== 'false'
+const isOpenTelemetryEnabled =
+  process.env.NODE_ENV !== 'test' && process.env.OPEN_TELEMETRY_ENABLED?.toLowerCase() !== 'false'
+let isInstrumentationRegistered = false
 let sdk: NodeSDK | undefined
 
-if (isOpenTelemetryEnabled) {
+if (isOpenTelemetryEnabled && !isInstrumentationRegistered) {
   // Optional diagnostics
   diag.setLogger(new DiagConsoleLogger(), DiagLogLevel.INFO)
 
@@ -46,6 +48,7 @@ if (isOpenTelemetryEnabled) {
 
   sdk.start()
   diag.info('OpenTelemetry SDK initialized')
+  isInstrumentationRegistered = true
 }
 
 export async function gracefulOtelShutdown() {
@@ -55,6 +58,7 @@ export async function gracefulOtelShutdown() {
     }
     await sdk.shutdown()
     diag.info('OpenTelemetry SDK shutdown completed')
+    isInstrumentationRegistered = false
   } catch (error) {
     diag.error('Error during OpenTelemetry SDK shutdown:', error)
   }
