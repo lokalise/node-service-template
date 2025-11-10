@@ -43,6 +43,7 @@
         "@fastify/cors": "^11.1.0",
         "@fastify/helmet": "^13.0.2",
         "@fastify/jwt": "^10.0.0",
+        "@fastify/otel": "^0.13.1",
         "@fastify/schedule": "^6.0.0",
         "@fastify/swagger": "^9.5.2",
         "@lokalise/api-contracts": "^6.0.0",
@@ -97,7 +98,6 @@
     "devDependencies": {
         "@amplitude/analytics-types": "^2.11.0",
         "@biomejs/biome": "2.3.4",
-        "@fastify/otel": "^0.13.1",
         "@lokalise/biome-config": "^3.1.0",
         "@lokalise/tsconfig": "^3.0.0",
         "@lokalise/universal-testing-utils": "^3.0.0",
