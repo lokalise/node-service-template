@@ -1,4 +1,4 @@
-import type { QueueConfiguration } from '@lokalise/background-jobs-common'
+import type { ModuleAwareQueueConfiguration } from '@lokalise/background-jobs-common'
 import {
   createNotificationPair,
   type InMemoryCacheConfiguration,
@@ -65,9 +65,10 @@ export type UsersPublicDependencies = Pick<
 export const userBullmqQueues = [
   {
     queueId: UserImportJob.QUEUE_ID,
+    moduleId: 'user',
     jobPayloadSchema: USER_IMPORT_JOB_PAYLOAD,
   },
-] as const satisfies QueueConfiguration[]
+] as const satisfies ModuleAwareQueueConfiguration[]
 
 export class UserModule extends AbstractModule<UsersModuleDependencies> {
   resolveDependencies(
