@@ -35,9 +35,9 @@
         "cmd:getUserImportJobs": "node --env-file-if-exists=.env scripts/cmd/getUserImportJobs.ts"
     },
     "dependencies": {
-        "@aws-sdk/client-sns": "^3.927.0",
-        "@aws-sdk/client-sqs": "^3.927.0",
-        "@aws-sdk/credential-providers": "^3.927.0",
+        "@aws-sdk/client-sns": "^3.932.0",
+        "@aws-sdk/client-sqs": "^3.932.0",
+        "@aws-sdk/credential-providers": "^3.932.0",
         "@fastify/auth": "^5.0.3",
         "@fastify/awilix": "^8.0.0",
         "@fastify/cors": "^11.1.0",
