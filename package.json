@@ -107,12 +107,12 @@
         "@types/jsonwebtoken": "^9.0.10",
         "@types/newrelic": "^9.14.8",
         "@types/node": "^24.10.1",
-        "@vitest/coverage-v8": "^3.2.4",
+        "@vitest/coverage-v8": "^4.0.13",
         "cpy-cli": "^6.0.0",
         "cross-env": "^10.1.0",
         "mockttp": "^4.2.1",
         "typescript": "5.9.3",
-        "vitest": "^3.2.4",
+        "vitest": "^4.0.13",
         "yaml": "^2.8.1"
     }
 }
