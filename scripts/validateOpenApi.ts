@@ -1,21 +1,22 @@
 import { readFile } from 'node:fs/promises'
 import { resolve } from 'node:path'
-
-import { validate } from 'oas-validator'
+import { compileErrors, validate } from '@readme/openapi-parser'
 import { parse as fromYaml } from 'yaml'
+import { consoleLog } from './utils/loggingUtils.ts'
+import { getRootDirectory } from './utils/pathUtils.ts'
 
-const targetPath = resolve(__dirname, '../openApiSpec.yaml')
-
-const hasOptions = (error: unknown): error is { options: unknown } =>
-  typeof error === 'object' && error !== null && 'options' in error
+const targetPath = resolve(getRootDirectory(), 'openApiSpec.yaml')
 
 async function run() {
   const yaml = await readFile(targetPath)
-  try {
-    await validate(fromYaml(yaml.toString()), {})
-    console.log('Document is valid')
-  } catch (err) {
-    console.log(hasOptions(err) ? JSON.stringify(err.options) : err)
+  const validationResult = await validate(fromYaml(yaml.toString()))
+  if (validationResult.valid) {
+    consoleLog('Document is valid')
+  } else {
+    consoleLog(`Errors:\n${compileErrors(validationResult)}`)
+    if (validationResult.warnings?.length) {
+      consoleLog(`Warnings: ${JSON.stringify(validationResult.warnings)}`)
+    }
     throw new Error('Specification validation has failed')
   }
 }

@@ -9,50 +9,57 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [18.x, 20.x]
+        node-version: [24.x]
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v6
 
       - name: Setup Node ${{ matrix.node-version }}
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v6
         with:
           node-version: ${{ matrix.node-version }}
 
       - name: Install
         run: |
           npm install --ignore-scripts
-          npx prisma generate
+
+      - name: Validate docs
+        run: |
+          node --run docs:validate
 
       - name: Docker start
         run: |
-          docker compose up waitmysql
-          docker compose up -d redis rabbitmq
+          docker compose up -d --quiet-pull --wait
 
       - name: Build TS
         run: |
-          npm run build
+          node --run build
 
       - name: Schema preparation
         run: |
-          npm run copy:config
-          npm run db:migration:run
-
-      - name: Generate client
-        run: |
-          npm run db:update-client
+          node --run copy:config
+          npm run db:apply-migrations
 
       - name: Run Tests
         run: |
-          npm run test:ci
+          node --run test:ci
+
+      - name: Run lint
+        run: |
+          node --run lint   
+
+      - name: Generate and validate OpenAPI schema
+        run: |
+          node --run spec:generate
+
+      - name: Smoketest the application
+        run: |
+          node --run start:prod:smoke-test
 
       - name: DB stop
         run: |
           docker compose down
 
-      - name: Generate and validate OpenAPI schema
-        run: |
-          npm run spec:generate
 
   automerge:
     needs: build

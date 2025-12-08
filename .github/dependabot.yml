@@ -5,13 +5,43 @@ updates:
     schedule:
       interval: 'monthly'
     open-pull-requests-limit: 10
+    cooldown:
+      default-days: 7
 
   - package-ecosystem: 'npm'
     directory: '/'
     schedule:
       interval: 'weekly'
     open-pull-requests-limit: 10
-    ignore:
-      - dependency-name: '@typescript-eslint/eslint-plugin'
-      - dependency-name: '@typescript-eslint/parser'
-      - dependency-name: '@types/node'
+    cooldown:
+      default-days: 7
+    groups:
+      types:
+        patterns:
+          - '@types/*'
+      vitest:
+        patterns:
+          - 'vitest'
+          - '@vitest/*'
+      typescript:
+        patterns:
+          - 'tsx'
+          - 'typescript'
+      fastify:
+        patterns:
+          - '@fastify/*'
+          - 'fastify'
+          - 'fastify-*'
+      message-queue-toolkit:
+        patterns:
+          - '@message-queue-toolkit/*'
+      drizzle:
+        patterns:
+          - 'drizzle-*'
+      awilix:
+        patterns:
+          - 'awilix'
+          - 'awilix-*'
+      aws:
+        patterns:
+          - '@aws-sdk/*'

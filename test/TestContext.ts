@@ -1,36 +1,51 @@
-import type { Cradle } from '@fastify/awilix'
 import { NewRelicTransactionManager } from '@lokalise/fastify-extras'
-import type { AwilixContainer } from 'awilix'
+import { globalLogger } from '@lokalise/node-core'
 import { createContainer } from 'awilix'
-import type { FastifyInstance } from 'fastify'
+import { AwilixManager } from 'awilix-manager'
+import { AbstractTestContextFactory, type DIContext } from 'opinionated-machine'
+import type { AppInstance } from '../src/app.ts'
+import type { Dependencies, ExternalDependencies } from '../src/infrastructure/CommonModule.ts'
+import type { Config } from '../src/infrastructure/config.ts'
+import { getConfig } from '../src/infrastructure/config.ts'
+import { ALL_MODULES } from '../src/modules.ts'
 
-import type { DependencyOverrides } from '../src/infrastructure/diConfig'
-import { registerDependencies } from '../src/infrastructure/diConfig'
+export type TestContext = DIContext<Dependencies, Config, ExternalDependencies>
 
-export type TestContext = {
-  diContainer: AwilixContainer<Cradle>
-}
+class TestContextFactory extends AbstractTestContextFactory<
+  Dependencies,
+  ExternalDependencies,
+  Config
+> {
+  constructor() {
+    const diContainer = createContainer({
+      injectionMode: 'PROXY',
+    })
 
-export function createTestContext(dependencyOverrides: DependencyOverrides = {}): TestContext {
-  const diContainer = createContainer({
-    injectionMode: 'PROXY',
-  })
-  const fakeApp: Partial<FastifyInstance> = {
-    newrelicTransactionManager: new NewRelicTransactionManager(false),
+    const awilixManager = new AwilixManager({
+      diContainer,
+      asyncDispose: true,
+      asyncInit: true,
+      eagerInject: true,
+    })
+
+    const fakeApp: Partial<AppInstance> = {
+      newrelicTransactionManager: NewRelicTransactionManager.createDisabled(),
+      awilixManager,
+    }
+
+    super(
+      {
+        app: fakeApp as AppInstance,
+        logger: globalLogger,
+      },
+      ALL_MODULES,
+      diContainer,
+    )
   }
-  registerDependencies(
-    diContainer,
-    {
-      app: fakeApp as FastifyInstance,
-    },
-    dependencyOverrides,
-  )
 
-  return {
-    diContainer,
+  resolveBaseAppConfig() {
+    return getConfig()
   }
 }
 
-export async function destroyTestContext(testContext: TestContext) {
-  await testContext.diContainer.dispose()
-}
+export const testContextFactory = new TestContextFactory()

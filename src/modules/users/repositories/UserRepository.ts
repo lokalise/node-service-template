@@ -1,46 +1,50 @@
-import type { Either } from '@lokalise/node-core'
-import type { PrismaClient, User } from '@prisma/client'
-
-import type { Dependencies } from '../../../infrastructure/diConfig'
-
-export type CreateUserRow = Omit<User, 'id'>
+import { eq, inArray } from 'drizzle-orm'
+import type { PostgresJsDatabase } from 'drizzle-orm/postgres-js'
+import {
+  type NewUser,
+  type UpdatedUser,
+  type User,
+  user as userTable,
+} from '../../../db/schema/user.ts'
+import type { UsersInjectableDependencies } from '../UserModule.ts'
 
 export class UserRepository {
-  private readonly prisma: PrismaClient
+  private readonly drizzle: PostgresJsDatabase
 
-  constructor({ prisma }: Dependencies) {
-    this.prisma = prisma
+  constructor({ drizzle }: UsersInjectableDependencies) {
+    this.drizzle = drizzle
   }
 
-  async getUser(id: number): Promise<Either<'NOT_FOUND', User>> {
-    const user = await this.prisma.user.findUnique({
-      where: {
-        id,
-      },
-    })
+  async getUser(id: string): Promise<User | null> {
+    const [result] = await this.drizzle.select().from(userTable).where(eq(userTable.id, id))
 
-    if (user === null) {
-      return { error: 'NOT_FOUND' }
-    }
-
-    return { result: user }
+    return result ?? null
   }
 
-  async getUsers(userIds: number[]): Promise<User[]> {
-    const result = await this.prisma.user.findMany({
-      where: {
-        id: {
-          in: userIds,
-        },
-      },
-    })
-    return result
+  getUsers(userIds: string[]): Promise<User[]> {
+    return this.drizzle.select().from(userTable).where(inArray(userTable.id, userIds))
   }
 
-  async createUser(user: CreateUserRow): Promise<User> {
-    const createdUser = await this.prisma.user.create({
-      data: user,
-    })
-    return createdUser
+  async deleteUser(id: string): Promise<User | null> {
+    const [result] = await this.drizzle.delete(userTable).where(eq(userTable.id, id)).returning()
+
+    return result ?? null
+  }
+
+  async updateUser(id: string, updatedUser: UpdatedUser): Promise<User | null> {
+    const [result] = await this.drizzle
+      .update(userTable)
+      .set(updatedUser)
+      .where(eq(userTable.id, id))
+      .returning()
+
+    return result ?? null
+  }
+
+  async createUser(user: NewUser): Promise<User> {
+    const [result] = await this.drizzle.insert(userTable).values(user).returning()
+
+    // biome-ignore lint/style/noNonNullAssertion: Insert should fail if no result is returned
+    return result!
   }
 }

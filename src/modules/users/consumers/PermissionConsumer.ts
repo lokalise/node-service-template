@@ -1,49 +1,77 @@
-import type { Either } from '@lokalise/node-core'
+import { AbstractAmqpTopicConsumer } from '@message-queue-toolkit/amqp'
+import { MessageHandlerConfigBuilder } from '@message-queue-toolkit/core'
+import type z from 'zod/v4'
+import { isTest } from '../../../infrastructure/config.ts'
+import type { RequestContextPreHandlerOutput } from '../../../infrastructure/prehandlers/requestContextPrehandler.ts'
+import { createRequestContextPreHandler } from '../../../infrastructure/prehandlers/requestContextPrehandler.ts'
+import type { PermissionsService } from '../services/PermissionsService.ts'
+import type { UserService } from '../services/UserService.ts'
+import type { UsersInjectableDependencies } from '../UserModule.ts'
+import { addPermissionsHandler } from './handlers/AddPermissionsHandler.ts'
+import { removePermissionsHandler } from './handlers/RemovePermissionsHandler.ts'
+import {
+  PERMISSIONS_EXCHANGE,
+  PermissionsMessages,
+  SERVICE_TEMPLATE_PERMISSIONS_QUEUE,
+} from './permissionsMessageSchemas.ts'
 
-import { AbstractConsumer } from '../../../infrastructure/amqp/AbstractConsumer'
-import type { Dependencies } from '../../../infrastructure/diConfig'
-import type { PermissionsService } from '../services/PermissionsService'
-import type { UserService } from '../services/UserService'
+type SupportedMessages =
+  | z.infer<typeof PermissionsMessages.added.consumerSchema>
+  | z.infer<typeof PermissionsMessages.removed.consumerSchema>
+type ExecutionContext = {
+  userService: UserService
+  permissionsService: PermissionsService
+}
 
-import type { PERMISSIONS_MESSAGE_TYPE } from './userConsumerSchemas'
-import { PERMISSIONS_MESSAGE_SCHEMA } from './userConsumerSchemas'
+export class PermissionConsumer extends AbstractAmqpTopicConsumer<
+  SupportedMessages,
+  ExecutionContext,
+  RequestContextPreHandlerOutput
+> {
+  public static readonly QUEUE_NAME = SERVICE_TEMPLATE_PERMISSIONS_QUEUE
+  public static readonly EXCHANGE_NAME = PERMISSIONS_EXCHANGE
 
-export class PermissionConsumer extends AbstractConsumer<PERMISSIONS_MESSAGE_TYPE> {
-  public static QUEUE_NAME = 'user_permissions'
-  private readonly userService: UserService
-  private readonly permissionsService: PermissionsService
-
-  constructor(dependencies: Dependencies) {
+  constructor(dependencies: UsersInjectableDependencies) {
     super(
       {
-        queueName: PermissionConsumer.QUEUE_NAME,
-        messageSchema: PERMISSIONS_MESSAGE_SCHEMA,
+        amqpConnectionManager: dependencies.amqpConnectionManager,
+        consumerErrorResolver: dependencies.consumerErrorResolver,
+        errorReporter: dependencies.errorReporter,
+        logger: dependencies.logger,
+        transactionObservabilityManager: dependencies.transactionObservabilityManager,
+        messageMetricsManager: dependencies.messageProcessingMetricsManager,
       },
-      dependencies,
+      {
+        creationConfig: {
+          exchange: PermissionConsumer.EXCHANGE_NAME,
+          queueName: PermissionConsumer.QUEUE_NAME,
+          queueOptions: {
+            autoDelete: false,
+            durable: true,
+            exclusive: false,
+          },
+        },
+        deletionConfig: {
+          deleteIfExists: isTest(),
+        },
+        logMessages: true,
+        handlerSpy: isTest(),
+        handlers: new MessageHandlerConfigBuilder<
+          SupportedMessages,
+          ExecutionContext,
+          RequestContextPreHandlerOutput
+        >()
+          .addConfig(PermissionsMessages.added.consumerSchema, addPermissionsHandler, {
+            preHandlers: [createRequestContextPreHandler(dependencies.logger)],
+          })
+          .addConfig(PermissionsMessages.removed.consumerSchema, removePermissionsHandler)
+          .build(),
+        messageTypeField: 'type',
+      },
+      {
+        userService: dependencies.userService,
+        permissionsService: dependencies.permissionsService,
+      },
     )
-    this.userService = dependencies.userService
-    this.permissionsService = dependencies.permissionsService
-  }
-
-  override async processMessage(
-    message: PERMISSIONS_MESSAGE_TYPE,
-  ): Promise<Either<'retryLater', 'success'>> {
-    const projectUsers = await this.userService.getUsers(message.userIds)
-
-    if (!projectUsers || projectUsers.length < message.userIds.length) {
-      // not all users were already created, we need to wait to be able to set permissions
-      return {
-        error: 'retryLater',
-      }
-    }
-
-    // Do not do this in production, some kind of bulk insertion is needed here
-    for (const user of projectUsers) {
-      await this.permissionsService.setPermissions(user.id, message.permissions)
-    }
-
-    return {
-      result: 'success',
-    }
   }
 }

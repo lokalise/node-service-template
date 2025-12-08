@@ -1,6 +1,7 @@
-import { ConsumerErrorResolver } from '../../src/infrastructure/amqp/ConsumerErrorResolver'
+import type { InternalError } from '@lokalise/node-core'
+import { AmqpConsumerErrorResolver } from '@message-queue-toolkit/amqp'
 
-export class FakeConsumerErrorResolver extends ConsumerErrorResolver {
+export class FakeConsumerErrorResolver extends AmqpConsumerErrorResolver {
   public handleErrorCallsCount: number
   constructor() {
     super()
@@ -8,7 +9,7 @@ export class FakeConsumerErrorResolver extends ConsumerErrorResolver {
     this.handleErrorCallsCount = 0
   }
 
-  public override processError(error: unknown) {
+  public override processError(error: unknown): InternalError {
     this.handleErrorCallsCount++
     return super.processError(error)
   }

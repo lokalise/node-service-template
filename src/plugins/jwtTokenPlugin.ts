@@ -1,7 +1,8 @@
 import type {
+  FastifyInstance,
+  FastifyPluginCallback,
   FastifyReply,
   FastifyRequest,
-  FastifyInstance,
   HookHandlerDoneFunction,
 } from 'fastify'
 import fp from 'fastify-plugin'
@@ -17,8 +18,8 @@ function plugin(
 ) {
   fastify.addHook(
     'onRequest',
-    (req: FastifyRequest, res: FastifyReply, done: HookHandlerDoneFunction) => {
-      if (pluginOptions.skipList.has(req.routerPath)) {
+    (req: FastifyRequest, _res: FastifyReply, done: HookHandlerDoneFunction) => {
+      if (req.routeOptions.url && pluginOptions.skipList.has(req.routeOptions.url)) {
         return done()
       }
 
@@ -36,7 +37,8 @@ function plugin(
   next()
 }
 
-export const jwtTokenPlugin = fp<JwtTokenPluginOptions>(plugin, {
-  fastify: '4.x',
-  name: 'jwt-token-plugin',
-})
+export const jwtTokenPlugin: FastifyPluginCallback<JwtTokenPluginOptions> =
+  fp<JwtTokenPluginOptions>(plugin, {
+    fastify: '5.x',
+    name: 'jwt-token-plugin',
+  })

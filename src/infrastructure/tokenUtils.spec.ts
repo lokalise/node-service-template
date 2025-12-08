@@ -1,9 +1,16 @@
 import fastifyJWT from '@fastify/jwt'
 import fastify from 'fastify'
+import { describe, expect, it } from 'vitest'
 
 const ACCESS_TOKEN_TTL_IN_SECONDS = 60
 
-import { decodeJwtToken, generateJwtToken } from './tokenUtils'
+import { EmptyTokenError } from './errors/publicErrors.ts'
+import { decodeJwtToken, generateJwtToken } from './tokenUtils.ts'
+
+type Token = {
+  exp: number
+  iat: number
+}
 
 describe('tokenUtils', () => {
   describe('generateJwtToken', () => {
@@ -19,17 +26,13 @@ describe('tokenUtils', () => {
       }
 
       const token = await generateJwtToken(app.jwt, payload, ACCESS_TOKEN_TTL_IN_SECONDS)
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-      const decodedToken = await decodeJwtToken(app.jwt, token)
+      const decodedToken = await decodeJwtToken<Token>(app.jwt, token)
 
       expect(decodedToken).toMatchObject({
         userId: 1,
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
         exp: expect.any(Number),
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
         iat: expect.any(Number),
       })
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       expect(decodedToken.exp - decodedToken.iat).toEqual(ACCESS_TOKEN_TTL_IN_SECONDS)
 
       await app.close()
@@ -60,6 +63,28 @@ describe('tokenUtils', () => {
 
       await app.close()
       await app2.close()
+    })
+
+    it('rejects if jwt.sign returns an error', async () => {
+      const mockPayload = { foo: 'bar' }
+      const ttl = 60
+
+      const fakeError = new Error('sign failed')
+      const jwt = {
+        sign: vi.fn((_payload, _opts, cb) => cb(fakeError)),
+      } as any
+
+      await expect(generateJwtToken(jwt, mockPayload, ttl)).rejects.toBe(fakeError)
+    })
+
+    it('rejects with EmptyTokenError if encoded is undefined', async () => {
+      const mockPayload = { wonder: 'wall' }
+      const jwt = {
+        sign: vi.fn((_payload, _opts, cb) => cb(null, undefined)), // encoded is undefined
+      } as any
+
+      const promise = generateJwtToken(jwt, mockPayload, 60)
+      await expect(promise).rejects.toBeInstanceOf(EmptyTokenError)
     })
   })
 })

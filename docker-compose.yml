@@ -1,29 +1,24 @@
 services:
-  mysql:
-    image: mysql:8.0.28-oracle
+  postgres:
+    image: postgres:17.3
+    # see https://www.postgresql.org/docs/current/non-durability.html
+    command: '-c full_page_writes=off -c fsync=off -c synchronous_commit=off'
     ports:
-      - ${DOCKER_MYSQL_PORT:-3306}:3306
-    volumes:
-      - mysql_data:/var/lib/mysql
+      - '5432:5432'
     environment:
-      - MYSQL_ROOT_PASSWORD=rootpass
-      - MYSQL_PASSWORD=pass
-      - MYSQL_USER=serviceuser
-      - MYSQL_DATABASE=service_db
-
-  waitmysql:
-    image: mysql:8.0.28-oracle
-    links:
-      - mysql
-    depends_on:
-      - mysql
-    entrypoint:
-      - bash
-      - -c
-      - 'until /usr/bin/mysql -hmysql -userviceuser -ppass -e "SELECT 1"; do sleep 5; done'
+      - POSTGRES_USER=serviceuser
+      - POSTGRES_PASSWORD=pass
+      - POSTGRES_DB=service_db
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -h localhost -p 5432"]
+      interval: 1s # run the check every 2 seconds
+      timeout: 5s  # fail the check if it takes longer than 5 seconds
+      retries: 10   # require 10 consecutive failures before marking unhealthy
+    volumes:
+      - ./scripts/db/init-dbs.sh:/docker-entrypoint-initdb.d/init-dbs.sh
 
   redis:
-    image: redis:6.2.7-alpine
+    image: redis:6.2.14-alpine
     command: redis-server --requirepass sOmE_sEcUrE_pAsS
     ports:
       - ${DOCKER_REDIS_PORT:-6379}:6379
@@ -31,16 +26,36 @@ services:
       - redis_data:/redis/data:cached
 
   rabbitmq:
-    image: rabbitmq:3.10.17
+    image: rabbitmq:3.13.7-management
     ports:
       - ${DOCKER_RABBITMQ_CLIENT_PORT:-5672}:5672
       - ${DOCKER_RABBITMQ_MANAGEMENT_PORT:-15672}:15672
     volumes:
       - rabbit_data:/var/lib/rabbitmq
 
+  localstack:
+    image: localstack/localstack:4.1.1
+    hostname: localstack
+    ports:
+      - '4566:4566'
+      - 4510-4559:4510-4559
+    environment:
+      SERVICES: sns,sqs
+      DEBUG: 0
+      DATA_DIR: ${DATA_DIR-}
+      DOCKER_HOST: unix:///var/run/docker.sock
+      LOCALSTACK_HOST: localstack
+    healthcheck:
+      test: [ "CMD-SHELL", "awslocal sns list-topics"]
+      interval: 1s # run the check every 2 seconds
+      timeout: 5s  # fail the check if it takes longer than 5 seconds
+      retries: 10  # require 10 consecutive failures before marking unhealthy
+    volumes:
+      - ${TMPDIR:-/tmp}/localstack:/var/log/localstack
+      - /var/run/docker.sock:/var/run/docker.sock
+    restart: on-failure
+
 volumes:
-  mysql_data:
-    driver: local
   redis_data:
     driver: local
   rabbit_data:

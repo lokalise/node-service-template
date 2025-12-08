@@ -1,15 +1,15 @@
-import type { PrismaClient } from '@prisma/client'
+import type { PgTable } from 'drizzle-orm/pg-core'
+import type { PostgresJsDatabase } from 'drizzle-orm/postgres-js'
+import { post } from '../src/db/schema/post.ts'
+import { user } from '../src/db/schema/user.ts'
 
-export enum DB_MODEL {
-  User = 'user',
-}
+export const DB_MODEL = {
+  User: user,
+  Post: post,
+} as const satisfies Record<string, PgTable>
 
-export async function cleanTables(prisma: PrismaClient, modelNames: readonly DB_MODEL[]) {
-  const delegates = modelNames.map<{ deleteMany: () => Promise<unknown> }>(
-    (modelName) => prisma[modelName],
-  )
-
-  for (const delegate of delegates) {
-    await delegate.deleteMany()
+export async function cleanTables(drizzle: PostgresJsDatabase, modelNames: PgTable[]) {
+  for (const modelName of modelNames) {
+    await drizzle.delete(modelName)
   }
 }

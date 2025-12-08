@@ -1,12 +1,19 @@
-import { InternalError, PublicNonRecoverableError } from '@lokalise/node-core'
-import type { FastifyRequest, FastifyReply, FastifyInstance } from 'fastify'
+import {
+  type FreeformRecord,
+  isInternalError,
+  isObject,
+  isPublicNonRecoverableError,
+  isStandardizedError,
+} from '@lokalise/node-core'
+import type { FastifyReply, FastifyRequest } from 'fastify'
+import {
+  hasZodFastifySchemaValidationErrors,
+  isResponseSerializationError,
+} from 'fastify-type-provider-zod'
 import pino from 'pino'
-import { ZodError } from 'zod'
+import type { AppInstance } from '../../app.ts'
 
-import type { FreeformRecord } from '../../schemas/commonTypes'
-import { isObject, isStandardizedError } from '../typeUtils'
-
-const knownErrors = new Set([
+const knownAuthErrors = new Set([
   'FST_JWT_NO_AUTHORIZATION_IN_HEADER',
   'FST_JWT_AUTHORIZATION_TOKEN_EXPIRED',
   'FST_JWT_AUTHORIZATION_TOKEN_INVALID',
@@ -16,15 +23,15 @@ type ResponseObject = {
   statusCode: number
   payload: {
     message: string
-    errorCode: string | unknown
+    errorCode: string
     details?: FreeformRecord
   }
 }
 
 function resolveLogObject(error: unknown): FreeformRecord {
-  if (error instanceof InternalError) {
+  if (isInternalError(error)) {
     return {
-      message: error.message,
+      msg: error.message,
       code: error.errorCode,
       details: error.details ? JSON.stringify(error.details) : undefined,
       error: pino.stdSerializers.err({
@@ -43,7 +50,7 @@ function resolveLogObject(error: unknown): FreeformRecord {
 }
 
 function resolveResponseObject(error: FreeformRecord): ResponseObject {
-  if (error instanceof PublicNonRecoverableError) {
+  if (isPublicNonRecoverableError(error)) {
     return {
       statusCode: error.httpStatusCode ?? 500,
       payload: {
@@ -54,21 +61,36 @@ function resolveResponseObject(error: FreeformRecord): ResponseObject {
     }
   }
 
-  if (error instanceof ZodError) {
+  if (hasZodFastifySchemaValidationErrors(error)) {
     return {
       statusCode: 400,
       payload: {
         message: 'Invalid params',
         errorCode: 'VALIDATION_ERROR',
         details: {
-          error: error.issues,
+          error: error.validation,
+        },
+      },
+    }
+  }
+
+  if (isResponseSerializationError(error)) {
+    return {
+      statusCode: 500,
+      payload: {
+        message: 'Invalid response',
+        errorCode: 'RESPONSE_VALIDATION_ERROR',
+        details: {
+          error: error.cause.issues,
+          method: error.method,
+          url: error.url,
         },
       },
     }
   }
 
   if (isStandardizedError(error)) {
-    if (knownErrors.has(error.code)) {
+    if (knownAuthErrors.has(error.code)) {
       const message =
         error.code === 'FST_JWT_AUTHORIZATION_TOKEN_INVALID'
           ? 'Authorization token is invalid'
@@ -94,15 +116,22 @@ function resolveResponseObject(error: FreeformRecord): ResponseObject {
 }
 
 export const errorHandler = function (
-  this: FastifyInstance,
+  this: AppInstance,
   error: FreeformRecord,
   request: FastifyRequest,
   reply: FastifyReply,
 ): void {
   const logObject = resolveLogObject(error)
-  request.log.error(logObject)
 
-  if (error instanceof InternalError) {
+  // Potentially request can break before we resolved the context
+  if (request.reqContext) {
+    // this preserves correct request id field
+    request.reqContext.logger.error(logObject)
+  } else {
+    request.log.error(logObject)
+  }
+
+  if (isInternalError(error)) {
     this.diContainer.cradle.errorReporter.report({ error })
   }
 

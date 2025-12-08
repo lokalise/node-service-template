@@ -1,54 +1,83 @@
-import type { User } from '@prisma/client'
+import type { RequestContext } from '@lokalise/fastify-extras'
+import type { Loader } from 'layered-loader'
 
-import type { Dependencies } from '../../../infrastructure/diConfig'
-import { EntityNotFoundError } from '../../../infrastructure/errors/publicErrors'
-import type { UserRepository } from '../repositories/UserRepository'
+import type z from 'zod/v4'
+import type { User } from '../../../db/schema/user.ts'
+import { EntityNotFoundError } from '../../../infrastructure/errors/publicErrors.ts'
+import type { UserRepository } from '../repositories/UserRepository.ts'
+import type {
+  CREATE_USER_BODY_SCHEMA,
+  UPDATE_USER_BODY_SCHEMA,
+  USER_SCHEMA_TYPE,
+} from '../schemas/userSchemas.ts'
+import type { UsersInjectableDependencies } from '../UserModule.ts'
 
-export type NewUserDTO = Omit<UserDTO, 'id'>
-
-export type UserDTO = {
-  id: number
-  email: string
-  name?: string
-}
+export type UserDTO = USER_SCHEMA_TYPE
+export type UserCreateDTO = z.infer<typeof CREATE_USER_BODY_SCHEMA>
+export type UserUpdateDTO = z.infer<typeof UPDATE_USER_BODY_SCHEMA>
 
 export class UserService {
   private readonly userRepository: UserRepository
+  private readonly userLoader: Loader<User>
 
-  constructor({ userRepository }: Dependencies) {
+  constructor({ userRepository, userLoader }: UsersInjectableDependencies) {
     this.userRepository = userRepository
+    this.userLoader = userLoader
   }
 
-  async createUser(user: NewUserDTO) {
-    return await this.userRepository.createUser({
+  async createUser(user: UserCreateDTO) {
+    const newUser = await this.userRepository.createUser({
       name: user.name ?? null,
+      age: user.age ?? null,
       email: user.email,
     })
+    await this.userLoader.invalidateCacheFor(newUser.id.toString())
+    return newUser
   }
 
-  async getUser(id: number): Promise<User> {
-    const getUserResult = await this.userRepository.getUser(id)
+  async getUser(requestContext: RequestContext, userId: string): Promise<User> {
+    const getUserResult =
+      this.userLoader.getInMemoryOnly(userId.toString()) ?? (await this.userLoader.get(userId))
 
-    if (getUserResult.error) {
-      throw new EntityNotFoundError({ message: 'User not found', details: { id } })
+    if (!getUserResult) {
+      throw new EntityNotFoundError({ message: 'User not found', details: { id: userId } })
     }
 
-    return getUserResult.result
+    requestContext.logger.debug({ userId }, 'Resolved user')
+    return getUserResult
   }
 
-  async getUsers(userIds: number[]): Promise<User[]> {
+  async deleteUser(requestContext: RequestContext, userId: string): Promise<void> {
+    await this.userRepository.deleteUser(userId)
+    await this.userLoader.invalidateCacheFor(userId.toString())
+
+    requestContext.logger.info({ userId }, 'Deleted user')
+  }
+
+  async updateUser(requestContext: RequestContext, userId: string, updatedData: UserUpdateDTO) {
+    await this.userRepository.updateUser(userId, updatedData)
+    await this.userLoader.invalidateCacheFor(userId)
+
+    requestContext.logger.info({ userId }, 'Updated user')
+  }
+
+  async getUsers(requestContext: RequestContext, userIds: string[]): Promise<UserDTO[]> {
     const users = await this.userRepository.getUsers(userIds)
 
+    requestContext.logger.debug({ userIds }, 'Resolved users')
     return users
   }
 
-  async findUserById(id: number): Promise<User | null> {
-    const getUserResult = await this.userRepository.getUser(id)
+  async findUserById(requestContext: RequestContext, id: string): Promise<UserDTO | null> {
+    const getUserResult =
+      this.userLoader.getInMemoryOnly(id.toString()) ?? (await this.userLoader.get(id))
 
-    if (getUserResult.error) {
-      return null
+    if (getUserResult) {
+      requestContext.logger.debug({ id }, 'Resolved user')
+      return getUserResult
     }
 
-    return getUserResult.result
+    requestContext.logger.debug({ id }, 'User does not exist')
+    return null
   }
 }
