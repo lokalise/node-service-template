@@ -1,3 +1,5 @@
+.DS_Store
+
 # Logs
 logs
 *.log
@@ -56,6 +58,7 @@ typings/
 
 # dotenv environment variables file
 .env
+.env.local
 
 # next.js build output
 .next

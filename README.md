@@ -1,5 +1,11 @@
 # node-service-template
 
+## Versioning
+
+Please bump the version in `package.json` and add description of changes into `CHANGELOG.md` when making changes.
+
+When synchronizing services built with the template with the upstream changes, please bump the version in `package.json` to reflect the step up to which the changes are synchronized.
+
 ## Overview
 
 `node-service-template` provides a "battery-included" starter template for building enterprise Node.js webservices.
@@ -19,15 +25,19 @@ Mechanisms:
 - [Dependency injection](./docs/dependency-injection.md) (using [awilix](https://github.com/jeffijoe/awilix));
 - [Scheduling](./docs/scheduling.md) (using [toad-scheduler](https://github.com/kibertoad/toad-scheduler)
   and [redis-semaphore](https://github.com/swarthy/redis-semaphore));
-- Type-safe [dependency mocking](./src/app.mock.test.ts) for tests;
+- Type-safe message queue handling, using [message-queue-toolkit](https://github.com/kibertoad/message-queue-toolkit) framework;
+- Type-safe [dependency mocking](./src/app.mock.spec.ts) for tests;
 
 Scaffolding:
 
-- [Background jobs](./src/infrastructure/AbstractBackgroundJob.ts);
+- [Periodic in-memory jobs](./src/infrastructure/jobs/AbstractPeriodicJob.ts);
+- [Durable enqueued Redis jobs](./src/infrastructure/jobs/AbstractEnqueuedJobProcessor.ts);
+- [API client](./src/integrations/FakeStoreApiClient.ts), using opinionated high-performance [backend client](https://www.npmjs.com/package/@lokalise/backend-http-client), based on [undici](https://www.npmjs.com/package/undici)
+- [AWS configuration loading](./src/infrastructure/aws/awsConfig.ts)
 
 Basic building block examples:
 
-- [Repository](./src/modules/users/repositories/UserRepository.ts) (using [prisma](https://www.prisma.io/));
+- [Repository](./src/modules/users/repositories/UserRepository.ts) (using [drizzle](https://orm.drizzle.team/));
 - [Domain service](./src/modules/users/services/UserService.ts);
 - [Controller](./src/modules/users/controllers/UserController.ts);
 - [Route](./src/modules/users/routes/userRoutes.ts);
@@ -43,25 +53,25 @@ Scripts:
 - [Generate](./scripts/generateOpenApi.ts) OpenAPI specification from your route definitions;
 - [Validate](./scripts/validateOpenApi.ts) your OpenAPI specification;
 - [GenerateJwt](./scripts/generateJwt.ts) generate jwt for dev usage.
+- [ValidateEnvDoc](./scripts/validateEnvVarDoc.ts) validate environment variables documentation;
 
 Service template also comes with a curated set of plugins [installed](./src/app.ts):
 
-- @fastify/helmet (security headers)
-- @fastify/swagger (OpenAPI specification generation)
-- @fastify/swagger-ui (visualizing OpenAPI specification)
-- @fastify/awilix (dependency injection)
-- @fastify/schedule (scheduling background jobs)
-- @fastify/auth (authentication)
-- fastify-graceful-shutdown (handling SEGTERM gracefully)
-- fastify-no-icon (avoiding warnings when sending GET calls via browser)
-- fastify-custom-healthcheck (registering app and dependency healthchecks)
-- @lokalise/fastify-extras -> metricsPlugin (exposing Prometheus metrics)
-- @lokalise/fastify-extras -> requestContextProviderPlugin (storing requestId in AsyncLocalStorage and populating
+- `@fastify/helmet` (security headers)
+- `@fastify/swagger` (OpenAPI specification generation)
+- `@fastify/awilix` (dependency injection)
+- `@fastify/schedule` (scheduling background jobs)
+- `@fastify/auth` (authentication)
+- `@scalar/fastify-api-reference` (OpenAPI specification website)
+- `fastify-graceful-shutdown` (handling `SEGTERM` gracefully)
+- `fastify-no-icon` (avoiding warnings when sending GET calls via browser)
+- `@lokalise/fastify-extras` -> `metricsPlugin` (exposing Prometheus metrics)
+- `@lokalise/fastify-extras` -> `requestContextProviderPlugin` (storing requestId in AsyncLocalStorage and populating
   requestContext on request)
-- @lokalise/fastify-extras -> newRelicTransactionManagerPlugin (creating custom NewRelic spans for background jobs)
-- @lokalise/fastify-extras -> bugsnagPlugin (reporting errors to BugSnag)
-- @lokalise/fastify-extras -> prismaOtelTracingPlugin (generating OpenTelemetry metrics for DB operations using prisma)
-- @lokalise/fastify-extras -> publicHealthcheckPlugin (registering public healthchecks)
+- `@lokalise/fastify-extras` -> `newRelicTransactionManagerPlugin` (creating custom NewRelic spans for background jobs)
+- `@lokalise/fastify-extras` -> `bugsnagPlugin` (reporting errors to BugSnag)
+- `@lokalise/fastify-extras` -> `amplitudePlugin` (tracking events in Amplitude)
+- `@lokalise/fastify-extras` -> `commonHealthcheckPlugin` (registering public healthchecks)
 
 Note that some of the fastify-extras plugins may not be relevant for you (e. g. if you are not using Prometheus, New
 Relic or Bugsnag). In that case you should remove the plugins and delete everything that breaks when you attempt to
@@ -72,7 +82,7 @@ are relevant for the technological stack of your organization, and replace `@lok
 
 ## Getting Started
 
-1. Make sure your node version is compatible with the requirements in [package.json](package.json). We are working with `node >= 18` and recommend using a version manager, such as [nvm](https://github.com/nvm-sh/nvm), to manage multiple Node versions on your device if needed.
+1. Make sure your node version is compatible with the requirements in [package.json](package.json). We are working with `node >= 22` and recommend using a version manager, such as [nvm](https://github.com/nvm-sh/nvm), to manage multiple Node versions on your device if needed.
 
 2. Install all project dependencies:
 
@@ -83,7 +93,7 @@ are relevant for the technological stack of your organization, and replace `@lok
 3. Copy the `.env.default` file to a new `.env` file. You can do this with the following npm script:
 
    ```shell
-   npm run copy:config
+   node --run copy:config
    ```
 
 4. Launch all the infrastructural dependencies locally:
@@ -93,28 +103,51 @@ are relevant for the technological stack of your organization, and replace `@lok
    ```
 
 5. Run migrations to synchronize your database schema with defined models:
-
    ```shell
-   npm run db:migration:dev
+   node --run db:apply-migrations
    ```
 
-6. Generate Prisma client for type-safe DB operations:
+6. To run application:
 
    ```shell
-   npm run db:update-client
-   ```
-
-7. To run application:
-
-   ```shell
-   npm run start:dev
+   node --run start:dev
    ```
 
    > **_NOTE:_** By default all calls to the `node-template` app will require a valid JWT token, hence authentication errors when running the application are expected if you haven't yet followed the steps in [Create jwt for dev usage](#create-jwt-for-dev-usage).
 
+### Drizzle Migrations
+
+We use [Drizzle](https://orm.drizzle.team/) as convenient mechanism for building queries.
+
+In order to automatically generate a new migration,
+
+1. Edit an existing schema file or add a new one to [src/db/schema](./src/db/schema);
+2. Run `node --run db:generate-migrations -- --name {migrationName}`, where `customName` is a short message describing your change separated by underscores (`_`);
+3. Run `node --run db:apply-migrations` to apply your new migration.
+
+In case you need to remove a previously generated migration,
+
+- Run `node --run db:drop-migrations`. It is recommended to use this command instead of deleting files manually, as it could break `drizzle-kit` (see [here](https://orm.drizzle.team/kit-docs/commands#drop-migration)).
+
+### Tests
+
+Before running your tests, make sure to run
+
+```shell
+node --run test:migrate
+```
+
+To initialize your test database and/or apply your latest schema changes.
+
 ### OpenAPI specification
 
-You can access OpenAPI specification of your application, while it is running, by opening [SwaggerUI](http://localhost:3000/documentation)
+You can access OpenAPI specification of your application, while it is running, by opening [/documentation](http://localhost:3000/documentation)
+
+### OpenTelemetry instrumentation
+
+There is an OpenTelemetry integration included, using the gRPC exporter. See [environment variable configuration]() for the details on configuring it.
+
+It should work out-of-the-box for all incoming HTTP requests, as long as correct exporter URL is configured.
 
 ### Create jwt for dev usage
 
@@ -138,7 +171,7 @@ You have multiple options to ease your development:
 - Run JWT generate script:
 
   ```shell
-  npm run jwt:generate
+  node --run jwt:generate
   ```
 
 - Your public key and token will be printed to console to make things easier. This is an example output:
@@ -152,16 +185,63 @@ You have multiple options to ease your development:
   {"claim":"value","iat":1676958080}
   ```
 
-- Copy your public key to `JWT_PUBLIC_KEY` in your `.env` file as a one line string
+- Copy your public key to `JWT_PUBLIC_KEY` in your `.env` file. Make sure to replace occurrences of `||` in your key with new lines
 
 - Restart the application to load the new public key:
 
   ```shell
-  npm run start:dev
+  node --run start:dev
   ```
 
 - Use your token to authenticate through bearer authentication in your requests
 
+#### Validate env var doc script
+
+- Script will get all environment variables used in [config.ts](./src/infrastructure/config.ts) and validate that 
+all are documented in [docs](./docs/environment-variables.md)
+
+  ```shell
+  node --run docs:validate
+  ```
+On successful validation, the script will print a message to the console:
+```
+✅ All environment variables are documented!
+```
+If any variable is not documented you will see a list of undocumented ones:
+```
+❌ Missing documentation for the following environment variables:
+- VARIABLE_NAME
+```
+
 ## Troubleshooting
 
-- If you are running a service in a monorepo setup, it is launched in the background and you want to always force closing the service before attempting to restart, you can use `npm run free-ports`, which will kill an application running on the predefined port (in an OS-independent way).
+- If you are running a service in a monorepo setup, it is launched in the background and you want to always force closing the service before attempting to restart, you can use `node --run free-ports`, which will kill an application running on the predefined port (in an OS-independent way).
+
+## CLI Commands
+
+To create a new CLI command, create a new file in the [scripts/cmd](./scripts/cmd) directory. The file should be self-executable. The process should create a CLI context using `cliContextUtils.ts` and destroy it before exiting.
+
+To use arguments in your command, ZOD schema and generic type should be provided in `createCliContext()`. Arguments will be parsed and validated using the provided schema.
+
+Create a new command in the `scripts` section of `package.json`:
+
+```json
+"scripts": {
+  "cmd:getUserImportJobs:dev": "cross-env NODE_ENV=development tsx --env-file=.env scripts/cmd/getUserImportJobs.ts",
+  "cmd:getUserImportJobs:prod": "node scripts/cmd/getUserImportJobs.js",
+}
+```
+
+!!! **Be aware of extensions and node / typescript execution commands in command paths, as development environment differs from non-development.**
+
+To run a command locally, use `node --run {npmScriptName} -- {arguments}`. Example:
+
+```shell
+node --run cmd:getUserImportJobs -- --queue=active
+```
+
+To run a command in a run-command pipeline, use `{npmScriptName} -- {arguments}` as a command argument. Example:
+
+```shell
+cmd:getUserImportJobs -- --queue=active
+```

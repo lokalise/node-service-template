@@ -1,194 +1,166 @@
-import type { FastifyInstance } from 'fastify'
-import { beforeEach, expect } from 'vitest'
+import { describeContract } from '@lokalise/api-contracts'
+import { injectDelete, injectGet, injectPatch, injectPost } from '@lokalise/fastify-api-contracts'
+import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest'
+import { cleanTables, DB_MODEL } from '../../../../test/DbCleaner.ts'
+import { getTestConfigurationOverrides } from '../../../../test/jwtUtils.ts'
+import type { AppInstance } from '../../../app.ts'
+import { getApp } from '../../../app.ts'
+import { generateJwtToken } from '../../../infrastructure/tokenUtils.ts'
+import type { UserRepository } from '../repositories/UserRepository.ts'
+import type { UserCreateDTO } from '../services/UserService.ts'
+import { UserController } from './UserController.ts'
 
-import { cleanTables, DB_MODEL } from '../../../../test/DbCleaner'
-import { getTestConfigurationOverrides } from '../../../../test/jwtUtils'
-import { getApp } from '../../../app'
-import { generateJwtToken } from '../../../infrastructure/tokenUtils'
-import type {
-  CREATE_USER_BODY_SCHEMA_TYPE,
-  GET_USER_SCHEMA_RESPONSE_SCHEMA_TYPE,
-  UPDATE_USER_BODY_SCHEMA_TYPE,
-} from '../schemas/userSchemas'
+const NEW_USER_FIXTURE = { name: 'dummy', email: 'email@test.com' } satisfies UserCreateDTO
 
 describe('UserController', () => {
-  let app: FastifyInstance
+  let app: AppInstance
+  let userRepository: UserRepository
   beforeAll(async () => {
     app = await getApp(getTestConfigurationOverrides())
+    userRepository = app.diContainer.cradle.userRepository
   })
   beforeEach(async () => {
-    await cleanTables(app.diContainer.cradle.prisma, [DB_MODEL.User])
+    await cleanTables(app.diContainer.cradle.drizzle, [DB_MODEL.User])
   })
   afterAll(async () => {
     await app.close()
   })
 
-  describe('POST /users', () => {
+  describe(describeContract(UserController.contracts.createUser), () => {
     it('validates email format', async () => {
       const token = await generateJwtToken(app.jwt, { userId: 1 }, 9999)
-      const response = await app
-        .inject()
-        .post('/users')
-        .headers({
+      const response = await injectPost(app, UserController.contracts.createUser, {
+        headers: {
           authorization: `Bearer ${token}`,
-        })
-        .body({ name: 'dummy', email: 'test' } as CREATE_USER_BODY_SCHEMA_TYPE)
-        .end()
+        },
+        body: { name: 'dummy', email: 'test' },
+      })
 
       expect(response.statusCode).toBe(400)
-      expect(response.json()).toEqual(
-        expect.objectContaining({
-          details: {
-            error: [
+      expect(response.json()).toMatchInlineSnapshot(`
+        {
+          "details": {
+            "error": [
               {
-                code: 'invalid_string',
-                message: 'Invalid email',
-                path: ['email'],
-                validation: 'email',
+                "instancePath": "/email",
+                "keyword": "invalid_format",
+                "message": "Invalid email address",
+                "params": {
+                  "format": "email",
+                  "origin": "string",
+                  "pattern": "/^(?!\\.)(?!.*\\.\\.)([A-Za-z0-9_'+\\-\\.]*)[A-Za-z0-9_+-]@([A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$/",
+                },
+                "schemaPath": "#/email/invalid_format",
               },
             ],
           },
-          message: 'Invalid params',
-        }),
-      )
+          "errorCode": "VALIDATION_ERROR",
+          "message": "Invalid params",
+        }
+      `)
+    })
+
+    it('creates user with correct payload', async () => {
+      const token = await generateJwtToken(app.jwt, { userId: 1 }, 9999)
+      const response = await injectPost(app, UserController.contracts.createUser, {
+        headers: {
+          authorization: `Bearer ${token}`,
+        },
+        body: NEW_USER_FIXTURE,
+      })
+
+      expect(response.statusCode).toBe(201)
+      expect(response.json()).toEqual({
+        data: {
+          age: null,
+          email: 'email@test.com',
+          id: expect.any(String),
+          name: 'dummy',
+        },
+      })
     })
   })
 
-  describe('GET /users/:userId', () => {
+  describe(describeContract(UserController.contracts.getUser), () => {
     it('returns user when requested twice', async () => {
-      const token = await generateJwtToken(app.jwt, { userId: 1 }, 9999)
+      const token = await generateJwtToken(app.jwt, { userId: '1' }, 9999)
+      const newUser = await userRepository.createUser(NEW_USER_FIXTURE)
+      const { id } = newUser
 
-      const response = await app
-        .inject()
-        .post('/users')
-        .headers({
+      const response1 = await injectGet(app, UserController.contracts.getUser, {
+        headers: {
           authorization: `Bearer ${token}`,
-        })
-        .body({ name: 'dummy', email: 'email@test.com' } as CREATE_USER_BODY_SCHEMA_TYPE)
-        .end()
-      expect(response.statusCode).toBe(201)
-      const { id } = response.json<GET_USER_SCHEMA_RESPONSE_SCHEMA_TYPE>().data
+        },
+        pathParams: {
+          userId: id,
+        },
+      })
 
-      const response1 = await app
-        .inject()
-        .get(`/users/${id}`)
-        .headers({
+      const response2 = await injectGet(app, UserController.contracts.getUser, {
+        headers: {
           authorization: `Bearer ${token}`,
-        })
-        .end()
-
-      const response2 = await app
-        .inject()
-        .get(`/users/${id}`)
-        .headers({
-          authorization: `Bearer ${token}`,
-        })
-        .end()
+        },
+        pathParams: {
+          userId: id,
+        },
+      })
 
       expect(response1.statusCode).toBe(200)
       expect(response2.statusCode).toBe(200)
-      expect(response1.json()).toEqual(response.json())
-      expect(response2.json()).toEqual(response.json())
+      expect(response1.json().data).toMatchObject(NEW_USER_FIXTURE)
+      expect(response2.json().data).toMatchObject(NEW_USER_FIXTURE)
     })
   })
 
-  describe('DELETE /users/:userId', () => {
+  describe(describeContract(UserController.contracts.deleteUser), () => {
     it('resets cache after deletion', async () => {
-      const token = await generateJwtToken(app.jwt, { userId: 1 }, 9999)
+      const token = await generateJwtToken(app.jwt, { userId: '1' }, 9999)
+      const newUser = await userRepository.createUser(NEW_USER_FIXTURE)
+      const { id } = newUser
 
-      const response = await app
-        .inject()
-        .post('/users')
-        .headers({
+      const retrievedUser = await userRepository.getUser(id)
+
+      await injectDelete(app, UserController.contracts.deleteUser, {
+        headers: {
           authorization: `Bearer ${token}`,
-        })
-        .body({ name: 'dummy', email: 'email@test.com' } as CREATE_USER_BODY_SCHEMA_TYPE)
-        .end()
-      expect(response.statusCode).toBe(201)
-      const { id } = response.json<GET_USER_SCHEMA_RESPONSE_SCHEMA_TYPE>().data
+        },
+        pathParams: {
+          userId: id,
+        },
+      })
 
-      const response1 = await app
-        .inject()
-        .get(`/users/${id}`)
-        .headers({
-          authorization: `Bearer ${token}`,
-        })
-        .end()
+      const retrievedUser2 = await userRepository.getUser(id)
 
-      await app
-        .inject()
-        .delete(`/users/${id}`)
-        .headers({
-          authorization: `Bearer ${token}`,
-        })
-        .end()
-
-      const response2 = await app
-        .inject()
-        .get(`/users/${id}`)
-        .headers({
-          authorization: `Bearer ${token}`,
-        })
-        .end()
-
-      expect(response1.statusCode).toBe(200)
-      expect(response2.statusCode).toBe(404)
-      expect(response1.json()).toEqual(response.json())
+      expect(retrievedUser).toBeDefined()
+      expect(retrievedUser2).toBeNull()
     })
   })
 
-  describe('PATCH /users/:userId', () => {
+  describe(describeContract(UserController.contracts.updateUser), () => {
     it('resets cache after update', async () => {
       const token = await generateJwtToken(app.jwt, { userId: 1 }, 9999)
+      const newUser = await userRepository.createUser(NEW_USER_FIXTURE)
+      const { id } = newUser
 
-      const response = await app
-        .inject()
-        .post('/users')
-        .headers({
-          authorization: `Bearer ${token}`,
-        })
-        .body({ name: 'dummy', email: 'email@test.com' } as CREATE_USER_BODY_SCHEMA_TYPE)
-        .end()
-      expect(response.statusCode).toBe(201)
-      const { id } = response.json<GET_USER_SCHEMA_RESPONSE_SCHEMA_TYPE>().data
-
-      const response1 = await app
-        .inject()
-        .get(`/users/${id}`)
-        .headers({
-          authorization: `Bearer ${token}`,
-        })
-        .end()
-
-      const updateResponse = await app
-        .inject()
-        .patch(`/users/${id}`)
-        .body({
-          name: 'updated',
-        } satisfies UPDATE_USER_BODY_SCHEMA_TYPE)
-        .headers({
-          authorization: `Bearer ${token}`,
-        })
-        .end()
-
-      const response2 = await app
-        .inject()
-        .get(`/users/${id}`)
-        .headers({
-          authorization: `Bearer ${token}`,
-        })
-        .end()
-
-      expect(updateResponse.statusCode).toBe(204)
-      expect(response1.statusCode).toBe(200)
-      expect(response2.statusCode).toBe(200)
-      expect(response2.json()).toEqual({
-        data: {
-          email: 'email@test.com',
-          age: null,
-          id: response1.json().data.id,
+      const updateResponse = await injectPatch(app, UserController.contracts.updateUser, {
+        body: {
           name: 'updated',
         },
+        pathParams: {
+          userId: id,
+        },
+        headers: {
+          authorization: `Bearer ${token}`,
+        },
+      })
+
+      const retrievedUser2 = await userRepository.getUser(id)
+      expect(updateResponse.statusCode).toBe(204)
+      expect(retrievedUser2).toEqual({
+        email: 'email@test.com',
+        age: null,
+        id,
+        name: 'updated',
       })
     })
   })

@@ -1,6 +1,6 @@
 import { InternalError } from '@lokalise/node-core'
 
-import type { CommonErrorParams } from './publicErrors'
+import type { CommonErrorParams } from './publicErrors.ts'
 
 export class DatabaseUnreachableError extends InternalError {
   constructor(params: CommonErrorParams) {

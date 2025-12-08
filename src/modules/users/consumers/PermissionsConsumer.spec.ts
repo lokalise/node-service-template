@@ -1,38 +1,41 @@
 import type { Cradle } from '@fastify/awilix'
-import { waitAndRetry } from '@message-queue-toolkit/core'
-import type { PrismaClient } from '@prisma/client'
+import { generateUuid7 } from '@lokalise/id-utils'
+import { type MessagePublishType, waitAndRetry } from '@message-queue-toolkit/core'
 import type { Channel } from 'amqplib'
 import type { AwilixContainer } from 'awilix'
-import { asClass } from 'awilix'
-import type { FastifyInstance } from 'fastify'
+import type { PostgresJsDatabase } from 'drizzle-orm/postgres-js'
+import { asSingletonClass } from 'opinionated-machine'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+import { cleanTables, DB_MODEL } from '../../../../test/DbCleaner.ts'
+import { FakeConsumerErrorResolver } from '../../../../test/fakes/FakeConsumerErrorResolver.ts'
+import { createRequestContext } from '../../../../test/requestUtils.ts'
+import type { AppInstance } from '../../../app.ts'
+import { getApp } from '../../../app.ts'
+import { user as userTable } from '../../../db/schema/user.ts'
+import type { PublisherManager } from '../../../infrastructure/CommonModule.ts'
+import { buildQueueMessage } from '../../../utils/queueUtils.ts'
+import type { PermissionsService } from '../services/PermissionsService.ts'
+import { PermissionConsumer } from './PermissionConsumer.ts'
+import type { PermissionsMessages } from './permissionsMessageSchemas.ts'
 
-import { cleanTables, DB_MODEL } from '../../../../test/DbCleaner'
-import { FakeConsumerErrorResolver } from '../../../../test/fakes/FakeConsumerErrorResolver'
-import { getApp } from '../../../app'
-import { SINGLETON_CONFIG } from '../../../infrastructure/diConfig'
-import { buildQueueMessage } from '../../../utils/queueUtils'
-import type { PermissionsService } from '../services/PermissionsService'
-
-import { PermissionConsumer } from './PermissionConsumer'
-import type { PERMISSIONS_ADD_MESSAGE_TYPE } from './userConsumerSchemas'
-
-const userIds = [100, 200, 300]
+const userIds = [generateUuid7(), generateUuid7(), generateUuid7()]
 const perms: [string, ...string[]] = ['perm1', 'perm2']
+const testRequestContext = createRequestContext()
 
-async function createUsers(prisma: PrismaClient, userIdsToCreate: number[]) {
-  await prisma.user.createMany({
-    data: userIdsToCreate.map((userId) => {
+async function createUsers(drizzle: PostgresJsDatabase, userIdsToCreate: string[]) {
+  await drizzle.insert(userTable).values(
+    userIdsToCreate.map((userId) => {
       return {
         id: userId,
         name: userId.toString(),
         email: `test${userId}@email.lt`,
       }
     }),
-  })
+  )
 }
 
-async function resolvePermissions(permissionsService: PermissionsService, userIds: number[]) {
-  const usersPerms = await permissionsService.getUserPermissionsBulk(userIds)
+async function resolvePermissions(permissionsService: PermissionsService, userIds: string[]) {
+  const usersPerms = await permissionsService.getUserPermissionsBulk(testRequestContext, userIds)
 
   if (usersPerms && usersPerms.length !== userIds.length) {
     return null
@@ -48,27 +51,30 @@ async function resolvePermissions(permissionsService: PermissionsService, userId
 
 describe('PermissionsConsumer', () => {
   describe('consume', () => {
-    let app: FastifyInstance
+    let app: AppInstance
     let diContainer: AwilixContainer<Cradle>
     let consumer: PermissionConsumer
+    let publisher: PublisherManager
     let channel: Channel
     beforeEach(async () => {
       app = await getApp(
         {
-          queuesEnabled: true,
+          messageQueueConsumersEnabled: [PermissionConsumer.QUEUE_NAME],
+          monitoringEnabled: true,
         },
         {
-          consumerErrorResolver: asClass(FakeConsumerErrorResolver, SINGLETON_CONFIG),
+          consumerErrorResolver: asSingletonClass(FakeConsumerErrorResolver),
         },
       )
       diContainer = app.diContainer
 
-      channel = await (
-        await app.diContainer.cradle.amqpConnectionManager.getConnection()
-      ).createChannel()
-      await cleanTables(diContainer.cradle.prisma, [DB_MODEL.User])
-      await app.diContainer.cradle.permissionsService.deleteAll()
+      const connection = await app.diContainer.cradle.amqpConnectionManager.getConnection()
+
+      channel = await connection.createChannel()
+      await cleanTables(diContainer.cradle.drizzle, [DB_MODEL.User])
+      await app.diContainer.cradle.permissionsService.deleteAll(testRequestContext)
       consumer = app.diContainer.cradle.permissionConsumer
+      publisher = app.diContainer.cradle.publisherManager
     })
 
     afterEach(async () => {
@@ -77,24 +83,25 @@ describe('PermissionsConsumer', () => {
     })
 
     it('Creates permissions', async () => {
-      const { userService, permissionsService, prisma } = diContainer.cradle
-      const users = await userService.getUsers(userIds)
+      const { userService, permissionsService, drizzle } = diContainer.cradle
+      const users = await userService.getUsers(testRequestContext, userIds)
       expect(users).toHaveLength(0)
 
-      await createUsers(prisma, userIds)
+      await createUsers(drizzle, userIds)
 
-      void channel.sendToQueue(
-        PermissionConsumer.QUEUE_NAME,
-        buildQueueMessage({
-          id: 'abc',
-          messageType: 'add',
+      publisher.publishSync('permissions', {
+        id: 'abc',
+        payload: {
           userIds,
           permissions: perms,
-        } satisfies PERMISSIONS_ADD_MESSAGE_TYPE),
-      )
+        },
+        type: 'permissions.added',
+      })
 
       const messageResult = await consumer.handlerSpy.waitForMessageWithId('abc')
-      expect(messageResult.processingResult).toBe('consumed')
+      expect(messageResult.processingResult).toEqual({
+        status: 'consumed',
+      })
       const usersPermissions = await resolvePermissions(permissionsService, userIds)
 
       if (null === usersPermissions) {
@@ -106,28 +113,29 @@ describe('PermissionsConsumer', () => {
     })
 
     it('Wait for users to be created and then create permissions', async () => {
-      const { userService, permissionsService, prisma } = diContainer.cradle
-      const users = await userService.getUsers(userIds)
+      const { userService, permissionsService, drizzle } = diContainer.cradle
+      const users = await userService.getUsers(testRequestContext, userIds)
       expect(users).toHaveLength(0)
 
-      channel.sendToQueue(
-        PermissionConsumer.QUEUE_NAME,
-        buildQueueMessage({
-          id: 'def',
+      publisher.publishSync('permissions', {
+        id: 'def',
+        type: 'permissions.added',
+        payload: {
           userIds,
-          messageType: 'add',
           permissions: perms,
-        } satisfies PERMISSIONS_ADD_MESSAGE_TYPE),
-      )
+        },
+      })
 
       const messageResult = await consumer.handlerSpy.waitForMessageWithId('def')
-      expect(messageResult.processingResult).toBe('retryLater')
+      expect(messageResult.processingResult).toEqual({
+        status: 'retryLater',
+      })
 
       // no users in the database, so message will go back to the queue
       const usersFromDb = await resolvePermissions(permissionsService, userIds)
       expect(usersFromDb).toBeNull()
 
-      await createUsers(prisma, userIds)
+      await createUsers(drizzle, userIds)
       await consumer.handlerSpy.waitForMessageWithId('def', 'consumed')
       const usersPermissions = await resolvePermissions(permissionsService, userIds)
 
@@ -140,32 +148,33 @@ describe('PermissionsConsumer', () => {
     })
 
     it('Not all users exist, no permissions were created', async () => {
-      const { userService, permissionsService, prisma } = diContainer.cradle
-      const users = await userService.getUsers(userIds)
+      const { userService, permissionsService, drizzle } = diContainer.cradle
+      const users = await userService.getUsers(testRequestContext, userIds)
       expect(users).toHaveLength(0)
 
       const partialUsers = [...userIds]
       const missingUser = partialUsers.pop()
-      await createUsers(prisma, partialUsers)
+      await createUsers(drizzle, partialUsers)
 
-      channel.sendToQueue(
-        PermissionConsumer.QUEUE_NAME,
-        buildQueueMessage({
-          id: 'abcdef',
+      publisher.publishSync('permissions', {
+        id: 'abcdef',
+        payload: {
           userIds,
-          messageType: 'add',
           permissions: perms,
-        } satisfies PERMISSIONS_ADD_MESSAGE_TYPE),
-      )
+        },
+        type: 'permissions.added',
+      })
 
       const messageResult = await consumer.handlerSpy.waitForMessageWithId('abcdef', 'retryLater')
-      expect(messageResult.processingResult).toBe('retryLater')
+      expect(messageResult.processingResult).toEqual({
+        status: 'retryLater',
+      })
 
       // not all users are in the database, so message will go back to the queue
       const usersFromDb = await resolvePermissions(permissionsService, userIds)
       expect(usersFromDb).toBeNull()
 
-      await createUsers(prisma, [missingUser!])
+      await createUsers(drizzle, [missingUser!])
 
       await consumer.handlerSpy.waitForMessageWithId('abcdef', 'consumed')
       const usersPermissions = await resolvePermissions(permissionsService, userIds)
@@ -180,22 +189,42 @@ describe('PermissionsConsumer', () => {
 
     it('Invalid message in the queue', async () => {
       const { consumerErrorResolver } = diContainer.cradle
-
-      channel.sendToQueue(
-        PermissionConsumer.QUEUE_NAME,
-        buildQueueMessage({
-          id: 'errorMessage',
-          messageType: 'add',
+      const invalidMessage = {
+        id: 'errorMessage',
+        payload: {
           permissions: perms,
-        }),
-      )
+        },
+        type: 'permissions.added',
+      }
+
+      expect(() =>
+        // @ts-expect-error This should be causing a compilation error
+        publisher.publishSync('permissions', invalidMessage),
+      ).toThrowErrorMatchingInlineSnapshot(`
+        [ZodError: [
+          {
+            "expected": "array",
+            "code": "invalid_type",
+            "path": [
+              "payload",
+              "userIds"
+            ],
+            "message": "Invalid input: expected array, received undefined"
+          }
+        ]]
+      `)
+
+      channel.sendToQueue(PermissionConsumer.QUEUE_NAME, buildQueueMessage(invalidMessage))
 
       const fakeResolver = consumerErrorResolver as FakeConsumerErrorResolver
       // even though we are failing at validating the message, we can still extract an id out of, as it's a valid json
       const messageResult = await consumer.handlerSpy.waitForMessage({
         id: 'errorMessage',
       })
-      expect(messageResult.processingResult).toBe('invalid_message')
+      expect(messageResult.processingResult).toEqual({
+        errorReason: 'invalidMessage',
+        status: 'error',
+      })
 
       expect(fakeResolver.handleErrorCallsCount).toBe(1)
     })
@@ -211,6 +240,52 @@ describe('PermissionsConsumer', () => {
 
       // We fail first when doing real reading, and second one when trying to extract an id
       expect(fakeResolver.handleErrorCallsCount).toBe(2)
+    })
+
+    it('Registers message processing metrics', async () => {
+      // Given
+      const { permissionsService, drizzle } = diContainer.cradle
+      await createUsers(drizzle, userIds)
+
+      expect(diContainer.cradle.messageProcessingMetricsManager).toBeDefined()
+      const metricsSpy = vi.spyOn(
+        diContainer.cradle.messageProcessingMetricsManager!,
+        'registerProcessedMessage',
+      )
+
+      // When
+      const messageId = 'testId'
+      const message = {
+        id: messageId,
+        payload: {
+          userIds,
+          permissions: perms,
+        },
+        type: 'permissions.added',
+      } satisfies MessagePublishType<typeof PermissionsMessages.added>
+      publisher.publishSync('permissions', message)
+
+      // Then
+      await consumer.handlerSpy.waitForMessageWithId(messageId, 'consumed')
+
+      const usersPermissions = await resolvePermissions(permissionsService, userIds)
+
+      expect(usersPermissions).toBeDefined()
+      expect(usersPermissions).not.toBeNull()
+      expect(usersPermissions![0]).toHaveLength(2)
+
+      expect(metricsSpy).toHaveBeenCalledWith({
+        messageId: messageId,
+        messageType: 'permissions.added',
+        processingResult: {
+          status: 'consumed',
+        },
+        message: expect.objectContaining(message),
+        queueName: PermissionConsumer.QUEUE_NAME,
+        messageTimestamp: expect.any(Number),
+        messageProcessingStartTimestamp: expect.any(Number),
+        messageProcessingEndTimestamp: expect.any(Number),
+      })
     })
   })
 })

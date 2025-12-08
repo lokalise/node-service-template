@@ -1,14 +1,17 @@
 import {
+  type FreeformRecord,
   isInternalError,
   isObject,
   isPublicNonRecoverableError,
   isStandardizedError,
 } from '@lokalise/node-core'
-import type { FastifyRequest, FastifyReply, FastifyInstance } from 'fastify'
+import type { FastifyReply, FastifyRequest } from 'fastify'
+import {
+  hasZodFastifySchemaValidationErrors,
+  isResponseSerializationError,
+} from 'fastify-type-provider-zod'
 import pino from 'pino'
-import { ZodError } from 'zod'
-
-import type { FreeformRecord } from '../../schemas/commonTypes'
+import type { AppInstance } from '../../app.ts'
 
 const knownAuthErrors = new Set([
   'FST_JWT_NO_AUTHORIZATION_IN_HEADER',
@@ -28,7 +31,7 @@ type ResponseObject = {
 function resolveLogObject(error: unknown): FreeformRecord {
   if (isInternalError(error)) {
     return {
-      message: error.message,
+      msg: error.message,
       code: error.errorCode,
       details: error.details ? JSON.stringify(error.details) : undefined,
       error: pino.stdSerializers.err({
@@ -58,14 +61,29 @@ function resolveResponseObject(error: FreeformRecord): ResponseObject {
     }
   }
 
-  if (error instanceof ZodError) {
+  if (hasZodFastifySchemaValidationErrors(error)) {
     return {
       statusCode: 400,
       payload: {
         message: 'Invalid params',
         errorCode: 'VALIDATION_ERROR',
         details: {
-          error: error.issues,
+          error: error.validation,
+        },
+      },
+    }
+  }
+
+  if (isResponseSerializationError(error)) {
+    return {
+      statusCode: 500,
+      payload: {
+        message: 'Invalid response',
+        errorCode: 'RESPONSE_VALIDATION_ERROR',
+        details: {
+          error: error.cause.issues,
+          method: error.method,
+          url: error.url,
         },
       },
     }
@@ -98,13 +116,20 @@ function resolveResponseObject(error: FreeformRecord): ResponseObject {
 }
 
 export const errorHandler = function (
-  this: FastifyInstance,
+  this: AppInstance,
   error: FreeformRecord,
   request: FastifyRequest,
   reply: FastifyReply,
 ): void {
   const logObject = resolveLogObject(error)
-  request.log.error(logObject)
+
+  // Potentially request can break before we resolved the context
+  if (request.reqContext) {
+    // this preserves correct request id field
+    request.reqContext.logger.error(logObject)
+  } else {
+    request.log.error(logObject)
+  }
 
   if (isInternalError(error)) {
     this.diContainer.cradle.errorReporter.report({ error })

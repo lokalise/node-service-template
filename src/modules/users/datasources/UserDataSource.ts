@@ -1,8 +1,8 @@
-import type { User } from '@prisma/client'
 import type { DataSource } from 'layered-loader'
 
-import type { UsersInjectableDependencies } from '../diConfig'
-import type { UserRepository } from '../repositories/UserRepository'
+import type { User } from '../../../db/schema/user.ts'
+import type { UserRepository } from '../repositories/UserRepository.ts'
+import type { UsersInjectableDependencies } from '../UserModule.ts'
 
 export class UserDataSource implements DataSource<User> {
   name = 'User loader'
@@ -13,10 +13,10 @@ export class UserDataSource implements DataSource<User> {
   }
 
   get(userId: string): Promise<User | null> {
-    return this.userRepository.getUser(Number.parseInt(userId))
+    return this.userRepository.getUser(userId)
   }
 
   getMany(keys: string[]): Promise<User[]> {
-    return this.userRepository.getUsers(keys.map(Number.parseInt))
+    return this.userRepository.getUsers(keys)
   }
 }

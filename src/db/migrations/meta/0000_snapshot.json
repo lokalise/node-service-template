@@ -1,0 +1,195 @@
+{
+    "id": "4a8f3238-87cc-4b5f-ad9c-5071375bb015",
+    "prevId": "00000000-0000-0000-0000-000000000000",
+    "version": "7",
+    "dialect": "postgresql",
+    "tables": {
+        "post.post": {
+            "name": "post",
+            "schema": "post",
+            "columns": {
+                "id": {
+                    "name": "id",
+                    "type": "uuid",
+                    "primaryKey": true,
+                    "notNull": true,
+                    "default": "gen_random_uuid()"
+                },
+                "created_at": {
+                    "name": "created_at",
+                    "type": "timestamp with time zone",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "default": "now()"
+                },
+                "updated_at": {
+                    "name": "updated_at",
+                    "type": "timestamp with time zone",
+                    "primaryKey": false,
+                    "notNull": false
+                },
+                "title": {
+                    "name": "title",
+                    "type": "varchar(256)",
+                    "primaryKey": false,
+                    "notNull": true
+                },
+                "content": {
+                    "name": "content",
+                    "type": "varchar",
+                    "primaryKey": false,
+                    "notNull": false
+                },
+                "published": {
+                    "name": "published",
+                    "type": "boolean",
+                    "primaryKey": false,
+                    "notNull": false,
+                    "default": false
+                },
+                "author_id": {
+                    "name": "author_id",
+                    "type": "varchar",
+                    "primaryKey": false,
+                    "notNull": true
+                }
+            },
+            "indexes": {
+                "author_id_idx": {
+                    "name": "author_id_idx",
+                    "columns": [
+                        {
+                            "expression": "author_id",
+                            "isExpression": false,
+                            "asc": true,
+                            "nulls": "last"
+                        }
+                    ],
+                    "isUnique": false,
+                    "concurrently": false,
+                    "method": "btree",
+                    "with": {}
+                }
+            },
+            "foreignKeys": {},
+            "compositePrimaryKeys": {},
+            "uniqueConstraints": {},
+            "policies": {},
+            "checkConstraints": {},
+            "isRLSEnabled": false
+        },
+        "user.profile": {
+            "name": "profile",
+            "schema": "user",
+            "columns": {
+                "id": {
+                    "name": "id",
+                    "type": "uuid",
+                    "primaryKey": true,
+                    "notNull": true,
+                    "default": "gen_random_uuid()"
+                },
+                "bio": {
+                    "name": "bio",
+                    "type": "varchar",
+                    "primaryKey": false,
+                    "notNull": false
+                },
+                "age": {
+                    "name": "age",
+                    "type": "integer",
+                    "primaryKey": false,
+                    "notNull": false
+                },
+                "email": {
+                    "name": "email",
+                    "type": "varchar",
+                    "primaryKey": false,
+                    "notNull": true
+                },
+                "user_id": {
+                    "name": "user_id",
+                    "type": "uuid",
+                    "primaryKey": false,
+                    "notNull": true
+                }
+            },
+            "indexes": {},
+            "foreignKeys": {},
+            "compositePrimaryKeys": {},
+            "uniqueConstraints": {
+                "profile_email_unique": {
+                    "name": "profile_email_unique",
+                    "nullsNotDistinct": false,
+                    "columns": ["email"]
+                },
+                "profile_user_id_unique": {
+                    "name": "profile_user_id_unique",
+                    "nullsNotDistinct": false,
+                    "columns": ["user_id"]
+                }
+            },
+            "policies": {},
+            "checkConstraints": {},
+            "isRLSEnabled": false
+        },
+        "user.user": {
+            "name": "user",
+            "schema": "user",
+            "columns": {
+                "id": {
+                    "name": "id",
+                    "type": "uuid",
+                    "primaryKey": true,
+                    "notNull": true,
+                    "default": "gen_random_uuid()"
+                },
+                "age": {
+                    "name": "age",
+                    "type": "integer",
+                    "primaryKey": false,
+                    "notNull": false
+                },
+                "email": {
+                    "name": "email",
+                    "type": "varchar",
+                    "primaryKey": false,
+                    "notNull": true
+                },
+                "name": {
+                    "name": "name",
+                    "type": "varchar",
+                    "primaryKey": false,
+                    "notNull": true
+                }
+            },
+            "indexes": {},
+            "foreignKeys": {},
+            "compositePrimaryKeys": {},
+            "uniqueConstraints": {
+                "user_email_unique": {
+                    "name": "user_email_unique",
+                    "nullsNotDistinct": false,
+                    "columns": ["email"]
+                }
+            },
+            "policies": {},
+            "checkConstraints": {},
+            "isRLSEnabled": false
+        }
+    },
+    "enums": {},
+    "schemas": {
+        "post": "post",
+        "user": "user"
+    },
+    "sequences": {},
+    "roles": {},
+    "policies": {},
+    "views": {},
+    "_meta": {
+        "columns": {},
+        "schemas": {},
+        "tables": {}
+    }
+}

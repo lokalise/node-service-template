@@ -2,18 +2,18 @@ import { fastifyAwilixPlugin } from '@fastify/awilix'
 import fastifyJWT from '@fastify/jwt'
 import { InternalError } from '@lokalise/node-core'
 import { asFunction } from 'awilix'
-import type { FastifyInstance } from 'fastify'
+import type { RouteHandlerMethod } from 'fastify'
 import fastify from 'fastify'
-import type { RouteHandlerMethod } from 'fastify/types/route'
+import { afterAll, describe, expect, it } from 'vitest'
+import { getTestConfigurationOverrides } from '../../../test/jwtUtils.ts'
+import type { AppInstance } from '../../app.ts'
+import { jwtTokenPlugin } from '../../plugins/jwtTokenPlugin.ts'
 
-import { getTestConfigurationOverrides } from '../../../test/jwtUtils'
-import { jwtTokenPlugin } from '../../plugins/jwtTokenPlugin'
+import { errorHandler } from './errorHandler.ts'
+import { AuthFailedError } from './publicErrors.ts'
 
-import { errorHandler } from './errorHandler'
-import { AuthFailedError } from './publicErrors'
-
-async function initApp(routeHandler: RouteHandlerMethod, awaitApp = true) {
-  const app = fastify()
+async function initApp(routeHandler: RouteHandlerMethod, awaitApp = true): Promise<AppInstance> {
+  const app: AppInstance = fastify()
   void app.register(fastifyAwilixPlugin, { disposeOnClose: true })
   app.setErrorHandler(errorHandler)
 
@@ -40,7 +40,7 @@ async function initApp(routeHandler: RouteHandlerMethod, awaitApp = true) {
 }
 
 describe('errorHandler', () => {
-  let app: FastifyInstance
+  let app: AppInstance
   afterAll(async () => {
     await app.close()
   })

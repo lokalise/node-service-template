@@ -1,21 +1,25 @@
-import { writeFile, rm } from 'node:fs/promises'
+import { rm, writeFile } from 'node:fs/promises'
 import { resolve } from 'node:path'
 
 import { stringify as toYaml } from 'yaml'
 
-import { getApp } from '../src/app'
+import { getApp } from '../src/app.ts'
 
-const targetPath = resolve(__dirname, '../openApiSpec.yaml')
+import { getRootDirectory } from './utils/pathUtils.ts'
+
+const targetPath = resolve(getRootDirectory(), 'openApiSpec.yaml')
 
 async function run() {
   const app = await getApp({
-    queuesEnabled: false,
-    jobsEnabled: false,
     healthchecksEnabled: false,
     monitoringEnabled: false,
+    periodicJobsEnabled: false,
+    messageQueueConsumersEnabled: false,
+    enqueuedJobWorkersEnabled: false,
+    jobQueuesEnabled: false,
   })
 
-  const openApiSpecResponse = await app.inject().get('/documentation/json')
+  const openApiSpecResponse = await app.inject().get('/documentation/openapi.json')
   const openApiSpecAsYaml = toYaml(JSON.parse(openApiSpecResponse.body))
 
   try {

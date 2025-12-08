@@ -1,8 +1,11 @@
-import { ConfigScope, createRangeValidator } from '@lokalise/node-core'
 import type { RedisConfig } from '@lokalise/node-core'
+import { ConfigScope } from '@lokalise/node-core'
+
+import type { AwsConfig } from './aws/awsConfig.ts'
+import { getAwsConfig } from './aws/awsConfig.ts'
 
 const configScope: ConfigScope = new ConfigScope()
-const redisDbValidator = createRangeValidator(0, 15)
+export const SERVICE_NAME = 'node-service-template'
 
 export type IntervalJobConfig = {
   periodInSeconds: number
@@ -13,7 +16,9 @@ export type CronJobConfig = {
 }
 
 export type Config = {
+  app: AppConfig
   db: DbConfig
+  aws: AwsConfig
   redis: RedisConfig
   scheduler: RedisConfig
   amqp: AmqpConfig
@@ -22,7 +27,6 @@ export type Config = {
       baseUrl: string
     }
   }
-  app: AppConfig
   jobs: JobConfig
   vendors: {
     newrelic: {
@@ -43,7 +47,6 @@ export type Config = {
       flushQueueSize?: number
     }
   }
-  multiLinevalue: string
 }
 
 export type JobConfig = {
@@ -74,15 +77,25 @@ export type AppConfig = {
   appEnv: 'production' | 'development' | 'staging'
   appVersion: string
   gitCommitSha: string
+  baseUrl: string
   metrics: {
     isEnabled: boolean
   }
 }
 
+let config: Config
 export function getConfig(): Config {
+  if (!config) {
+    config = generateConfig()
+  }
+  return config
+}
+
+export function generateConfig(): Config {
   return {
     app: getAppConfig(),
     db: getDbConfig(),
+    aws: getAwsConfig(configScope),
     redis: getRedisConfig(),
     amqp: getAmqpConfig(),
     scheduler: getSchedulerConfig(),
@@ -124,7 +137,6 @@ export function getConfig(): Config {
         flushMaxRetries: configScope.getOptionalInteger('AMPLITUDE_FLUSH_MAX_RETRIES', 12),
       },
     },
-    multiLinevalue: configScope.getMandatory('MULTI_LINE_VALUE'),
   }
 }
 
@@ -148,7 +160,7 @@ export function getDbConfig(): DbConfig {
 export function getRedisConfig(): RedisConfig {
   return {
     host: configScope.getMandatory('REDIS_HOST'),
-    db: configScope.getMandatoryValidatedInteger('REDIS_DB', redisDbValidator),
+    keyPrefix: configScope.getMandatory('REDIS_KEY_PREFIX'),
     port: configScope.getMandatoryInteger('REDIS_PORT'),
     username: configScope.getOptionalNullable('REDIS_USERNAME', undefined),
     password: configScope.getOptionalNullable('REDIS_PASSWORD', undefined),
@@ -161,7 +173,7 @@ export function getRedisConfig(): RedisConfig {
 export function getSchedulerConfig(): RedisConfig {
   return {
     host: configScope.getMandatory('SCHEDULER_REDIS_HOST'),
-    db: configScope.getMandatoryValidatedInteger('SCHEDULER_REDIS_DB', redisDbValidator),
+    keyPrefix: configScope.getMandatory('SCHEDULER_REDIS_KEY_PREFIX'),
     port: configScope.getMandatoryInteger('SCHEDULER_REDIS_PORT'),
     username: configScope.getOptionalNullable('SCHEDULER_REDIS_USERNAME', undefined),
     password: configScope.getOptionalNullable('SCHEDULER_REDIS_PASSWORD', undefined),
@@ -181,7 +193,7 @@ export function getAppConfig(): AppConfig {
   return {
     port: configScope.getOptionalInteger('APP_PORT', 3000),
     bindAddress: configScope.getMandatory('APP_BIND_ADDRESS'),
-    jwtPublicKey: configScope.getMandatory('JWT_PUBLIC_KEY'),
+    jwtPublicKey: decodeJwtConfig(configScope.getMandatory('JWT_PUBLIC_KEY')),
     logLevel: configScope.getMandatoryOneOf('LOG_LEVEL', [
       'fatal',
       'error',
@@ -191,9 +203,14 @@ export function getAppConfig(): AppConfig {
       'trace',
       'silent',
     ]),
-    nodeEnv: configScope.getMandatoryOneOf('NODE_ENV', ['production', 'development', 'test']),
+    nodeEnv: configScope.getOptionalOneOf('NODE_ENV', 'production', [
+      'production',
+      'development',
+      'test',
+    ]),
     appEnv: configScope.getMandatoryOneOf('APP_ENV', ['production', 'development', 'staging']),
     appVersion: configScope.getOptional('APP_VERSION', 'VERSION_NOT_SET'),
+    baseUrl: configScope.getOptional('BASE_URL', ''),
     gitCommitSha: configScope.getOptional('GIT_COMMIT_SHA', 'COMMIT_SHA_NOT_SET'),
     metrics: {
       isEnabled: configScope.getOptionalBoolean('METRICS_ENABLED', !configScope.isDevelopment()),
@@ -211,4 +228,8 @@ export function isTest() {
 
 export function isProduction() {
   return configScope.isProduction()
+}
+
+export function decodeJwtConfig(jwtPublicKey: string) {
+  return jwtPublicKey.replaceAll('||', '\n')
 }

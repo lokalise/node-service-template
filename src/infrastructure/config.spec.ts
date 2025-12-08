@@ -1,25 +1,24 @@
-import type { FastifyInstance } from 'fastify'
+import { expect, test } from 'vitest'
+import { decodeJwtConfig } from './config.ts'
 
-import { getApp } from '../app'
+test('replaces double pipe characters with newline', () => {
+  const jwtPublicKey = 'key1||key2||key3'
+  const expected = 'key1\nkey2\nkey3'
+  expect(decodeJwtConfig(jwtPublicKey)).toEqual(expected)
+})
 
-describe('config', () => {
-  let app: FastifyInstance
+test('returns the same string if there are no double pipe characters', () => {
+  const jwtPublicKey = 'key1\nkey2\nkey3'
+  expect(decodeJwtConfig(jwtPublicKey)).toEqual(jwtPublicKey)
+})
 
-  beforeAll(async () => {
-    app = await getApp({
-      monitoringEnabled: false,
-    })
-  })
+test('returns an empty string if input is an empty string', () => {
+  expect(decodeJwtConfig('')).toEqual('')
+})
 
-  afterAll(async () => {
-    await app.close()
-  })
-
-  it('support multi line values', () => {
-    const value = app.diContainer.cradle.config.multiLinevalue
-
-    expect(value).toBe(`multi
-line
-value`)
-  })
+test('throws an error if input is not a string', () => {
+  // @ts-expect-error
+  expect(() => decodeJwtConfig(null)).toThrow(TypeError)
+  // @ts-expect-error
+  expect(() => decodeJwtConfig(undefined)).toThrow(TypeError)
 })

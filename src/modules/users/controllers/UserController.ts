@@ -1,72 +1,85 @@
-import type { FastifyReply, FastifyRequest } from 'fastify'
+import {
+  buildFastifyNoPayloadRoute,
+  buildFastifyPayloadRoute,
+} from '@lokalise/fastify-api-contracts'
+import { AbstractController, type BuildRoutesReturnType } from 'opinionated-machine'
+import {
+  deleteUserContract,
+  getUserContract,
+  patchUpdateUserContract,
+  postCreateUserContract,
+} from '../schemas/userApiContracts.ts'
+import type { UserService } from '../services/UserService.ts'
+import type { UsersInjectableDependencies } from '../UserModule.ts'
 
-import type {
-  CREATE_USER_BODY_SCHEMA_TYPE,
-  DELETE_USER_PARAMS_SCHEMA_TYPE,
-  GET_USER_PARAMS_SCHEMA_TYPE,
-  UPDATE_USER_BODY_SCHEMA_TYPE,
-  UPDATE_USER_PARAMS_SCHEMA_TYPE,
-} from '../schemas/userSchemas'
+type UserControllerContractsType = typeof UserController.contracts
 
-export const postCreateUser = async (
-  req: FastifyRequest<{ Body: CREATE_USER_BODY_SCHEMA_TYPE }>,
-  reply: FastifyReply,
-): Promise<void> => {
-  const { name, email } = req.body
+export class UserController extends AbstractController<UserControllerContractsType> {
+  public static contracts = {
+    createUser: postCreateUserContract,
+    getUser: getUserContract,
+    deleteUser: deleteUserContract,
+    updateUser: patchUpdateUserContract,
+  } as const
 
-  const { userService } = req.diScope.cradle
+  private readonly userService: UserService
 
-  const createdUser = await userService.createUser({
-    name,
-    email,
+  constructor(dependencies: UsersInjectableDependencies) {
+    super()
+    this.userService = dependencies.userService
+  }
+
+  private createUser = buildFastifyPayloadRoute(postCreateUserContract, async (req, reply) => {
+    const { name, email, age } = req.body
+    const { userService } = req.diScope.cradle
+
+    const createdUser = await userService.createUser({
+      name,
+      email,
+      age,
+    })
+
+    return reply.status(201).send({
+      data: createdUser,
+    })
   })
 
-  return reply.status(201).send({
-    data: createdUser,
+  private getUser = buildFastifyNoPayloadRoute(getUserContract, async (req, reply) => {
+    const { userId } = req.params
+    const { reqContext } = req
+
+    const user = await this.userService.getUser(reqContext, userId)
+
+    return reply.send({
+      data: user,
+    })
   })
-}
 
-export const getUser = async (
-  req: FastifyRequest<{ Params: GET_USER_PARAMS_SCHEMA_TYPE }>,
-  reply: FastifyReply,
-): Promise<void> => {
-  const { userId } = req.params
+  private deleteUser = buildFastifyNoPayloadRoute(deleteUserContract, async (req, reply) => {
+    const { userId } = req.params
+    const { reqContext } = req
 
-  const { userService } = req.diScope.cradle
+    await this.userService.deleteUser(reqContext, userId)
 
-  const user = await userService.getUser(userId)
-
-  return reply.send({
-    data: user,
+    return reply.status(204).send()
   })
-}
 
-export const deleteUser = async (
-  req: FastifyRequest<{ Params: DELETE_USER_PARAMS_SCHEMA_TYPE }>,
-  reply: FastifyReply,
-): Promise<void> => {
-  const { userId } = req.params
+  private updateUser = buildFastifyPayloadRoute(patchUpdateUserContract, async (req, reply) => {
+    const { userId } = req.params
+    const updatedUser = req.body
+    const { reqContext } = req
 
-  const { userService } = req.diScope.cradle
+    await this.userService.updateUser(reqContext, userId, updatedUser)
 
-  await userService.deleteUser(userId)
+    return reply.status(204).send()
+  })
 
-  return reply.status(204).send()
-}
-
-export const patchUpdateUser = async (
-  req: FastifyRequest<{
-    Params: UPDATE_USER_PARAMS_SCHEMA_TYPE
-    Body: UPDATE_USER_BODY_SCHEMA_TYPE
-  }>,
-  reply: FastifyReply,
-): Promise<void> => {
-  const { userId } = req.params
-  const updatedUser = req.body
-
-  const { userService } = req.diScope.cradle
-
-  await userService.updateUser(userId, updatedUser)
-
-  return reply.status(204).send()
+  buildRoutes(): BuildRoutesReturnType<UserControllerContractsType> {
+    return {
+      createUser: this.createUser,
+      getUser: this.getUser,
+      deleteUser: this.deleteUser,
+      updateUser: this.updateUser,
+    }
+  }
 }

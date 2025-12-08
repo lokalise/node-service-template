@@ -5,19 +5,17 @@ updates:
     schedule:
       interval: 'monthly'
     open-pull-requests-limit: 10
+    cooldown:
+      default-days: 7
 
   - package-ecosystem: 'npm'
     directory: '/'
     schedule:
       interval: 'weekly'
     open-pull-requests-limit: 10
+    cooldown:
+      default-days: 7
     groups:
-      lint:
-        patterns:
-          - '@typescript-eslint/*'
-          - 'eslint'
-          - 'eslint-*'
-          - 'prettier'
       types:
         patterns:
           - '@types/*'
@@ -27,8 +25,7 @@ updates:
           - '@vitest/*'
       typescript:
         patterns:
-          - 'ts-node'
-          - 'ts-node-dev'
+          - 'tsx'
           - 'typescript'
       fastify:
         patterns:
@@ -38,11 +35,13 @@ updates:
       message-queue-toolkit:
         patterns:
           - '@message-queue-toolkit/*'
-      prisma:
+      drizzle:
         patterns:
-          - 'prisma'
-          - '@prisma/*'
+          - 'drizzle-*'
       awilix:
         patterns:
           - 'awilix'
           - 'awilix-*'
+      aws:
+        patterns:
+          - '@aws-sdk/*'

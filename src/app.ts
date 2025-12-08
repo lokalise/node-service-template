@@ -1,34 +1,34 @@
-/* eslint-disable max-statements */
-
 import { EventEmitter } from 'node:events'
 import type http from 'node:http'
-
 import type { ServerZoneType } from '@amplitude/analytics-types'
 import fastifyAuth from '@fastify/auth'
-import { diContainer, fastifyAwilixPlugin } from '@fastify/awilix'
+import { fastifyAwilixPlugin } from '@fastify/awilix'
 import { fastifyCors } from '@fastify/cors'
 import fastifyHelmet from '@fastify/helmet'
 import type { Secret } from '@fastify/jwt'
 import fastifyJWT from '@fastify/jwt'
 import fastifySchedule from '@fastify/schedule'
 import fastifySwagger from '@fastify/swagger'
-import fastifySwaggerUi from '@fastify/swagger-ui'
 import {
+  amplitudePlugin,
   bugsnagPlugin,
+  commonSyncHealthcheckPlugin,
   getRequestIdFastifyAppConfig,
   metricsPlugin,
   newrelicTransactionManagerPlugin,
-  prismaOtelTracingPlugin,
   requestContextProviderPlugin,
-  publicHealthcheckPlugin,
-  amplitudePlugin,
-  healthcheckMetricsPlugin,
 } from '@lokalise/fastify-extras'
-import { resolveGlobalErrorLogObject } from '@lokalise/node-core'
-import type { AwilixContainer } from 'awilix'
+import {
+  type CommonLogger,
+  isError,
+  resolveGlobalErrorLogObject,
+  resolveLogger,
+  stringValueSerializer,
+} from '@lokalise/node-core'
+import scalarFastifyApiReference from '@scalar/fastify-api-reference'
+import { type AwilixContainer, createContainer } from 'awilix'
+import type { FastifyInstance } from 'fastify'
 import fastify from 'fastify'
-import type { FastifyInstance, FastifyBaseLogger } from 'fastify'
-import customHealthCheck from 'fastify-custom-healthcheck'
 import fastifyGracefulShutdown from 'fastify-graceful-shutdown'
 import fastifyNoIcon from 'fastify-no-icon'
 import {
@@ -36,60 +36,73 @@ import {
   serializerCompiler,
   validatorCompiler,
 } from 'fastify-type-provider-zod'
-import type { ZodTypeProvider } from 'fastify-type-provider-zod'
-
-import { getConfig, isDevelopment, isProduction, isTest } from './infrastructure/config'
-import type { DependencyOverrides } from './infrastructure/diConfig'
-import { registerDependencies } from './infrastructure/diConfig'
-import { errorHandler } from './infrastructure/errors/errorHandler'
+import {
+  type AbstractModule,
+  type DependencyInjectionOptions,
+  DIContext,
+  type NestedPartial,
+} from 'opinionated-machine'
+import { stdSerializers } from 'pino'
+import type {
+  Dependencies,
+  DependencyOverrides,
+  ExternalDependencies,
+} from './infrastructure/CommonModule.ts'
+import { type Config, getConfig, isDevelopment } from './infrastructure/config.ts'
+import { errorHandler } from './infrastructure/errors/errorHandler.ts'
 import {
   dbHealthCheck,
   redisHealthCheck,
-  registerHealthChecks,
-  runAllHealthchecks,
-  wrapHealthCheckForPrometheus,
-} from './infrastructure/healthchecks'
-import { resolveLoggerConfiguration } from './infrastructure/logger'
-import { getRoutes } from './modules/routes'
-import { jwtTokenPlugin } from './plugins/jwtTokenPlugin'
+} from './infrastructure/healthchecks/healthchecksWrappers.ts'
+import { ALL_MODULES } from './modules.ts'
+import { gracefulOtelShutdown } from './otel.ts'
+import { jwtTokenPlugin } from './plugins/jwtTokenPlugin.ts'
 
 EventEmitter.defaultMaxListeners = 12
 
 const GRACEFUL_SHUTDOWN_TIMEOUT_IN_MSECS = 10000
+const REQUEST_LOGGING_LEVELS = ['debug', 'trace']
 
-export type ConfigOverrides = {
+export type AppInstance = FastifyInstance<
+  http.Server,
+  http.IncomingMessage,
+  http.ServerResponse,
+  CommonLogger
+>
+
+export type ConfigOverrides = DependencyInjectionOptions & {
   diContainer?: AwilixContainer
   jwtKeys?: {
     public: Secret
     private: Secret
   }
-  queuesEnabled?: boolean
-  jobsEnabled?: boolean
   healthchecksEnabled?: boolean
   monitoringEnabled?: boolean
-}
+} & NestedPartial<Config>
 
-export type RequestContext = {
-  logger?: FastifyBaseLogger
-  reqId: string
-}
-
+// do not delete // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: This is intentional. Don't remove.
 export async function getApp(
   configOverrides: ConfigOverrides = {},
   dependencyOverrides: DependencyOverrides = {},
-): Promise<
-  FastifyInstance<http.Server, http.IncomingMessage, http.ServerResponse, FastifyBaseLogger>
-> {
+  primaryModules: readonly AbstractModule<unknown>[] = ALL_MODULES,
+  secondaryModules?: readonly AbstractModule<unknown>[],
+): Promise<AppInstance> {
   const config = getConfig()
   const appConfig = config.app
-  const loggerConfig = resolveLoggerConfiguration(appConfig)
-  const enableRequestLogging = ['debug', 'trace'].includes(appConfig.logLevel)
+  const logger = resolveLogger(appConfig)
+  const enableRequestLogging = REQUEST_LOGGING_LEVELS.includes(appConfig.logLevel)
 
-  const app = fastify<http.Server, http.IncomingMessage, http.ServerResponse, FastifyBaseLogger>({
+  const app = fastify<http.Server, http.IncomingMessage, http.ServerResponse, CommonLogger>({
     ...getRequestIdFastifyAppConfig(),
-    logger: loggerConfig,
+    loggerInstance: logger,
     disableRequestLogging: !enableRequestLogging,
   })
+
+  const diContainer =
+    configOverrides.diContainer ??
+    createContainer({
+      injectionMode: 'PROXY',
+    })
 
   app.setValidatorCompiler(validatorCompiler)
   app.setSerializerCompiler(serializerCompiler)
@@ -128,7 +141,7 @@ export async function getApp(
     })
   }
 
-  await app.register(fastifyNoIcon)
+  await app.register(fastifyNoIcon.default)
 
   await app.register(fastifyAuth)
   await app.register(fastifySwagger, {
@@ -136,7 +149,6 @@ export async function getApp(
       skipList: [
         '/documentation/',
         '/documentation/initOAuth',
-        '/documentation/json',
         '/documentation/uiConfig',
         '/documentation/yaml',
         '/documentation/*',
@@ -152,9 +164,11 @@ export async function getApp(
       },
       servers: [
         {
-          url: `http://${
-            appConfig.bindAddress === '0.0.0.0' ? 'localhost' : appConfig.bindAddress
-          }:${appConfig.port}`,
+          url:
+            appConfig.baseUrl ||
+            `http://${
+              appConfig.bindAddress === '0.0.0.0' ? 'localhost' : appConfig.bindAddress
+            }:${appConfig.port}`,
         },
       ],
       components: {
@@ -169,8 +183,17 @@ export async function getApp(
     },
   })
 
-  await app.register(fastifySwaggerUi)
+  // Since DI config relies on having app-scoped NewRelic instance to be set by the plugin, we instantiate it earlier than we run the DI initialization.
+  await app.register(newrelicTransactionManagerPlugin, {
+    isEnabled: config.vendors.newrelic.isEnabled,
+  })
+
+  await app.register(scalarFastifyApiReference, {
+    routePrefix: '/documentation',
+  })
+
   await app.register(fastifyAwilixPlugin, {
+    container: diContainer,
     disposeOnClose: true,
     asyncDispose: true,
     asyncInit: true,
@@ -188,14 +211,14 @@ export async function getApp(
 
   await app.register(jwtTokenPlugin, {
     skipList: new Set([
+      '/favicon.ico',
       '/login',
       '/access-token',
       '/refresh-token',
       '/documentation',
-      '/documentation/json',
-      '/documentation/static/*',
-      '/documentation/static/index.html',
-      '/documentation/static/swagger-initializer.js',
+      '/documentation/',
+      '/documentation/openapi.json',
+      '/documentation/js/scalar.ts',
       '/',
       '/health',
       '/metrics',
@@ -204,49 +227,50 @@ export async function getApp(
 
   app.setErrorHandler(errorHandler)
 
-  registerDependencies(
-    configOverrides.diContainer ?? diContainer,
-    {
-      app,
-      logger: app.log,
-    },
-    dependencyOverrides,
+  const diContext = new DIContext<Dependencies, Config, ExternalDependencies>(
+    diContainer,
     /**
      * Running consumers and jobs introduces additional overhead and fragility when running tests,
      * so we avoid doing that unless we intend to actually use them
      */
     {
-      queuesEnabled: !!configOverrides.queuesEnabled,
-      jobsEnabled: !!configOverrides.jobsEnabled,
+      enqueuedJobWorkersEnabled: configOverrides.enqueuedJobWorkersEnabled,
+      messageQueueConsumersEnabled: configOverrides.messageQueueConsumersEnabled,
+      jobQueuesEnabled: configOverrides.jobQueuesEnabled,
+      periodicJobsEnabled: configOverrides.periodicJobsEnabled,
     },
+    config,
+  )
+
+  const externalDependencies: ExternalDependencies = {
+    app,
+    logger: app.log,
+  }
+
+  diContext.registerDependencies(
+    {
+      modules: primaryModules,
+      secondaryModules,
+      dependencyOverrides,
+      configOverrides,
+    },
+    externalDependencies,
   )
 
   if (configOverrides.monitoringEnabled) {
     await app.register(metricsPlugin, {
       bindAddress: appConfig.bindAddress,
       errorObjectResolver: resolveGlobalErrorLogObject,
-      loggerOptions: loggerConfig,
+      logger,
       disablePrometheusRequestLogging: true,
     })
   }
 
-  if (configOverrides.healthchecksEnabled !== false) {
-    await app.register(customHealthCheck, {
-      path: '/',
-      logLevel: 'warn',
-      info: {
-        env: appConfig.nodeEnv,
-        app_version: appConfig.appVersion,
-        git_commit_sha: appConfig.gitCommitSha,
-      },
-      schema: false,
-      exposeFailure: false,
-    })
-    await app.register(publicHealthcheckPlugin, {
-      url: '/health',
+  if (configOverrides.healthchecksEnabled) {
+    await app.register(commonSyncHealthcheckPlugin, {
       healthChecks: [
         {
-          name: 'mysql',
+          name: 'postgres',
           isMandatory: true,
           checker: dbHealthCheck,
         },
@@ -261,22 +285,10 @@ export async function getApp(
         gitCommitSha: appConfig.gitCommitSha,
       },
     })
-
-    if (configOverrides.monitoringEnabled) {
-      await app.register(healthcheckMetricsPlugin, {
-        healthChecks: [
-          wrapHealthCheckForPrometheus(redisHealthCheck, 'redis'),
-          wrapHealthCheckForPrometheus(dbHealthCheck, 'mysql'),
-        ],
-      })
-    }
   }
   await app.register(requestContextProviderPlugin)
 
   // Vendor-specific plugins
-  await app.register(newrelicTransactionManagerPlugin, {
-    isEnabled: config.vendors.newrelic.isEnabled,
-  })
   await app.register(bugsnagPlugin, {
     isEnabled: config.vendors.bugsnag.isEnabled,
     bugsnag: {
@@ -286,12 +298,7 @@ export async function getApp(
       ...(config.vendors.bugsnag.appType && { appType: config.vendors.bugsnag.appType }),
     },
   })
-  await app.register(prismaOtelTracingPlugin, {
-    isEnabled: config.vendors.newrelic.isEnabled,
-    samplingRatio: isProduction() ? 0.1 : 1.0,
-    serviceName: config.vendors.newrelic.appName,
-    useBatchSpans: isProduction(),
-  })
+
   await app.register(amplitudePlugin, {
     isEnabled: config.vendors.amplitude.isEnabled,
     apiKey: config.vendors.amplitude.apiKey,
@@ -305,29 +312,24 @@ export async function getApp(
 
   app.after(() => {
     // Register routes
-    const { routes } = getRoutes()
-    routes.forEach((route) => app.withTypeProvider<ZodTypeProvider>().route(route))
+    diContext.registerRoutes(app)
 
     // Graceful shutdown hook
     if (!isDevelopment()) {
-      app.gracefulShutdown((signal, next) => {
+      app.gracefulShutdown(async (_signal) => {
         app.log.info('Starting graceful shutdown')
-        next()
+        await gracefulOtelShutdown()
       })
-    }
-
-    if (configOverrides.healthchecksEnabled !== false) {
-      registerHealthChecks(app)
     }
   })
 
   try {
     await app.ready()
-    if (!isTest() && configOverrides.healthchecksEnabled !== false) {
-      await runAllHealthchecks(app)
-    }
   } catch (err) {
-    app.log.error('Error while initializing app: ', err)
+    app.log.error(
+      { error: isError(err) ? stdSerializers.err(err) : stringValueSerializer(err) },
+      'Error while initializing app: ',
+    )
     throw err
   }
 
