@@ -18,8 +18,14 @@ import {
   newrelicTransactionManagerPlugin,
   requestContextProviderPlugin,
 } from '@lokalise/fastify-extras'
-import { type CommonLogger, resolveGlobalErrorLogObject, resolveLogger } from '@lokalise/node-core'
-import { default as scalarFastifyApiReference } from '@scalar/fastify-api-reference'
+import {
+  type CommonLogger,
+  isError,
+  resolveGlobalErrorLogObject,
+  resolveLogger,
+  stringValueSerializer,
+} from '@lokalise/node-core'
+import scalarFastifyApiReference from '@scalar/fastify-api-reference'
 import { type AwilixContainer, createContainer } from 'awilix'
 import type { FastifyInstance } from 'fastify'
 import fastify from 'fastify'
@@ -320,7 +326,10 @@ export async function getApp(
   try {
     await app.ready()
   } catch (err) {
-    app.log.error({ error: stdSerializers.err(err as Error) }, 'Error while initializing app: ')
+    app.log.error(
+      { error: isError(err) ? stdSerializers.err(err) : stringValueSerializer(err) },
+      'Error while initializing app: ',
+    )
     throw err
   }
 

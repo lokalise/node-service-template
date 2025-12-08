@@ -28,6 +28,7 @@ export default defineConfig({
         'src/infrastructure/fakes/FakeNewrelicTransactionManager.ts',
         'src/schemas/commonTypes.ts',
         'src/server.ts',
+        'src/otel.ts',
         'src/app.ts',
         'src/**/*.spec.ts',
         'src/**/*.test.ts',
