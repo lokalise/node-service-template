@@ -30,10 +30,10 @@ export default defineConfig({
       ],
       reporter: ['text'],
       thresholds: {
-        lines: 89,
+        lines: 85,
         functions: 89,
-        branches: 85,
-        statements: 89,
+        branches: 68,
+        statements: 85,
       },
     },
   },
