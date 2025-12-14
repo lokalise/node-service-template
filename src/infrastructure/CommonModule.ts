@@ -259,7 +259,9 @@ export class CommonModule extends AbstractModule<CommonDependencies, ExternalDep
             }),
             publisherFactory: new CommonAmqpTopicPublisherFactory(),
             newPublisherOptions: {
-              messageTypeField: 'type',
+              messageTypeResolver: {
+                messageTypePath: 'type',
+              },
               messageIdField: 'id',
               logMessages: true,
               handlerSpy: isTest(),
