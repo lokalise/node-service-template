@@ -4,11 +4,7 @@ import { defineConfig } from 'vitest/config'
 export default defineConfig({
   test: {
     globals: true,
-    poolOptions: {
-      threads: {
-        singleThread: true,
-      },
-    },
+    maxWorkers: 1,
     pool: 'threads',
     watch: false,
     environment: 'node',
@@ -33,7 +29,6 @@ export default defineConfig({
         'src/**/*.test.ts',
       ],
       reporter: ['text'],
-      all: true,
       thresholds: {
         lines: 89,
         functions: 89,

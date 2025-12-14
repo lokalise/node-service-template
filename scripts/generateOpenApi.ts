@@ -19,8 +19,8 @@ async function run() {
     jobQueuesEnabled: false,
   })
 
-  const openApiSpecResponse = await app.inject().get('/documentation/openapi.json')
-  const openApiSpecAsYaml = toYaml(JSON.parse(openApiSpecResponse.body))
+  const openApiSpecResponse = app.swagger()
+  const openApiSpecAsYaml = toYaml(openApiSpecResponse)
 
   try {
     await rm(targetPath)
