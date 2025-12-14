@@ -23,6 +23,7 @@ export default defineConfig({
         'src/infrastructure/fakes/FakeNewrelicTransactionManager.ts',
         'src/schemas/commonTypes.ts',
         'src/server.ts',
+        'src/serverInternal.ts',
         'src/otel.ts',
         'src/app.ts',
         'src/**/*.spec.ts',
@@ -31,7 +32,7 @@ export default defineConfig({
       reporter: ['text'],
       thresholds: {
         lines: 85,
-        functions: 89,
+        functions: 90,
         branches: 68,
         statements: 85,
       },
