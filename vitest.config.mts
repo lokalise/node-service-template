@@ -15,8 +15,8 @@ export default defineConfig({
       include: ['src/**/*.ts'],
       exclude: [
         'src/db/*',
+        'src/infrastructure/CommonModule.ts',
         'src/infrastructure/logger.ts',
-        'src/infrastructure/diConfig.ts',
         'src/infrastructure/errors/publicErrors.ts',
         'src/infrastructure/errors/internalErrors.ts',
         'src/infrastructure/fakes/FakeAmplitude.ts',
@@ -33,7 +33,7 @@ export default defineConfig({
       thresholds: {
         lines: 85,
         functions: 90,
-        branches: 68,
+        branches: 72,
         statements: 85,
       },
     },
