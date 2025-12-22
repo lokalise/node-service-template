@@ -104,7 +104,7 @@
         "@types/amqplib": "^0.10.8",
         "@types/jsonwebtoken": "^9.0.10",
         "@types/newrelic": "^9.14.8",
-        "@types/node": "^24.10.4",
+        "@types/node": "^25.0.2",
         "@vitest/coverage-v8": "^4.0.15",
         "cpy-cli": "^6.0.0",
         "cross-env": "^10.1.0",
