@@ -95,7 +95,7 @@
     },
     "devDependencies": {
         "@amplitude/analytics-types": "^2.11.0",
-        "@biomejs/biome": "2.3.8",
+        "@biomejs/biome": "2.3.10",
         "@lokalise/biome-config": "^3.1.1",
         "@lokalise/tsconfig": "^3.0.0",
         "@lokalise/universal-testing-utils": "^3.0.0",
