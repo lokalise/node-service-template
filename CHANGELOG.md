@@ -1,5 +1,9 @@
 # Changelog
 
+## 19.01.2026
+
+Moved OpenAPI spec validation to e2e test.
+
 ## 17.09.2025
 
 Removed promise wrappers from healthchecks that already relied on synchronous storage, populated asynchronously. This reduces the overhead of healthcheck endpoint and works more reliably in a heavily loaded sytem.
