@@ -62,7 +62,7 @@
         "@message-queue-toolkit/sqs": "^24.1.1",
         "@opentelemetry/api": "^1.9.0",
         "@opentelemetry/auto-instrumentations-node": "^0.67.3",
-        "@opentelemetry/exporter-trace-otlp-grpc": "^0.208.0",
+        "@opentelemetry/exporter-trace-otlp-grpc": "^0.209.0",
         "@opentelemetry/sdk-node": "^0.208.0",
         "@scalar/fastify-api-reference": "^1.40.9",
         "@supercharge/promise-pool": "^3.2.0",
