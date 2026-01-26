@@ -1,5 +1,9 @@
 # Changelog
 
+## TODO
+
+Remove passing '-' as JWT secret private key to utilize Verify-only mode.
+
 ## 19.01.2026
 
 Moved OpenAPI spec validation to e2e test.

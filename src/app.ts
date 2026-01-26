@@ -74,7 +74,6 @@ export type ConfigOverrides = DependencyInjectionOptions & {
   diContainer?: AwilixContainer
   jwtKeys?: {
     public: Secret
-    private: Secret
   }
   healthchecksEnabled?: boolean
   monitoringEnabled?: boolean
@@ -204,7 +203,6 @@ export async function getApp(
 
   await app.register(fastifyJWT, {
     secret: configOverrides.jwtKeys ?? {
-      private: '-', // Private key blank, as this service won't create JWT tokens, only verify them
       public: appConfig.jwtPublicKey,
     },
   })
