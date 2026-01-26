@@ -72,7 +72,7 @@
         "drizzle-kit": "^0.31.8",
         "drizzle-orm": "^0.45.1",
         "drizzle-zod": "^0.8.3",
-        "fastify": "^5.6.2",
+        "fastify": "^5.7.1",
         "fastify-graceful-shutdown": "^5.0.0",
         "fastify-metrics": "^12.1.0",
         "fastify-no-icon": "^7.0.0",
