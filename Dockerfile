@@ -1,9 +1,8 @@
 # ---- Base Node ----
-FROM node:24.7.0-trixie-slim as base
+FROM node:24.13.0-trixie-slim as base
 
 RUN set -ex &&\
     apt-get update && \
-    apt-get install -y --no-install-recommends libssl3 && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*;
 
@@ -19,12 +18,6 @@ RUN set -ex && \
     apt-get install -y --no-install-recommends \
       ca-certificates \
       dumb-init \
-      g++ \
-      gcc \
-      git \
-      make \
-      openssl \
-      python3 \
     && apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 COPY --chown=node:node ./package.json ./package.json ./
@@ -68,4 +61,4 @@ ENV NODE_PATH=.
 
 USER node
 
-CMD ["dumb-init", "node", "--experimental-loader", "newrelic/esm-loader.mjs", "-r", "newrelic", "/home/node/app/src/server.js"]
+CMD ["dumb-init", "node","--import=@opentelemetry/instrumentation/hook.mjs", "/home/node/app/src/server.js"]

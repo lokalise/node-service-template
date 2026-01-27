@@ -1,6 +1,7 @@
 import { randomUUID } from 'node:crypto'
 import { buildClient, sendGet, TEST_OPTIONS } from '@lokalise/backend-http-client'
 import { HealthcheckRefreshJob } from '@lokalise/healthcheck-utils'
+import { validate } from '@readme/openapi-parser'
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it } from 'vitest'
 import type { AppInstance } from './app.ts'
 import { getApp } from './app.ts'
@@ -77,7 +78,7 @@ describe('app', () => {
     it('Returns OpenAPI information (Redirect)', async () => {
       const response = await app.inject().get('/documentation').end()
 
-      expect(response.statusCode).toBe(302)
+      expect(response.statusCode).toBe(301)
     })
 
     it('Returns OpenAPI information (HTML)', async () => {
@@ -90,6 +91,13 @@ describe('app', () => {
       const response = await app.inject().get('/documentation/openapi.json').end()
 
       expect(response.statusCode).toBe(200)
+
+      const openApiSpec = response.json()
+      const validationResult = await validate(openApiSpec)
+
+      expect(validationResult).toMatchObject({
+        valid: true,
+      })
     })
   })
 

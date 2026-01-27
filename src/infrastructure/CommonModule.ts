@@ -1,8 +1,8 @@
 import type { JWT } from '@fastify/jwt'
 import {
   CommonBullmqFactoryNew,
-  type QueueConfiguration,
-  QueueManager,
+  type ModuleAwareQueueConfiguration,
+  ModuleAwareQueueManager,
 } from '@lokalise/background-jobs-common'
 import { type Amplitude, reportErrorToBugsnag } from '@lokalise/fastify-extras'
 import {
@@ -47,8 +47,7 @@ import type { AppInstance } from '../app.ts'
 import { FakeStoreApiClient } from '../integrations/FakeStoreApiClient.ts'
 import { PermissionsMessages } from '../modules/users/consumers/permissionsMessageSchemas.ts'
 import { type UsersModuleDependencies, userBullmqQueues } from '../modules/users/UserModule.ts'
-import type { Config } from './config.ts'
-import { getAmqpConfig, getConfig, isTest } from './config.ts'
+import { type Config, getAmqpConfig, getConfig, isTest, SERVICE_NAME } from './config.ts'
 import { FakeAmplitude } from './fakes/FakeAmplitude.ts'
 import {
   DbHealthcheck,
@@ -83,7 +82,9 @@ export type PublisherManager = AmqpTopicPublisherManager<
   AmqpSupportedMessages
 >
 
-const bullmqSupportedQueues = [...userBullmqQueues] as const satisfies QueueConfiguration[]
+const bullmqSupportedQueues = [
+  ...userBullmqQueues,
+] as const satisfies ModuleAwareQueueConfiguration[]
 export type BullmqSupportedQueues = typeof bullmqSupportedQueues
 
 export class CommonModule extends AbstractModule<CommonDependencies, ExternalDependencies> {
@@ -204,11 +205,12 @@ export class CommonModule extends AbstractModule<CommonDependencies, ExternalDep
 
       bullmqQueueManager: asSingletonFunction(
         (deps) =>
-          new QueueManager(new CommonBullmqFactoryNew(), bullmqSupportedQueues, {
-            redisConfig: deps.config.redis,
-            isTest: isTest(),
-            lazyInitEnabled: !isTest(),
-          }),
+          new ModuleAwareQueueManager(
+            SERVICE_NAME,
+            new CommonBullmqFactoryNew(),
+            bullmqSupportedQueues,
+            { redisConfig: deps.config.redis, isTest: isTest() },
+          ),
         {
           asyncInit: (manager) => manager.start(resolveJobQueuesEnabled(diOptions)),
           asyncDispose: 'dispose',
@@ -257,7 +259,9 @@ export class CommonModule extends AbstractModule<CommonDependencies, ExternalDep
             }),
             publisherFactory: new CommonAmqpTopicPublisherFactory(),
             newPublisherOptions: {
-              messageTypeField: 'type',
+              messageTypeResolver: {
+                messageTypePath: 'type',
+              },
               messageIdField: 'id',
               logMessages: true,
               handlerSpy: isTest(),
@@ -276,11 +280,11 @@ export class CommonModule extends AbstractModule<CommonDependencies, ExternalDep
 
       // vendor-specific dependencies
       transactionObservabilityManager: asSingletonFunction(() => {
-        if (!externalDependencies.app?.newrelicTransactionManager) {
+        if (!externalDependencies.app?.openTelemetryTransactionManager) {
           throw new Error('Observability manager is not set')
         }
 
-        return externalDependencies.app?.newrelicTransactionManager
+        return externalDependencies.app?.openTelemetryTransactionManager
       }),
 
       amplitude: asSingletonFunction(() => {
@@ -301,6 +305,7 @@ export class CommonModule extends AbstractModule<CommonDependencies, ExternalDep
         },
         {
           asyncInit: 'asyncRegister',
+          asyncDispose: 'dispose',
           enabled: isPeriodicJobEnabled(
             diOptions.periodicJobsEnabled,
             HealthcheckRefreshJob.JOB_NAME,
@@ -346,7 +351,7 @@ export type CommonDependencies = {
   redisConsumer: Redis
   drizzle: PostgresJsDatabase
 
-  bullmqQueueManager: QueueManager<BullmqSupportedQueues>
+  bullmqQueueManager: ModuleAwareQueueManager<BullmqSupportedQueues, 'user'>
 
   amqpConnectionManager: AmqpConnectionManager
 

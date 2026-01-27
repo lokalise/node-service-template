@@ -43,9 +43,8 @@ describe('healthcheck', () => {
       )
 
       await app.diContainer.cradle.healthcheckRefreshJob.process(randomUUID())
-      const result = await dbHealthCheck(app as unknown as FastifyInstance)
-      expect(result.result).toBeUndefined()
-      expect(result.error).toBeDefined()
+      const result = dbHealthCheck(app as unknown as FastifyInstance)
+      expect(result).toBeInstanceOf(Error)
     })
 
     it('Does not fail on successful DB ping', async () => {
@@ -55,9 +54,8 @@ describe('healthcheck', () => {
       )
 
       await app.diContainer.cradle.healthcheckRefreshJob.process(randomUUID())
-      const result = await dbHealthCheck(app as unknown as FastifyInstance)
-      expect(result.result).toBeDefined()
-      expect(result.error).toBeUndefined()
+      const result = dbHealthCheck(app as unknown as FastifyInstance)
+      expect(result).toBeNull
     })
   })
 
@@ -69,12 +67,10 @@ describe('healthcheck', () => {
       )
 
       await app.diContainer.cradle.healthcheckRefreshJob.process(randomUUID())
-      const result = await redisHealthCheck(app as unknown as FastifyInstance)
-      expect(result).toMatchObject({
-        error: new Error(
-          'Error occurred during redis healthcheck: Redis did not respond with PONG',
-        ),
-      })
+      const result = redisHealthCheck(app as unknown as FastifyInstance)
+      expect(result).toMatchObject(
+        new Error('Error occurred during redis healthcheck: Redis did not respond with PONG'),
+      )
     })
 
     it('Fails on timeout', async () => {
@@ -84,13 +80,11 @@ describe('healthcheck', () => {
       expect.assertions(1)
 
       await app.diContainer.cradle.healthcheckRefreshJob.process(randomUUID())
-      const promise = redisHealthCheck(app as unknown as FastifyInstance)
+      const result = redisHealthCheck(app as unknown as FastifyInstance)
 
-      await expect(promise).resolves.toMatchObject({
-        error: new Error(
-          'Error occurred during redis healthcheck: Redis did not respond with PONG',
-        ),
-      })
+      expect(result).toMatchObject(
+        new Error('Error occurred during redis healthcheck: Redis did not respond with PONG'),
+      )
     })
 
     it('Does not fail on successful Redis ping', async () => {
@@ -100,10 +94,8 @@ describe('healthcheck', () => {
       )
 
       await app.diContainer.cradle.healthcheckRefreshJob.process(randomUUID())
-      const result = await redisHealthCheck(app as unknown as FastifyInstance)
-      expect(result).toMatchObject({
-        result: true,
-      })
+      const result = redisHealthCheck(app as unknown as FastifyInstance)
+      expect(result).toBeNull()
     })
   })
 })

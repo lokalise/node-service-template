@@ -12,10 +12,10 @@ jobs:
         node-version: [24.x]
 
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
 
       - name: Setup Node ${{ matrix.node-version }}
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: ${{ matrix.node-version }}
 
@@ -51,6 +51,10 @@ jobs:
       - name: Generate and validate OpenAPI schema
         run: |
           node --run spec:generate
+
+      - name: Smoketest the application
+        run: |
+          node --run start:prod:smoke-test
 
       - name: DB stop
         run: |

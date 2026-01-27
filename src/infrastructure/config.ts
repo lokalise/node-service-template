@@ -29,9 +29,8 @@ export type Config = {
   }
   jobs: JobConfig
   vendors: {
-    newrelic: {
+    opentelemetry: {
       isEnabled: boolean
-      appName: string
     }
     bugsnag: {
       isEnabled: boolean
@@ -116,9 +115,8 @@ export function generateConfig(): Config {
       },
     },
     vendors: {
-      newrelic: {
-        isEnabled: configScope.getOptionalBoolean('NEW_RELIC_ENABLED', true),
-        appName: configScope.getOptionalNullable('NEW_RELIC_APP_NAME', ''),
+      opentelemetry: {
+        isEnabled: configScope.getOptionalBoolean('OTEL_ENABLED', true),
       },
       bugsnag: {
         isEnabled: configScope.getOptionalBoolean('BUGSNAG_ENABLED', true),

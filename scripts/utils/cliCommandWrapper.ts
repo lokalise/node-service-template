@@ -1,7 +1,7 @@
 import { parseArgs } from 'node:util'
 import type { RequestContext } from '@lokalise/fastify-extras'
 import { generateMonotonicUuid } from '@lokalise/id-utils'
-import { isError } from '@lokalise/node-core'
+import { isError, stringValueSerializer } from '@lokalise/node-core'
 import { ENABLE_ALL } from 'opinionated-machine'
 import pino from 'pino'
 import type z from 'zod/v4'
@@ -69,7 +69,7 @@ export const cliCommandWrapper = async <ArgsSchema extends z.Schema | undefined>
     isSuccess = false
     reqContext.logger.error(
       {
-        error: JSON.stringify(isError(err) ? pino.stdSerializers.err(err) : err),
+        error: isError(err) ? pino.stdSerializers.err(err) : stringValueSerializer(err),
       },
       'Error running command',
     )

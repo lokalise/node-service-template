@@ -12,13 +12,20 @@ import fastifySwagger from '@fastify/swagger'
 import {
   amplitudePlugin,
   bugsnagPlugin,
-  commonHealthcheckPlugin,
+  commonSyncHealthcheckPlugin,
   getRequestIdFastifyAppConfig,
   metricsPlugin,
-  newrelicTransactionManagerPlugin,
+  openTelemetryTransactionManagerPlugin,
   requestContextProviderPlugin,
 } from '@lokalise/fastify-extras'
-import { type CommonLogger, resolveGlobalErrorLogObject, resolveLogger } from '@lokalise/node-core'
+import {
+  type CommonLogger,
+  isError,
+  resolveGlobalErrorLogObject,
+  resolveLogger,
+  stringValueSerializer,
+} from '@lokalise/node-core'
+import { gracefulOtelShutdown } from '@lokalise/opentelemetry-fastify-bootstrap'
 import scalarFastifyApiReference from '@scalar/fastify-api-reference'
 import { type AwilixContainer, createContainer } from 'awilix'
 import type { FastifyInstance } from 'fastify'
@@ -49,7 +56,6 @@ import {
   redisHealthCheck,
 } from './infrastructure/healthchecks/healthchecksWrappers.ts'
 import { ALL_MODULES } from './modules.ts'
-import { gracefulOtelShutdown } from './otel.ts'
 import { jwtTokenPlugin } from './plugins/jwtTokenPlugin.ts'
 
 EventEmitter.defaultMaxListeners = 12
@@ -68,7 +74,6 @@ export type ConfigOverrides = DependencyInjectionOptions & {
   diContainer?: AwilixContainer
   jwtKeys?: {
     public: Secret
-    private: Secret
   }
   healthchecksEnabled?: boolean
   monitoringEnabled?: boolean
@@ -177,9 +182,9 @@ export async function getApp(
     },
   })
 
-  // Since DI config relies on having app-scoped NewRelic instance to be set by the plugin, we instantiate it earlier than we run the DI initialization.
-  await app.register(newrelicTransactionManagerPlugin, {
-    isEnabled: config.vendors.newrelic.isEnabled,
+  // Since DI config relies on having app-scoped OTel instance to be set by the plugin, we instantiate it earlier than we run the DI initialization.
+  await app.register(openTelemetryTransactionManagerPlugin, {
+    isEnabled: config.vendors.opentelemetry.isEnabled,
   })
 
   await app.register(scalarFastifyApiReference, {
@@ -198,7 +203,6 @@ export async function getApp(
 
   await app.register(fastifyJWT, {
     secret: configOverrides.jwtKeys ?? {
-      private: '-', // Private key blank, as this service won't create JWT tokens, only verify them
       public: appConfig.jwtPublicKey,
     },
   })
@@ -260,8 +264,8 @@ export async function getApp(
     })
   }
 
-  if (configOverrides.healthchecksEnabled !== false) {
-    await app.register(commonHealthcheckPlugin, {
+  if (configOverrides.healthchecksEnabled) {
+    await app.register(commonSyncHealthcheckPlugin, {
       healthChecks: [
         {
           name: 'postgres',
@@ -320,7 +324,10 @@ export async function getApp(
   try {
     await app.ready()
   } catch (err) {
-    app.log.error({ error: stdSerializers.err(err as Error) }, 'Error while initializing app: ')
+    app.log.error(
+      { error: isError(err) ? stdSerializers.err(err) : stringValueSerializer(err) },
+      'Error while initializing app: ',
+    )
     throw err
   }
 

@@ -1,7 +1,6 @@
-import { AbstractAmqpTopicConsumer } from '@message-queue-toolkit/amqp'
 import { MessageHandlerConfigBuilder } from '@message-queue-toolkit/core'
 import type z from 'zod/v4'
-import { isTest } from '../../../infrastructure/config.ts'
+import { AbstractRabbitMQTopicConsumer } from '../../../infrastructure/AbstractRabbitMQTopicConsumer.ts'
 import type { RequestContextPreHandlerOutput } from '../../../infrastructure/prehandlers/requestContextPrehandler.ts'
 import { createRequestContextPreHandler } from '../../../infrastructure/prehandlers/requestContextPrehandler.ts'
 import type { PermissionsService } from '../services/PermissionsService.ts'
@@ -18,44 +17,32 @@ import {
 type SupportedMessages =
   | z.infer<typeof PermissionsMessages.added.consumerSchema>
   | z.infer<typeof PermissionsMessages.removed.consumerSchema>
+
 type ExecutionContext = {
   userService: UserService
   permissionsService: PermissionsService
 }
 
-export class PermissionConsumer extends AbstractAmqpTopicConsumer<
+export class PermissionConsumer extends AbstractRabbitMQTopicConsumer<
   SupportedMessages,
-  ExecutionContext,
-  RequestContextPreHandlerOutput
+  ExecutionContext
 > {
   public static readonly QUEUE_NAME = SERVICE_TEMPLATE_PERMISSIONS_QUEUE
   public static readonly EXCHANGE_NAME = PERMISSIONS_EXCHANGE
 
   constructor(dependencies: UsersInjectableDependencies) {
     super(
+      dependencies,
       {
-        amqpConnectionManager: dependencies.amqpConnectionManager,
-        consumerErrorResolver: dependencies.consumerErrorResolver,
-        errorReporter: dependencies.errorReporter,
-        logger: dependencies.logger,
-        transactionObservabilityManager: dependencies.transactionObservabilityManager,
-        messageMetricsManager: dependencies.messageProcessingMetricsManager,
-      },
-      {
-        creationConfig: {
-          exchange: PermissionConsumer.EXCHANGE_NAME,
+        queueConfig: {
+          exchangeName: PermissionConsumer.EXCHANGE_NAME,
           queueName: PermissionConsumer.QUEUE_NAME,
-          queueOptions: {
+          amqpOptions: {
             autoDelete: false,
             durable: true,
             exclusive: false,
           },
         },
-        deletionConfig: {
-          deleteIfExists: isTest(),
-        },
-        logMessages: true,
-        handlerSpy: isTest(),
         handlers: new MessageHandlerConfigBuilder<
           SupportedMessages,
           ExecutionContext,
@@ -66,7 +53,6 @@ export class PermissionConsumer extends AbstractAmqpTopicConsumer<
           })
           .addConfig(PermissionsMessages.removed.consumerSchema, removePermissionsHandler)
           .build(),
-        messageTypeField: 'type',
       },
       {
         userService: dependencies.userService,

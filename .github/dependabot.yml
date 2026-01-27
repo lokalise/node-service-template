@@ -25,7 +25,6 @@ updates:
           - '@vitest/*'
       typescript:
         patterns:
-          - 'tsx'
           - 'typescript'
       fastify:
         patterns:
@@ -45,3 +44,12 @@ updates:
       aws:
         patterns:
           - '@aws-sdk/*'
+      rollup:
+        patterns:
+          - '@rollup/*'
+      esbuild:
+        patterns:
+          - '@esbuild/*'
+      biomejs:
+        patterns:
+          - '@biomejs/*'
