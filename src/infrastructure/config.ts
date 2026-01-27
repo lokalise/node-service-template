@@ -213,6 +213,23 @@ const envSchema = {
         'OTEL_ENABLED',
         z.stringbool().default(true).describe('Whether to enable OpenTelemetry instrumentation  '),
       ),
+      _resourceAttributes: envvar(
+        'OTEL_RESOURCE_ATTRIBUTES',
+        z
+          .string()
+          .regex(
+            /^(service\.namespace=[^,]+,env=(stage|live)|env=(stage|live),service\.namespace=[^,]+)$/,
+            'Must match format: service.namespace={appName},env={stage or live} or env={stage or live},service.namespace={appName}',
+          )
+          .optional()
+          .describe(
+            'OpenTelemetry resource attributes in format service.namespace={appName},env={stage or live} (order can be reversed)',
+          ),
+      ),
+      _exporterUrl: envvar(
+        'OTEL_EXPORTER_URL',
+        z.url().optional().describe('OpenTelemetry exporter endpoint URL'),
+      ),
     },
     bugsnag: {
       isEnabled: envvar(
