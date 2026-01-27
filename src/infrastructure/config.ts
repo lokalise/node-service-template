@@ -1,11 +1,329 @@
-import type { RedisConfig } from '@lokalise/node-core'
-import { ConfigScope } from '@lokalise/node-core'
+import { detectNodeEnv, envvar, type InferEnv, parseEnv } from 'envase'
+import { z } from 'zod'
 
-import type { AwsConfig } from './aws/awsConfig.ts'
-import { getAwsConfig } from './aws/awsConfig.ts'
+function setZodPortChecks<T extends z.ZodCoercedNumber>(schema: T) {
+  return schema.int().min(0).max(65535)
+}
 
-const configScope: ConfigScope = new ConfigScope()
+export const nodeEnv = detectNodeEnv(process.env)
+
 export const SERVICE_NAME = 'node-service-template'
+
+export function decodeJwtConfig(jwtPublicKey: string) {
+  return jwtPublicKey.replaceAll('||', '\n')
+}
+
+const envSchema = {
+  app: {
+    nodeEnv: envvar(
+      'NODE_ENV',
+      z.enum(['production', 'test', 'development']).describe('Application execution environment'),
+    ),
+    appEnv: envvar(
+      'APP_ENV',
+      z
+        .enum(['production', 'staging', 'development'])
+        .describe('Deployment environment for the application'),
+    ),
+    appVersion: envvar(
+      'APP_VERSION',
+      z
+        .string()
+        .default('VERSION_NOT_SET')
+        .describe('Application version exposed via healthcheck endpoint'),
+    ),
+    gitCommitSha: envvar(
+      'GIT_COMMIT_SHA',
+      z.string().default('COMMIT_SHA_NOT_SET').describe('Git commit SHA of the deployed version'),
+    ),
+    port: envvar(
+      'APP_PORT',
+      z.coerce
+        .number()
+        .apply(setZodPortChecks)
+        .default(3000)
+        .describe('HTTP server listening port'),
+    ),
+    bindAddress: envvar(
+      'APP_BIND_ADDRESS',
+      z.string().describe('HTTP server binding address (e.g., 0.0.0.0 for all interfaces)'),
+    ),
+    jwtPublicKey: envvar(
+      'JWT_PUBLIC_KEY',
+      z
+        .string()
+        .describe("JWT validation public key (use '||' as newline separator)")
+        .transform(decodeJwtConfig),
+    ),
+    logLevel: envvar(
+      'LOG_LEVEL',
+      z
+        .enum(['fatal', 'error', 'warn', 'info', 'debug', 'trace', 'silent'])
+        .describe('Minimum log level for emitted logs'),
+    ),
+    baseUrl: envvar(
+      'BASE_URL',
+      z
+        .string()
+        .default('')
+        .describe('Public URL where the application is accessible, used in OpenAPI spec'),
+    ),
+    metrics: {
+      isEnabled: envvar(
+        'METRICS_ENABLED',
+        z.stringbool().default(true).describe('Whether to enable Prometheus metrics collection'),
+      ),
+    },
+  },
+  db: {
+    databaseUrl: envvar(
+      'DATABASE_URL',
+      z.string().describe('PostgreSQL connection URL including credentials and database name'),
+    ),
+  },
+  redis: {
+    host: envvar('REDIS_HOST', z.string().describe('Redis server hostname')),
+    keyPrefix: envvar('REDIS_KEY_PREFIX', z.string().describe('Prefix for all Redis keys')),
+    port: envvar(
+      'REDIS_PORT',
+      z.coerce.number().apply(setZodPortChecks).describe('Redis server port'),
+    ),
+    username: envvar(
+      'REDIS_USERNAME',
+      z.string().optional().describe('Redis authentication username'),
+    ),
+    password: envvar(
+      'REDIS_PASSWORD',
+      z.string().optional().describe('Redis authentication password'),
+    ),
+    useTls: envvar(
+      'REDIS_USE_TLS',
+      z.stringbool().default(true).describe('Whether to use TLS/SSL for Redis connection'),
+    ),
+    commandTimeout: envvar(
+      'REDIS_COMMAND_TIMEOUT',
+      z.coerce
+        .number()
+        .int()
+        .gte(0)
+        .optional()
+        .describe('Command execution timeout in milliseconds'),
+    ),
+    connectTimeout: envvar(
+      'REDIS_CONNECT_TIMEOUT',
+      z.coerce
+        .number()
+        .int()
+        .gte(0)
+        .optional()
+        .describe('Initial connection timeout in milliseconds'),
+    ),
+  },
+  scheduler: {
+    host: envvar('SCHEDULER_REDIS_HOST', z.string().describe('Scheduler Redis server hostname')),
+    keyPrefix: envvar(
+      'SCHEDULER_REDIS_KEY_PREFIX',
+      z.string().describe('Prefix for all scheduler Redis keys'),
+    ),
+    port: envvar(
+      'SCHEDULER_REDIS_PORT',
+      z.coerce.number().apply(setZodPortChecks).describe('Scheduler Redis server port'),
+    ),
+    username: envvar(
+      'SCHEDULER_REDIS_USERNAME',
+      z.string().optional().describe('Scheduler Redis authentication username'),
+    ),
+    password: envvar(
+      'SCHEDULER_REDIS_PASSWORD',
+      z.string().optional().describe('Scheduler Redis authentication password'),
+    ),
+    useTls: envvar(
+      'SCHEDULER_REDIS_USE_TLS',
+      z
+        .stringbool()
+        .default(true)
+        .describe('Whether to use TLS/SSL for scheduler Redis connection'),
+    ),
+    commandTimeout: envvar(
+      'SCHEDULER_REDIS_COMMAND_TIMEOUT',
+      z.coerce
+        .number()
+        .int()
+        .gte(0)
+        .optional()
+        .describe('Scheduler command execution timeout in milliseconds'),
+    ),
+    connectTimeout: envvar(
+      'SCHEDULER_REDIS_CONNECT_TIMEOUT',
+      z.coerce
+        .number()
+        .int()
+        .gte(0)
+        .optional()
+        .describe('Scheduler initial connection timeout in milliseconds'),
+    ),
+  },
+  amqp: {
+    hostname: envvar('AMQP_HOSTNAME', z.string().describe('AMQP broker hostname')),
+    port: envvar(
+      'AMQP_PORT',
+      z.coerce.number().apply(setZodPortChecks).describe('AMQP broker port'),
+    ),
+    username: envvar('AMQP_USERNAME', z.string().describe('AMQP broker username')),
+    password: envvar('AMQP_PASSWORD', z.string().describe('AMQP broker password')),
+    vhost: envvar('AMQP_VHOST', z.string().default('').describe('AMQP broker virtual host')),
+    useTls: envvar(
+      'AMQP_USE_TLS',
+      z.stringbool().default(true).describe('Whether to use TLS/SSL for AMQP connection'),
+    ),
+  },
+  aws: {
+    region: envvar('AWS_REGION', z.string().min(1).describe('AWS region for resource management')),
+
+    kmsKeyId: envvar(
+      'AWS_KMS_KEY_ID',
+      z.string().optional().default('').describe('KMS key ID for encryption/decryption'),
+    ),
+
+    allowedSourceOwner: envvar(
+      'AWS_ALLOWED_SOURCE_OWNER',
+      z.string().optional().describe('AWS account ID for permitted request source'),
+    ),
+
+    endpoint: envvar(
+      'AWS_ENDPOINT',
+      z.string().url().optional().describe('Custom AWS service endpoint URL'),
+    ),
+
+    resourcePrefix: envvar(
+      'AWS_RESOURCE_PREFIX',
+      z
+        .string()
+        .max(10, {
+          message: `AWS resource prefix exceeds maximum length of ${10} characters`,
+        })
+        .optional()
+        .describe('Prefix for AWS resource names (max 10 chars)'),
+    ),
+
+    accessKeyId: envvar(
+      'AWS_ACCESS_KEY_ID',
+      z.string().optional().describe('AWS access key ID for authentication'),
+    ),
+
+    secretAccessKey: envvar(
+      'AWS_SECRET_ACCESS_KEY',
+      z.string().optional().describe('AWS secret access key for authentication'),
+    ),
+  },
+  integrations: {
+    fakeStore: {
+      baseUrl: envvar(
+        'SAMPLE_FAKE_STORE_BASE_URL',
+        z.string().describe('Base URL for the fake store API integration'),
+      ),
+    },
+  },
+  jobs: {
+    deleteOldUsersJob: {
+      periodInSeconds: envvar(
+        'DELETE_OLD_USERS_JOB_PERIOD_IN_SECS',
+        z.coerce.number().int().gte(0).describe('Period in seconds for deleting old users job'),
+      ),
+    },
+    processLogFilesJob: {
+      periodInSeconds: envvar(
+        'PROCESS_LOGS_FILES_JOB_PERIOD_IN_SECS',
+        z.coerce.number().int().gte(0).describe('Period in seconds for processing log files job'),
+      ),
+    },
+    sendEmailsJob: {
+      cronExpression: envvar(
+        'SEND_EMAILS_JOB_CRON',
+        z.string().describe('Cron expression for scheduling the send emails job'),
+      ),
+    },
+  },
+  vendors: {
+    newrelic: {
+      isEnabled: envvar(
+        'NEW_RELIC_ENABLED',
+        z.stringbool().default(true).describe('Whether to enable New Relic instrumentation'),
+      ),
+      appName: envvar(
+        'NEW_RELIC_APP_NAME',
+        z
+          .string()
+          .default('')
+          .describe('Instrumented application name for New Relic grouping purposes'),
+      ),
+    },
+    bugsnag: {
+      isEnabled: envvar(
+        'BUGSNAG_ENABLED',
+        z.stringbool().default(true).describe('Whether to send errors to Bugsnag'),
+      ),
+      apiKey: envvar(
+        'BUGSNAG_KEY',
+        z.string().optional().describe('Bugsnag API key for error submission'),
+      ),
+      appType: envvar(
+        'BUGSNAG_APP_TYPE',
+        z.string().optional().describe('Application process type identifier for Bugsnag'),
+      ),
+    },
+    amplitude: {
+      isEnabled: envvar(
+        'AMPLITUDE_ENABLED',
+        z.stringbool().default(false).describe('Whether to track analytics with Amplitude'),
+      ),
+      apiKey: envvar(
+        'AMPLITUDE_KEY',
+        z.string().optional().describe('Amplitude API key for event submission'),
+      ),
+      serverZone: envvar(
+        'AMPLITUDE_SERVER_ZONE',
+        z.enum(['EU', 'US']).default('EU').describe('Amplitude data residency region'),
+      ),
+      flushIntervalMillis: envvar(
+        'AMPLITUDE_FLUSH_INTERVAL_MILLIS',
+        z.coerce
+          .number()
+          .int()
+          .gte(0)
+          .default(10_000)
+          .describe('Event batch upload interval in milliseconds'),
+      ),
+      flushQueueSize: envvar(
+        'AMPLITUDE_FLUSH_QUEUE_SIZE',
+        z.coerce.number().int().gte(0).default(300).describe('Maximum events per batch upload'),
+      ),
+      flushMaxRetries: envvar(
+        'AMPLITUDE_FLUSH_MAX_RETRIES',
+        z.coerce
+          .number()
+          .int()
+          .gte(0)
+          .default(12)
+          .describe('Maximum retry attempts for failed uploads'),
+      ),
+    },
+  },
+}
+
+// biome-ignore lint/style/noDefaultExport: envase uses default export to generate docs
+export default envSchema
+
+export type Config = InferEnv<typeof envSchema>
+
+let config: Config | null = null
+
+export function getConfig(): Config {
+  if (!config) {
+    config = parseEnv(process.env, envSchema)
+  }
+  return config
+}
 
 export type IntervalJobConfig = {
   periodInSeconds: number
@@ -13,223 +331,4 @@ export type IntervalJobConfig = {
 
 export type CronJobConfig = {
   cronExpression: string
-}
-
-export type Config = {
-  app: AppConfig
-  db: DbConfig
-  aws: AwsConfig
-  redis: RedisConfig
-  scheduler: RedisConfig
-  amqp: AmqpConfig
-  integrations: {
-    fakeStore: {
-      baseUrl: string
-    }
-  }
-  jobs: JobConfig
-  vendors: {
-    newrelic: {
-      isEnabled: boolean
-      appName: string
-    }
-    bugsnag: {
-      isEnabled: boolean
-      apiKey?: string
-      appType?: string
-    }
-    amplitude: {
-      isEnabled: boolean
-      apiKey?: string
-      serverZone: string
-      flushIntervalMillis?: number
-      flushMaxRetries?: number
-      flushQueueSize?: number
-    }
-  }
-}
-
-export type JobConfig = {
-  processLogFilesJob: IntervalJobConfig
-  deleteOldUsersJob: IntervalJobConfig
-  sendEmailsJob: CronJobConfig
-}
-
-export type DbConfig = {
-  databaseUrl: string
-}
-
-export type AmqpConfig = {
-  hostname: string
-  port: number
-  username: string
-  password: string
-  vhost: string
-  useTls: boolean
-}
-
-export type AppConfig = {
-  port: number
-  bindAddress: string
-  jwtPublicKey: string
-  logLevel: 'fatal' | 'error' | 'warn' | 'info' | 'debug' | 'trace' | 'silent'
-  nodeEnv: 'production' | 'development' | 'test'
-  appEnv: 'production' | 'development' | 'staging'
-  appVersion: string
-  gitCommitSha: string
-  baseUrl: string
-  metrics: {
-    isEnabled: boolean
-  }
-}
-
-let config: Config
-export function getConfig(): Config {
-  if (!config) {
-    config = generateConfig()
-  }
-  return config
-}
-
-export function generateConfig(): Config {
-  return {
-    app: getAppConfig(),
-    db: getDbConfig(),
-    aws: getAwsConfig(configScope),
-    redis: getRedisConfig(),
-    amqp: getAmqpConfig(),
-    scheduler: getSchedulerConfig(),
-    integrations: {
-      fakeStore: {
-        baseUrl: configScope.getMandatory('SAMPLE_FAKE_STORE_BASE_URL'),
-      },
-    },
-    jobs: {
-      deleteOldUsersJob: {
-        periodInSeconds: configScope.getMandatoryInteger('DELETE_OLD_USERS_JOB_PERIOD_IN_SECS'),
-      },
-      processLogFilesJob: {
-        periodInSeconds: configScope.getMandatoryInteger('PROCESS_LOGS_FILES_JOB_PERIOD_IN_SECS'),
-      },
-      sendEmailsJob: {
-        cronExpression: configScope.getMandatory('SEND_EMAILS_JOB_CRON'),
-      },
-    },
-    vendors: {
-      newrelic: {
-        isEnabled: configScope.getOptionalBoolean('NEW_RELIC_ENABLED', true),
-        appName: configScope.getOptionalNullable('NEW_RELIC_APP_NAME', ''),
-      },
-      bugsnag: {
-        isEnabled: configScope.getOptionalBoolean('BUGSNAG_ENABLED', true),
-        apiKey: configScope.getOptionalNullable('BUGSNAG_KEY', undefined),
-        appType: configScope.getOptionalNullable('BUGSNAG_APP_TYPE', undefined),
-      },
-      amplitude: {
-        isEnabled: configScope.getOptionalBoolean('AMPLITUDE_ENABLED', false),
-        apiKey: configScope.getOptionalNullable('AMPLITUDE_KEY', undefined),
-        serverZone: configScope.getOptionalOneOf('AMPLITUDE_SERVER_ZONE', 'EU', ['EU', 'US']),
-        flushIntervalMillis: configScope.getOptionalInteger(
-          'AMPLITUDE_FLUSH_INTERVAL_MILLIS',
-          10_000,
-        ),
-        flushQueueSize: configScope.getOptionalInteger('AMPLITUDE_FLUSH_QUEUE_SIZE', 300),
-        flushMaxRetries: configScope.getOptionalInteger('AMPLITUDE_FLUSH_MAX_RETRIES', 12),
-      },
-    },
-  }
-}
-
-export function getAmqpConfig(): AmqpConfig {
-  return {
-    hostname: configScope.getMandatory('AMQP_HOSTNAME'),
-    port: configScope.getMandatoryInteger('AMQP_PORT'),
-    username: configScope.getMandatory('AMQP_USERNAME'),
-    password: configScope.getMandatory('AMQP_PASSWORD'),
-    vhost: configScope.getOptional('AMQP_VHOST', ''),
-    useTls: configScope.getOptionalBoolean('AMQP_USE_TLS', true),
-  }
-}
-
-export function getDbConfig(): DbConfig {
-  return {
-    databaseUrl: configScope.getMandatory('DATABASE_URL'),
-  }
-}
-
-export function getRedisConfig(): RedisConfig {
-  return {
-    host: configScope.getMandatory('REDIS_HOST'),
-    keyPrefix: configScope.getMandatory('REDIS_KEY_PREFIX'),
-    port: configScope.getMandatoryInteger('REDIS_PORT'),
-    username: configScope.getOptionalNullable('REDIS_USERNAME', undefined),
-    password: configScope.getOptionalNullable('REDIS_PASSWORD', undefined),
-    useTls: configScope.getOptionalBoolean('REDIS_USE_TLS', true),
-    commandTimeout: configScope.getOptionalNullableInteger('REDIS_COMMAND_TIMEOUT', undefined),
-    connectTimeout: configScope.getOptionalNullableInteger('REDIS_CONNECT_TIMEOUT', undefined),
-  }
-}
-
-export function getSchedulerConfig(): RedisConfig {
-  return {
-    host: configScope.getMandatory('SCHEDULER_REDIS_HOST'),
-    keyPrefix: configScope.getMandatory('SCHEDULER_REDIS_KEY_PREFIX'),
-    port: configScope.getMandatoryInteger('SCHEDULER_REDIS_PORT'),
-    username: configScope.getOptionalNullable('SCHEDULER_REDIS_USERNAME', undefined),
-    password: configScope.getOptionalNullable('SCHEDULER_REDIS_PASSWORD', undefined),
-    useTls: configScope.getOptionalBoolean('REDIS_USE_TLS', true),
-    commandTimeout: configScope.getOptionalNullableInteger(
-      'SCHEDULER_REDIS_COMMAND_TIMEOUT',
-      undefined,
-    ),
-    connectTimeout: configScope.getOptionalNullableInteger(
-      'SCHEDULER_REDIS_CONNECT_TIMEOUT',
-      undefined,
-    ),
-  }
-}
-
-export function getAppConfig(): AppConfig {
-  return {
-    port: configScope.getOptionalInteger('APP_PORT', 3000),
-    bindAddress: configScope.getMandatory('APP_BIND_ADDRESS'),
-    jwtPublicKey: decodeJwtConfig(configScope.getMandatory('JWT_PUBLIC_KEY')),
-    logLevel: configScope.getMandatoryOneOf('LOG_LEVEL', [
-      'fatal',
-      'error',
-      'warn',
-      'info',
-      'debug',
-      'trace',
-      'silent',
-    ]),
-    nodeEnv: configScope.getOptionalOneOf('NODE_ENV', 'production', [
-      'production',
-      'development',
-      'test',
-    ]),
-    appEnv: configScope.getMandatoryOneOf('APP_ENV', ['production', 'development', 'staging']),
-    appVersion: configScope.getOptional('APP_VERSION', 'VERSION_NOT_SET'),
-    baseUrl: configScope.getOptional('BASE_URL', ''),
-    gitCommitSha: configScope.getOptional('GIT_COMMIT_SHA', 'COMMIT_SHA_NOT_SET'),
-    metrics: {
-      isEnabled: configScope.getOptionalBoolean('METRICS_ENABLED', !configScope.isDevelopment()),
-    },
-  }
-}
-
-export function isDevelopment() {
-  return configScope.isDevelopment()
-}
-
-export function isTest() {
-  return configScope.isTest()
-}
-
-export function isProduction() {
-  return configScope.isProduction()
-}
-
-export function decodeJwtConfig(jwtPublicKey: string) {
-  return jwtPublicKey.replaceAll('||', '\n')
 }
