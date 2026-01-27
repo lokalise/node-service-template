@@ -1,5 +1,4 @@
 import type { RequestContext } from '@lokalise/fastify-extras'
-import { generateUuid7 } from '@lokalise/id-utils'
 import type { Loader } from 'layered-loader'
 import type z from 'zod/v4'
 import type { User } from '../../../db/schema/user.ts'
@@ -27,7 +26,6 @@ export class UserService {
 
   async createUser(user: UserCreateDTO) {
     const newUser = await this.userRepository.createUser({
-      id: generateUuid7(),
       name: user.name ?? null,
       age: user.age ?? null,
       email: user.email,
