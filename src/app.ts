@@ -63,6 +63,9 @@ EventEmitter.defaultMaxListeners = 12
 const GRACEFUL_SHUTDOWN_TIMEOUT_IN_MSECS = 10000
 const REQUEST_LOGGING_LEVELS = ['debug', 'trace']
 
+// Service utility endpoints to exclude from request logging
+const REQUEST_LOGGING_SKIP_PATHS = new Set(['/', '/health', '/ready', '/live', '/metrics'])
+
 export type AppInstance = FastifyInstance<
   http.Server,
   http.IncomingMessage,
@@ -94,7 +97,9 @@ export async function getApp(
   const app = fastify<http.Server, http.IncomingMessage, http.ServerResponse, CommonLogger>({
     ...getRequestIdFastifyAppConfig(),
     loggerInstance: logger,
-    disableRequestLogging: !enableRequestLogging,
+    disableRequestLogging: enableRequestLogging
+      ? (req) => REQUEST_LOGGING_SKIP_PATHS.has(req.url)
+      : true,
   })
 
   const diContainer =
@@ -210,9 +215,6 @@ export async function getApp(
   await app.register(jwtTokenPlugin, {
     skipList: new Set([
       '/favicon.ico',
-      '/login',
-      '/access-token',
-      '/refresh-token',
       '/documentation',
       '/documentation/',
       '/documentation/openapi.json',
