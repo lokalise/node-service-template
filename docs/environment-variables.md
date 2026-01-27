@@ -245,6 +245,16 @@
   Description: Whether to enable OpenTelemetry instrumentation    
   Default: `true`
 
+- `OTEL_RESOURCE_ATTRIBUTES` (optional)  
+  Type: `string`  
+  Description: OpenTelemetry resource attributes in format service.namespace={appName},env={stage or live} (order can be reversed)  
+  Pattern: `^(service\.namespace=[^,]+,env=(stage|live)|env=(stage|live),service\.namespace=[^,]+)$`
+
+- `OTEL_EXPORTER_URL` (optional)  
+  Type: `string`  
+  Description: OpenTelemetry exporter endpoint URL  
+  Format: `uri`
+
 ## Vendors Bugsnag
 
 - `BUGSNAG_ENABLED` (optional)  
