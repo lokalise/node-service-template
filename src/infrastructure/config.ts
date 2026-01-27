@@ -1,3 +1,4 @@
+import { getEnvaseAwsConfig } from '@lokalise/aws-config'
 import { detectNodeEnv, envvar, type InferEnv, parseEnv } from 'envase'
 import { z } from 'zod'
 
@@ -177,45 +178,7 @@ const envSchema = {
       z.stringbool().default(true).describe('Whether to use TLS/SSL for AMQP connection'),
     ),
   },
-  aws: {
-    region: envvar('AWS_REGION', z.string().min(1).describe('AWS region for resource management')),
-
-    kmsKeyId: envvar(
-      'AWS_KMS_KEY_ID',
-      z.string().optional().default('').describe('KMS key ID for encryption/decryption'),
-    ),
-
-    allowedSourceOwner: envvar(
-      'AWS_ALLOWED_SOURCE_OWNER',
-      z.string().optional().describe('AWS account ID for permitted request source'),
-    ),
-
-    endpoint: envvar(
-      'AWS_ENDPOINT',
-      z.string().url().optional().describe('Custom AWS service endpoint URL'),
-    ),
-
-    resourcePrefix: envvar(
-      'AWS_RESOURCE_PREFIX',
-      z
-        .string()
-        .max(10, {
-          message: `AWS resource prefix exceeds maximum length of ${10} characters`,
-        })
-        .optional()
-        .describe('Prefix for AWS resource names (max 10 chars)'),
-    ),
-
-    accessKeyId: envvar(
-      'AWS_ACCESS_KEY_ID',
-      z.string().optional().describe('AWS access key ID for authentication'),
-    ),
-
-    secretAccessKey: envvar(
-      'AWS_SECRET_ACCESS_KEY',
-      z.string().optional().describe('AWS secret access key for authentication'),
-    ),
-  },
+  aws: getEnvaseAwsConfig(),
   integrations: {
     fakeStore: {
       baseUrl: envvar(
