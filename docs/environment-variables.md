@@ -78,9 +78,6 @@ For tests there are some overrides defined in [envSetupHook.ts](../test/envSetup
 
 ## OpenTelemetry
 
-OTEL_ENABLED=false
-OTEL_RESOURCE_ATTRIBUTES="service.name=node-service-template"
-
 - (OPTIONAL) `OTEL_ENABLED` - whether to use OpenTelemetry instrumentation (`true`)
 - (OPTIONAL) `OTEL_RESOURCE_ATTRIBUTES` - metadata that is passed to OTel collector, in a format of key/value array, e. g. "service.name=node-service-template"
 
