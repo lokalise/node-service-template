@@ -200,11 +200,15 @@
 
 - `AWS_ACCESS_KEY_ID` (optional)  
   Type: `string`  
-  Description: AWS access key ID for authentication
+  Description: AWS access key ID for programmatic access
 
 - `AWS_SECRET_ACCESS_KEY` (optional)  
   Type: `string`  
-  Description: AWS secret access key for authentication
+  Description: AWS secret access key for programmatic access
+
+- `_AWS_CREDENTIALS_RESOLVED` (optional)  
+  Type: `undefined`  
+  Description: Auto-resolved from AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY. Do not configure directly.
 
 ## Integrations FakeStore
 
