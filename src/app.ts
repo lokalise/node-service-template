@@ -15,7 +15,7 @@ import {
   commonSyncHealthcheckPlugin,
   getRequestIdFastifyAppConfig,
   metricsPlugin,
-  newrelicTransactionManagerPlugin,
+  openTelemetryTransactionManagerPlugin,
   requestContextProviderPlugin,
 } from '@lokalise/fastify-extras'
 import {
@@ -25,6 +25,7 @@ import {
   resolveLogger,
   stringValueSerializer,
 } from '@lokalise/node-core'
+import { gracefulOtelShutdown } from '@lokalise/opentelemetry-fastify-bootstrap'
 import scalarFastifyApiReference from '@scalar/fastify-api-reference'
 import { type AwilixContainer, createContainer } from 'awilix'
 import type { FastifyInstance } from 'fastify'
@@ -55,7 +56,6 @@ import {
   redisHealthCheck,
 } from './infrastructure/healthchecks/healthchecksWrappers.ts'
 import { ALL_MODULES } from './modules.ts'
-import { gracefulOtelShutdown } from './otel.ts'
 import { jwtTokenPlugin } from './plugins/jwtTokenPlugin.ts'
 
 EventEmitter.defaultMaxListeners = 12
@@ -182,9 +182,9 @@ export async function getApp(
     },
   })
 
-  // Since DI config relies on having app-scoped NewRelic instance to be set by the plugin, we instantiate it earlier than we run the DI initialization.
-  await app.register(newrelicTransactionManagerPlugin, {
-    isEnabled: config.vendors.newrelic.isEnabled,
+  // Since DI config relies on having app-scoped OTel instance to be set by the plugin, we instantiate it earlier than we run the DI initialization.
+  await app.register(openTelemetryTransactionManagerPlugin, {
+    isEnabled: config.vendors.opentelemetry.isEnabled,
   })
 
   await app.register(scalarFastifyApiReference, {
