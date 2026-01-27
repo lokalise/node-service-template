@@ -114,7 +114,7 @@
         "@biomejs/cli-linux-x64": "^2.3.11",
         "@biomejs/cli-win32-x64": "^2.3.11",
         "@esbuild/darwin-arm64": "^0.25.11",
-        "@esbuild/linux-arm64": "^0.25.11",
+        "@esbuild/linux-arm64": "^0.27.2",
         "@esbuild/linux-x64": "^0.25.11",
         "@esbuild/win32-x64": "^0.25.11",
         "@rollup/rollup-darwin-arm64": "^4.56.0",
