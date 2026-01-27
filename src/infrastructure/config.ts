@@ -248,7 +248,7 @@ const envSchema = {
     opentelemetry: {
       isEnabled: envvar(
         'OTEL_ENABLED',
-        z.stringbool().default(true).describe('Whether to send errors to Bugsnag'),
+        z.stringbool().default(true).describe('Whether to enable OpenTelemetry instrumentation  '),
       ),
     },
     bugsnag: {

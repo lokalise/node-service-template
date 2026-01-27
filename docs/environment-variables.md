@@ -238,7 +238,7 @@
 
 - `OTEL_ENABLED` (optional)  
   Type: `string`  
-  Description: Whether to send errors to Bugsnag  
+  Description: Whether to enable OpenTelemetry instrumentation    
   Default: `true`
 
 ## Vendors Bugsnag
