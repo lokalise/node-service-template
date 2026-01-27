@@ -6,6 +6,18 @@ Migrate envvars management to envase.
 
 ## 27.01.2026
 
+* Use newer version of OTel instrumentation setup
+
+* Remove New Relic instrumentation
+
+* Add optionalDependencies to ensure consistent lockfile regeneration
+
+* Remove passing '-' as JWT secret private key to utilize Verify-only mode.
+
+* Update dependencies
+
+## 27.01.2026
+
 Remove passing '-' as JWT secret private key to utilize Verify-only mode.
 
 ## 19.01.2026

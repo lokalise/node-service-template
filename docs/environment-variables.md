@@ -234,17 +234,12 @@
   Type: `string`  
   Description: Cron expression for scheduling the send emails job
 
-## Vendors Newrelic
+## Vendors Opentelemetry
 
-- `NEW_RELIC_ENABLED` (optional)  
+- `OTEL_ENABLED` (optional)  
   Type: `string`  
-  Description: Whether to enable New Relic instrumentation  
+  Description: Whether to send errors to Bugsnag  
   Default: `true`
-
-- `NEW_RELIC_APP_NAME` (optional)  
-  Type: `string`  
-  Description: Instrumented application name for New Relic grouping purposes  
-  Default: ``
 
 ## Vendors Bugsnag
 

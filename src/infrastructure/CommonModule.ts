@@ -280,11 +280,11 @@ export class CommonModule extends AbstractModule<CommonDependencies, ExternalDep
 
       // vendor-specific dependencies
       transactionObservabilityManager: asSingletonFunction(() => {
-        if (!externalDependencies.app?.newrelicTransactionManager) {
+        if (!externalDependencies.app?.openTelemetryTransactionManager) {
           throw new Error('Observability manager is not set')
         }
 
-        return externalDependencies.app?.newrelicTransactionManager
+        return externalDependencies.app?.openTelemetryTransactionManager
       }),
 
       amplitude: asSingletonFunction(() => {

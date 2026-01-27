@@ -245,17 +245,10 @@ const envSchema = {
     },
   },
   vendors: {
-    newrelic: {
+    opentelemetry: {
       isEnabled: envvar(
-        'NEW_RELIC_ENABLED',
-        z.stringbool().default(true).describe('Whether to enable New Relic instrumentation'),
-      ),
-      appName: envvar(
-        'NEW_RELIC_APP_NAME',
-        z
-          .string()
-          .default('')
-          .describe('Instrumented application name for New Relic grouping purposes'),
+        'OTEL_ENABLED',
+        z.stringbool().default(true).describe('Whether to send errors to Bugsnag'),
       ),
     },
     bugsnag: {
