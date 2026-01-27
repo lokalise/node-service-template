@@ -1,6 +1,6 @@
 # Changelog
 
-## TODO
+## 27.01.2026
 
 Remove passing '-' as JWT secret private key to utilize Verify-only mode.
 

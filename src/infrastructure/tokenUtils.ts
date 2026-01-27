@@ -2,24 +2,6 @@ import type { JWT } from '@fastify/jwt'
 
 import { AuthFailedError, EmptyTokenError } from './errors/publicErrors.ts'
 
-export function generateJwtToken(
-  jwt: JWT,
-  payload: Record<string, unknown>,
-  ttlInSeconds: number,
-): Promise<string> {
-  return new Promise((resolve, reject) => {
-    jwt.sign(payload, { expiresIn: ttlInSeconds }, (err, encoded) => {
-      if (err) {
-        return reject(err)
-      }
-      if (!encoded) {
-        throw new EmptyTokenError()
-      }
-      resolve(encoded)
-    })
-  })
-}
-
 const hasCode = (error: unknown): error is { code: unknown } =>
   typeof error === 'object' && error !== null && 'code' in error
 
