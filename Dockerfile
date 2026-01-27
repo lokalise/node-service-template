@@ -3,7 +3,6 @@ FROM node:24.13.0-trixie-slim as base
 
 RUN set -ex &&\
     apt-get update && \
-    apt-get install -y --no-install-recommends libssl3 && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*;
 
@@ -19,12 +18,6 @@ RUN set -ex && \
     apt-get install -y --no-install-recommends \
       ca-certificates \
       dumb-init \
-      g++ \
-      gcc \
-      git \
-      make \
-      openssl \
-      python3 \
     && apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 COPY --chown=node:node ./package.json ./package.json ./
