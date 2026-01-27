@@ -76,12 +76,13 @@ For tests there are some overrides defined in [envSetupHook.ts](../test/envSetup
 - (OPTIONAL) `AWS_SQS_ENDPOINT` - AWS SQS endpoint
 - (OPTIONAL) `AWS_SQS_QUEUE_NAME_PATTERN` - AWS SQS queue name pattern
 
-## new relic
+## OpenTelemetry
 
-- (OPTIONAL) `NEW_RELIC_LICENSE_KEY` - New Relic API key
-- (OPTIONAL) `NEW_RELIC_APP_NAME` - instrumented application name for New Relic grouping purposes
-- (OPTIONAL) `NEW_RELIC_ENABLED` - whether to use New Relic instrumentation (`true`)
-- (OPTIONAL) `NEW_RELIC_LABELS` - tags/labels to apply to your reporting in the format key:value
+OTEL_ENABLED=false
+OTEL_RESOURCE_ATTRIBUTES="service.name=node-service-template"
+
+- (OPTIONAL) `OTEL_ENABLED` - whether to use OpenTelemetry instrumentation (`true`)
+- (OPTIONAL) `OTEL_RESOURCE_ATTRIBUTES` - metadata that is passed to OTel collector, in a format of key/value array, e. g. "service.name=node-service-template"
 
 ### bugsnag
 

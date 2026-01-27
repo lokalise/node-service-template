@@ -68,7 +68,7 @@ Service template also comes with a curated set of plugins [installed](./src/app.
 - `@lokalise/fastify-extras` -> `metricsPlugin` (exposing Prometheus metrics)
 - `@lokalise/fastify-extras` -> `requestContextProviderPlugin` (storing requestId in AsyncLocalStorage and populating
   requestContext on request)
-- `@lokalise/fastify-extras` -> `newRelicTransactionManagerPlugin` (creating custom NewRelic spans for background jobs)
+- `@lokalise/fastify-extras` -> `OpenTelemetryTransactionManager` (creating custom OpenTelemetry spans for background jobs)
 - `@lokalise/fastify-extras` -> `bugsnagPlugin` (reporting errors to BugSnag)
 - `@lokalise/fastify-extras` -> `amplitudePlugin` (tracking events in Amplitude)
 - `@lokalise/fastify-extras` -> `commonHealthcheckPlugin` (registering public healthchecks)

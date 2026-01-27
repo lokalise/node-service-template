@@ -1,4 +1,4 @@
-import { NewRelicTransactionManager } from '@lokalise/fastify-extras'
+import { OpenTelemetryTransactionManager } from '@lokalise/fastify-extras'
 import { globalLogger } from '@lokalise/node-core'
 import { createContainer } from 'awilix'
 import { AwilixManager } from 'awilix-manager'
@@ -29,7 +29,7 @@ class TestContextFactory extends AbstractTestContextFactory<
     })
 
     const fakeApp: Partial<AppInstance> = {
-      newrelicTransactionManager: NewRelicTransactionManager.createDisabled(),
+      openTelemetryTransactionManager: OpenTelemetryTransactionManager.createDisabled(),
       awilixManager,
     }
 

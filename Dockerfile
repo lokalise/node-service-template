@@ -1,5 +1,5 @@
 # ---- Base Node ----
-FROM node:24.12.0-trixie-slim as base
+FROM node:24.13.0-trixie-slim as base
 
 RUN set -ex &&\
     apt-get update && \
@@ -68,4 +68,4 @@ ENV NODE_PATH=.
 
 USER node
 
-CMD ["dumb-init", "node", "--import", "newrelic/esm-loader.mjs", "-r", "newrelic", "/home/node/app/src/server.js"]
+CMD ["dumb-init", "node","--import=@opentelemetry/instrumentation/hook.mjs", "/home/node/app/src/server.js"]
