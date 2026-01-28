@@ -40,7 +40,6 @@ import {
   isPeriodicJobEnabled,
   resolveJobQueuesEnabled,
 } from 'opinionated-machine'
-import postgres from 'postgres'
 import { ToadScheduler } from 'toad-scheduler'
 import type { z } from 'zod/v4'
 import type { AppInstance } from '../app.ts'
@@ -195,8 +194,7 @@ export class CommonModule extends AbstractModule<CommonDependencies, ExternalDep
 
       drizzle: asSingletonFunction(
         ({ config }: CommonDependencies) => {
-          const pg = postgres(config.db.databaseUrl)
-          return drizzle(pg)
+          return drizzle(config.db.databaseUrl)
         },
         {
           dispose: (drizzle) => drizzle.$client.end(),

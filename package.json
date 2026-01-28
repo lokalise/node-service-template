@@ -1,6 +1,6 @@
 {
     "name": "node-service-template",
-    "version": "1.3.1",
+    "version": "1.3.2",
     "engines": {
         "node": ">=24.5.0"
     },
@@ -70,9 +70,9 @@
         "awilix": "^12.0.5",
         "awilix-manager": "^6.3.0",
         "bullmq": "^5.67.1",
-        "drizzle-kit": "^0.31.8",
-        "drizzle-orm": "^0.45.1",
-        "drizzle-zod": "^0.8.3",
+        "drizzle-kit": "1.0.0-beta.12-a5629fb",
+        "drizzle-orm": "1.0.0-beta.12-a5629fb",
+        "drizzle-zod": "1.0.0-beta.12-a5629fb",
         "envase": "^1.2.2",
         "fastify": "^5.7.2",
         "fastify-graceful-shutdown": "^5.0.0",
