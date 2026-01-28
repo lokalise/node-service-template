@@ -1,115 +1,309 @@
 # Environment variables
 
-In development, environment variables are resolved from the .env file
-In production you are expected to set environment variables during deployment (e. g. using Vault)
-For tests there are some overrides defined in [envSetupHook.ts](../test/envSetupHook.ts)
+## App
 
-## List of environment variables
+- `NODE_ENV` (required)  
+  Type: `string`  
+  Description: Application execution environment  
+  Supported values: `production` | `test` | `development`
 
-### app
+- `APP_ENV` (required)  
+  Type: `string`  
+  Description: Deployment environment for the application  
+  Supported values: `production` | `staging` | `development`
 
-- `NODE_ENV` - app execution mode. Supported values: `production` | `development` | `test`
-- `APP_ENV` - environment, in which app is running. Supported values: `production` | `development` | `staging`
-- `APP_BIND_ADDRESS` - address, on which server will be listening for HTTP(S) connections. e. g. `0.0.0.0`
-- `LOG_LEVEL` - logs starting from which level should be emitted. Supported values: `fatal` | `error` | `warn` | `info` | `debug` | `trace` | `silent`
-- (OPTIONAL) `APP_PORT` - port, on which server will be listening for HTTP(S) connections (`3000`)
-- (OPTIONAL) `APP_VERSION` - application version, exposed via healthcheck endpoint (`VERSION_NOT_SET`)
-- (OPTIONAL) `BASE_URL` - URL where the app is available externally, used in OpenAPI specification (default: `http://${APP_BIND_ADDRESS}:{APP_PORT}`)
-- (OPTIONAL) `GIT_COMMIT_SHA` - SHA of a last commit of the deployed version (`COMMIT_SHA_NOT_SET`)
-- `DATABASE_URL` - full DB connection URL. e. g. 'postgresql://serviceuser:pass@localhost:5432/service_db?application_name=new_service'
-- `JWT_PUBLIC_KEY` - full public key for JWT token validation, with '||' replaced with new lines, e. g.
-  ```
-    -----BEGIN PUBLIC KEY-----
-    MIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEAzi4k4ful8Q65RWbHvZwD
-    jKNfspb89typkUATf8KXlYcWp6ibUG9nKpYrig3jmlCdMvCm+S7kZedACshFyRmm
-    1ocaWjRIt/jJyzntxnMIgWetTedZXXzlFbparDMrdEMmsPbM7LrByCU57iKloZEl
-    BhOSQZk/JbJK1YpozTCxcs28YlpnTuMBaXvXddrQuNHo+HYhK53XlFXyiOBzmEFY
-    cBrVqptdjA3z7uNNd6A4IAfEkRYp4lZxZgwTPyjYZ1oXmhalvbr6OAs9ujLIZPSM
-    QoP1VoHLdOqrs7QTmi2rrNCfIcFkFp02N39TovMm9zZQJjQvFEJqIKe4db2457vr
-    uJ5qxkWmbBu+/tf6ytKfbiA433neLSvpfquPXbq3OLGzJ4H2YHiHa0ddfUCqdN49
-    t5nCPEMp6OTa5kXuwObf8yvHyoP8HgQQD+/sftHUIE/1sdQ6fzB/9L+smzp5SW/X
-    nI8NY0k1SH9MLlweGuXi6M1jS62kPWk4HTDQmiqUTImcG0XYRrVd5ISXPdfnVgnq
-    KKht+SUmkPrfaWMDc21FsXXmmVSRTjvBhA6Cy6PLPzGZaeA4TVkOZUkp1OvcyfiI
-    HixuZca1OASxGeUM8lcPi9my8TJCtw5ZR0M/uqVV/1o3U0nx+U5z54ulWN9leMLY
-    vgv+lGrqfFWRemajGXSm8L0CAwEAAQ==
-    -----END PUBLIC KEY-----
-  ```
-- (OPTIONAL) `METRICS_ENABLED` - whether to enable `metricsPlugin` (`true`)
+- `APP_VERSION` (optional)  
+  Type: `string`  
+  Description: Application version exposed via healthcheck endpoint  
+  Default: `VERSION_NOT_SET`
 
-### redis
+- `GIT_COMMIT_SHA` (optional)  
+  Type: `string`  
+  Description: Git commit SHA of the deployed version  
+  Default: `COMMIT_SHA_NOT_SET`
 
-- `REDIS_HOST` - Redis DB host
-- `REDIS_PORT` - Redis DB port
-- `REDIS_USERNAME` - Redis DB username
-- `REDIS_PASSWORD` - Redis DB password
-- `REDIS_KEY_PREFIX` - prefix to prepend to all keys in a command
-- (OPTIONAL) `REDIS_USE_TLS` - whether to use https connection (`true`)
-- (OPTIONAL) `REDIS_CONNECT_TIMEOUT` - if set, the milliseconds before a timeout occurs during the initial connection to the Redis server.
-- (OPTIONAL) `REDIS_COMMAND_TIMEOUT` - if set, and a command does not return a reply within a set number of milliseconds, a "Command timed out" error will be thrown.
-- `SCHEDULER_REDIS_HOST` - scheduling Redis instance host
-- `SCHEDULER_REDIS_PORT` - scheduling Redis instance port
-- `SCHEDULER_REDIS_USERNAME` - scheduling Redis instance username
-- `SCHEDULER_REDIS_PASSWORD` - scheduling Redis instance password
-- `SCHEDULER_REDIS_KEY_PREFIX` - scheduling Redis instance prefix to prepend to all keys in a command
-- (OPTIONAL) `SCHEDULER_REDIS_USE_TLS` - whether to use https connection for scheduling Redis instance (`true`)
-- (OPTIONAL) `SCHEDULER_REDIS_CONNECT_TIMEOUT` - if set, the milliseconds before a timeout occurs during the initial connection to the Redis server.
-- (OPTIONAL) `SCHEDULER_REDIS_COMMAND_TIMEOUT` - if set, and a command does not return a reply within a set number of milliseconds, a "Command timed out" error will be thrown.
+- `APP_PORT` (optional)  
+  Type: `integer`  
+  Description: HTTP server listening port  
+  Min value: `0`  
+  Max value: `65535`  
+  Default: `3000`
 
-### amqp
+- `APP_BIND_ADDRESS` (required)  
+  Type: `string`  
+  Description: HTTP server binding address (e.g., 0.0.0.0 for all interfaces)
 
-- `AMQP_HOSTNAME` - AMQP broker host
-- `AMQP_PORT` - AMQP broker port
-- `AMQP_USERNAME` - AMQP broker username
-- `AMQP_PASSWORD` - AMQP broker password
-- (OPTIONAL) `AMQP_VHOST` - AMQP broker vhost
-- (OPTIONAL) `AMQP_USE_TLS` - whether to use https connection for AMQP broker (`true`)
+- `JWT_PUBLIC_KEY` (required)  
+  Type: `string`  
+  Description: JWT validation public key (use '||' as newline separator)
 
-### aws
+- `LOG_LEVEL` (required)  
+  Type: `string`  
+  Description: Minimum log level for emitted logs  
+  Supported values: `fatal` | `error` | `warn` | `info` | `debug` | `trace` | `silent`
 
-- `AWS_REGION` - AWS region
-- (OPTIONAL) `AWS_ACCESS_KEY_ID` - AWS access key ID
-- (OPTIONAL) `AWS_SECRET_ACCESS_KEY` - AWS secret access key
-- (OPTIONAL) `AWS_KMS_KEY_ID` - AWS KMS key ID
-- (OPTIONAL) `AWS_ALLOWED_SOURCE_OWNER` - AWS allowed source owner
-- (OPTIONAL) `AWS_SNS_ENDPOINT` - AWS SNS endpoint
-- (OPTIONAL) `AWS_SNS_TOPIC_NAME_PATTERN` - AWS SNS topic name pattern
-- (OPTIONAL) `AWS_SQS_ENDPOINT` - AWS SQS endpoint
-- (OPTIONAL) `AWS_SQS_QUEUE_NAME_PATTERN` - AWS SQS queue name pattern
+- `BASE_URL` (optional)  
+  Type: `string`  
+  Description: Public URL where the application is accessible, used in OpenAPI spec  
+  Default: ``
 
-## OpenTelemetry
+## App Metrics
 
-- (OPTIONAL) `OTEL_ENABLED` - whether to use OpenTelemetry instrumentation (`true`)
-- (OPTIONAL) `OTEL_RESOURCE_ATTRIBUTES` - metadata that is passed to OTel collector, in a format of key/value array, e. g. "service.name=node-service-template"
+- `METRICS_ENABLED` (optional)  
+  Type: `string`  
+  Description: Whether to enable Prometheus metrics collection  
+  Default: `true`
 
-### bugsnag
+## Db
 
-- (OPTIONAL) `BUGSNAG_KEY` - BugSnag API key
-- (OPTIONAL) `BUGSNAG_ENABLED` - whether to send errors to BugSnag (`true`)
-- (OPTIONAL) `BUGSNAG_APP_TYPE` - type of app process running
+- `DATABASE_URL` (required)  
+  Type: `string`  
+  Description: PostgreSQL connection URL including credentials and database name
 
-### docker compose
+## Redis
 
-- (OPTIONAL) `DOCKER_REDIS_PORT` - Docker `redis` service port, for development purposes only (`6379`)
-- (OPTIONAL) `DOCKER_RABBITMQ_CLIENT_PORT` - Docker `rabbitmq` service client port, for development purposes only (`5672`)
-- (OPTIONAL) `DOCKER_RABBITMQ_MANAGEMENT_PORT` - Docker `rabbitmq` service management port, for development purposes only (`15672`)
+- `REDIS_HOST` (required)  
+  Type: `string`  
+  Description: Redis server hostname
 
-### amplitude
+- `REDIS_KEY_PREFIX` (required)  
+  Type: `string`  
+  Description: Prefix for all Redis keys
 
-- (OPTIONAL) `AMPLITUDE_ENABLED` - Amplitude enabled (`false`)
-- (OPTIONAL) `AMPLITUDE_KEY` - Amplitude source API key
-- (OPTIONAL) `AMPLITUDE_SERVER_ZONE` - Amplitude server zone (`EU`). Supported values: `EU` | `US`
-- (OPTIONAL) `AMPLITUDE_FLUSH_INTERVAL_MILLIS` - Sets the interval of uploading events to Amplitude in milliseconds. (`10000`)
-- (OPTIONAL) `AMPLITUDE_FLUSH_QUEUE_SIZE` - Sets the maximum number of events that are batched in a single upload attempt. (`300`)
-- (OPTIONAL) `AMPLITUDE_FLUSH_MAX_RETRIES` - Sets the maximum number of retries for failed upload attempts. This is only applicable to retry-able errors. (`12`)
+- `REDIS_PORT` (required)  
+  Type: `integer`  
+  Description: Redis server port  
+  Min value: `0`  
+  Max value: `65535`
 
-### Jobs
-- (OPTIONAL) `SEND_EMAILS_JOB_CRON` - send emails job cron expression
-- `PROCESS_LOGS_FILES_JOB_PERIOD_IN_SECS` - period in seconds for processing logs files job
-- `DELETE_OLD_USERS_JOB_PERIOD_IN_SECS` - period in seconds for deleting old users job
+- `REDIS_USERNAME` (optional)  
+  Type: `string`  
+  Description: Redis authentication username
 
-### Integrations
-- (OPTIONAL) `SAMPLE_FAKE_STORE_BASE_URL` - fake store base URL
+- `REDIS_PASSWORD` (optional)  
+  Type: `string`  
+  Description: Redis authentication password
 
-### OpenTelemetry
-- (OPTIONAL) `OPEN_TELEMETRY_ENABLED` - whether to produce OpenTelemetry traces for requests. Default is "true"
-- (OPTIONAL) `OPEN_TELEMETRY_EXPORTER_URL` - OpenTelemetry exporter URL. Default is "grpc://localhost:4317"
+- `REDIS_USE_TLS` (optional)  
+  Type: `string`  
+  Description: Whether to use TLS/SSL for Redis connection  
+  Default: `true`
+
+- `REDIS_COMMAND_TIMEOUT` (optional)  
+  Type: `integer`  
+  Description: Command execution timeout in milliseconds  
+  Min value: `0`  
+  Max value: `9007199254740991`
+
+- `REDIS_CONNECT_TIMEOUT` (optional)  
+  Type: `integer`  
+  Description: Initial connection timeout in milliseconds  
+  Min value: `0`  
+  Max value: `9007199254740991`
+
+## Scheduler
+
+- `SCHEDULER_REDIS_HOST` (required)  
+  Type: `string`  
+  Description: Scheduler Redis server hostname
+
+- `SCHEDULER_REDIS_KEY_PREFIX` (required)  
+  Type: `string`  
+  Description: Prefix for all scheduler Redis keys
+
+- `SCHEDULER_REDIS_PORT` (required)  
+  Type: `integer`  
+  Description: Scheduler Redis server port  
+  Min value: `0`  
+  Max value: `65535`
+
+- `SCHEDULER_REDIS_USERNAME` (optional)  
+  Type: `string`  
+  Description: Scheduler Redis authentication username
+
+- `SCHEDULER_REDIS_PASSWORD` (optional)  
+  Type: `string`  
+  Description: Scheduler Redis authentication password
+
+- `SCHEDULER_REDIS_USE_TLS` (optional)  
+  Type: `string`  
+  Description: Whether to use TLS/SSL for scheduler Redis connection  
+  Default: `true`
+
+- `SCHEDULER_REDIS_COMMAND_TIMEOUT` (optional)  
+  Type: `integer`  
+  Description: Scheduler command execution timeout in milliseconds  
+  Min value: `0`  
+  Max value: `9007199254740991`
+
+- `SCHEDULER_REDIS_CONNECT_TIMEOUT` (optional)  
+  Type: `integer`  
+  Description: Scheduler initial connection timeout in milliseconds  
+  Min value: `0`  
+  Max value: `9007199254740991`
+
+## Amqp
+
+- `AMQP_HOSTNAME` (required)  
+  Type: `string`  
+  Description: AMQP broker hostname
+
+- `AMQP_PORT` (required)  
+  Type: `integer`  
+  Description: AMQP broker port  
+  Min value: `0`  
+  Max value: `65535`
+
+- `AMQP_USERNAME` (required)  
+  Type: `string`  
+  Description: AMQP broker username
+
+- `AMQP_PASSWORD` (required)  
+  Type: `string`  
+  Description: AMQP broker password
+
+- `AMQP_VHOST` (optional)  
+  Type: `string`  
+  Description: AMQP broker virtual host  
+  Default: ``
+
+- `AMQP_USE_TLS` (optional)  
+  Type: `string`  
+  Description: Whether to use TLS/SSL for AMQP connection  
+  Default: `true`
+
+## Aws
+
+- `AWS_REGION` (required)  
+  Type: `string`  
+  Description: AWS region for resource management  
+  Min length: `1`
+
+- `AWS_KMS_KEY_ID` (optional)  
+  Type: `string`  
+  Description: KMS key ID for encryption/decryption  
+  Default: ``
+
+- `AWS_ALLOWED_SOURCE_OWNER` (optional)  
+  Type: `string`  
+  Description: AWS account ID for permitted request source
+
+- `AWS_ENDPOINT` (optional)  
+  Type: `string`  
+  Description: Custom AWS service endpoint URL  
+  Format: `uri`
+
+- `AWS_RESOURCE_PREFIX` (optional)  
+  Type: `string`  
+  Description: Prefix for AWS resource names (max 10 chars)  
+  Max length: `10`
+
+- `AWS_ACCESS_KEY_ID` (optional)  
+  Type: `string`  
+  Description: AWS access key ID for programmatic access
+
+- `AWS_SECRET_ACCESS_KEY` (optional)  
+  Type: `string`  
+  Description: AWS secret access key for programmatic access
+
+- `_AWS_CREDENTIALS_RESOLVED` (optional)  
+  Type: `undefined`  
+  Description: Auto-resolved from AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY. Do not configure directly.
+
+## Integrations FakeStore
+
+- `SAMPLE_FAKE_STORE_BASE_URL` (required)  
+  Type: `string`  
+  Description: Base URL for the fake store API integration
+
+## Jobs DeleteOldUsersJob
+
+- `DELETE_OLD_USERS_JOB_PERIOD_IN_SECS` (required)  
+  Type: `integer`  
+  Description: Period in seconds for deleting old users job  
+  Min value: `0`  
+  Max value: `9007199254740991`
+
+## Jobs ProcessLogFilesJob
+
+- `PROCESS_LOGS_FILES_JOB_PERIOD_IN_SECS` (required)  
+  Type: `integer`  
+  Description: Period in seconds for processing log files job  
+  Min value: `0`  
+  Max value: `9007199254740991`
+
+## Jobs SendEmailsJob
+
+- `SEND_EMAILS_JOB_CRON` (required)  
+  Type: `string`  
+  Description: Cron expression for scheduling the send emails job
+
+## Vendors Opentelemetry
+
+- `OTEL_ENABLED` (optional)  
+  Type: `string`  
+  Description: Whether to enable OpenTelemetry instrumentation    
+  Default: `true`
+
+- `OTEL_RESOURCE_ATTRIBUTES` (optional)  
+  Type: `string`  
+  Description: OpenTelemetry resource attributes in format service.namespace={appName},env={stage or live} (order can be reversed)  
+  Pattern: `^(service\.namespace=[^,]+,env=(stage|live)|env=(stage|live),service\.namespace=[^,]+)$`
+
+- `OTEL_EXPORTER_URL` (optional)  
+  Type: `string`  
+  Description: OpenTelemetry exporter endpoint URL  
+  Format: `uri`
+
+## Vendors Bugsnag
+
+- `BUGSNAG_ENABLED` (optional)  
+  Type: `string`  
+  Description: Whether to send errors to Bugsnag  
+  Default: `true`
+
+- `BUGSNAG_KEY` (optional)  
+  Type: `string`  
+  Description: Bugsnag API key for error submission
+
+- `BUGSNAG_APP_TYPE` (optional)  
+  Type: `string`  
+  Description: Application process type identifier for Bugsnag
+
+## Vendors Amplitude
+
+- `AMPLITUDE_ENABLED` (optional)  
+  Type: `string`  
+  Description: Whether to track analytics with Amplitude  
+  Default: `false`
+
+- `AMPLITUDE_KEY` (optional)  
+  Type: `string`  
+  Description: Amplitude API key for event submission
+
+- `AMPLITUDE_SERVER_ZONE` (optional)  
+  Type: `string`  
+  Description: Amplitude data residency region  
+  Supported values: `EU` | `US`  
+  Default: `EU`
+
+- `AMPLITUDE_FLUSH_INTERVAL_MILLIS` (optional)  
+  Type: `integer`  
+  Description: Event batch upload interval in milliseconds  
+  Min value: `0`  
+  Max value: `9007199254740991`  
+  Default: `10000`
+
+- `AMPLITUDE_FLUSH_QUEUE_SIZE` (optional)  
+  Type: `integer`  
+  Description: Maximum events per batch upload  
+  Min value: `0`  
+  Max value: `9007199254740991`  
+  Default: `300`
+
+- `AMPLITUDE_FLUSH_MAX_RETRIES` (optional)  
+  Type: `integer`  
+  Description: Maximum retry attempts for failed uploads  
+  Min value: `0`  
+  Max value: `9007199254740991`  
+  Default: `12`

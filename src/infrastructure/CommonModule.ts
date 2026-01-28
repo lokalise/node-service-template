@@ -47,7 +47,7 @@ import type { AppInstance } from '../app.ts'
 import { FakeStoreApiClient } from '../integrations/FakeStoreApiClient.ts'
 import { PermissionsMessages } from '../modules/users/consumers/permissionsMessageSchemas.ts'
 import { type UsersModuleDependencies, userBullmqQueues } from '../modules/users/UserModule.ts'
-import { type Config, getAmqpConfig, getConfig, isTest, SERVICE_NAME } from './config.ts'
+import { type Config, getConfig, nodeEnv, SERVICE_NAME } from './config.ts'
 import { FakeAmplitude } from './fakes/FakeAmplitude.ts'
 import {
   DbHealthcheck,
@@ -209,7 +209,7 @@ export class CommonModule extends AbstractModule<CommonDependencies, ExternalDep
             SERVICE_NAME,
             new CommonBullmqFactoryNew(),
             bullmqSupportedQueues,
-            { redisConfig: deps.config.redis, isTest: isTest() },
+            { redisConfig: deps.config.redis, isTest: nodeEnv.isTest },
           ),
         {
           asyncInit: (manager) => manager.start(resolveJobQueuesEnabled(diOptions)),
@@ -219,8 +219,8 @@ export class CommonModule extends AbstractModule<CommonDependencies, ExternalDep
       ),
 
       amqpConnectionManager: asSingletonFunction(
-        () => {
-          return new AmqpConnectionManager(getAmqpConfig(), externalDependencies.logger)
+        (deps: CommonDependencies) => {
+          return new AmqpConnectionManager(deps.config.amqp, externalDependencies.logger)
         },
         {
           lifetime: Lifetime.SINGLETON,
@@ -264,7 +264,7 @@ export class CommonModule extends AbstractModule<CommonDependencies, ExternalDep
               },
               messageIdField: 'id',
               logMessages: true,
-              handlerSpy: isTest(),
+              handlerSpy: nodeEnv.isTest,
               messageTimestampField: 'timestamp',
               deletionConfig: {
                 deleteIfExists: false, // queue deletion/creation should be handled by consumers
