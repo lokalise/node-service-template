@@ -1,0 +1,24 @@
+name: AI Assistance Tracking
+
+on:
+  pull_request:
+    types: [opened, edited]
+
+jobs:
+  validate-and-label:
+    # Only run for human authors (skip bots)
+    if: ${{ !endsWith(github.event.pull_request.user.login, '[bot]') }}
+    runs-on: ubuntu-latest
+
+    permissions:
+      pull-requests: write
+      issues: write
+
+    steps:
+      - name: Validate AI assistance and manage label
+        uses: lokalise/github-actions/ai-assistance-tracking@main
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          pr_body: ${{ github.event.pull_request.body }}
+          pr_number: ${{ github.event.pull_request.number }}
+          repository: ${{ github.repository }}
