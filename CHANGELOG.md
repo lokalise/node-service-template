@@ -8,17 +8,23 @@
 
 * Add optionalDependencies to ensure consistent lockfile regeneration
 
-* Remove passing '-' as JWT secret private key to utilize Verify-only mode.
-
 * Update dependencies
+
+## [1.2.3] - 2026-01-27
+
+Remove passing '-' as JWT secret private key to utilize Verify-only mode.
 
 ## [1.2.2] - 2026-01-19
 
-Moved OpenAPI spec validation to e2e test.
+Move OpenAPI spec validation to e2e test.
+
+## [1.2.1] - 2026-01-19
+
+Improve error logging.
 
 ## [1.2.0] - 2025-09-17
 
-Removed promise wrappers from healthchecks that already relied on synchronous storage, populated asynchronously. This reduces the overhead of healthcheck endpoint and works more reliably in a heavily loaded sytem.
+Remove promise wrappers from healthchecks that already relied on synchronous storage, populated asynchronously. This reduces the overhead of healthcheck endpoint and works more reliably in a heavily loaded sytem.
 
 ## [1.1.0] - 2025-09-17
 
