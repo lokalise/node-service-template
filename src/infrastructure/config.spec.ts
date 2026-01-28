@@ -29,116 +29,64 @@ describe('config', () => {
 
   describe('OpenTelemetry config validation', () => {
     describe('_resourceAttributes', () => {
-      test('accepts valid format with stage env', () => {
+      test('accepts valid format with service name', () => {
         const env = buildEnv({
-          OTEL_RESOURCE_ATTRIBUTES: 'service.namespace=my-app,env=stage',
+          OTEL_RESOURCE_ATTRIBUTES: 'service.name=my-app',
+        })
+
+        const config = parseEnv(env, envSchema)
+        expect(config.vendors.opentelemetry._resourceAttributes).toBe('service.name=my-app')
+      })
+
+      test('accepts service names with hyphens and underscores', () => {
+        const env = buildEnv({
+          OTEL_RESOURCE_ATTRIBUTES: 'service.name=my-app_name-123',
         })
 
         const config = parseEnv(env, envSchema)
         expect(config.vendors.opentelemetry._resourceAttributes).toBe(
-          'service.namespace=my-app,env=stage',
+          'service.name=my-app_name-123',
         )
       })
 
-      test('accepts valid format with live env', () => {
+      test('rejects format without service.name prefix', () => {
         const env = buildEnv({
-          OTEL_RESOURCE_ATTRIBUTES: 'service.namespace=another-service,env=live',
-        })
-
-        const config = parseEnv(env, envSchema)
-        expect(config.vendors.opentelemetry._resourceAttributes).toBe(
-          'service.namespace=another-service,env=live',
-        )
-      })
-
-      test('accepts format with reversed order', () => {
-        const env = buildEnv({
-          OTEL_RESOURCE_ATTRIBUTES: 'env=stage,service.namespace=my-app',
-        })
-
-        const config = parseEnv(env, envSchema)
-        expect(config.vendors.opentelemetry._resourceAttributes).toBe(
-          'env=stage,service.namespace=my-app',
-        )
-      })
-
-      test('accepts app names with hyphens and underscores', () => {
-        const env = buildEnv({
-          OTEL_RESOURCE_ATTRIBUTES: 'service.namespace=my-app_name-123,env=stage',
-        })
-
-        const config = parseEnv(env, envSchema)
-        expect(config.vendors.opentelemetry._resourceAttributes).toBe(
-          'service.namespace=my-app_name-123,env=stage',
-        )
-      })
-
-      test('rejects format with invalid env value', () => {
-        const env = buildEnv({
-          OTEL_RESOURCE_ATTRIBUTES: 'service.namespace=my-app,env=production',
+          OTEL_RESOURCE_ATTRIBUTES: 'name=my-app',
         })
 
         expect(() => parseEnv(env, envSchema)).toThrowErrorMatchingInlineSnapshot(`
           [EnvaseError: Environment variables validation has failed:
             [OTEL_RESOURCE_ATTRIBUTES]:
-              Must match format: service.namespace={appName},env={stage or live} or env={stage or live},service.namespace={appName}
-              (received: "service.namespace=my-app,env=production")
-          ]
-        `)
-      })
-
-      test('rejects format without service.namespace prefix', () => {
-        const env = buildEnv({
-          OTEL_RESOURCE_ATTRIBUTES: 'namespace=my-app,env=stage',
-        })
-
-        expect(() => parseEnv(env, envSchema)).toThrowErrorMatchingInlineSnapshot(`
-          [EnvaseError: Environment variables validation has failed:
-            [OTEL_RESOURCE_ATTRIBUTES]:
-              Must match format: service.namespace={appName},env={stage or live} or env={stage or live},service.namespace={appName}
-              (received: "namespace=my-app,env=stage")
-          ]
-        `)
-      })
-
-      test('rejects format with missing env parameter', () => {
-        const env = buildEnv({
-          OTEL_RESOURCE_ATTRIBUTES: 'service.namespace=my-app',
-        })
-
-        expect(() => parseEnv(env, envSchema)).toThrowErrorMatchingInlineSnapshot(`
-          [EnvaseError: Environment variables validation has failed:
-            [OTEL_RESOURCE_ATTRIBUTES]:
-              Must match format: service.namespace={appName},env={stage or live} or env={stage or live},service.namespace={appName}
-              (received: "service.namespace=my-app")
+              Must match format: service.name={serviceName}
+              (received: "name=my-app")
           ]
         `)
       })
 
       test('rejects format with extra parameters', () => {
         const env = buildEnv({
-          OTEL_RESOURCE_ATTRIBUTES: 'service.namespace=my-app,env=stage,extra=value',
+          OTEL_RESOURCE_ATTRIBUTES: 'service.name=my-app,env=stage',
         })
 
         expect(() => parseEnv(env, envSchema)).toThrowErrorMatchingInlineSnapshot(`
           [EnvaseError: Environment variables validation has failed:
             [OTEL_RESOURCE_ATTRIBUTES]:
-              Must match format: service.namespace={appName},env={stage or live} or env={stage or live},service.namespace={appName}
-              (received: "service.namespace=my-app,env=stage,extra=value")
+              Must match format: service.name={serviceName}
+              (received: "service.name=my-app,env=stage")
           ]
         `)
       })
 
-      test('rejects empty app name', () => {
+      test('rejects empty service name', () => {
         const env = buildEnv({
-          OTEL_RESOURCE_ATTRIBUTES: 'service.namespace=,env=stage',
+          OTEL_RESOURCE_ATTRIBUTES: 'service.name=',
         })
 
         expect(() => parseEnv(env, envSchema)).toThrowErrorMatchingInlineSnapshot(`
           [EnvaseError: Environment variables validation has failed:
             [OTEL_RESOURCE_ATTRIBUTES]:
-              Must match format: service.namespace={appName},env={stage or live} or env={stage or live},service.namespace={appName}
-              (received: "service.namespace=,env=stage")
+              Must match format: service.name={serviceName}
+              (received: "service.name=")
           ]
         `)
       })
