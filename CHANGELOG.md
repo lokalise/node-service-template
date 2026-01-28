@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.3.1] - 2026-01-28
+
+Migrate envvars management to envase.
+
+# Changelog
+
 ## [1.3.0] - 2026-01-27
 
 * Use newer version of OTel instrumentation setup
@@ -60,7 +66,7 @@ The new wrapper looks like this:
 export const redisHealthCheck: HealthChecker = (
     app: FastifyInstance,
 ): Promise<Either<Error, true>> => {
-   return app.diContainer.cradle.healthcheckStore.getAsyncHealthCheckResult('redis')
+    return app.diContainer.cradle.healthcheckStore.getAsyncHealthCheckResult('redis')
 }
 ```
 

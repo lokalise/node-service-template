@@ -44,3 +44,12 @@ updates:
       aws:
         patterns:
           - '@aws-sdk/*'
+      rollup:
+        patterns:
+          - '@rollup/*'
+      esbuild:
+        patterns:
+          - '@esbuild/*'
+      biomejs:
+        patterns:
+          - '@biomejs/*'
