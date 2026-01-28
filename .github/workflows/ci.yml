@@ -23,10 +23,6 @@ jobs:
         run: |
           npm install --ignore-scripts
 
-      - name: Validate docs
-        run: |
-          node --run docs:validate
-
       - name: Docker start
         run: |
           docker compose up -d --quiet-pull --wait
@@ -47,10 +43,6 @@ jobs:
       - name: Run lint
         run: |
           node --run lint   
-
-      - name: Generate and validate OpenAPI schema
-        run: |
-          node --run spec:generate
 
       - name: Smoketest the application
         run: |

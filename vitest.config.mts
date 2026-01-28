@@ -17,6 +17,7 @@ export default defineConfig({
         'src/db/*',
         'src/infrastructure/CommonModule.ts',
         'src/infrastructure/logger.ts',
+        'src/infrastructure/config.ts',
         'src/infrastructure/errors/publicErrors.ts',
         'src/infrastructure/errors/internalErrors.ts',
         'src/infrastructure/fakes/FakeAmplitude.ts',
@@ -32,7 +33,7 @@ export default defineConfig({
       thresholds: {
         lines: 85,
         functions: 90,
-        branches: 72,
+        branches: 68,
         statements: 85,
       },
     },

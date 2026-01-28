@@ -49,7 +49,7 @@ import type {
   DependencyOverrides,
   ExternalDependencies,
 } from './infrastructure/CommonModule.ts'
-import { type Config, getConfig, isDevelopment } from './infrastructure/config.ts'
+import { type Config, getConfig, nodeEnv } from './infrastructure/config.ts'
 import { errorHandler } from './infrastructure/errors/errorHandler.ts'
 import {
   dbHealthCheck,
@@ -115,7 +115,7 @@ export async function getApp(
   // on nginx or kubernetes level, but for local development it is convenient
   // to have these headers set by application.
   // If this service is never called from the browser, this entire block can be removed.
-  if (isDevelopment()) {
+  if (nodeEnv.isDevelopment) {
     await app.register(fastifyCors, {
       origin: '*',
       credentials: true,
@@ -131,14 +131,14 @@ export async function getApp(
 
   await app.register(
     fastifyHelmet,
-    isDevelopment()
+    nodeEnv.isDevelopment
       ? {
           contentSecurityPolicy: false,
         }
       : {},
   )
 
-  if (!isDevelopment()) {
+  if (!nodeEnv.isDevelopment) {
     await app.register(fastifyGracefulShutdown, {
       resetHandlersOnInit: true,
       timeout: GRACEFUL_SHUTDOWN_TIMEOUT_IN_MSECS,
@@ -315,7 +315,7 @@ export async function getApp(
     diContext.registerRoutes(app)
 
     // Graceful shutdown hook
-    if (!isDevelopment()) {
+    if (!nodeEnv.isDevelopment) {
       app.gracefulShutdown(async (_signal) => {
         app.log.info('Starting graceful shutdown')
         await gracefulOtelShutdown()
