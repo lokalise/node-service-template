@@ -247,8 +247,8 @@
 
 - `OTEL_RESOURCE_ATTRIBUTES` (optional)  
   Type: `string`  
-  Description: OpenTelemetry resource attributes in format service.namespace={appName},env={stage or live} (order can be reversed)  
-  Pattern: `^(service\.namespace=[^,]+,env=(stage|live)|env=(stage|live),service\.namespace=[^,]+)$`
+  Description: OpenTelemetry resource attributes in format service.name={serviceName}  
+  Pattern: `^service\.name=[^,]+$`
 
 - `OTEL_EXPORTER_URL` (optional)  
   Type: `string`  
