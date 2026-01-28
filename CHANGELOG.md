@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.3.3] - 2026-01-28
+
+Skip request logging for utility endpoints
+
 ## [1.3.2] - 2026-01-28
 
 Switch to 1.0.0 beta drizzle

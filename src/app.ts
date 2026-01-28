@@ -13,6 +13,7 @@ import {
   amplitudePlugin,
   bugsnagPlugin,
   commonSyncHealthcheckPlugin,
+  getFastifyAppLoggingConfig,
   getRequestIdFastifyAppConfig,
   metricsPlugin,
   openTelemetryTransactionManagerPlugin,
@@ -61,7 +62,6 @@ import { jwtTokenPlugin } from './plugins/jwtTokenPlugin.ts'
 EventEmitter.defaultMaxListeners = 12
 
 const GRACEFUL_SHUTDOWN_TIMEOUT_IN_MSECS = 10000
-const REQUEST_LOGGING_LEVELS = ['debug', 'trace']
 
 export type AppInstance = FastifyInstance<
   http.Server,
@@ -89,12 +89,11 @@ export async function getApp(
   const config = getConfig()
   const appConfig = config.app
   const logger = resolveLogger(appConfig)
-  const enableRequestLogging = REQUEST_LOGGING_LEVELS.includes(appConfig.logLevel)
 
   const app = fastify<http.Server, http.IncomingMessage, http.ServerResponse, CommonLogger>({
     ...getRequestIdFastifyAppConfig(),
+    ...getFastifyAppLoggingConfig(appConfig.logLevel),
     loggerInstance: logger,
-    disableRequestLogging: !enableRequestLogging,
   })
 
   const diContainer =
@@ -210,9 +209,6 @@ export async function getApp(
   await app.register(jwtTokenPlugin, {
     skipList: new Set([
       '/favicon.ico',
-      '/login',
-      '/access-token',
-      '/refresh-token',
       '/documentation',
       '/documentation/',
       '/documentation/openapi.json',
