@@ -35,9 +35,7 @@ describe('config', () => {
         })
 
         const config = parseEnv(env, envSchema)
-        expect(config.vendors.opentelemetry._resourceAttributes).toBe(
-          'service.name=my-app',
-        )
+        expect(config.vendors.opentelemetry._resourceAttributes).toBe('service.name=my-app')
       })
 
       test('accepts service names with hyphens and underscores', () => {

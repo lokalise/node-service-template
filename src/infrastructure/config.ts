@@ -217,14 +217,9 @@ const envSchema = {
         'OTEL_RESOURCE_ATTRIBUTES',
         z
           .string()
-          .regex(
-            /^service\.name=[^,]+$/,
-            'Must match format: service.name={serviceName}',
-          )
+          .regex(/^service\.name=[^,]+$/, 'Must match format: service.name={serviceName}')
           .optional()
-          .describe(
-            'OpenTelemetry resource attributes in format service.name={serviceName}',
-          ),
+          .describe('OpenTelemetry resource attributes in format service.name={serviceName}'),
       ),
       _exporterUrl: envvar(
         'OTEL_EXPORTER_URL',
