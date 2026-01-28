@@ -218,12 +218,12 @@ const envSchema = {
         z
           .string()
           .regex(
-            /^(service\.namespace=[^,]+,env=(stage|live)|env=(stage|live),service\.namespace=[^,]+)$/,
-            'Must match format: service.namespace={appName},env={stage or live} or env={stage or live},service.namespace={appName}',
+            /^service\.name=[^,]+$/,
+            'Must match format: service.name={serviceName}',
           )
           .optional()
           .describe(
-            'OpenTelemetry resource attributes in format service.namespace={appName},env={stage or live} (order can be reversed)',
+            'OpenTelemetry resource attributes in format service.name={serviceName}',
           ),
       ),
       _exporterUrl: envvar(
