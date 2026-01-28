@@ -4,8 +4,6 @@
 
 Migrate envvars management to envase.
 
-# Changelog
-
 ## [1.3.0] - 2026-01-27
 
 * Use newer version of OTel instrumentation setup
