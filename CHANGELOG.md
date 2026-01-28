@@ -1,6 +1,6 @@
 # Changelog
 
-## 27.01.2026
+## [1.3.0] - 2026-01-27
 
 * Use newer version of OTel instrumentation setup
 
@@ -12,19 +12,19 @@
 
 * Update dependencies
 
-## 19.01.2026
+## [1.2.2] - 2026-01-19
 
 Moved OpenAPI spec validation to e2e test.
 
-## 17.09.2025
+## [1.2.0] - 2025-09-17
 
 Removed promise wrappers from healthchecks that already relied on synchronous storage, populated asynchronously. This reduces the overhead of healthcheck endpoint and works more reliably in a heavily loaded sytem.
 
-## 11.09.2025
+## [1.1.0] - 2025-09-17
 
 Smoketest script added into CI, now it will start an application and wait for the healthcheck to pass, and shutdown the application, or timeout in 15 seconds.
 
-## 30.07.2025
+## [1.0.0] - 2025-07-30
 
 ### Changes
 
