@@ -1,10 +1,10 @@
 # Changelog
 
-## 27.01.2026
+## [1.3.1] - 2026-01-28
 
 Migrate envvars management to envase.
 
-## 27.01.2026
+## [1.3.0] - 2026-01-27
 
 * Use newer version of OTel instrumentation setup
 
@@ -12,27 +12,29 @@ Migrate envvars management to envase.
 
 * Add optionalDependencies to ensure consistent lockfile regeneration
 
-* Remove passing '-' as JWT secret private key to utilize Verify-only mode.
-
 * Update dependencies
 
-## 27.01.2026
+## [1.2.3] - 2026-01-27
 
 Remove passing '-' as JWT secret private key to utilize Verify-only mode.
 
-## 19.01.2026
+## [1.2.2] - 2026-01-19
 
-Moved OpenAPI spec validation to e2e test.
+Move OpenAPI spec validation to e2e test.
 
-## 17.09.2025
+## [1.2.1] - 2026-01-19
 
-Removed promise wrappers from healthchecks that already relied on synchronous storage, populated asynchronously. This reduces the overhead of healthcheck endpoint and works more reliably in a heavily loaded sytem.
+Improve error logging.
 
-## 11.09.2025
+## [1.2.0] - 2025-09-17
+
+Remove promise wrappers from healthchecks that already relied on synchronous storage, populated asynchronously. This reduces the overhead of healthcheck endpoint and works more reliably in a heavily loaded sytem.
+
+## [1.1.0] - 2025-09-17
 
 Smoketest script added into CI, now it will start an application and wait for the healthcheck to pass, and shutdown the application, or timeout in 15 seconds.
 
-## 30.07.2025
+## [1.0.0] - 2025-07-30
 
 ### Changes
 
@@ -62,7 +64,7 @@ The new wrapper looks like this:
 export const redisHealthCheck: HealthChecker = (
     app: FastifyInstance,
 ): Promise<Either<Error, true>> => {
-   return app.diContainer.cradle.healthcheckStore.getAsyncHealthCheckResult('redis')
+    return app.diContainer.cradle.healthcheckStore.getAsyncHealthCheckResult('redis')
 }
 ```
 
