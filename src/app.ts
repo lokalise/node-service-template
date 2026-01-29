@@ -11,13 +11,16 @@ import fastifySchedule from '@fastify/schedule'
 import fastifySwagger from '@fastify/swagger'
 import {
   amplitudePlugin,
+  bugsnagErrorReporter,
   bugsnagPlugin,
   commonSyncHealthcheckPlugin,
+  createErrorHandler,
   getFastifyAppLoggingConfig,
   getRequestIdFastifyAppConfig,
   metricsPlugin,
   openTelemetryTransactionManagerPlugin,
   requestContextProviderPlugin,
+  unhandledExceptionPlugin,
 } from '@lokalise/fastify-extras'
 import {
   type CommonLogger,
@@ -51,7 +54,6 @@ import type {
   ExternalDependencies,
 } from './infrastructure/CommonModule.ts'
 import { type Config, getConfig, nodeEnv } from './infrastructure/config.ts'
-import { errorHandler } from './infrastructure/errors/errorHandler.ts'
 import {
   dbHealthCheck,
   redisHealthCheck,
@@ -219,7 +221,7 @@ export async function getApp(
     ]),
   })
 
-  app.setErrorHandler(errorHandler)
+  app.setErrorHandler(createErrorHandler({ errorReporter: bugsnagErrorReporter }))
 
   const diContext = new DIContext<Dependencies, Config, ExternalDependencies>(
     diContainer,
@@ -240,7 +242,6 @@ export async function getApp(
     app,
     logger: app.log,
   }
-
   diContext.registerDependencies(
     {
       modules: primaryModules,
@@ -250,6 +251,13 @@ export async function getApp(
     },
     externalDependencies,
   )
+
+  await app.register(requestContextProviderPlugin)
+  await app.register(unhandledExceptionPlugin, {
+    shutdownAfterHandling: false,
+    errorObjectResolver: resolveGlobalErrorLogObject,
+    errorReporter: bugsnagErrorReporter,
+  })
 
   if (configOverrides.monitoringEnabled) {
     await app.register(metricsPlugin, {
