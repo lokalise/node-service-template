@@ -288,7 +288,6 @@ export async function getApp(
       },
     })
   }
-  await app.register(requestContextProviderPlugin)
 
   // Vendor-specific plugins
   await app.register(bugsnagPlugin, {
