@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.3.4] - 2026-01-29
+ - Add missing `unhandledExceptionPlugin`
+ - Remove the error folder and replace it with `node-core`
+ - Clean up unused dependencies
+
 ## [1.3.3] - 2026-01-28
 
 Skip request logging for utility endpoints
