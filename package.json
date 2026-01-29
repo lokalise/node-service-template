@@ -65,7 +65,6 @@
         "@opentelemetry/auto-instrumentations-node": "^0.68.0",
         "@opentelemetry/exporter-trace-otlp-grpc": "^0.210.0",
         "@scalar/fastify-api-reference": "^1.43.15",
-        "@supercharge/promise-pool": "^3.2.0",
         "amqplib": "^0.10.9",
         "awilix": "^12.0.5",
         "awilix-manager": "^6.3.0",
@@ -80,7 +79,6 @@
         "fastify-no-icon": "^7.0.0",
         "fastify-type-provider-zod": "^6.1.0",
         "ioredis": "^5.9.2",
-        "jsonwebtoken": "^9.0.3",
         "layered-loader": "^14.2.2",
         "opinionated-machine": "^5.2.0",
         "pino": "^10.3.0",
@@ -90,7 +88,6 @@
         "redis-semaphore": "^5.6.2",
         "toad-scheduler": "^3.1.0",
         "undici": "^7.19.1",
-        "validation-utils": "11.0.1",
         "zod": "^4.3.6"
     },
     "devDependencies": {
@@ -101,7 +98,6 @@
         "@lokalise/universal-testing-utils": "^3.0.0",
         "@readme/openapi-parser": "^5.5.0",
         "@types/amqplib": "^0.10.8",
-        "@types/jsonwebtoken": "^9.0.10",
         "@types/node": "^25.0.9",
         "@vitest/coverage-v8": "^4.0.18",
         "cpy-cli": "^6.0.0",
