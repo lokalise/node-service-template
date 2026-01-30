@@ -1,8 +1,8 @@
 import type { RequestContext } from '@lokalise/fastify-extras'
+import { EntityNotFoundError } from '@lokalise/node-core'
 import type { Loader } from 'layered-loader'
 import type z from 'zod/v4'
 import type { User } from '../../../db/schema/user.ts'
-import { EntityNotFoundError } from '../../../infrastructure/errors/publicErrors.ts'
 import type { UserRepository } from '../repositories/UserRepository.ts'
 import type {
   CREATE_USER_BODY_SCHEMA,
