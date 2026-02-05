@@ -64,7 +64,7 @@
         "@message-queue-toolkit/sqs": "^24.1.1",
         "@opentelemetry/auto-instrumentations-node": "^0.68.0",
         "@opentelemetry/exporter-trace-otlp-grpc": "^0.210.0",
-        "@scalar/fastify-api-reference": "^1.43.15",
+        "@scalar/fastify-api-reference": "^1.44.1",
         "amqplib": "^0.10.9",
         "awilix": "^12.0.5",
         "awilix-manager": "^6.3.0",
