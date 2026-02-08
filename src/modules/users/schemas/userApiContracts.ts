@@ -1,4 +1,4 @@
-import { buildDeleteRoute, buildGetRoute, buildPayloadRoute } from '@lokalise/api-contracts'
+import { buildRestContract } from '@lokalise/api-contracts'
 import z from 'zod/v4'
 import {
   AUTH_HEADERS,
@@ -11,7 +11,7 @@ import {
   UPDATE_USER_PARAMS_SCHEMA,
 } from './userSchemas.ts'
 
-export const postCreateUserContract = buildPayloadRoute({
+export const postCreateUserContract = buildRestContract({
   method: 'post', // can also be 'patch' or 'post'
   successResponseBodySchema: CREATE_USER_RESPONSE_BODY_SCHEMA,
   requestHeaderSchema: AUTH_HEADERS,
@@ -20,7 +20,8 @@ export const postCreateUserContract = buildPayloadRoute({
   description: 'Create user',
 })
 
-export const getUserContract = buildGetRoute({
+export const getUserContract = buildRestContract({
+  method: 'get',
   successResponseBodySchema: GET_USER_SCHEMA_RESPONSE_SCHEMA,
   requestPathParamsSchema: GET_USER_PARAMS_SCHEMA,
   requestHeaderSchema: AUTH_HEADERS,
@@ -28,7 +29,8 @@ export const getUserContract = buildGetRoute({
   description: 'Get user',
 })
 
-export const deleteUserContract = buildDeleteRoute({
+export const deleteUserContract = buildRestContract({
+  method: 'delete',
   successResponseBodySchema: z.undefined(),
   requestPathParamsSchema: DELETE_USER_PARAMS_SCHEMA,
   requestHeaderSchema: AUTH_HEADERS,
@@ -36,7 +38,7 @@ export const deleteUserContract = buildDeleteRoute({
   description: 'Delete user',
 })
 
-export const patchUpdateUserContract = buildPayloadRoute({
+export const patchUpdateUserContract = buildRestContract({
   method: 'patch', // can also be 'patch' or 'post'
   successResponseBodySchema: z.undefined(),
   isEmptyResponseExpected: true,

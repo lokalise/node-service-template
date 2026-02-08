@@ -132,7 +132,7 @@ export class UserModule extends AbstractModule<UsersModuleDependencies> {
     }
   }
 
-  resolveControllers(): MandatoryNameAndRegistrationPair<unknown> {
+  override resolveControllers(): MandatoryNameAndRegistrationPair<unknown> {
     return {
       userController: asControllerClass(UserController),
     }
