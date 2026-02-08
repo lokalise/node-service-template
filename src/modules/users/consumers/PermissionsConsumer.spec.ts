@@ -277,8 +277,15 @@ describe('PermissionsConsumer', () => {
       expect(metricsSpy).toHaveBeenCalledWith({
         messageId: messageId,
         messageType: 'permissions.added',
+        messageDeduplicationId: undefined,
         processingResult: {
           status: 'consumed',
+        },
+        messageMetadata: {
+          correlationId: expect.any(String),
+          originatedFrom: 'node-service-template',
+          producedBy: 'node-service-template',
+          schemaVersion: '1.0.1',
         },
         message: expect.objectContaining(message),
         queueName: PermissionConsumer.QUEUE_NAME,

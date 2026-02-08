@@ -332,7 +332,7 @@ export class CommonModule extends AbstractModule<CommonDependencies, ExternalDep
     }
   }
 
-  resolveControllers() {
+  override resolveControllers() {
     return {}
   }
 }
