@@ -95,7 +95,7 @@
         "@biomejs/biome": "2.3.13",
         "@lokalise/biome-config": "^3.1.1",
         "@lokalise/tsconfig": "^3.1.0",
-        "@lokalise/universal-testing-utils": "^3.0.0",
+        "@lokalise/universal-testing-utils": "^3.0.1",
         "@readme/openapi-parser": "^5.5.0",
         "@types/amqplib": "^0.10.8",
         "@types/node": "^25.2.2",
