@@ -48,7 +48,7 @@
         "@lokalise/aws-config": "^7.1.0",
         "@lokalise/backend-http-client": "^10.0.3",
         "@lokalise/background-jobs-common": "^14.2.1",
-        "@lokalise/fastify-api-contracts": "^5.1.0",
+        "@lokalise/fastify-api-contracts": "^5.1.1",
         "@lokalise/fastify-extras": "^30.6.0",
         "@lokalise/healthcheck-utils": "^6.0.0",
         "@lokalise/id-utils": "^3.0.1",
