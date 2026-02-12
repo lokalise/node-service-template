@@ -54,7 +54,7 @@
         "@lokalise/id-utils": "^3.0.1",
         "@lokalise/node-core": "^14.7.0",
         "@lokalise/opentelemetry-fastify-bootstrap": "^2.0.1",
-        "@lokalise/universal-ts-utils": "^4.8.0",
+        "@lokalise/universal-ts-utils": "^4.9.0",
         "@lokalise/zod-extras": "^3.0.1",
         "@message-queue-toolkit/amqp": "^23.1.0",
         "@message-queue-toolkit/core": "^25.3.0",
