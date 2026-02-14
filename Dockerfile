@@ -61,4 +61,4 @@ ENV NODE_PATH=.
 
 USER node
 
-CMD ["dumb-init", "node","--import=@opentelemetry/instrumentation/hook.mjs", "/home/node/app/src/server.js"]
+CMD ["dumb-init", "node","--import=@opentelemetry/instrumentation/hook.mjs", "/home/node/app/server.js"]
