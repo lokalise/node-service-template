@@ -4,12 +4,12 @@ import type { ErrorReporter, TransactionObservabilityManager } from '@lokalise/n
 import { resolveGlobalErrorLogObject } from '@lokalise/node-core'
 import type { FastifyBaseLogger } from 'fastify'
 import type { Redis } from 'ioredis'
+import type { PublicDependencies } from 'opinionated-machine'
 import { stdSerializers } from 'pino'
 import type { LockOptions } from 'redis-semaphore'
 import { Mutex } from 'redis-semaphore'
 import type { ToadScheduler } from 'toad-scheduler'
 import { AsyncTask, SimpleIntervalJob } from 'toad-scheduler'
-import type { CommonDependencies } from '../CommonModule.ts'
 
 const DEFAULT_LOCK_NAME = 'exclusive'
 const DEFAULT_JOB_INTERVAL = 60000
@@ -96,7 +96,7 @@ export abstract class AbstractPeriodicJob {
       transactionObservabilityManager,
       errorReporter,
       scheduler,
-    }: CommonDependencies,
+    }: PublicDependencies,
   ) {
     this.options = {
       intervalInMs: DEFAULT_JOB_INTERVAL,

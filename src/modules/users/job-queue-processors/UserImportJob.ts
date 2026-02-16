@@ -3,10 +3,10 @@ import type { RequestContext } from '@lokalise/fastify-extras'
 import type { Job } from 'bullmq'
 
 import z from 'zod/v4'
-import type { Dependencies } from '../../../infrastructure/CommonModule.ts'
 import { SERVICE_NAME } from '../../../infrastructure/config.ts'
 import { AbstractEnqueuedJobProcessor } from '../../../infrastructure/jobs/AbstractEnqueuedJobProcessor.ts'
 import type { UserService } from '../services/UserService.ts'
+import type { UsersInjectableDependencies } from '../UserModule.ts'
 
 export const USER_IMPORT_JOB_PAYLOAD = BASE_JOB_PAYLOAD_SCHEMA.extend({
   name: z.string(),
@@ -19,7 +19,7 @@ export class UserImportJob extends AbstractEnqueuedJobProcessor<'UserImportJob'>
   public static readonly QUEUE_ID = 'UserImportJob'
   private readonly userService: UserService
 
-  constructor(dependencies: Dependencies) {
+  constructor(dependencies: UsersInjectableDependencies) {
     super(dependencies, {
       queueId: UserImportJob.QUEUE_ID,
       ownerName: SERVICE_NAME,

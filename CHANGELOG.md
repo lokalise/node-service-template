@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.4.0] - 2026-02-16
+
+- Migrate to new `opinionated-machine` DI patterns: `PublicDependencies` module augmentation, `InferModuleDependencies`, `InferPublicModuleDependencies`
+- Migrate to unified `buildRestContract` from `@lokalise/api-contracts` (replaces `buildGetRoute` and other method-specific builders)
+- Migrate to unified `sendByContract` from `@lokalise/backend-http-client` (replaces `sendByGetRoute` and other method-specific senders)
+- Migrate to unified `buildFastifyRoute` and `injectByContract` from `@lokalise/fastify-api-contracts` (replaces `buildFastifyPayloadRoute`/`buildFastifyNoPayloadRoute` and `injectGet`/`injectPost`/`injectPatch`/`injectDelete`)
+- Update `awilix` to v13, `opinionated-machine` to v6.10
+
 ## [1.3.4] - 2026-01-29
  - Add missing `unhandledExceptionPlugin`
  - Remove the error folder and replace it with `node-core`

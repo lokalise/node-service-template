@@ -1,7 +1,4 @@
-import {
-  buildFastifyNoPayloadRoute,
-  buildFastifyPayloadRoute,
-} from '@lokalise/fastify-api-contracts'
+import { buildFastifyRoute } from '@lokalise/fastify-api-contracts'
 import { AbstractController, type BuildRoutesReturnType } from 'opinionated-machine'
 import {
   deleteUserContract,
@@ -29,7 +26,7 @@ export class UserController extends AbstractController<UserControllerContractsTy
     this.userService = dependencies.userService
   }
 
-  private createUser = buildFastifyPayloadRoute(postCreateUserContract, async (req, reply) => {
+  private createUser = buildFastifyRoute(postCreateUserContract, async (req, reply) => {
     const { name, email, age } = req.body
     const { userService } = req.diScope.cradle
 
@@ -44,7 +41,7 @@ export class UserController extends AbstractController<UserControllerContractsTy
     })
   })
 
-  private getUser = buildFastifyNoPayloadRoute(getUserContract, async (req, reply) => {
+  private getUser = buildFastifyRoute(getUserContract, async (req, reply) => {
     const { userId } = req.params
     const { reqContext } = req
 
@@ -55,7 +52,7 @@ export class UserController extends AbstractController<UserControllerContractsTy
     })
   })
 
-  private deleteUser = buildFastifyNoPayloadRoute(deleteUserContract, async (req, reply) => {
+  private deleteUser = buildFastifyRoute(deleteUserContract, async (req, reply) => {
     const { userId } = req.params
     const { reqContext } = req
 
@@ -64,7 +61,7 @@ export class UserController extends AbstractController<UserControllerContractsTy
     return reply.status(204).send()
   })
 
-  private updateUser = buildFastifyPayloadRoute(patchUpdateUserContract, async (req, reply) => {
+  private updateUser = buildFastifyRoute(patchUpdateUserContract, async (req, reply) => {
     const { userId } = req.params
     const updatedUser = req.body
     const { reqContext } = req

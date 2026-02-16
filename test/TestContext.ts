@@ -17,7 +17,7 @@ class TestContextFactory extends AbstractTestContextFactory<
   Config
 > {
   constructor() {
-    const diContainer = createContainer({
+    const diContainer = createContainer<any>({
       injectionMode: 'PROXY',
     })
 

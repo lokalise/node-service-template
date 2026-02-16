@@ -1,10 +1,10 @@
 import { AbstractAmqpTopicConsumer, type AMQPQueueConfig } from '@message-queue-toolkit/amqp'
 import type { MessageHandlerConfig } from '@message-queue-toolkit/core'
-import type { CommonDependencies } from './CommonModule.ts'
+import type { PublicDependencies } from 'opinionated-machine'
 import type { RequestContextPreHandlerOutput } from './prehandlers/requestContextPrehandler.ts'
 
 export type CommonConsumerDependencies = Pick<
-  CommonDependencies,
+  PublicDependencies,
   | 'amqpConnectionManager'
   | 'config'
   | 'errorReporter'
