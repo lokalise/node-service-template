@@ -14,11 +14,10 @@ import {
   type AmqpAwareEventDefinition,
   AmqpConnectionManager,
   AmqpConsumerErrorResolver,
-  AmqpTopicPublisherManager,
+  type AmqpTopicPublisherManager,
   type CommonAmqpTopicPublisher,
-  CommonAmqpTopicPublisherFactory,
 } from '@message-queue-toolkit/amqp'
-import { CommonMetadataFiller, EventRegistry } from '@message-queue-toolkit/core'
+import { EventRegistry } from '@message-queue-toolkit/core'
 import type { Connection } from 'amqplib'
 import { Lifetime, type NameAndRegistrationPair, type Resolver } from 'awilix'
 import { drizzle, type PostgresJsDatabase } from 'drizzle-orm/postgres-js'
@@ -44,6 +43,7 @@ import { getConfig, nodeEnv, SERVICE_NAME } from './config.ts'
 import { FakeAmplitude } from './fakes/FakeAmplitude.ts'
 import { DbHealthcheck, RedisHealthcheck } from './healthchecks/healthchecks.ts'
 import { MessageProcessingMetricsManager } from './metrics/MessageProcessingMetricsManager.ts'
+import { PublisherManagerAdapter } from './PublisherManagerAdapter.ts'
 
 export type ExternalDependencies = {
   app?: AppInstance
@@ -62,9 +62,9 @@ declare module '@fastify/awilix' {
 const amqpSupportedMessages = [
   ...Object.values(PermissionsMessages),
 ] as const satisfies AmqpAwareEventDefinition[]
-type AmqpSupportedMessages = typeof amqpSupportedMessages
+export type AmqpSupportedMessages = typeof amqpSupportedMessages
 
-type MessagesPublishPayloadsType = z.infer<AmqpSupportedMessages[number]['publisherSchema']>
+export type MessagesPublishPayloadsType = z.infer<AmqpSupportedMessages[number]['publisherSchema']>
 
 export type PublisherManager = AmqpTopicPublisherManager<
   CommonAmqpTopicPublisher<MessagesPublishPayloadsType>,
@@ -334,42 +334,6 @@ export type CommonDependencies = InferModuleDependencies<CommonModule>
 
 declare module 'opinionated-machine' {
   interface PublicDependencies extends InferPublicModuleDependencies<CommonModule> {}
-}
-
-class PublisherManagerAdapter extends AmqpTopicPublisherManager<
-  CommonAmqpTopicPublisher<MessagesPublishPayloadsType>,
-  AmqpSupportedMessages
-> {
-  constructor(dependencies: CommonDependencies) {
-    super(
-      {
-        errorReporter: dependencies.errorReporter,
-        logger: dependencies.logger,
-        amqpConnectionManager: dependencies.amqpConnectionManager,
-        eventRegistry: dependencies.eventRegistry,
-      },
-      {
-        metadataField: 'metadata',
-        metadataFiller: new CommonMetadataFiller({
-          serviceId: 'node-service-template',
-          defaultVersion: '1.0.0',
-        }),
-        publisherFactory: new CommonAmqpTopicPublisherFactory(),
-        newPublisherOptions: {
-          messageTypeResolver: {
-            messageTypePath: 'type',
-          },
-          messageIdField: 'id',
-          logMessages: true,
-          handlerSpy: nodeEnv.isTest,
-          messageTimestampField: 'timestamp',
-          deletionConfig: {
-            deleteIfExists: false, // queue deletion/creation should be handled by consumers
-          },
-        },
-      },
-    )
-  }
 }
 
 class HealthcheckRefreshJobAdapter extends HealthcheckRefreshJob {
