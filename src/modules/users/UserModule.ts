@@ -1,5 +1,4 @@
 import type { ModuleAwareQueueConfiguration } from '@lokalise/background-jobs-common'
-import type { Loader } from 'layered-loader'
 import {
   AbstractModule,
   asControllerClass,
@@ -10,11 +9,11 @@ import {
   asServiceClass,
   asSingletonClass,
   type DependencyInjectionOptions,
+  type InferModuleDependencies,
   type InferPublicModuleDependencies,
   type MandatoryNameAndRegistrationPair,
   type PublicDependencies,
 } from 'opinionated-machine'
-import type { User } from '../../db/schema/user.ts'
 import { PermissionConsumer } from './consumers/PermissionConsumer.ts'
 import { UserController } from './controllers/UserController.ts'
 import { USER_IMPORT_JOB_PAYLOAD, UserImportJob } from './job-queue-processors/UserImportJob.ts'
@@ -26,21 +25,6 @@ import { PermissionsService } from './services/PermissionsService.ts'
 import { UserService } from './services/UserService.ts'
 import { UserLoader } from './UserLoader.ts'
 
-export type UsersModuleDependencies = {
-  userRepository: UserRepository
-  userService: UserService
-  userLoader: Loader<User>
-
-  permissionsService: PermissionsService
-  permissionConsumer: PermissionConsumer
-
-  deleteOldUsersJob: DeleteOldUsersJob
-  processLogFilesJob: ProcessLogFilesJob
-  sendEmailsJob: SendEmailsJob
-
-  userImportJob: UserImportJob
-}
-
 export type UsersInjectableDependencies = UsersModuleDependencies & PublicDependencies
 
 export const userBullmqQueues = [
@@ -51,10 +35,8 @@ export const userBullmqQueues = [
   },
 ] as const satisfies ModuleAwareQueueConfiguration[]
 
-export class UserModule extends AbstractModule<UsersModuleDependencies> {
-  resolveDependencies(
-    diOptions: DependencyInjectionOptions,
-  ): MandatoryNameAndRegistrationPair<UsersModuleDependencies> {
+export class UserModule extends AbstractModule {
+  resolveDependencies(diOptions: DependencyInjectionOptions) {
     return {
       userRepository: asRepositoryClass(UserRepository),
       userService: asServiceClass(UserService),
@@ -95,6 +77,8 @@ export class UserModule extends AbstractModule<UsersModuleDependencies> {
     }
   }
 }
+
+export type UsersModuleDependencies = InferModuleDependencies<UserModule>
 
 declare module 'opinionated-machine' {
   interface PublicDependencies extends InferPublicModuleDependencies<UserModule> {}
