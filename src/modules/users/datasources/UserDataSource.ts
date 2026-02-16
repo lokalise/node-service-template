@@ -2,12 +2,13 @@ import type { DataSource } from 'layered-loader'
 
 import type { User } from '../../../db/schema/user.ts'
 import type { UserRepository } from '../repositories/UserRepository.ts'
+import type { UsersInjectableDependencies } from '../UserModule.ts'
 
 export class UserDataSource implements DataSource<User> {
   name = 'User loader'
   private userRepository: UserRepository
 
-  constructor({ userRepository }: { userRepository: UserRepository }) {
+  constructor({ userRepository }: UsersInjectableDependencies) {
     this.userRepository = userRepository
   }
 
