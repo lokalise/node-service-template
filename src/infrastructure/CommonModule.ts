@@ -1,21 +1,15 @@
-import type { JWT } from '@fastify/jwt'
 import {
   CommonBullmqFactoryNew,
   type ModuleAwareQueueConfiguration,
   ModuleAwareQueueManager,
 } from '@lokalise/background-jobs-common'
-import { type Amplitude, reportErrorToBugsnag } from '@lokalise/fastify-extras'
+import { reportErrorToBugsnag } from '@lokalise/fastify-extras'
 import {
   type Healthcheck,
   HealthcheckRefreshJob,
   HealthcheckResultsStore,
 } from '@lokalise/healthcheck-utils'
-import type {
-  CommonLogger,
-  ErrorReporter,
-  ErrorResolver,
-  TransactionObservabilityManager,
-} from '@lokalise/node-core'
+import type { CommonLogger, ErrorReporter } from '@lokalise/node-core'
 import {
   type AmqpAwareEventDefinition,
   AmqpConnectionManager,
@@ -26,16 +20,16 @@ import {
 } from '@message-queue-toolkit/amqp'
 import { CommonMetadataFiller, EventRegistry } from '@message-queue-toolkit/core'
 import type { Connection } from 'amqplib'
-import { Lifetime, type NameAndRegistrationPair } from 'awilix'
-import type { AwilixManager } from 'awilix-manager'
-import type { PostgresJsDatabase } from 'drizzle-orm/postgres-js'
-import { drizzle } from 'drizzle-orm/postgres-js'
+import { Lifetime, type NameAndRegistrationPair, type Resolver } from 'awilix'
+import { drizzle, type PostgresJsDatabase } from 'drizzle-orm/postgres-js'
 import { Redis } from 'ioredis'
 import {
   AbstractModule,
   asSingletonClass,
   asSingletonFunction,
   type DependencyInjectionOptions,
+  type InferModuleDependencies,
+  type InferPublicModuleDependencies,
   isAnyMessageQueueConsumerEnabled,
   isPeriodicJobEnabled,
   resolveJobQueuesEnabled,
@@ -46,13 +40,9 @@ import type { AppInstance } from '../app.ts'
 import { FakeStoreApiClient } from '../integrations/FakeStoreApiClient.ts'
 import { PermissionsMessages } from '../modules/users/consumers/permissionsMessageSchemas.ts'
 import { type UsersModuleDependencies, userBullmqQueues } from '../modules/users/UserModule.ts'
-import { type Config, getConfig, nodeEnv, SERVICE_NAME } from './config.ts'
+import { getConfig, nodeEnv, SERVICE_NAME } from './config.ts'
 import { FakeAmplitude } from './fakes/FakeAmplitude.ts'
-import {
-  DbHealthcheck,
-  RedisHealthcheck,
-  type SupportedHealthchecks,
-} from './healthchecks/healthchecks.ts'
+import { DbHealthcheck, RedisHealthcheck } from './healthchecks/healthchecks.ts'
 import { MessageProcessingMetricsManager } from './metrics/MessageProcessingMetricsManager.ts'
 
 export type ExternalDependencies = {
@@ -86,7 +76,7 @@ const bullmqSupportedQueues = [
 ] as const satisfies ModuleAwareQueueConfiguration[]
 export type BullmqSupportedQueues = typeof bullmqSupportedQueues
 
-export class CommonModule extends AbstractModule<CommonDependencies, ExternalDependencies> {
+export class CommonModule extends AbstractModule<unknown, ExternalDependencies> {
   resolveDependencies(
     diOptions: DependencyInjectionOptions,
     externalDependencies: ExternalDependencies,
@@ -98,11 +88,14 @@ export class CommonModule extends AbstractModule<CommonDependencies, ExternalDep
         }
         return externalDependencies.app.jwt
       }),
-      logger: asSingletonFunction(() => externalDependencies.logger),
+      logger: asSingletonFunction(() => externalDependencies.logger, { public: true }),
 
-      scheduler: asSingletonFunction(() => {
-        return externalDependencies.app?.scheduler ?? new ToadScheduler()
-      }),
+      scheduler: asSingletonFunction(
+        () => {
+          return externalDependencies.app?.scheduler ?? new ToadScheduler()
+        },
+        { public: true },
+      ),
 
       awilixManager: asSingletonFunction(() => {
         if (!externalDependencies.app) {
@@ -114,7 +107,7 @@ export class CommonModule extends AbstractModule<CommonDependencies, ExternalDep
       }),
 
       redis: asSingletonFunction(
-        ({ config }: CommonDependencies) => {
+        ({ config }: { config: CommonDependencies['config'] }): Redis => {
           const redisConfig = config.redis
 
           return new Redis({
@@ -130,6 +123,7 @@ export class CommonModule extends AbstractModule<CommonDependencies, ExternalDep
           })
         },
         {
+          public: true,
           dispose: (redis) => {
             return new Promise((resolve) => {
               void redis.quit((_err, result) => {
@@ -141,7 +135,7 @@ export class CommonModule extends AbstractModule<CommonDependencies, ExternalDep
       ),
 
       redisPublisher: asSingletonFunction(
-        ({ config }: CommonDependencies) => {
+        ({ config }: { config: CommonDependencies['config'] }): Redis => {
           const redisConfig = config.redis
 
           return new Redis({
@@ -156,6 +150,7 @@ export class CommonModule extends AbstractModule<CommonDependencies, ExternalDep
           })
         },
         {
+          public: true,
           dispose: (redis) => {
             return new Promise((resolve) => {
               void redis.quit((_err, result) => {
@@ -167,7 +162,7 @@ export class CommonModule extends AbstractModule<CommonDependencies, ExternalDep
       ),
 
       redisConsumer: asSingletonFunction(
-        ({ config }: CommonDependencies) => {
+        ({ config }: { config: CommonDependencies['config'] }): Redis => {
           const redisConfig = config.redis
 
           return new Redis({
@@ -182,6 +177,7 @@ export class CommonModule extends AbstractModule<CommonDependencies, ExternalDep
           })
         },
         {
+          public: true,
           dispose: (redis) => {
             return new Promise((resolve) => {
               void redis.quit((_err, result) => {
@@ -193,23 +189,33 @@ export class CommonModule extends AbstractModule<CommonDependencies, ExternalDep
       ),
 
       drizzle: asSingletonFunction(
-        ({ config }: CommonDependencies) => {
+        ({
+          config,
+        }: {
+          config: CommonDependencies['config']
+        }): PostgresJsDatabase & { $client: { end(): Promise<void> } } => {
           return drizzle(config.db.databaseUrl)
         },
         {
+          public: true,
           dispose: (drizzle) => drizzle.$client.end(),
         },
       ),
 
       bullmqQueueManager: asSingletonFunction(
-        (deps) =>
+        ({
+          config,
+        }: {
+          config: CommonDependencies['config']
+        }): ModuleAwareQueueManager<BullmqSupportedQueues> =>
           new ModuleAwareQueueManager(
             SERVICE_NAME,
             new CommonBullmqFactoryNew(),
             bullmqSupportedQueues,
-            { redisConfig: deps.config.redis, isTest: nodeEnv.isTest },
+            { redisConfig: config.redis, isTest: nodeEnv.isTest },
           ),
         {
+          public: true,
           asyncInit: (manager) => manager.start(resolveJobQueuesEnabled(diOptions)),
           asyncDispose: 'dispose',
           asyncDisposePriority: 20,
@@ -217,10 +223,11 @@ export class CommonModule extends AbstractModule<CommonDependencies, ExternalDep
       ),
 
       amqpConnectionManager: asSingletonFunction(
-        (deps: CommonDependencies) => {
-          return new AmqpConnectionManager(deps.config.amqp, externalDependencies.logger)
+        ({ config }: { config: CommonDependencies['config'] }): AmqpConnectionManager => {
+          return new AmqpConnectionManager(config.amqp, externalDependencies.logger)
         },
         {
+          public: true,
           lifetime: Lifetime.SINGLETON,
           asyncInit: 'init',
           asyncDispose: 'close',
@@ -230,86 +237,62 @@ export class CommonModule extends AbstractModule<CommonDependencies, ExternalDep
         },
       ),
 
-      consumerErrorResolver: asSingletonFunction(() => {
-        return new AmqpConsumerErrorResolver()
-      }),
+      consumerErrorResolver: asSingletonFunction(
+        () => {
+          return new AmqpConsumerErrorResolver()
+        },
+        { public: true },
+      ),
 
-      eventRegistry: asSingletonFunction(() => {
-        return new EventRegistry(amqpSupportedMessages)
-      }),
+      eventRegistry: asSingletonFunction(
+        () => {
+          return new EventRegistry(amqpSupportedMessages)
+        },
+        { public: true },
+      ),
 
-      publisherManager: asSingletonFunction((dependencies: CommonDependencies) => {
-        return new AmqpTopicPublisherManager<
-          CommonAmqpTopicPublisher<MessagesPublishPayloadsType>,
-          AmqpSupportedMessages
-        >(
-          {
-            errorReporter: dependencies.errorReporter,
-            logger: dependencies.logger,
-            amqpConnectionManager: dependencies.amqpConnectionManager,
-            eventRegistry: dependencies.eventRegistry,
-          },
-          {
-            metadataField: 'metadata',
-            metadataFiller: new CommonMetadataFiller({
-              serviceId: 'node-service-template',
-              defaultVersion: '1.0.0',
-            }),
-            publisherFactory: new CommonAmqpTopicPublisherFactory(),
-            newPublisherOptions: {
-              messageTypeResolver: {
-                messageTypePath: 'type',
-              },
-              messageIdField: 'id',
-              logMessages: true,
-              handlerSpy: nodeEnv.isTest,
-              messageTimestampField: 'timestamp',
-              deletionConfig: {
-                deleteIfExists: false, // queue deletion/creation should be handled by consumers
-              },
-            },
-          },
-        )
-      }),
+      publisherManager: asSingletonClass(PublisherManagerAdapter, { public: true }),
 
-      config: asSingletonFunction(() => {
-        return getConfig()
-      }),
+      config: asSingletonFunction(() => getConfig(), { public: true }),
 
       // vendor-specific dependencies
-      transactionObservabilityManager: asSingletonFunction(() => {
-        if (!externalDependencies.app?.openTelemetryTransactionManager) {
-          throw new Error('Observability manager is not set')
-        }
+      transactionObservabilityManager: asSingletonFunction(
+        () => {
+          if (!externalDependencies.app?.openTelemetryTransactionManager) {
+            throw new Error('Observability manager is not set')
+          }
 
-        return externalDependencies.app?.openTelemetryTransactionManager
-      }),
-
-      amplitude: asSingletonFunction(() => {
-        return externalDependencies.app?.amplitude ?? new FakeAmplitude()
-      }),
-
-      errorReporter: asSingletonFunction(() => {
-        return {
-          report: (report) => reportErrorToBugsnag(report),
-        } satisfies ErrorReporter
-      }),
-
-      fakeStoreApiClient: asSingletonClass(FakeStoreApiClient),
-
-      healthcheckRefreshJob: asSingletonFunction(
-        (dependencies: CommonDependencies) => {
-          return new HealthcheckRefreshJob(dependencies, dependencies.healthchecks)
+          return externalDependencies.app?.openTelemetryTransactionManager
         },
-        {
-          asyncInit: 'asyncRegister',
-          asyncDispose: 'dispose',
-          enabled: isPeriodicJobEnabled(
-            diOptions.periodicJobsEnabled,
-            HealthcheckRefreshJob.JOB_NAME,
-          ),
-        },
+        { public: true },
       ),
+
+      amplitude: asSingletonFunction(
+        () => {
+          return externalDependencies.app?.amplitude ?? new FakeAmplitude()
+        },
+        { public: true },
+      ),
+
+      errorReporter: asSingletonFunction(
+        () => {
+          return {
+            report: (report) => reportErrorToBugsnag(report),
+          } satisfies ErrorReporter
+        },
+        { public: true },
+      ),
+
+      fakeStoreApiClient: asSingletonClass(FakeStoreApiClient, { public: true }),
+
+      healthcheckRefreshJob: asSingletonClass(HealthcheckRefreshJobAdapter, {
+        asyncInit: 'asyncRegister',
+        asyncDispose: 'dispose',
+        enabled: isPeriodicJobEnabled(
+          diOptions.periodicJobsEnabled,
+          HealthcheckRefreshJob.JOB_NAME,
+        ),
+      }),
 
       dbHealthcheck: asSingletonClass(DbHealthcheck),
       redisHealthcheck: asSingletonClass(RedisHealthcheck),
@@ -320,16 +303,26 @@ export class CommonModule extends AbstractModule<CommonDependencies, ExternalDep
         })
       }),
 
-      healthchecks: asSingletonFunction((dependencies: CommonDependencies) => {
-        return [dependencies.redisHealthcheck, dependencies.dbHealthcheck]
-      }),
-
-      messageProcessingMetricsManager: asSingletonFunction(() =>
-        externalDependencies.app?.metrics
-          ? new MessageProcessingMetricsManager(externalDependencies.app.metrics)
-          : undefined,
+      healthchecks: asSingletonFunction(
+        ({
+          redisHealthcheck,
+          dbHealthcheck,
+        }: {
+          redisHealthcheck: CommonDependencies['redisHealthcheck']
+          dbHealthcheck: CommonDependencies['dbHealthcheck']
+        }): Healthcheck[] => {
+          return [redisHealthcheck, dbHealthcheck]
+        },
       ),
-    }
+
+      messageProcessingMetricsManager: asSingletonFunction(
+        () =>
+          externalDependencies.app?.metrics
+            ? new MessageProcessingMetricsManager(externalDependencies.app.metrics)
+            : undefined,
+        { public: true },
+      ),
+    } satisfies Record<string, Resolver<unknown>>
   }
 
   override resolveControllers() {
@@ -337,37 +330,50 @@ export class CommonModule extends AbstractModule<CommonDependencies, ExternalDep
   }
 }
 
-export type CommonDependencies = {
-  jwt: JWT
-  config: Config
-  logger: CommonLogger
-  scheduler: ToadScheduler
-  awilixManager: AwilixManager
+export type CommonDependencies = InferModuleDependencies<CommonModule>
 
-  redis: Redis
-  redisPublisher: Redis
-  redisConsumer: Redis
-  drizzle: PostgresJsDatabase
+declare module 'opinionated-machine' {
+  interface PublicDependencies extends InferPublicModuleDependencies<CommonModule> {}
+}
 
-  bullmqQueueManager: ModuleAwareQueueManager<BullmqSupportedQueues, 'user'>
+class PublisherManagerAdapter extends AmqpTopicPublisherManager<
+  CommonAmqpTopicPublisher<MessagesPublishPayloadsType>,
+  AmqpSupportedMessages
+> {
+  constructor(dependencies: CommonDependencies) {
+    super(
+      {
+        errorReporter: dependencies.errorReporter,
+        logger: dependencies.logger,
+        amqpConnectionManager: dependencies.amqpConnectionManager,
+        eventRegistry: dependencies.eventRegistry,
+      },
+      {
+        metadataField: 'metadata',
+        metadataFiller: new CommonMetadataFiller({
+          serviceId: 'node-service-template',
+          defaultVersion: '1.0.0',
+        }),
+        publisherFactory: new CommonAmqpTopicPublisherFactory(),
+        newPublisherOptions: {
+          messageTypeResolver: {
+            messageTypePath: 'type',
+          },
+          messageIdField: 'id',
+          logMessages: true,
+          handlerSpy: nodeEnv.isTest,
+          messageTimestampField: 'timestamp',
+          deletionConfig: {
+            deleteIfExists: false, // queue deletion/creation should be handled by consumers
+          },
+        },
+      },
+    )
+  }
+}
 
-  amqpConnectionManager: AmqpConnectionManager
-
-  // vendor-specific dependencies
-  transactionObservabilityManager: TransactionObservabilityManager
-  amplitude: Amplitude
-
-  eventRegistry: EventRegistry<AmqpSupportedMessages>
-  publisherManager: PublisherManager
-  errorReporter: ErrorReporter
-  consumerErrorResolver: ErrorResolver
-
-  fakeStoreApiClient: FakeStoreApiClient
-  healthcheckRefreshJob: HealthcheckRefreshJob
-  redisHealthcheck: RedisHealthcheck
-  dbHealthcheck: DbHealthcheck
-  healthcheckStore: HealthcheckResultsStore<SupportedHealthchecks>
-  healthchecks: readonly Healthcheck[]
-
-  messageProcessingMetricsManager?: MessageProcessingMetricsManager
+class HealthcheckRefreshJobAdapter extends HealthcheckRefreshJob {
+  constructor(deps: CommonDependencies) {
+    super(deps, deps.healthchecks)
+  }
 }

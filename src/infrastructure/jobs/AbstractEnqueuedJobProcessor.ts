@@ -4,7 +4,8 @@ import {
   CommonBullmqFactoryNew,
   type SupportedQueueIds,
 } from '@lokalise/background-jobs-common'
-import type { BullmqSupportedQueues, Dependencies } from '../CommonModule.ts'
+import type { PublicDependencies } from 'opinionated-machine'
+import type { BullmqSupportedQueues } from '../CommonModule.ts'
 import { SERVICE_NAME } from '../config.ts'
 
 type AbstractEnqueuedJobProcessorConfig<QueueId extends SupportedQueueIds<BullmqSupportedQueues>> =
@@ -14,7 +15,7 @@ export abstract class AbstractEnqueuedJobProcessor<
   QueueId extends SupportedQueueIds<BullmqSupportedQueues>,
 > extends AbstractBackgroundJobProcessorNew<BullmqSupportedQueues, QueueId> {
   protected constructor(
-    dependencies: Dependencies,
+    dependencies: PublicDependencies,
     config: AbstractEnqueuedJobProcessorConfig<QueueId>,
   ) {
     super(

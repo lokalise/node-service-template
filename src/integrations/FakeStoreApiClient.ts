@@ -1,5 +1,5 @@
-import { buildGetRoute } from '@lokalise/api-contracts'
-import { buildClient, sendByGetRoute } from '@lokalise/backend-http-client'
+import { buildRestContract } from '@lokalise/api-contracts'
+import { buildClient, sendByContract } from '@lokalise/backend-http-client'
 import type { Client } from 'undici'
 import z from 'zod/v4'
 import type { CommonDependencies } from '../infrastructure/CommonModule.ts'
@@ -14,7 +14,8 @@ const GET_PRODUCT_PATH_PARAMS_SCHEMA = z.object({
   productId: z.number(),
 })
 
-export const GET_PRODUCT_CONTRACT = buildGetRoute({
+export const GET_PRODUCT_CONTRACT = buildRestContract({
+  method: 'get',
   successResponseBodySchema: GET_PRODUCT_RESPONSE_SCHEMA,
   requestPathParamsSchema: GET_PRODUCT_PATH_PARAMS_SCHEMA,
   description: 'Fake API',
@@ -32,7 +33,7 @@ export class FakeStoreApiClient {
   }
 
   async getProduct(productId: number) {
-    const response = await sendByGetRoute(
+    const response = await sendByContract(
       this.client,
       GET_PRODUCT_CONTRACT,
       {

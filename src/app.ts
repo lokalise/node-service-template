@@ -98,7 +98,8 @@ export async function getApp(
     loggerInstance: logger,
   })
 
-  const diContainer =
+  // biome-ignore lint/suspicious/noExplicitAny: we will build it incrementally later, so we do not care about the type
+  const diContainer: AwilixContainer<any> =
     configOverrides.diContainer ??
     createContainer({
       injectionMode: 'PROXY',

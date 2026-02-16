@@ -3,7 +3,6 @@ import {
   createNotificationPair,
   type InMemoryCacheConfiguration,
   Loader,
-  type LoaderConfig,
   RedisCache,
 } from 'layered-loader'
 import {
@@ -14,12 +13,13 @@ import {
   asPeriodicJobClass,
   asRepositoryClass,
   asServiceClass,
-  asSingletonFunction,
+  asSingletonClass,
   type DependencyInjectionOptions,
+  type InferPublicModuleDependencies,
   type MandatoryNameAndRegistrationPair,
+  type PublicDependencies,
 } from 'opinionated-machine'
 import type { User } from '../../db/schema/user.ts'
-import type { CommonDependencies } from '../../infrastructure/CommonModule.ts'
 import { PermissionConsumer } from './consumers/PermissionConsumer.ts'
 import { UserController } from './controllers/UserController.ts'
 import { UserDataSource } from './datasources/UserDataSource.ts'
@@ -55,12 +55,34 @@ export type UsersModuleDependencies = {
   userImportJob: UserImportJob
 }
 
-export type UsersInjectableDependencies = UsersModuleDependencies & CommonDependencies
+export type UsersInjectableDependencies = UsersModuleDependencies & PublicDependencies
 
-export type UsersPublicDependencies = Pick<
-  UsersInjectableDependencies,
-  'userService' | 'permissionsService'
->
+class UserLoader extends Loader<User> {
+  constructor(deps: UsersInjectableDependencies) {
+    const { publisher: notificationPublisher, consumer: notificationConsumer } =
+      createNotificationPair<User>({
+        channel: 'user-cache-notifications',
+        consumerRedis: deps.redisConsumer,
+        publisherRedis: deps.redisPublisher,
+      })
+
+    super({
+      inMemoryCache: {
+        ...IN_MEMORY_CONFIGURATION_BASE,
+        maxItems: 1000,
+      },
+      asyncCache: new RedisCache<User>(deps.redis, {
+        json: true,
+        prefix: 'layered-loader:users:',
+        ttlInMsecs: 1000 * 60 * 60,
+      }),
+      dataSources: [new UserDataSource(deps)],
+      notificationConsumer,
+      notificationPublisher,
+      logger: deps.logger,
+    })
+  }
+}
 
 export const userBullmqQueues = [
   {
@@ -78,31 +100,7 @@ export class UserModule extends AbstractModule<UsersModuleDependencies> {
       userRepository: asRepositoryClass(UserRepository),
       userService: asServiceClass(UserService),
 
-      userLoader: asSingletonFunction((deps: UsersInjectableDependencies) => {
-        const { publisher: notificationPublisher, consumer: notificationConsumer } =
-          createNotificationPair<User>({
-            channel: 'user-cache-notifications',
-            consumerRedis: deps.redisConsumer,
-            publisherRedis: deps.redisPublisher,
-          })
-
-        const config: LoaderConfig<User> = {
-          inMemoryCache: {
-            ...IN_MEMORY_CONFIGURATION_BASE,
-            maxItems: 1000,
-          },
-          asyncCache: new RedisCache<User>(deps.redis, {
-            json: true,
-            prefix: 'layered-loader:users:',
-            ttlInMsecs: 1000 * 60 * 60,
-          }),
-          dataSources: [new UserDataSource(deps)],
-          notificationConsumer,
-          notificationPublisher,
-          logger: deps.logger,
-        }
-        return new Loader(config)
-      }),
+      userLoader: asSingletonClass(UserLoader),
 
       permissionsService: asServiceClass(PermissionsService),
       permissionConsumer: asMessageQueueHandlerClass(PermissionConsumer, {
@@ -137,4 +135,8 @@ export class UserModule extends AbstractModule<UsersModuleDependencies> {
       userController: asControllerClass(UserController),
     }
   }
+}
+
+declare module 'opinionated-machine' {
+  interface PublicDependencies extends InferPublicModuleDependencies<UserModule> {}
 }
