@@ -1,6 +1,6 @@
 {
     "name": "node-service-template",
-    "version": "1.4.0",
+    "version": "1.5.0",
     "engines": {
         "node": ">=24.5.0"
     },
@@ -33,9 +33,10 @@
         "cmd:getUserImportJobs": "node --env-file-if-exists=.env scripts/cmd/getUserImportJobs.ts"
     },
     "dependencies": {
-        "@aws-sdk/client-sns": "^3.990.0",
-        "@aws-sdk/client-sqs": "^3.990.0",
-        "@aws-sdk/credential-providers": "^3.990.0",
+        "@aws-sdk/client-sns": "^3.995.0",
+        "@aws-sdk/client-sqs": "^3.995.0",
+        "@aws-sdk/client-sts": "^3.995.0",
+        "@aws-sdk/credential-providers": "^3.995.0",
         "@fastify/auth": "^5.0.4",
         "@fastify/awilix": "^8.2.0",
         "@fastify/cors": "^11.2.0",
@@ -61,7 +62,7 @@
         "@message-queue-toolkit/metrics": "^4.1.1",
         "@message-queue-toolkit/schemas": "^7.1.0",
         "@message-queue-toolkit/sns": "^24.5.0",
-        "@message-queue-toolkit/sqs": "^24.2.0",
+        "@message-queue-toolkit/sqs": "^24.2.1",
         "@opentelemetry/auto-instrumentations-node": "^0.68.0",
         "@opentelemetry/exporter-trace-otlp-grpc": "^0.210.0",
         "@scalar/fastify-api-reference": "^1.44.20",
@@ -102,6 +103,7 @@
         "@vitest/coverage-v8": "^4.0.18",
         "cpy-cli": "^7.0.0",
         "cross-env": "^10.1.0",
+        "fauxqs": "^1.9.2",
         "mockttp": "^4.2.1",
         "typescript": "5.9.3",
         "vitest": "^4.0.18",

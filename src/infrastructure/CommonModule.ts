@@ -10,6 +10,9 @@ import {
   HealthcheckResultsStore,
 } from '@lokalise/healthcheck-utils'
 import type { CommonLogger, ErrorReporter } from '@lokalise/node-core'
+import { SNSClient } from '@aws-sdk/client-sns'
+import { SQSClient } from '@aws-sdk/client-sqs'
+import { STSClient } from '@aws-sdk/client-sts'
 import {
   type AmqpAwareEventDefinition,
   AmqpConnectionManager,
@@ -18,6 +21,7 @@ import {
   type CommonAmqpTopicPublisher,
 } from '@message-queue-toolkit/amqp'
 import { EventRegistry } from '@message-queue-toolkit/core'
+import { SnsConsumerErrorResolver } from '@message-queue-toolkit/sns'
 import type { Connection } from 'amqplib'
 import { Lifetime, type NameAndRegistrationPair, type Resolver } from 'awilix'
 import { drizzle, type PostgresJsDatabase } from 'drizzle-orm/postgres-js'
@@ -39,7 +43,7 @@ import type { AppInstance } from '../app.ts'
 import { FakeStoreApiClient } from '../integrations/FakeStoreApiClient.ts'
 import { PermissionsMessages } from '../modules/users/consumers/permissionsMessageSchemas.ts'
 import { type UsersModuleDependencies, userBullmqQueues } from '../modules/users/UserModule.ts'
-import { getConfig, nodeEnv, SERVICE_NAME } from './config.ts'
+import { type Config, getConfig, nodeEnv, SERVICE_NAME } from './config.ts'
 import { FakeAmplitude } from './fakes/FakeAmplitude.ts'
 import { DbHealthcheck, RedisHealthcheck } from './healthchecks/healthchecks.ts'
 import { MessageProcessingMetricsManager } from './metrics/MessageProcessingMetricsManager.ts'
@@ -240,6 +244,61 @@ export class CommonModule extends AbstractModule<unknown, ExternalDependencies> 
       consumerErrorResolver: asSingletonFunction(
         () => {
           return new AmqpConsumerErrorResolver()
+        },
+        { public: true },
+      ),
+
+      sqsClient: asSingletonFunction(
+        ({ config }: { config: Config }) => {
+          return new SQSClient({
+            region: config.aws.region,
+            endpoint: config.aws.endpoint,
+            credentials: config.aws.credentials,
+          })
+        },
+        {
+          public: true,
+          dispose: (client) => {
+            client.destroy()
+          },
+        },
+      ),
+
+      snsClient: asSingletonFunction(
+        ({ config }: { config: Config }) => {
+          return new SNSClient({
+            region: config.aws.region,
+            endpoint: config.aws.endpoint,
+            credentials: config.aws.credentials,
+          })
+        },
+        {
+          public: true,
+          dispose: (client) => {
+            client.destroy()
+          },
+        },
+      ),
+
+      stsClient: asSingletonFunction(
+        ({ config }: { config: Config }) => {
+          return new STSClient({
+            region: config.aws.region,
+            endpoint: config.aws.endpoint,
+            credentials: config.aws.credentials,
+          })
+        },
+        {
+          public: true,
+          dispose: (client) => {
+            client.destroy()
+          },
+        },
+      ),
+
+      snsConsumerErrorResolver: asSingletonFunction(
+        () => {
+          return new SnsConsumerErrorResolver()
         },
         { public: true },
       ),
