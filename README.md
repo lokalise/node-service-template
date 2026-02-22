@@ -102,6 +102,13 @@ are relevant for the technological stack of your organization, and replace `@lok
    docker compose up -d
    ```
 
+   This starts PostgreSQL, Redis, RabbitMQ, and [fauxqs](https://github.com/kibertoad/fauxqs) (local SQS/SNS emulator).
+
+   - Database is initialized via [scripts/db/init-dbs.sh](./scripts/db/init-dbs.sh).
+   - SQS/SNS queues, topics, and subscriptions are initialized via [scripts/fauxqs-init.json](./scripts/fauxqs-init.json).
+
+   In tests, fauxqs runs as an embedded library (no Docker required) — see [test/FauxqsHelper.ts](./test/FauxqsHelper.ts).
+
 5. Run migrations to synchronize your database schema with defined models:
    ```shell
    node --run db:apply-migrations

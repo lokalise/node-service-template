@@ -40,7 +40,7 @@ services:
     environment:
       FAUXQS_INIT: /app/init.json
     volumes:
-      - ./fauxqs-init.json:/app/init.json
+      - ./scripts/fauxqs-init.json:/app/init.json
     healthcheck:
       test: ["CMD-SHELL", "wget -qO- http://localhost:4566/_fauxqs/queues || exit 1"]
       interval: 1s

@@ -8,11 +8,11 @@ export function handleUserCreatedEvent(
   message: z.infer<typeof UserEventMessages.created.consumerSchema>,
   _handlerContext: Record<string, never>,
   preHandlingOutputs: PreHandlingOutputs<RequestContextPreHandlerOutput, unknown>,
-): Either<'retryLater', 'success'> {
+): Promise<Either<'retryLater', 'success'>> {
   const { requestContext } = preHandlingOutputs.preHandlerOutput
   requestContext.logger.info({ userId: message.payload.userId }, 'Received user.created event')
 
-  return {
+  return Promise.resolve({
     result: 'success',
-  }
+  })
 }
