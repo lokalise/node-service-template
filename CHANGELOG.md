@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.5.0] - 2026-02-22
+
+- Replace LocalStack with [fauxqs](https://github.com/kibertoad/fauxqs) for local AWS service emulation (SQS/SNS)
+- Add `AbstractSnsSqsConsumer` base class mirroring `AbstractRabbitMQTopicConsumer` pattern
+- Add `sqsClient`, `snsClient`, `stsClient`, and `snsConsumerErrorResolver` DI registrations
+- Add sample `UserEventConsumer` (SNS->SQS) with `user.created` event handler
+- Add fauxqs test helper for embedded library mode in tests
+
 ## [1.4.0] - 2026-02-16
 
 - Migrate to new `opinionated-machine` DI patterns: `PublicDependencies` module augmentation, `InferModuleDependencies`, `InferPublicModuleDependencies`

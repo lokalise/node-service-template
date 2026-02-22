@@ -1,0 +1,5 @@
+{
+    "queues": [{ "name": "service_template.user_events" }],
+    "topics": [{ "name": "user-events" }],
+    "subscriptions": [{ "topic": "user-events", "queue": "service_template.user_events" }]
+}
