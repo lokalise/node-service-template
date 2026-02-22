@@ -1,5 +1,5 @@
-import { AbstractSnsSqsConsumer as AbstractSnsSqsConsumerBase } from '@message-queue-toolkit/sns'
 import type { MessageHandlerConfig } from '@message-queue-toolkit/core'
+import { AbstractSnsSqsConsumer as AbstractSnsSqsConsumerBase } from '@message-queue-toolkit/sns'
 import type { PublicDependencies } from 'opinionated-machine'
 import type { RequestContextPreHandlerOutput } from './prehandlers/requestContextPrehandler.ts'
 

@@ -1,3 +1,6 @@
+import { SNSClient } from '@aws-sdk/client-sns'
+import { SQSClient } from '@aws-sdk/client-sqs'
+import { STSClient } from '@aws-sdk/client-sts'
 import {
   CommonBullmqFactoryNew,
   type ModuleAwareQueueConfiguration,
@@ -10,9 +13,6 @@ import {
   HealthcheckResultsStore,
 } from '@lokalise/healthcheck-utils'
 import type { CommonLogger, ErrorReporter } from '@lokalise/node-core'
-import { SNSClient } from '@aws-sdk/client-sns'
-import { SQSClient } from '@aws-sdk/client-sqs'
-import { STSClient } from '@aws-sdk/client-sts'
 import {
   type AmqpAwareEventDefinition,
   AmqpConnectionManager,

@@ -4,16 +4,13 @@ import type z from 'zod/v4'
 import type { RequestContextPreHandlerOutput } from '../../../../infrastructure/prehandlers/requestContextPrehandler.ts'
 import type { UserEventMessages } from '../userEventMessageSchemas.ts'
 
-export async function handleUserCreatedEvent(
+export function handleUserCreatedEvent(
   message: z.infer<typeof UserEventMessages.created.consumerSchema>,
   _handlerContext: Record<string, never>,
   preHandlingOutputs: PreHandlingOutputs<RequestContextPreHandlerOutput, unknown>,
-): Promise<Either<'retryLater', 'success'>> {
+): Either<'retryLater', 'success'> {
   const { requestContext } = preHandlingOutputs.preHandlerOutput
-  requestContext.logger.info(
-    { userId: message.payload.userId },
-    'Received user.created event',
-  )
+  requestContext.logger.info({ userId: message.payload.userId }, 'Received user.created event')
 
   return {
     result: 'success',

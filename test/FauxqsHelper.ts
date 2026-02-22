@@ -1,4 +1,4 @@
-import { startFauxqs, type FauxqsServer } from 'fauxqs'
+import { type FauxqsServer, startFauxqs } from 'fauxqs'
 import {
   SERVICE_TEMPLATE_USER_EVENTS_QUEUE,
   USER_EVENTS_TOPIC,
