@@ -7,7 +7,7 @@ import {
 let server: FauxqsServer
 
 export async function startTestFauxqs(): Promise<FauxqsServer> {
-  server = await startFauxqs({ port: 4566, logger: false, messageSpies: true })
+  server = await startFauxqs({ port: 4567, logger: false, messageSpies: true })
   server.setup({
     queues: [{ name: SERVICE_TEMPLATE_USER_EVENTS_QUEUE }],
     topics: [{ name: USER_EVENTS_TOPIC }],
