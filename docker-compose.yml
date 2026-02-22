@@ -33,6 +33,7 @@ services:
     volumes:
       - rabbit_data:/var/lib/rabbitmq
 
+  # Built-in healthcheck is defined in the fauxqs Docker image
   fauxqs:
     image: kibertoad/fauxqs:latest
     ports:
@@ -41,11 +42,6 @@ services:
       FAUXQS_INIT: /app/init.json
     volumes:
       - ./scripts/fauxqs-init.json:/app/init.json
-    healthcheck:
-      test: ["CMD-SHELL", "wget -qO- http://localhost:4566/_fauxqs/queues || exit 1"]
-      interval: 1s
-      timeout: 5s
-      retries: 10
 
 volumes:
   redis_data:
