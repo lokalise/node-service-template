@@ -8,15 +8,23 @@ import z from 'zod/v4'
 import { getApp } from '../../src/app.ts'
 import type { Dependencies } from '../../src/infrastructure/CommonModule.ts'
 
+const unwrapSchemaIfNeeded = (schema: z.Schema) =>
+  schema instanceof z.ZodOptional || schema instanceof z.ZodNullable ? schema.unwrap() : schema
+
 const deriveParseArgsOptions = (schema: z.Schema): ParseArgsOptionsConfig | undefined => {
   if (!(schema instanceof z.ZodObject)) return undefined
 
   const options: ParseArgsOptionsConfig = {}
   for (const [key, fieldSchema] of Object.entries(schema.shape as Record<string, z.Schema>)) {
-    const isMultiple = fieldSchema instanceof z.ZodArray
-    const innerSchema = isMultiple ? fieldSchema.element : fieldSchema
+    const unwrappedFieldSchema = unwrapSchemaIfNeeded(fieldSchema)
+
+    const isMultiple = unwrappedFieldSchema instanceof z.ZodArray
+    const elementSchema = isMultiple
+      ? unwrapSchemaIfNeeded(unwrappedFieldSchema.element as z.ZodSchema)
+      : unwrappedFieldSchema
+
     options[key] = {
-      type: innerSchema instanceof z.ZodBoolean ? 'boolean' : 'string',
+      type: elementSchema instanceof z.ZodBoolean ? 'boolean' : 'string',
       multiple: isMultiple,
     }
   }

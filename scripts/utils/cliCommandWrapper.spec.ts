@@ -48,6 +48,21 @@ describe('cliCommandWrapper', () => {
       schema: z.object({ id: z.array(z.string()), flag: z.boolean() }),
       expected: { id: ['abc', 'def'], flag: true },
     },
+    {
+      inputArgs: ['--key=value'],
+      schema: z.object({ key: z.string().optional() }),
+      expected: { key: 'value' },
+    },
+    {
+      inputArgs: ['--flag'],
+      schema: z.object({ flag: z.boolean().optional() }),
+      expected: { flag: true },
+    },
+    {
+      inputArgs: ['--id=abc', '--id=def'],
+      schema: z.object({ id: z.array(z.string()).optional() }),
+      expected: { id: ['abc', 'def'] },
+    },
   ])('should parse arguments', async ({ inputArgs, schema, expected }) => {
     process.argv = ['node', 'script.ts', ...inputArgs]
     await cliCommandWrapper(
