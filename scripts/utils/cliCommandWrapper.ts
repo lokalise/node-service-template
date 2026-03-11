@@ -1,17 +1,34 @@
-import { parseArgs } from 'node:util'
+import { type ParseArgsConfig, parseArgs } from 'node:util'
 import type { RequestContext } from '@lokalise/fastify-extras'
 import { generateMonotonicUuid } from '@lokalise/id-utils'
 import { isError, stringValueSerializer } from '@lokalise/node-core'
 import { ENABLE_ALL } from 'opinionated-machine'
 import pino from 'pino'
-import type z from 'zod/v4'
+import z from 'zod/v4'
 import { getApp } from '../../src/app.ts'
 import type { Dependencies } from '../../src/infrastructure/CommonModule.ts'
 
-const getArgs = () => {
+const deriveParseArgsOptions = (schema: z.Schema): ParseArgsConfig['options'] => {
+  if (!(schema instanceof z.ZodObject)) return undefined
+
+  const options: ParseArgsConfig['options'] = {}
+  for (const [key, fieldSchema] of Object.entries(schema.shape as Record<string, z.Schema>)) {
+    const isMultiple = fieldSchema instanceof z.ZodArray
+    const innerSchema = isMultiple ? fieldSchema.element : fieldSchema
+    options[key] = {
+      type: innerSchema instanceof z.ZodBoolean ? 'boolean' : 'string',
+      multiple: isMultiple,
+    }
+  }
+
+  return options
+}
+
+const getArgs = (argsSchema: z.Schema) => {
   const { values } = parseArgs({
     args: process.argv,
     strict: false,
+    options: deriveParseArgsOptions(argsSchema),
   })
 
   return values
@@ -47,7 +64,7 @@ export const cliCommandWrapper = async <ArgsSchema extends z.Schema | undefined>
 
   let args = undefined as ArgsSchema extends z.Schema ? z.infer<ArgsSchema> : undefined
   if (argsSchema) {
-    const parseResult = argsSchema.safeParse(getArgs())
+    const parseResult = argsSchema.safeParse(getArgs(argsSchema))
     if (!parseResult.success) {
       reqContext.logger.error(
         {

@@ -38,6 +38,16 @@ describe('cliCommandWrapper', () => {
       }),
       expected: { key: 'value', flag: true, a: true, b: true, c: true },
     },
+    {
+      inputArgs: ['--id=abc', '--id=def'],
+      schema: z.object({ id: z.array(z.string()) }),
+      expected: { id: ['abc', 'def'] },
+    },
+    {
+      inputArgs: ['--id=abc', '--id=def', '--flag'],
+      schema: z.object({ id: z.array(z.string()), flag: z.boolean() }),
+      expected: { id: ['abc', 'def'], flag: true },
+    },
   ])('should parse arguments', async ({ inputArgs, schema, expected }) => {
     process.argv = ['node', 'script.ts', ...inputArgs]
     await cliCommandWrapper(
