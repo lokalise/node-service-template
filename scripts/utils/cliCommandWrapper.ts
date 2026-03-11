@@ -1,4 +1,4 @@
-import { type ParseArgsConfig, parseArgs } from 'node:util'
+import { type ParseArgsOptionsConfig, parseArgs } from 'node:util'
 import type { RequestContext } from '@lokalise/fastify-extras'
 import { generateMonotonicUuid } from '@lokalise/id-utils'
 import { isError, stringValueSerializer } from '@lokalise/node-core'
@@ -8,10 +8,10 @@ import z from 'zod/v4'
 import { getApp } from '../../src/app.ts'
 import type { Dependencies } from '../../src/infrastructure/CommonModule.ts'
 
-const deriveParseArgsOptions = (schema: z.Schema): ParseArgsConfig['options'] => {
+const deriveParseArgsOptions = (schema: z.Schema): ParseArgsOptionsConfig | undefined => {
   if (!(schema instanceof z.ZodObject)) return undefined
 
-  const options: ParseArgsConfig['options'] = {}
+  const options: ParseArgsOptionsConfig = {}
   for (const [key, fieldSchema] of Object.entries(schema.shape as Record<string, z.Schema>)) {
     const isMultiple = fieldSchema instanceof z.ZodArray
     const innerSchema = isMultiple ? fieldSchema.element : fieldSchema
