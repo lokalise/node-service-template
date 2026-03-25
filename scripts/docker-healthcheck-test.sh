@@ -14,7 +14,7 @@ RETRY_INTERVAL=2
 cleanup() {
   echo "Cleaning up..."
   docker rm -f "$CONTAINER_NAME" 2>/dev/null || true
-  docker compose -p "$COMPOSE_PROJECT" -f docker-compose.yml -f docker-compose.test.yml down --volumes --remove-orphans 2>/dev/null || true
+  docker compose -p "$COMPOSE_PROJECT" down --volumes --remove-orphans 2>/dev/null || true
 }
 trap cleanup EXIT INT TERM
 
@@ -29,7 +29,7 @@ docker build \
 
 # Step 2: Start infrastructure dependencies
 echo "==> Starting infrastructure dependencies..."
-docker compose -p "$COMPOSE_PROJECT" -f docker-compose.yml -f docker-compose.test.yml up -d --quiet-pull --wait
+docker compose -p "$COMPOSE_PROJECT" up -d --quiet-pull --wait
 
 # Step 3: Run the app container on the compose network
 NETWORK_NAME="${COMPOSE_PROJECT}_default"
