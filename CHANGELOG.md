@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.5.1] - 2026-03-25
+
+- Add Docker build and healthcheck test script (`scripts/docker-healthcheck-test.sh`)
+- Add conditional GitHub Actions workflow that validates the Docker image on Dockerfile changes
+- Add Docker-compatible env file (`.env.docker-test`) for container-based testing
+
 ## [1.5.0] - 2026-02-22
 
 - Replace LocalStack with [fauxqs](https://github.com/kibertoad/fauxqs) for local AWS service emulation (SQS/SNS)
