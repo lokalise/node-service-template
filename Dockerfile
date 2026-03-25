@@ -1,5 +1,5 @@
 # ---- Base Node ----
-FROM node:24.13.1-trixie-slim AS base
+FROM node:24.14.1-trixie-slim AS base
 
 RUN set -ex && \
     apt-get update && \
