@@ -1,6 +1,7 @@
 {
     "extends": ["./tsconfig.json", "@lokalise/tsconfig/build-app"],
     "compilerOptions": {
+        "rootDir": "src",
         "types": ["node"]
     },
     "include": ["src/**/*"],
