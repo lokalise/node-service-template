@@ -4,6 +4,7 @@ on:
   pull_request:
     paths:
       - 'Dockerfile'
+      - '.dockerignore'
       - 'docker-compose.yml'
       - '.env.docker-test'
       - 'scripts/docker-healthcheck-test.sh'

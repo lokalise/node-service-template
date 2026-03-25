@@ -218,6 +218,7 @@ export async function getApp(
       '/documentation/js/scalar.ts',
       '/',
       '/health',
+      '/live',
       '/metrics',
     ]),
   })
@@ -268,6 +269,20 @@ export async function getApp(
       disablePrometheusRequestLogging: true,
     })
   }
+
+  // Shallow liveness probe: confirms the Node.js process is running and can
+  // serve HTTP traffic. Intentionally does NOT check external dependencies
+  // (Postgres, Redis, etc.) — those are covered by the readiness endpoint
+  // (/health). This separation lets container orchestrators (Docker, K8s)
+  // restart only truly dead containers without false positives caused by
+  // transient dependency outages.
+  app.route({
+    url: '/live',
+    method: 'GET',
+    logLevel: 'warn',
+    schema: { hide: true },
+    handler: (_request, reply) => reply.status(200).send({ status: 'OK' }),
+  })
 
   if (configOverrides.healthchecksEnabled) {
     await app.register(commonSyncHealthcheckPlugin, {
