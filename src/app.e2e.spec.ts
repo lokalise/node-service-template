@@ -38,6 +38,13 @@ describe('app', () => {
       expect(response.statusCode).toBe(200)
     })
 
+    it('Returns shallow liveness probe', async () => {
+      const response = await app.inject().get('/live').end()
+
+      expect(response.json()).toEqual({ status: 'OK' })
+      expect(response.statusCode).toBe(200)
+    })
+
     it('Returns private health check information', async () => {
       const response = await app.inject().get('/health').end()
 

@@ -20,10 +20,14 @@ USER node
 RUN set -ex; \
     npm ci --ignore-scripts --omit dev;
 # separate production node_modules
-RUN mv node_modules prod_node_modules
+# Uses cp (not mv) so that the next npm install can add dev dependencies
+# incrementally on top of existing production deps, instead of installing
+# everything from scratch. Trades disk usage in the build stage for faster
+# installs. This stage is discarded in the final image.
+RUN cp -R node_modules prod_node_modules
 # install ALL node_modules, including 'devDependencies'
 RUN set -ex; \
-    npm ci --ignore-scripts;
+    npm install --ignore-scripts;
 
 # ---- Build ----
 FROM dependencies AS build
@@ -50,7 +54,9 @@ USER node
 
 EXPOSE 3000
 
+# Uses /live (shallow liveness) instead of /health (readiness) so the container
+# is not killed when external dependencies (Postgres, Redis) are temporarily down.
 HEALTHCHECK --interval=30s --timeout=3s --start-period=10s --retries=3 \
-    CMD node -e "fetch('http://localhost:3000/health').then(r => { if (!r.ok) process.exit(1) }).catch(() => process.exit(1))"
+    CMD node -e "fetch('http://localhost:3000/live').then(r => { if (!r.ok) process.exit(1) }).catch(() => process.exit(1))"
 
 CMD ["dumb-init", "node", "--import=@opentelemetry/instrumentation/hook.mjs", "server.js"]
