@@ -14,7 +14,7 @@ RETRY_INTERVAL=2
 cleanup() {
   echo "Cleaning up..."
   docker rm -f "$CONTAINER_NAME" 2>/dev/null || true
-  docker compose -p "$COMPOSE_PROJECT" down --volumes --remove-orphans 2>/dev/null || true
+  docker compose -p "$COMPOSE_PROJECT" -f docker-compose.yml -f docker-compose.test.yml down --volumes --remove-orphans 2>/dev/null || true
 }
 trap cleanup EXIT INT TERM
 
@@ -29,19 +29,27 @@ docker build \
 
 # Step 2: Start infrastructure dependencies
 echo "==> Starting infrastructure dependencies..."
-docker compose -p "$COMPOSE_PROJECT" up -d --quiet-pull --wait
+docker compose -p "$COMPOSE_PROJECT" -f docker-compose.yml -f docker-compose.test.yml up -d --quiet-pull --wait
 
 # Step 3: Run the app container on the compose network
 NETWORK_NAME="${COMPOSE_PROJECT}_default"
 
 echo "==> Starting application container..."
+# Docker --env-file cannot parse multiline values; strip the multiline
+# JWT_PUBLIC_KEY block from .env.default (docker-test override supplies a
+# single-line version).
+FILTERED_ENV=$(mktemp)
+awk 'BEGIN{s=0} /^JWT_PUBLIC_KEY=/{s=1} s && /-----END/{s=0;next} s==0' .env.default \
+  | sed 's/^\([A-Za-z_][A-Za-z_0-9]*=\)"\(.*\)"$/\1\2/' > "$FILTERED_ENV"
+
 docker run -d \
   --name "$CONTAINER_NAME" \
   --network "$NETWORK_NAME" \
   -p "3000:3000" \
-  --env-file .env.default \
+  --env-file "$FILTERED_ENV" \
   --env-file .env.docker-test \
   "${IMAGE_NAME}:${IMAGE_TAG}"
+rm -f "$FILTERED_ENV"
 
 # Step 4: Poll healthcheck
 echo "==> Polling healthcheck at ${HEALTH_URL}..."
