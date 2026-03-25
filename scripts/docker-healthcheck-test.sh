@@ -21,6 +21,7 @@ trap cleanup EXIT INT TERM
 # Step 1: Build the Docker image
 echo "==> Building Docker image..."
 docker build \
+  --no-cache \
   --build-arg GIT_COMMIT_SHA="$(git rev-parse HEAD 2>/dev/null || echo 'unknown')" \
   --build-arg APP_VERSION="test" \
   -t "${IMAGE_NAME}:${IMAGE_TAG}" \
