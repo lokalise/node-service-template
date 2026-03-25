@@ -7,3 +7,4 @@ Dockerfile
 .github
 .gitignore
 .npmrc
+.env*
