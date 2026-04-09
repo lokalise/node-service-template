@@ -66,7 +66,7 @@
         "@opentelemetry/auto-instrumentations-node": "^0.68.0",
         "@opentelemetry/exporter-trace-otlp-grpc": "^0.210.0",
         "@scalar/fastify-api-reference": "^1.49.5",
-        "amqplib": "^0.10.9",
+        "amqplib": "^1.0.3",
         "awilix": "^13.0.3",
         "awilix-manager": "^6.3.0",
         "bullmq": "^5.72.0",
