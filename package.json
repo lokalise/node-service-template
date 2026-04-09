@@ -100,7 +100,7 @@
         "@readme/openapi-parser": "^6.0.0",
         "@types/amqplib": "^0.10.8",
         "@types/node": "^25.5.0",
-        "@vitest/coverage-v8": "^4.1.1",
+        "@vitest/coverage-v8": "^4.1.2",
         "cpy-cli": "^7.0.0",
         "cross-env": "^10.1.0",
         "fauxqs": "^2.3.1",
