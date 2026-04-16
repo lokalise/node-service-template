@@ -97,7 +97,7 @@
         "@lokalise/biome-config": "^3.1.1",
         "@lokalise/tsconfig": "^3.1.0",
         "@lokalise/universal-testing-utils": "^3.5.0",
-        "@readme/openapi-parser": "^6.0.0",
+        "@readme/openapi-parser": "^6.0.1",
         "@types/amqplib": "^0.10.8",
         "@types/node": "^25.5.0",
         "@vitest/coverage-v8": "^4.1.2",
