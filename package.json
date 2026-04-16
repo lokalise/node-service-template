@@ -57,7 +57,7 @@
         "@lokalise/opentelemetry-fastify-bootstrap": "^2.1.2",
         "@lokalise/universal-ts-utils": "^4.10.0",
         "@lokalise/zod-extras": "^3.0.1",
-        "@message-queue-toolkit/amqp": "^23.1.0",
+        "@message-queue-toolkit/amqp": "^24.0.0",
         "@message-queue-toolkit/core": "^25.4.0",
         "@message-queue-toolkit/metrics": "^4.4.2",
         "@message-queue-toolkit/schemas": "^7.1.0",
