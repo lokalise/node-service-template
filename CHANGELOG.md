@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.6.0] - 2026-04-20
+
+- Migrate AWS config to `envase` `createConfig` with computed schema (`getEnvaseAwsConfig({ path: 'aws' })` now exposes `schema`/`computed`, and `Config.aws` is typed as `AwsConfig`)
+- Make container port configurable via `APP_PORT` env var in `Dockerfile` (healthcheck and `EXPOSE` now honor the override)
+- Bump Node base image to `24.15.0-trixie-slim`
+- Update dependencies across aws, drizzle, biomejs, vitest, awilix, and types groups; notable bumps include `opinionated-machine` 6.10.1 → 6.13.2, `@lokalise/api-contracts` 6.5.3 → 6.8.0, `@scalar/fastify-api-reference` 1.44.26 → 1.49.8, `bullmq` 5.70.0 → 5.72.0, `postgres` 3.4.8 → 3.4.9, `undici` 7.24.5 → 7.25.0, `ioredis` 5.9.3 → 5.10.1, `redis-semaphore` 5.6.2 → 5.7.0, plus dev-only bumps to `@readme/openapi-parser` 5.5.0 → 6.0.1 and `mockttp` 4.2.3 → 4.3.1
+
 ## [1.5.1] - 2026-03-25
 
 - Add Docker build and healthcheck test script (`scripts/docker-healthcheck-test.sh`)
