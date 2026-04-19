@@ -53,7 +53,9 @@ ENV NODE_PATH=.
 USER node
 
 ENV APP_PORT=3000
-EXPOSE ${APP_PORT}
+# EXPOSE is resolved at build time, so it documents the default APP_PORT (3000).
+# Override APP_PORT at runtime with `-e APP_PORT=...` and publish with `-p <host>:<app_port>`.
+EXPOSE 3000
 
 # Uses /live (shallow liveness) instead of /health (readiness) so the container
 # is not killed when external dependencies (Postgres, Redis) are temporarily down.

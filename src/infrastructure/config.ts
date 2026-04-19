@@ -3,7 +3,7 @@ import { createConfig, detectNodeEnv, envvar, type InferEnv } from 'envase'
 import { z } from 'zod'
 
 function setZodPortChecks<T extends z.ZodCoercedNumber>(schema: T) {
-  return schema.int().min(0).max(65535)
+  return schema.int().min(1).max(65535)
 }
 
 export const nodeEnv = detectNodeEnv(process.env)

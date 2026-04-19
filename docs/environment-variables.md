@@ -25,7 +25,7 @@
 - `APP_PORT` (optional)  
   Type: `integer`  
   Description: HTTP server listening port  
-  Min value: `0`  
+  Min value: `1`  
   Max value: `65535`  
   Default: `3000`
 
@@ -73,7 +73,7 @@
 - `REDIS_PORT` (required)  
   Type: `integer`  
   Description: Redis server port  
-  Min value: `0`  
+  Min value: `1`  
   Max value: `65535`
 
 - `REDIS_USERNAME` (optional)  
@@ -114,7 +114,7 @@
 - `SCHEDULER_REDIS_PORT` (required)  
   Type: `integer`  
   Description: Scheduler Redis server port  
-  Min value: `0`  
+  Min value: `1`  
   Max value: `65535`
 
 - `SCHEDULER_REDIS_USERNAME` (optional)  
@@ -151,7 +151,7 @@
 - `AMQP_PORT` (required)  
   Type: `integer`  
   Description: AMQP broker port  
-  Min value: `0`  
+  Min value: `1`  
   Max value: `65535`
 
 - `AMQP_USERNAME` (required)  
@@ -205,10 +205,6 @@
 - `AWS_SECRET_ACCESS_KEY` (optional)  
   Type: `string`  
   Description: AWS secret access key for programmatic access
-
-- `_AWS_CREDENTIALS_RESOLVED` (optional)  
-  Type: `undefined`  
-  Description: Auto-resolved from AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY. Do not configure directly.
 
 ## Integrations FakeStore
 
