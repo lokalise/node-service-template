@@ -1,5 +1,5 @@
-import { getEnvaseAwsConfig } from '@lokalise/aws-config'
-import { detectNodeEnv, envvar, type InferEnv, parseEnv } from 'envase'
+import { type AwsConfig, getEnvaseAwsConfig } from '@lokalise/aws-config'
+import { createConfig, detectNodeEnv, envvar, type InferEnv } from 'envase'
 import { z } from 'zod'
 
 function setZodPortChecks<T extends z.ZodCoercedNumber>(schema: T) {
@@ -13,6 +13,8 @@ export const SERVICE_NAME = 'node-service-template'
 export function decodeJwtConfig(jwtPublicKey: string) {
   return jwtPublicKey.replaceAll('||', '\n')
 }
+
+const awsConfig = getEnvaseAwsConfig({ path: 'aws' })
 
 const envSchema = {
   app: {
@@ -178,7 +180,7 @@ const envSchema = {
       z.stringbool().default(true).describe('Whether to use TLS/SSL for AMQP connection'),
     ),
   },
-  aws: getEnvaseAwsConfig(),
+  aws: awsConfig.schema,
   integrations: {
     fakeStore: {
       baseUrl: envvar(
@@ -279,16 +281,20 @@ const envSchema = {
   },
 }
 
+const computedSchema = {
+  aws: awsConfig.computed,
+}
+
 // biome-ignore lint/style/noDefaultExport: envase uses default export to generate docs
 export default envSchema
 
-export type Config = InferEnv<typeof envSchema>
+export type Config = Omit<InferEnv<typeof envSchema>, 'aws'> & { aws: AwsConfig }
 
 let config: Config | null = null
 
 export function getConfig(): Config {
   if (!config) {
-    config = parseEnv(process.env, envSchema)
+    config = createConfig(process.env, { schema: envSchema, computed: computedSchema })
   }
   return config
 }
