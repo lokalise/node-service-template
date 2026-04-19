@@ -1,5 +1,5 @@
 # ---- Base Node ----
-FROM node:24.14.1-trixie-slim AS base
+FROM node:24.15.0-trixie-slim AS base
 
 RUN set -ex && \
     apt-get update && \
@@ -52,11 +52,14 @@ ENV NODE_PATH=.
 
 USER node
 
+ENV APP_PORT=3000
+# EXPOSE is resolved at build time, so it documents the default APP_PORT (3000).
+# Override APP_PORT at runtime with `-e APP_PORT=...` and publish with `-p <host>:<app_port>`.
 EXPOSE 3000
 
 # Uses /live (shallow liveness) instead of /health (readiness) so the container
 # is not killed when external dependencies (Postgres, Redis) are temporarily down.
 HEALTHCHECK --interval=30s --timeout=3s --start-period=10s --retries=3 \
-    CMD node -e "fetch('http://localhost:3000/live').then(r => { if (!r.ok) process.exit(1) }).catch(() => process.exit(1))"
+    CMD node -e "fetch(\`http://localhost:${process.env.APP_PORT || 3000}/live\`).then(r => { if (!r.ok) process.exit(1) }).catch(() => process.exit(1))"
 
 CMD ["dumb-init", "node", "--import=@opentelemetry/instrumentation/hook.mjs", "server.js"]
