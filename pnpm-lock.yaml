@@ -261,23 +261,22 @@ importers:
         version: 0.27.7
 
   packages/api-contracts:
-    dependencies:
+    devDependencies:
       '@lokalise/api-contracts':
         specifier: ^6.8.0
         version: 6.8.0(zod@4.3.6)
-      '@lokalise/zod-extras':
-        specifier: ^3.0.1
-        version: 3.0.1
-      zod:
-        specifier: ^4.3.6
-        version: 4.3.6
-    devDependencies:
       '@lokalise/tsconfig':
         specifier: ^3.1.0
         version: 3.1.0
+      '@lokalise/zod-extras':
+        specifier: ^3.0.1
+        version: 3.0.1
       typescript:
         specifier: ^6.0.3
         version: 6.0.3
+      zod:
+        specifier: ^4.3.6
+        version: 4.3.6
 
 packages:
 
