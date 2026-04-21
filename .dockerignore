@@ -1,5 +1,6 @@
 .dockerignore
-node_modules
+**/node_modules
+**/dist
 docs
 npm-debug.log
 Dockerfile

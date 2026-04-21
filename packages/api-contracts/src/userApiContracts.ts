@@ -12,7 +12,7 @@ import {
 } from './userSchemas.ts'
 
 export const postCreateUserContract = buildRestContract({
-  method: 'post', // can also be 'patch' or 'post'
+  method: 'post',
   successResponseBodySchema: CREATE_USER_RESPONSE_BODY_SCHEMA,
   requestHeaderSchema: AUTH_HEADERS,
   requestBodySchema: CREATE_USER_BODY_SCHEMA,
@@ -39,7 +39,7 @@ export const deleteUserContract = buildRestContract({
 })
 
 export const patchUpdateUserContract = buildRestContract({
-  method: 'patch', // can also be 'patch' or 'post'
+  method: 'patch',
   successResponseBodySchema: z.undefined(),
   isEmptyResponseExpected: true,
   requestBodySchema: UPDATE_USER_BODY_SCHEMA,

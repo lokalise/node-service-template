@@ -1,0 +1,38 @@
+{
+    "name": "@node-service-template/api-contracts",
+    "version": "0.1.0",
+    "description": "API contracts for node-service-template",
+    "license": "MIT",
+    "type": "module",
+    "files": [
+        "dist"
+    ],
+    "exports": {
+        ".": {
+            "types": "./dist/index.d.ts",
+            "default": "./src/index.ts"
+        }
+    },
+    "publishConfig": {
+        "exports": {
+            ".": {
+                "types": "./dist/index.d.ts",
+                "default": "./dist/index.js"
+            }
+        }
+    },
+    "scripts": {
+        "build": "tsc -p tsconfig.build.json",
+        "clean": "rm -rf dist",
+        "prepublishOnly": "pnpm run clean && pnpm run build"
+    },
+    "dependencies": {
+        "@lokalise/api-contracts": "^6.8.0",
+        "@lokalise/zod-extras": "^3.0.1",
+        "zod": "^4.3.6"
+    },
+    "devDependencies": {
+        "@lokalise/tsconfig": "^3.1.0",
+        "typescript": "^6.0.3"
+    }
+}

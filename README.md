@@ -41,7 +41,7 @@ Basic building block examples:
 - [Domain service](./src/modules/users/services/UserService.ts);
 - [Controller](./src/modules/users/controllers/UserController.ts);
 - [Route](./src/modules/users/routes/userRoutes.ts);
-- [Schema](src/modules/users/schemas/userSchemas.ts);
+- [Schema](packages/api-contracts/src/userSchemas.ts) (published independently as [`@node-service-template/api-contracts`](packages/api-contracts));
 - [e2e test](./src/modules/users/controllers/UserController.e2e.spec.ts);
 
 Plugins:
@@ -87,8 +87,12 @@ are relevant for the technological stack of your organization, and replace `@lok
 2. Install all project dependencies:
 
    ```shell
-   npm install
+   pnpm install
    ```
+
+   > This is a pnpm workspace. The service lives at the repository root and the
+   > publishable API contracts live under [`packages/api-contracts`](packages/api-contracts).
+   > The service consumes the contracts via `@node-service-template/api-contracts` (`workspace:*`).
 
 3. Copy the `.env.default` file to a new `.env` file. You can do this with the following npm script:
 

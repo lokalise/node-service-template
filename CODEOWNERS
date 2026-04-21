@@ -1,5 +1,6 @@
 package.json @lokalise/dx-guild
-package-lock.json @lokalise/dx-guild
+pnpm-lock.yaml @lokalise/dx-guild
+pnpm-workspace.yaml @lokalise/dx-guild
 /.github @lokalise/dx-guild
 Dockerfile @lokalise/dx-guild
 docker-compose.yml @lokalise/dx-guild
@@ -7,3 +8,4 @@ docker-compose.yml @lokalise/dx-guild
 /src @kibertoad @drdaemos @lokalise/dx-guild
 /test @kibertoad @drdaemos @lokalise/dx-guild
 /docs @kibertoad @drdaemos @lokalise/dx-guild
+/packages @kibertoad @drdaemos @lokalise/dx-guild

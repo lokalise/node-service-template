@@ -7,5 +7,6 @@ test/
 coverage/
 lib/
 package-lock.json
+pnpm-lock.yaml
 tsconfig.json
 .eslintrc.json
