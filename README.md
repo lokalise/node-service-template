@@ -84,7 +84,13 @@ are relevant for the technological stack of your organization, and replace `@lok
 
 1. Make sure your node version is compatible with the requirements in [package.json](package.json). We are working with `node >= 22` and recommend using a version manager, such as [nvm](https://github.com/nvm-sh/nvm), to manage multiple Node versions on your device if needed.
 
-2. Install all project dependencies:
+2. Install [pnpm](https://pnpm.io/installation) (this project uses pnpm as its package manager — see the `packageManager` field in [package.json](package.json)). The easiest way on a recent Node.js is to enable Corepack:
+
+   ```shell
+   corepack enable
+   ```
+
+3. Install all project dependencies:
 
    ```shell
    pnpm install
@@ -94,13 +100,13 @@ are relevant for the technological stack of your organization, and replace `@lok
    > publishable API contracts live under [`packages/api-contracts`](packages/api-contracts).
    > The service consumes the contracts via `@node-service-template/api-contracts` (`workspace:*`).
 
-3. Copy the `.env.default` file to a new `.env` file. You can do this with the following npm script:
+4. Copy the `.env.default` file to a new `.env` file. You can do this with the following npm script:
 
    ```shell
    node --run copy:config
    ```
 
-4. Launch all the infrastructural dependencies locally:
+5. Launch all the infrastructural dependencies locally:
 
    ```shell
    docker compose up -d
@@ -113,12 +119,12 @@ are relevant for the technological stack of your organization, and replace `@lok
 
    In tests, fauxqs runs as an embedded library (no Docker required) — see [test/FauxqsHelper.ts](./test/FauxqsHelper.ts).
 
-5. Run migrations to synchronize your database schema with defined models:
+6. Run migrations to synchronize your database schema with defined models:
    ```shell
    node --run db:apply-migrations
    ```
 
-6. To run application:
+7. To run application:
 
    ```shell
    node --run start:dev

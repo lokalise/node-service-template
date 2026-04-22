@@ -8,18 +8,8 @@
         "dist"
     ],
     "exports": {
-        ".": {
-            "types": "./src/index.ts",
-            "default": "./dist/index.js"
-        }
-    },
-    "publishConfig": {
-        "exports": {
-            ".": {
-                "types": "./dist/index.d.ts",
-                "default": "./dist/index.js"
-            }
-        }
+        ".": "./dist/index.js",
+        "./package.json": "./package.json"
     },
     "scripts": {
         "build": "tsc -p tsconfig.build.json",
