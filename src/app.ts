@@ -63,8 +63,6 @@ import { jwtTokenPlugin } from './plugins/jwtTokenPlugin.ts'
 
 EventEmitter.defaultMaxListeners = 12
 
-const GRACEFUL_SHUTDOWN_TIMEOUT_IN_MSECS = 10000
-
 export type AppInstance = FastifyInstance<
   http.Server,
   http.IncomingMessage,
@@ -138,7 +136,7 @@ export async function getApp(
   if (!nodeEnv.isDevelopment) {
     await app.register(fastifyGracefulShutdown, {
       resetHandlersOnInit: true,
-      timeout: GRACEFUL_SHUTDOWN_TIMEOUT_IN_MSECS,
+      timeout: appConfig.gracefulShutdownTimeoutMs,
     })
   }
 

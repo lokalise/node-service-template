@@ -54,6 +54,11 @@
   Description: Whether to enable Prometheus metrics collection  
   Default: `true`
 
+- `GRACEFUL_SHUTDOWN_TIMEOUT_MS` (optional)  
+  Type: `string`  
+  Description: Timeout in milliseconds for graceful shutdown  
+  Default: `30000`
+
 ## Db
 
 - `DATABASE_URL` (required)  

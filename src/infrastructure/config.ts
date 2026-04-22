@@ -77,6 +77,15 @@ const envSchema = {
         z.stringbool().default(true).describe('Whether to enable Prometheus metrics collection'),
       ),
     },
+    gracefulShutdownTimeoutMs: envvar(
+      'GRACEFUL_SHUTDOWN_TIMEOUT_MS',
+      z.coerce
+        .number()
+        .int()
+        .nonnegative()
+        .default(10000)
+        .describe('Timeout in milliseconds for graceful shutdown'),
+    ),
   },
   db: {
     databaseUrl: envvar(
