@@ -57,7 +57,7 @@
 - `GRACEFUL_SHUTDOWN_TIMEOUT_MS` (optional)  
   Type: `string`  
   Description: Timeout in milliseconds for graceful shutdown  
-  Default: `30000`
+  Default: `10000`
 
 ## Db
 
