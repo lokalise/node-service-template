@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.7.0] - 2026-04-22
+
+- Make graceful shutdown timeout configurable via `GRACEFUL_SHUTDOWN_TIMEOUT_MS` env var (default: `10000`), replacing the hardcoded constant in `app.ts`
+
 ## [1.6.0] - 2026-04-20
 
 - Migrate AWS config to `envase` `createConfig` with computed schema (`getEnvaseAwsConfig({ path: 'aws' })` now exposes `schema`/`computed`, and `Config.aws` is typed as `AwsConfig`)
