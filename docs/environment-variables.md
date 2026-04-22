@@ -47,17 +47,19 @@
   Description: Public URL where the application is accessible, used in OpenAPI spec  
   Default: ``
 
+- `GRACEFUL_SHUTDOWN_TIMEOUT_MS` (optional)  
+  Type: `integer`  
+  Description: Timeout in milliseconds for graceful shutdown  
+  Min value: `0`  
+  Max value: `9007199254740991`  
+  Default: `10000`
+
 ## App Metrics
 
 - `METRICS_ENABLED` (optional)  
   Type: `string`  
   Description: Whether to enable Prometheus metrics collection  
   Default: `true`
-
-- `GRACEFUL_SHUTDOWN_TIMEOUT_MS` (optional)  
-  Type: `string`  
-  Description: Timeout in milliseconds for graceful shutdown  
-  Default: `10000`
 
 ## Db
 
