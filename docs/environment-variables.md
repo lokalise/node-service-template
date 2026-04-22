@@ -49,7 +49,7 @@
 
 - `GRACEFUL_SHUTDOWN_TIMEOUT_MS` (optional)  
   Type: `integer`  
-  Description: Timeout in milliseconds for graceful shutdown  
+  Description: Timeout in milliseconds for graceful shutdown (max: 30000)  
   Min value: `0`  
   Max value: `9007199254740991`  
   Default: `10000`

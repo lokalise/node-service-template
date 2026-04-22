@@ -1,5 +1,6 @@
+import { globalLogger } from '@lokalise/node-core'
 import { parseEnv } from 'envase'
-import { describe, expect, test } from 'vitest'
+import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest'
 import envSchema, { decodeJwtConfig } from './config.ts'
 
 describe('config', () => {
@@ -24,6 +25,41 @@ describe('config', () => {
       expect(() => decodeJwtConfig(null)).toThrow(TypeError)
       // @ts-expect-error
       expect(() => decodeJwtConfig(undefined)).toThrow(TypeError)
+    })
+  })
+
+  describe('gracefulShutdownTimeoutMs', () => {
+    let warnSpy: ReturnType<typeof vi.spyOn>
+
+    beforeEach(() => {
+      warnSpy = vi.spyOn(globalLogger, 'warn').mockImplementation(() => {})
+    })
+
+    afterEach(() => {
+      warnSpy.mockRestore()
+    })
+
+    test('uses the default when not set', () => {
+      const env = buildEnv({ GRACEFUL_SHUTDOWN_TIMEOUT_MS: undefined })
+      const config = parseEnv(env, envSchema)
+      expect(config.app.gracefulShutdownTimeoutMs).toBe(10000)
+      expect(warnSpy).not.toHaveBeenCalled()
+    })
+
+    test('accepts values at or below 30000ms without warning', () => {
+      const env = buildEnv({ GRACEFUL_SHUTDOWN_TIMEOUT_MS: '30000' })
+      const config = parseEnv(env, envSchema)
+      expect(config.app.gracefulShutdownTimeoutMs).toBe(30000)
+      expect(warnSpy).not.toHaveBeenCalled()
+    })
+
+    test('clamps values above 30000ms to 30000ms and warns', () => {
+      const env = buildEnv({ GRACEFUL_SHUTDOWN_TIMEOUT_MS: '60000' })
+      const config = parseEnv(env, envSchema)
+      expect(config.app.gracefulShutdownTimeoutMs).toBe(30000)
+      expect(warnSpy).toHaveBeenCalledTimes(1)
+      expect(warnSpy).toHaveBeenCalledWith(expect.stringContaining('60000'))
+      expect(warnSpy).toHaveBeenCalledWith(expect.stringContaining('30000'))
     })
   })
 

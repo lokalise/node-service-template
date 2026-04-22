@@ -1,10 +1,13 @@
 import { type AwsConfig, getEnvaseAwsConfig } from '@lokalise/aws-config'
+import { globalLogger } from '@lokalise/node-core'
 import { createConfig, detectNodeEnv, envvar, type InferEnv } from 'envase'
 import { z } from 'zod'
 
 function setZodPortChecks<T extends z.ZodCoercedNumber>(schema: T) {
   return schema.int().min(1).max(65535)
 }
+
+const MAX_GRACEFUL_SHUTDOWN_TIMEOUT_MS = 30_000
 
 export const nodeEnv = detectNodeEnv(process.env)
 
@@ -84,7 +87,18 @@ const envSchema = {
         .int()
         .nonnegative()
         .default(10000)
-        .describe('Timeout in milliseconds for graceful shutdown'),
+        .describe(
+          `Timeout in milliseconds for graceful shutdown (max: ${MAX_GRACEFUL_SHUTDOWN_TIMEOUT_MS})`,
+        )
+        .transform((value) => {
+          if (value > MAX_GRACEFUL_SHUTDOWN_TIMEOUT_MS) {
+            globalLogger.warn(
+              `GRACEFUL_SHUTDOWN_TIMEOUT_MS value of ${value}ms exceeds the maximum of ${MAX_GRACEFUL_SHUTDOWN_TIMEOUT_MS}ms. Forcing to ${MAX_GRACEFUL_SHUTDOWN_TIMEOUT_MS}ms.`,
+            )
+            return MAX_GRACEFUL_SHUTDOWN_TIMEOUT_MS
+          }
+          return value
+        }),
     ),
   },
   db: {
