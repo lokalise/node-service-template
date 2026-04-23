@@ -49,9 +49,9 @@
 
 - `GRACEFUL_SHUTDOWN_TIMEOUT_MS` (optional)  
   Type: `integer`  
-  Description: Timeout in milliseconds for graceful shutdown (max: 30000)  
+  Description: Timeout in milliseconds for graceful shutdown  
   Min value: `0`  
-  Max value: `9007199254740991`  
+  Max value: `30000`  
   Default: `10000`
 
 ## App Metrics
