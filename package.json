@@ -69,7 +69,7 @@
         "@node-service-template/api-contracts": "workspace:*",
         "@opentelemetry/auto-instrumentations-node": "0.68.0",
         "@opentelemetry/exporter-trace-otlp-grpc": "0.210.0",
-        "@opentelemetry/instrumentation": "^0.212.0",
+        "@opentelemetry/instrumentation": "^0.214.0",
         "@scalar/fastify-api-reference": "^1.49.8",
         "amqplib": "^1.0.3",
         "awilix": "^13.0.3",
