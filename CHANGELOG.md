@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.9.0] - 2026-04-23
+
+- Add a dedicated Biome config for workspace packages: root `biome.jsonc` is now `root: true` and excludes `packages`; new `packages/biome.jsonc` is an independent root extending `biome-base`, `biome-esm`, and `biome-package`
+- Add `lint`/`lint:fix` scripts to `packages/api-contracts` (`biome check && tsc`) and chain them from the root `lint`/`lint:fix` via `pnpm --filter "./packages/*"` so workspace packages are linted and type-checked in CI alongside the service
+
 ## [1.8.0] - 2026-04-23
 
 - Make graceful shutdown timeout configurable via `GRACEFUL_SHUTDOWN_TIMEOUT_MS` env var (default: `10000`,  maximum `30000`; values above the maximum fail validation at startup), replacing the hardcoded constant in `app.ts`
