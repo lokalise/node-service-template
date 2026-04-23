@@ -1,0 +1,4 @@
+{
+    "extends": "@lokalise/tsconfig/tsc",
+    "include": ["src/**/*"]
+}

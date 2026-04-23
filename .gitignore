@@ -63,6 +63,7 @@ typings/
 # next.js build output
 .next
 /dist/
+/packages/*/dist/
 /.idea/
 /.fleet/
 /serviceSpec.yaml

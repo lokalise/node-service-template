@@ -14,14 +14,18 @@ jobs:
     steps:
       - uses: actions/checkout@v6
 
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
       - name: Setup Node ${{ matrix.node-version }}
         uses: actions/setup-node@v6
         with:
           node-version: ${{ matrix.node-version }}
+          cache: 'pnpm'
 
       - name: Install
         run: |
-          npm install --ignore-scripts
+          pnpm install --frozen-lockfile --ignore-scripts
 
       - name: Docker start
         run: |
@@ -29,24 +33,24 @@ jobs:
 
       - name: Build TS
         run: |
-          node --run build
+          pnpm run build
 
       - name: Schema preparation
         run: |
-          node --run copy:config
-          npm run db:apply-migrations
+          pnpm run copy:config
+          pnpm run db:apply-migrations
 
       - name: Run Tests
         run: |
-          node --run test:ci
+          pnpm run test:ci
 
       - name: Run lint
         run: |
-          node --run lint   
+          pnpm run lint
 
       - name: Smoketest the application
         run: |
-          node --run start:prod:smoke-test
+          pnpm run start:prod:smoke-test
 
       - name: DB stop
         run: |

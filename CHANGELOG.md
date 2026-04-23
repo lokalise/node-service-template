@@ -1,8 +1,17 @@
 # Changelog
 
-## [1.7.0] - 2026-04-22
+## [1.8.0] - 2026-04-23
 
 - Make graceful shutdown timeout configurable via `GRACEFUL_SHUTDOWN_TIMEOUT_MS` env var (default: `10000`, capped at `30000` with a warning when exceeded), replacing the hardcoded constant in `app.ts`
+
+## [1.7.0] - 2026-04-21
+
+- Migrate package manager from npm to pnpm (lockfile, CI, Dockerfile, dependabot config, README, CODEOWNERS updated); `package-lock.json` replaced by `pnpm-lock.yaml`
+- Introduce pnpm workspace with `@node-service-template/api-contracts` package under `packages/api-contracts/` (extracted user API contracts and schemas; consumed by the service via `workspace:*`)
+- Add `build:contracts` script and run it before `start:dev`/`start:dev:watch` so the contracts package's `dist/` is available at runtime
+- Add `@opentelemetry/instrumentation` as an explicit dependency so the `--import=@opentelemetry/instrumentation/hook.mjs` runtime hook resolves under pnpm's strict isolation
+- Add `@lokalise/zod-extras` as a direct service dependency to satisfy the api-contracts package's peer dependency when running `pnpm install --prod` in the Docker production-deps stage
+- Point the api-contracts package's runtime `exports` at `./dist/index.js` (types remain on `./src/index.ts` for the workspace so type-checking needs no prior build; `publishConfig` narrows types to `dist` on publish)
 
 ## [1.6.0] - 2026-04-20
 

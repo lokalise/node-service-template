@@ -1,11 +1,11 @@
 import { buildFastifyRoute } from '@lokalise/fastify-api-contracts'
-import { AbstractController, type BuildRoutesReturnType } from 'opinionated-machine'
 import {
   deleteUserContract,
   getUserContract,
   patchUpdateUserContract,
   postCreateUserContract,
-} from '../schemas/userApiContracts.ts'
+} from '@node-service-template/api-contracts'
+import { AbstractController, type BuildRoutesReturnType } from 'opinionated-machine'
 import type { UserService } from '../services/UserService.ts'
 import type { UsersInjectableDependencies } from '../UserModule.ts'
 
