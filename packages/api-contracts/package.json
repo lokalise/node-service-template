@@ -14,6 +14,8 @@
     "scripts": {
         "build": "tsc -p tsconfig.build.json",
         "clean": "rm -rf dist",
+        "lint": "biome check && tsc",
+        "lint:fix": "biome check --write",
         "prepublishOnly": "pnpm run clean && pnpm run build"
     },
     "peerDependencies": {
