@@ -47,6 +47,13 @@
   Description: Public URL where the application is accessible, used in OpenAPI spec  
   Default: ``
 
+- `GRACEFUL_SHUTDOWN_TIMEOUT_MS` (optional)  
+  Type: `integer`  
+  Description: Timeout in milliseconds for graceful shutdown  
+  Min value: `0`  
+  Max value: `30000`  
+  Default: `10000`
+
 ## App Metrics
 
 - `METRICS_ENABLED` (optional)  

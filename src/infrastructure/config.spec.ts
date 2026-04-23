@@ -27,6 +27,31 @@ describe('config', () => {
     })
   })
 
+  describe('gracefulShutdownTimeoutMs', () => {
+    test('uses the default when not set', () => {
+      const env = buildEnv({ GRACEFUL_SHUTDOWN_TIMEOUT_MS: undefined })
+      const config = parseEnv(env, envSchema)
+      expect(config.app.gracefulShutdownTimeoutMs).toBe(10000)
+    })
+
+    test('accepts values at or below 30000ms', () => {
+      const env = buildEnv({ GRACEFUL_SHUTDOWN_TIMEOUT_MS: '30000' })
+      const config = parseEnv(env, envSchema)
+      expect(config.app.gracefulShutdownTimeoutMs).toBe(30000)
+    })
+
+    test('rejects values above 30000ms', () => {
+      const env = buildEnv({ GRACEFUL_SHUTDOWN_TIMEOUT_MS: '60000' })
+      expect(() => parseEnv(env, envSchema)).toThrowErrorMatchingInlineSnapshot(`
+        [EnvaseError: Environment variables validation has failed:
+          [GRACEFUL_SHUTDOWN_TIMEOUT_MS]:
+            Too big: expected number to be <=30000
+            (received: "60000")
+        ]
+      `)
+    })
+  })
+
   describe('OpenTelemetry config validation', () => {
     describe('_resourceAttributes', () => {
       test('accepts valid format with service name', () => {

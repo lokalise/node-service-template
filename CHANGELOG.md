@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.8.0] - 2026-04-23
+
+- Make graceful shutdown timeout configurable via `GRACEFUL_SHUTDOWN_TIMEOUT_MS` env var (default: `10000`,  maximum `30000`; values above the maximum fail validation at startup), replacing the hardcoded constant in `app.ts`
+
 ## [1.7.0] - 2026-04-21
 
 - Migrate package manager from npm to pnpm (lockfile, CI, Dockerfile, dependabot config, README, CODEOWNERS updated); `package-lock.json` replaced by `pnpm-lock.yaml`

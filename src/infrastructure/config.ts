@@ -6,6 +6,8 @@ function setZodPortChecks<T extends z.ZodCoercedNumber>(schema: T) {
   return schema.int().min(1).max(65535)
 }
 
+const MAX_GRACEFUL_SHUTDOWN_TIMEOUT_MS = 30_000
+
 export const nodeEnv = detectNodeEnv(process.env)
 
 export const SERVICE_NAME = 'node-service-template'
@@ -77,6 +79,16 @@ const envSchema = {
         z.stringbool().default(true).describe('Whether to enable Prometheus metrics collection'),
       ),
     },
+    gracefulShutdownTimeoutMs: envvar(
+      'GRACEFUL_SHUTDOWN_TIMEOUT_MS',
+      z.coerce
+        .number()
+        .int()
+        .nonnegative()
+        .max(MAX_GRACEFUL_SHUTDOWN_TIMEOUT_MS)
+        .default(10000)
+        .describe('Timeout in milliseconds for graceful shutdown'),
+    ),
   },
   db: {
     databaseUrl: envvar(
