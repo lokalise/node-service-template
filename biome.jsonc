@@ -6,7 +6,7 @@
         "./node_modules/@lokalise/biome-config/configs/biome-esm.jsonc"
     ],
     "files": {
-        "includes": ["**", "!packages"]
+        "includes": ["**", "!**/node_modules", "!**/dist", "!**/coverage", "!packages"]
     },
     "linter": {
         // add overrides here if necessary

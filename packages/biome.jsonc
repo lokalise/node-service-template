@@ -7,6 +7,6 @@
         "@lokalise/biome-config/configs/biome-package.jsonc"
     ],
     "files": {
-        "includes": ["**"]
+        "includes": ["**", "!**/node_modules", "!**/dist", "!**/coverage"]
     }
 }
