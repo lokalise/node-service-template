@@ -2,7 +2,7 @@
 
 ## [1.8.0] - 2026-04-23
 
-- Make graceful shutdown timeout configurable via `GRACEFUL_SHUTDOWN_TIMEOUT_MS` env var (default: `10000`, capped at `30000` with a warning when exceeded), replacing the hardcoded constant in `app.ts`
+- Make graceful shutdown timeout configurable via `GRACEFUL_SHUTDOWN_TIMEOUT_MS` env var (default: `10000`,  maximum `30000`; values above the maximum fail validation at startup), replacing the hardcoded constant in `app.ts`
 
 ## [1.7.0] - 2026-04-21
 
