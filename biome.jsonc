@@ -1,9 +1,13 @@
 {
     "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
+    "root": true,
     "extends": [
         "./node_modules/@lokalise/biome-config/configs/biome-base.jsonc",
         "./node_modules/@lokalise/biome-config/configs/biome-esm.jsonc"
     ],
+    "files": {
+        "includes": ["**", "!**/node_modules", "!**/dist", "!**/coverage", "!packages"]
+    },
     "linter": {
         // add overrides here if necessary
         "rules": {}
