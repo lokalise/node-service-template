@@ -7,38 +7,45 @@ RUN set -ex && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
+# Enable pnpm via corepack so the version pinned in package.json#packageManager
+# is used consistently across local, CI, and Docker builds.
+RUN corepack enable
+
 RUN mkdir -p /home/node/app && chown -R node:node /home/node && chmod -R 770 /home/node
 WORKDIR /home/node/app
 
-# ---- Dependencies ----
-FROM base AS dependencies
+# ---- Production dependencies ----
+FROM base AS production-deps
 
-COPY --chown=node:node ./package.json ./
-COPY --chown=node:node ./package-lock.json ./
+# Workspace manifests must all be present so pnpm can resolve `workspace:*` deps.
+COPY --chown=node:node ./package.json ./pnpm-lock.yaml ./pnpm-workspace.yaml ./
+COPY --chown=node:node ./packages/api-contracts/package.json ./packages/api-contracts/package.json
+
 USER node
-# install production dependencies
 RUN set -ex; \
-    npm ci --ignore-scripts --omit dev;
-# separate production node_modules
-# Uses cp (not mv) so that the next npm install can add dev dependencies
-# incrementally on top of existing production deps, instead of installing
-# everything from scratch. Trades disk usage in the build stage for faster
-# installs. This stage is discarded in the final image.
-RUN cp -R node_modules prod_node_modules
-# install ALL node_modules, including 'devDependencies'
-RUN set -ex; \
-    npm install --ignore-scripts;
+    pnpm install --frozen-lockfile --ignore-scripts --prod;
 
 # ---- Build ----
-FROM dependencies AS build
+FROM base AS build
+
+COPY --chown=node:node ./package.json ./pnpm-lock.yaml ./pnpm-workspace.yaml ./
+COPY --chown=node:node ./packages/api-contracts/package.json ./packages/api-contracts/package.json
+
+USER node
+# Full install including devDependencies needed to build the service.
+RUN set -ex; \
+    pnpm install --frozen-lockfile --ignore-scripts;
 
 COPY --chown=node:node . .
-RUN node --run build
+RUN pnpm run build
 
 # ---- Release ----
 FROM base AS release
 
-COPY --chown=node:node --from=build /home/node/app/prod_node_modules ./node_modules
+# Production node_modules (with pnpm symlinks into workspace packages)
+COPY --chown=node:node --from=production-deps /home/node/app/node_modules ./node_modules
+# Workspace packages referenced via symlinks from node_modules
+COPY --chown=node:node --from=build /home/node/app/packages ./packages
 COPY --chown=node:node --from=build /home/node/app/src/db/migrations ./src/db/migrations
 COPY --chown=node:node --from=build /home/node/app/dist ./
 
