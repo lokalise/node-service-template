@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.10.0] - 2026-04-28
+
+- Upgrade OpenAPI spec to 3.1.0 and set `zodToJsonConfig.target` to `draft-2020-12` in `createJsonSchemaTransform`; fixes nullable objects and arrays being incorrectly described in Scalar API reference docs
+
 ## [1.9.0] - 2026-04-23
 
 - Add a dedicated Biome config for workspace packages: root `biome.jsonc` is now `root: true` and excludes `packages`; new `packages/biome.jsonc` is an independent root extending `biome-base`, `biome-esm`, and `biome-package`
