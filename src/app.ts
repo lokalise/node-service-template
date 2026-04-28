@@ -145,6 +145,9 @@ export async function getApp(
   await app.register(fastifyAuth)
   await app.register(fastifySwagger, {
     transform: createJsonSchemaTransform({
+      zodToJsonConfig: {
+        target: 'draft-2020-12',
+      },
       skipList: [
         '/documentation/',
         '/documentation/initOAuth',
@@ -156,6 +159,7 @@ export async function getApp(
       ],
     }),
     openapi: {
+      openapi: '3.1.0',
       info: {
         title: 'SampleApi',
         description: 'Sample backend service',
