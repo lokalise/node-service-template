@@ -49,7 +49,7 @@ importers:
         version: 6.8.0(zod@4.3.6)
       '@lokalise/aws-config':
         specifier: ^8.1.0
-        version: 8.1.0(421050fd72032a50239b897cbd9a7ab5)
+        version: 8.1.0(82f3e04e636fc3cd64e424e607e3ae7d)
       '@lokalise/backend-http-client':
         specifier: ^10.1.0
         version: 10.1.0(@lokalise/api-contracts@6.8.0(zod@4.3.6))(@lokalise/node-core@14.7.4(zod@4.3.6))(zod@4.3.6)
@@ -61,7 +61,7 @@ importers:
         version: 5.3.1(@lokalise/api-contracts@6.8.0(zod@4.3.6))(@lokalise/node-core@14.7.4(zod@4.3.6))(fastify@5.8.5)(zod@4.3.6)
       '@lokalise/fastify-extras':
         specifier: ^30.7.2
-        version: 30.7.2(@fastify/jwt@10.0.0)(@lokalise/api-contracts@6.8.0(zod@4.3.6))(@lokalise/background-jobs-common@14.2.1(bullmq@5.75.2)(ioredis@5.10.1)(pino@10.3.1)(toad-scheduler@3.1.0)(zod@4.3.6))(@lokalise/node-core@14.7.4(zod@4.3.6))(@opentelemetry/api@1.9.1)(bullmq@5.75.2)(dd-trace@5.98.0(@emnapi/core@1.9.2)(@emnapi/runtime@1.9.2))(fastify-type-provider-zod@6.1.0(@fastify/swagger@9.7.0)(fastify@5.8.5)(openapi-types@12.1.3)(zod@4.3.6))(fastify@5.8.5)(ioredis@5.10.1)(newrelic@13.19.2)(pino@10.3.1)(zod@4.3.6)
+        version: 30.7.2(@fastify/jwt@10.0.0)(@lokalise/api-contracts@6.8.0(zod@4.3.6))(@lokalise/background-jobs-common@14.2.1(bullmq@5.75.2)(ioredis@5.10.1)(pino@10.3.1)(toad-scheduler@3.1.0)(zod@4.3.6))(@lokalise/node-core@14.7.4(zod@4.3.6))(@opentelemetry/api@1.9.1)(bullmq@5.75.2)(dd-trace@5.98.0(@emnapi/core@1.9.2)(@emnapi/runtime@1.9.2)(@openfeature/server-sdk@1.21.0(@openfeature/core@1.10.0)))(fastify-type-provider-zod@6.1.0(@fastify/swagger@9.7.0)(fastify@5.8.5)(openapi-types@12.1.3)(zod@4.3.6))(fastify@5.8.5)(ioredis@5.10.1)(newrelic@13.19.2)(pino@10.3.1)(zod@4.3.6)
       '@lokalise/healthcheck-utils':
         specifier: ^6.0.0
         version: 6.0.0(@lokalise/background-jobs-common@14.2.1(bullmq@5.75.2)(ioredis@5.10.1)(pino@10.3.1)(toad-scheduler@3.1.0)(zod@4.3.6))(ioredis@5.10.1)(prom-client@15.1.3)(toad-scheduler@3.1.0)(zod@4.3.6)
@@ -73,7 +73,7 @@ importers:
         version: 14.7.4(zod@4.3.6)
       '@lokalise/opentelemetry-fastify-bootstrap':
         specifier: ^2.2.0
-        version: 2.2.0(@fastify/otel@0.17.1(@opentelemetry/api@1.9.1))(@opentelemetry/auto-instrumentations-node@0.68.0(@opentelemetry/api@1.9.1)(@opentelemetry/core@2.7.0(@opentelemetry/api@1.9.1)))(@opentelemetry/exporter-trace-otlp-grpc@0.210.0(@opentelemetry/api@1.9.1))(@opentelemetry/sdk-node@0.210.0(@opentelemetry/api@1.9.1))(@opentelemetry/sdk-trace-base@2.4.0(@opentelemetry/api@1.9.1))(fastify@5.8.5)
+        version: 2.2.0(@fastify/otel@0.17.1(@opentelemetry/api@1.9.1))(@opentelemetry/auto-instrumentations-node@0.68.0(@opentelemetry/api@1.9.1)(@opentelemetry/core@2.7.1(@opentelemetry/api@1.9.1)))(@opentelemetry/exporter-trace-otlp-grpc@0.210.0(@opentelemetry/api@1.9.1))(@opentelemetry/sdk-node@0.210.0(@opentelemetry/api@1.9.1))(@opentelemetry/sdk-trace-base@2.4.0(@opentelemetry/api@1.9.1))(fastify@5.8.5)
       '@lokalise/universal-ts-utils':
         specifier: ^4.10.0
         version: 4.10.0
@@ -103,7 +103,7 @@ importers:
         version: link:packages/api-contracts
       '@opentelemetry/auto-instrumentations-node':
         specifier: 0.68.0
-        version: 0.68.0(@opentelemetry/api@1.9.1)(@opentelemetry/core@2.7.0(@opentelemetry/api@1.9.1))
+        version: 0.68.0(@opentelemetry/api@1.9.1)(@opentelemetry/core@2.7.1(@opentelemetry/api@1.9.1))
       '@opentelemetry/exporter-trace-otlp-grpc':
         specifier: 0.210.0
         version: 0.210.0(@opentelemetry/api@1.9.1)
@@ -126,14 +126,14 @@ importers:
         specifier: ^5.74.1
         version: 5.75.2
       drizzle-kit:
-        specifier: 1.0.0-beta.22-41a7d21
-        version: 1.0.0-beta.22-41a7d21
+        specifier: 1.0.0-beta.23
+        version: 1.0.0-beta.23
       drizzle-orm:
-        specifier: 1.0.0-beta.22-41a7d21
-        version: 1.0.0-beta.22-41a7d21(@opentelemetry/api@1.9.1)(@types/mssql@9.1.11(@azure/core-client@1.10.1))(@types/pg@8.15.6)(mssql@11.0.1(@azure/core-client@1.10.1))(postgres@3.4.9)(valibot@1.3.1(typescript@6.0.3))(zod@4.3.6)
+        specifier: 1.0.0-beta.23
+        version: 1.0.0-beta.23(@opentelemetry/api@1.9.1)(@types/mssql@9.1.11(@azure/core-client@1.10.1))(@types/pg@8.15.6)(mssql@11.0.1(@azure/core-client@1.10.1))(postgres@3.4.9)(valibot@1.3.1(typescript@6.0.3))(zod@4.3.6)
       drizzle-zod:
         specifier: 1.0.0-beta.14-56703c9
-        version: 1.0.0-beta.14-56703c9(drizzle-orm@1.0.0-beta.22-41a7d21(@opentelemetry/api@1.9.1)(@types/mssql@9.1.11(@azure/core-client@1.10.1))(@types/pg@8.15.6)(mssql@11.0.1(@azure/core-client@1.10.1))(postgres@3.4.9)(valibot@1.3.1(typescript@6.0.3))(zod@4.3.6))(zod@4.3.6)
+        version: 1.0.0-beta.14-56703c9(drizzle-orm@1.0.0-beta.23(@opentelemetry/api@1.9.1)(@types/mssql@9.1.11(@azure/core-client@1.10.1))(@types/pg@8.15.6)(mssql@11.0.1(@azure/core-client@1.10.1))(postgres@3.4.9)(valibot@1.3.1(typescript@6.0.3))(zod@4.3.6))(zod@4.3.6)
       envase:
         specifier: ^1.3.0
         version: 1.3.0
@@ -556,16 +556,16 @@ packages:
     resolution: {integrity: sha512-fCqPIfOcLE+CGqGPd66c8bZpwAji98tZ4JI9i/mlTNTlsIWslCfpg48s/ypyLxZTump5sypjrKn2/kY7q8oAbA==}
     engines: {node: '>=20.0.0'}
 
-  '@azure/msal-browser@5.8.0':
-    resolution: {integrity: sha512-X7IZV77bN56l7sbLjkcbQJX1t3U4tgxqztDr/XFbUcUfKk+z2FavcLgKP+OYUNj0wl/pEEtV9lldW9siY8BuHQ==}
+  '@azure/msal-browser@5.9.0':
+    resolution: {integrity: sha512-CzE+4PefDSJWj26zU7G1bKchlGRRHMBFreG4tAlGuzyI8hAPiYGobaJvZBgZBf6L63iphX7VH+ityL8VgEQz9Q==}
     engines: {node: '>=0.8.0'}
 
-  '@azure/msal-common@16.5.1':
-    resolution: {integrity: sha512-WS9w9SfI8SEYO7mTnxGeZ3UwQfhAVYCWglYF2/7GNx3ioHiAs2gPkl9eSwVs8cPrmiGh+zi9ai/OOKoq4cyzDw==}
+  '@azure/msal-common@16.5.2':
+    resolution: {integrity: sha512-GkDEL6TYo3HgT3UuqakdgE9PZfc1hMki6+Hwgy1uddb/EauvAKfu85vVhuofRSo22D1xTnWt8Ucwfg4vSCVwvA==}
     engines: {node: '>=0.8.0'}
 
-  '@azure/msal-node@5.1.4':
-    resolution: {integrity: sha512-G4LXGGggok1QC48uKu64/SV2DPRDlddmV8EieK8pflsNYMj9/Zz+Y9OHoEBhT15h+zpdwXXLYA/7PJCR/yZ8aw==}
+  '@azure/msal-node@5.1.5':
+    resolution: {integrity: sha512-ObTeMoNPmq19X3z40et9Xvs4ZoWVeJg43PZMRLG5iwVL+2nCtAerG3YTDItqPp1CfXNwmCXBbg8jn1DOx65c3g==}
     engines: {node: '>=20'}
 
   '@babel/code-frame@7.29.0':
@@ -672,8 +672,8 @@ packages:
     resolution: {integrity: sha512-Ir+AOibqzrIsL6ajt3Rz3LskB7OiMVHqltZmspbW/TJuTVuyOMirVqAkjfY6JISiLHgyNqicAC8AyHHGzNd/dA==}
     engines: {node: '>=0.1.90'}
 
-  '@datadog/flagging-core@1.1.1':
-    resolution: {integrity: sha512-QoV2DRD7da5jTFrwc/iTjY3lvSCtFXf+yREYYpHK4RJTO/eB/B7K0Cug1bcmWxd+8acjjPWJYjht+EUNrUx3jA==}
+  '@datadog/flagging-core@0.3.3':
+    resolution: {integrity: sha512-LnkTXMVxaCDGCOF2I+CCACndpbi4E8CP8NIsb1IbMmmATzkQHmYiL1ntFcS4mt5kNGAWXNrKquM02jhoiVc+dA==}
 
   '@datadog/libdatadog@0.9.3':
     resolution: {integrity: sha512-L+scIlcRRRF0qjeSU3VQLQlqezfQHkDdnOdbmx/gLjPqewKSyqVGp7XRdKXYo2vZTzmG8dH6rPKXwgI68UQufw==}
@@ -689,14 +689,11 @@ packages:
     resolution: {integrity: sha512-MU1gHrolwryrU4X9g+fylA1KPH3S46oqJPEtVyrO+3Kh29z80fegmtyrU22bNt8LigPUK/EdPCnSbMe88QbnxQ==}
     engines: {node: '>=16'}
 
-  '@datadog/openfeature-node-server@1.1.1':
-    resolution: {integrity: sha512-044Fmlqp3fyJ6zoOEueFMuaKVZGBXWf7HjZ6zetPUeJ+AgEQkkZ6g4qQThwyUNmDddNiHOnLnkJd7KA58Sk3gA==}
+  '@datadog/openfeature-node-server@1.1.2':
+    resolution: {integrity: sha512-fr+zCaKoCSdizX22H7eA9Z3QaZrOMu5qU0yK0M2aWtUxokSAKPlLz3+9HdmqwBWU/ikqI+lbiAK0oNdvmUKeQA==}
     engines: {node: '>=18.0.0'}
     peerDependencies:
       '@openfeature/server-sdk': '>=1.15.1'
-    peerDependenciesMeta:
-      '@openfeature/server-sdk':
-        optional: true
 
   '@datadog/pprof@5.14.1':
     resolution: {integrity: sha512-MlODCE9Gltmx7WChOg1BkIm7W2iE4CDW7K72BMwgzCvxFkG9rFWVsuA7/NEZL1nDvJ0qDe2du7DZZdZHTjcVPw==}
@@ -1260,8 +1257,8 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@mswjs/interceptors@0.41.5':
-    resolution: {integrity: sha512-Fa2HztoLlZxRN6wVC2KB7q0SvRTKjfP0328NVnSit03+0nzm62syxyT46KGbgq3Vr1A/mmLeQwu3GprB0lNTjw==}
+  '@mswjs/interceptors@0.41.7':
+    resolution: {integrity: sha512-D0nkS5+sx87mYpxFqASImCineYoEl9wGlUPrzkuS0ohzG8wfophLpE+I76qGJ0slLAVI19do5SI9pWJNCVf4fg==}
     engines: {node: '>=18'}
 
   '@napi-rs/wasm-runtime@1.1.4':
@@ -1306,6 +1303,15 @@ packages:
   '@open-draft/until@2.1.0':
     resolution: {integrity: sha512-U69T3ItWHvLwGg5eJ0n3I62nWuE6ilHlmz7zM0npLBRvPRd7e6NYmg54vvRtP5mZG7kZqZCFVdsTWo7BPtBujg==}
 
+  '@openfeature/core@1.10.0':
+    resolution: {integrity: sha512-C3ynxtPYhe5qVJgQIqCNxZXeRXo4t1Eo86uiROr8+sD6F2OjEJGIp6VOGxz+r6jkad2s8Br9BnUJOvskhai/3A==}
+
+  '@openfeature/server-sdk@1.21.0':
+    resolution: {integrity: sha512-ZBVAiyMeN+dxurcXGJlvuOpYg9X7V923MVCI5dq/kE/5o8ys7MCOPhW44e4PS+XABHzSRTw44hcgWez93xwifw==}
+    engines: {node: '>=20'}
+    peerDependencies:
+      '@openfeature/core': ^1.10.0
+
   '@opentelemetry/api-logs@0.201.1':
     resolution: {integrity: sha512-IxcFDP1IGMDemVFG2by/AMK+/o6EuBQ8idUq3xZ6MxgQGeumYZuX5OwR0h9HuvcUc/JPjQGfU5OHKIKYDJcXeA==}
     engines: {node: '>=8.0.0'}
@@ -1326,8 +1332,8 @@ packages:
     resolution: {integrity: sha512-40lSJeqYO8Uz2Yj7u94/SJWE/wONa7rmMKjI1ZcIjgf3MHNHv1OZUCrCETGuaRF62d5pQD1wKIW+L4lmSMTzZA==}
     engines: {node: '>=8.0.0'}
 
-  '@opentelemetry/api-logs@0.215.0':
-    resolution: {integrity: sha512-xrFlqhdhUyO8wSRn6DjE0145/HPWSJ5Nm0C7vWua6TdL/FSEAZvEyvdsa9CRXuxo9ebb7j/NEPhEcO62IJ0qUA==}
+  '@opentelemetry/api-logs@0.216.0':
+    resolution: {integrity: sha512-KmGTgvxTJ0J01d4mOeX1wMV5NUTNf9HebIuOOGDfIn0a/IrnXIQbOnlylDyl9tkDv4h0DUpdI/GqCdLzfTkUXg==}
     engines: {node: '>=8.0.0'}
 
   '@opentelemetry/api@1.9.1':
@@ -1367,6 +1373,12 @@ packages:
 
   '@opentelemetry/core@2.7.0':
     resolution: {integrity: sha512-DT12SXVwV2eoJrGf4nnsvZojxxeQo+LlNAsoYGRRObPWTeN6APiqZ2+nqDCQDvQX40eLi1AePONS0onoASp3yQ==}
+    engines: {node: ^18.19.0 || >=20.6.0}
+    peerDependencies:
+      '@opentelemetry/api': '>=1.0.0 <1.10.0'
+
+  '@opentelemetry/core@2.7.1':
+    resolution: {integrity: sha512-QAqIj32AtK6+pEVNG7EOVxHdE06RP+FM5qpiEJ4RtDcFIqKUZHYhl7/7UY5efhwmwNAg7j8QbJVBLxMerc0+gw==}
     engines: {node: ^18.19.0 || >=20.6.0}
     peerDependencies:
       '@opentelemetry/api': '>=1.0.0 <1.10.0'
@@ -1807,6 +1819,12 @@ packages:
     peerDependencies:
       '@opentelemetry/api': '>=1.3.0 <1.10.0'
 
+  '@opentelemetry/resources@2.7.1':
+    resolution: {integrity: sha512-DeT6KKolmC4e/dRQvMQ/RwlnzhaqeiFOXY5ngoOPJ07GgVVKxZOg9EcrNZb5aTzUn+iCrJldAgOfQm1O/QfPAQ==}
+    engines: {node: ^18.19.0 || >=20.6.0}
+    peerDependencies:
+      '@opentelemetry/api': '>=1.3.0 <1.10.0'
+
   '@opentelemetry/sdk-logs@0.201.1':
     resolution: {integrity: sha512-Ug8gtpssUNUnfpotB9ZhnSsPSGDu+7LngTMgKl31mmVJwLAKyl6jC8diZrMcGkSgBh0o5dbg9puvLyR25buZfw==}
     engines: {node: ^18.19.0 || >=20.6.0}
@@ -1837,8 +1855,8 @@ packages:
     peerDependencies:
       '@opentelemetry/api': '>=1.9.0 <1.10.0'
 
-  '@opentelemetry/sdk-metrics@2.7.0':
-    resolution: {integrity: sha512-Vd7h95av/LYRsAVN7wbprvvJnHkq7swMXAo7Uad0Uxf9jl6NSReLa0JNivrcc5BVIx/vl2t+cgdVQQbnVhsR9w==}
+  '@opentelemetry/sdk-metrics@2.7.1':
+    resolution: {integrity: sha512-MpDJdkiFDs3Pm1RHO3KByuZbuBdJEXEAkiC0+yJdsZGVCdf1RpHR6n+LHDcS7ffmfrt5kVCzJSCfm4z2C7v0uQ==}
     engines: {node: ^18.19.0 || >=20.6.0}
     peerDependencies:
       '@opentelemetry/api': '>=1.9.0 <1.10.0'
@@ -2051,6 +2069,9 @@ packages:
   '@protobufjs/codegen@2.0.4':
     resolution: {integrity: sha512-YyFaikqM5sH0ziFZCN3xDC7zeGaB/d0IUb9CATugHWbd1FRFwWwt4ld4OYMPWu5a3Xe01mGAULCdqhMlPl29Jg==}
 
+  '@protobufjs/codegen@2.0.5':
+    resolution: {integrity: sha512-zgXFLzW3Ap33e6d0Wlj4MGIm6Ce8O89n/apUaGNB/jx+hw+ruWEp7EwGUshdLKVRCxZW12fp9r40E1mQrf/34g==}
+
   '@protobufjs/eventemitter@1.1.0':
     resolution: {integrity: sha512-j9ednRT81vYJ9OfVuXG6ERSTdEL1xVsNgqpkxMsbIabzSo3goCjDIveeGv5d03om39ML71RdmrGNjG5SReBP/Q==}
 
@@ -2063,6 +2084,9 @@ packages:
   '@protobufjs/inquire@1.1.0':
     resolution: {integrity: sha512-kdSefcPdruJiFMVSbn801t4vFK7KB/5gd2fYvrxhuJYg8ILrmn9SKSX2tZdV6V+ksulWqS7aXjBcRXl3wHoD9Q==}
 
+  '@protobufjs/inquire@1.1.1':
+    resolution: {integrity: sha512-mnzgDV26ueAvk7rsbt9L7bE0SuAoqyuys/sMMrmVcN5x9VsxpcG3rqAUSgDyLp0UZlmNfIbQ4fHfCtreVBk8Ew==}
+
   '@protobufjs/path@1.1.2':
     resolution: {integrity: sha512-6JOcJ5Tm08dOHAbdR3GrvP+yUUfkjG5ePsHYczMFLq3ZmMkAD98cDgcT2iA1lJ9NVwFd4tH/iSSoe44YWkltEA==}
 
@@ -2071,6 +2095,9 @@ packages:
 
   '@protobufjs/utf8@1.1.0':
     resolution: {integrity: sha512-Vvn3zZrhQZkkBE8LSuW3em98c0FwgO4nxzv6OdSxPKJIEKY2bGbHn+mhGIPerzI4twdxaP8/0+06HBpwf345Lw==}
+
+  '@protobufjs/utf8@1.1.1':
+    resolution: {integrity: sha512-oOAWABowe8EAbMyWKM0tYDKi8Yaox52D+HWZhAIJqQXbqe0xI/GV7FhLWqlEKreMkfDjshR5FKgi3mnle0h6Eg==}
 
   '@readme/better-ajv-errors@2.4.0':
     resolution: {integrity: sha512-9WODaOAKSl/mU+MYNZ2aHCrkoRSvmQ+1YkLj589OEqqjOAhbn8j7Z+ilYoiTu/he6X63/clsxxAB4qny9/dDzg==}
@@ -2989,12 +3016,12 @@ packages:
     resolution: {integrity: sha512-tE7ztYzXHIeyvc7N+hR3oi7FIbf/NIjVP9hmAt3yMXzrQ072/fpjGLx2GxNxGxUl5V73MEqYzioOMoVhGMJ5cA==}
     engines: {node: '>=10'}
 
-  drizzle-kit@1.0.0-beta.22-41a7d21:
-    resolution: {integrity: sha512-oVaJ9jaC9SWb5OknLAy/eiVTVzDostTrYG3fJivzUYOnRrsgQtywqkfsCkYT9Qh2fb2EqIusDmZ7o5DpG/W/GQ==}
+  drizzle-kit@1.0.0-beta.23:
+    resolution: {integrity: sha512-AXVAYTItegF3h1JQECt4s4z9RwipiBoK99A3IY/thGZ0xdSPlsXZr/SU9sh6JvQi5bq08ZYXmKcdIwJpNxITig==}
     hasBin: true
 
-  drizzle-orm@1.0.0-beta.22-41a7d21:
-    resolution: {integrity: sha512-OSrigFeDbXxsjIbitduXnNce3MfFZis1Rb/sTYiPljf07CThPp6bPOnYfz5nCWe8KUYbhfgJD6bi6iBYSDryhg==}
+  drizzle-orm@1.0.0-beta.23:
+    resolution: {integrity: sha512-LeXxZgOd6YPCBNEz7z7BrrvQqrkjFf4vrRDbW8xKCvvTWYBAadaIwrXNdLM/rHEky0vdtzX6SG0EpX0hsd4ZVg==}
     peerDependencies:
       '@aws-sdk/client-rds-data': '>=3'
       '@cloudflare/workers-types': '>=4'
@@ -3004,6 +3031,7 @@ packages:
       '@libsql/client': '>=0.10.0'
       '@libsql/client-wasm': '>=0.10.0'
       '@neondatabase/serverless': '>=0.10.0'
+      '@netlify/db': '>=0.4.0'
       '@op-engineering/op-sqlite': '>=2'
       '@opentelemetry/api': ^1.4.1
       '@planetscale/database': '>=1.13'
@@ -3051,6 +3079,8 @@ packages:
         optional: true
       '@neondatabase/serverless':
         optional: true
+      '@netlify/db':
+        optional: true
       '@op-engineering/op-sqlite':
         optional: true
       '@opentelemetry/api':
@@ -3071,6 +3101,8 @@ packages:
         optional: true
       '@types/better-sqlite3':
         optional: true
+      '@types/mssql':
+        optional: true
       '@types/pg':
         optional: true
       '@types/sql.js':
@@ -3090,6 +3122,8 @@ packages:
       expo-sqlite:
         optional: true
       gel:
+        optional: true
+      mssql:
         optional: true
       mysql2:
         optional: true
@@ -4185,8 +4219,8 @@ packages:
     resolution: {integrity: sha512-r34yH/GlQpKZbU1BvFFqOjhISRo1MNx1tWYsYvmj6KIRHSPMT2+yHOEb1SG6NMvRoHRF0a07kCOox/9yakl1vg==}
     hasBin: true
 
-  postcss@8.5.10:
-    resolution: {integrity: sha512-pMMHxBOZKFU6HgAZ4eyGnwXF/EvPGGqUr0MnZ5+99485wwW41kW91A4LOGxSHhgugZmSChL5AlElNdwlNgcnLQ==}
+  postcss@8.5.12:
+    resolution: {integrity: sha512-W62t/Se6rA0Az3DfCL0AqJwXuKwBeYg6nOaIgzP+xZ7N5BFCI7DYi1qs6ygUYT6rvfi6t9k65UMLJC+PHZpDAA==}
     engines: {node: ^10 || ^12 || >=14}
 
   postgres-array@2.0.0:
@@ -4235,6 +4269,10 @@ packages:
 
   protobufjs@7.5.5:
     resolution: {integrity: sha512-3wY1AxV+VBNW8Yypfd1yQY9pXnqTAN+KwQxL8iYm3/BjKYMNg4i0owhEe26PWDOMaIrzeeF98Lqd5NGz4omiIg==}
+    engines: {node: '>=12.0.0'}
+
+  protobufjs@7.5.6:
+    resolution: {integrity: sha512-M71sTMB146U3u0di3yup8iM+zv8yPRNQVr1KK4tyBitl3qFvEGucq/rGDRShD2rsJhtN02RJaJ7j5X5hmy8SJg==}
     engines: {node: '>=12.0.0'}
 
   protobufjs@8.0.0:
@@ -4628,11 +4666,11 @@ packages:
     resolution: {integrity: sha512-Bf+ILmBgretUrdJxzXM0SgXLZ3XfiaUuOj/IKQHuTXip+05Xn+uyEYdVg0kYDipTBcLrCVyUzAPz7QmArb0mmw==}
     engines: {node: '>=14.0.0'}
 
-  tldts-core@7.0.28:
-    resolution: {integrity: sha512-7W5Efjhsc3chVdFhqtaU0KtK32J37Zcr9RKtID54nG+tIpcY79CQK/veYPODxtD/LJ4Lue66jvrQzIX2Z2/pUQ==}
+  tldts-core@7.0.29:
+    resolution: {integrity: sha512-W99NuU7b1DcG3uJ3v9k9VztCH3WialNbBkBft5wCs8V8mexu0XQqaZEYb9l9RNNzK8+3EJ9PKWB0/RUtTQ/o+Q==}
 
-  tldts@7.0.28:
-    resolution: {integrity: sha512-+Zg3vWhRUv8B1maGSTFdev9mjoo8Etn2Ayfs4cnjlD3CsGkxXX4QyW3j2WJ0wdjYcYmy7Lx2RDsZMhgCWafKIw==}
+  tldts@7.0.29:
+    resolution: {integrity: sha512-JIXCerhudr/N6OWLwLF1HVsTTUo7ry6qHa5eWZEkiMuxsIiAACL55tGLfqfHfoH7QaMQUW8fngD7u7TxWexYQg==}
     hasBin: true
 
   tmp@0.2.5:
@@ -4754,12 +4792,9 @@ packages:
     resolution: {integrity: sha512-0/A9rDy9P7cJ+8w1c9WD9V//9Wj15Ce2MPz8Ri6032usz+NfePxx5AcN3bN+r6ZL6jEo066/yNYB3tn4pQEx+A==}
     hasBin: true
 
-  uuid@8.3.2:
-    resolution: {integrity: sha512-+NYs2QeMWy+GWFOEm9xnn6HCDp0l7QBD7ml8zLUmJ+93Q5NF0NocErnwkTkXVFNiX3/fpC6afS8Dhb/gz7R7eg==}
-    hasBin: true
-
   uuid@9.0.1:
     resolution: {integrity: sha512-b+1eJOlsR9K8HJpow9Ok3fiWOWSIcIzXodvv0rQjVoOVNpWMpxf1wZNpt4y9h10odCNrqnYp1OBzRktckBe3sA==}
+    deprecated: uuid@10 and below is no longer supported.  For ESM codebases, update to uuid@latest.  For CommonJS codebases, use uuid@11 (but be aware this version will likely be deprecated in 2028).
     hasBin: true
 
   uuidv7@1.2.1:
@@ -5657,10 +5692,12 @@ snapshots:
       tslib: 2.8.1
     transitivePeerDependencies:
       - supports-color
+    optional: true
 
   '@azure/abort-controller@2.1.2':
     dependencies:
       tslib: 2.8.1
+    optional: true
 
   '@azure/core-auth@1.10.1':
     dependencies:
@@ -5669,6 +5706,7 @@ snapshots:
       tslib: 2.8.1
     transitivePeerDependencies:
       - supports-color
+    optional: true
 
   '@azure/core-client@1.10.1':
     dependencies:
@@ -5681,12 +5719,14 @@ snapshots:
       tslib: 2.8.1
     transitivePeerDependencies:
       - supports-color
+    optional: true
 
   '@azure/core-http-compat@2.4.0(@azure/core-client@1.10.1)(@azure/core-rest-pipeline@1.23.0)':
     dependencies:
       '@azure/abort-controller': 2.1.2
       '@azure/core-client': 1.10.1
       '@azure/core-rest-pipeline': 1.23.0
+    optional: true
 
   '@azure/core-lro@2.7.2':
     dependencies:
@@ -5696,10 +5736,12 @@ snapshots:
       tslib: 2.8.1
     transitivePeerDependencies:
       - supports-color
+    optional: true
 
   '@azure/core-paging@1.6.2':
     dependencies:
       tslib: 2.8.1
+    optional: true
 
   '@azure/core-rest-pipeline@1.23.0':
     dependencies:
@@ -5712,10 +5754,12 @@ snapshots:
       tslib: 2.8.1
     transitivePeerDependencies:
       - supports-color
+    optional: true
 
   '@azure/core-tracing@1.3.1':
     dependencies:
       tslib: 2.8.1
+    optional: true
 
   '@azure/core-util@1.13.1':
     dependencies:
@@ -5724,6 +5768,7 @@ snapshots:
       tslib: 2.8.1
     transitivePeerDependencies:
       - supports-color
+    optional: true
 
   '@azure/identity@4.13.1':
     dependencies:
@@ -5734,12 +5779,13 @@ snapshots:
       '@azure/core-tracing': 1.3.1
       '@azure/core-util': 1.13.1
       '@azure/logger': 1.3.0
-      '@azure/msal-browser': 5.8.0
-      '@azure/msal-node': 5.1.4
+      '@azure/msal-browser': 5.9.0
+      '@azure/msal-node': 5.1.5
       open: 10.2.0
       tslib: 2.8.1
     transitivePeerDependencies:
       - supports-color
+    optional: true
 
   '@azure/keyvault-common@2.1.0':
     dependencies:
@@ -5753,6 +5799,7 @@ snapshots:
       tslib: 2.8.1
     transitivePeerDependencies:
       - supports-color
+    optional: true
 
   '@azure/keyvault-keys@4.10.0(@azure/core-client@1.10.1)':
     dependencies:
@@ -5771,6 +5818,7 @@ snapshots:
     transitivePeerDependencies:
       - '@azure/core-client'
       - supports-color
+    optional: true
 
   '@azure/logger@1.3.0':
     dependencies:
@@ -5778,18 +5826,21 @@ snapshots:
       tslib: 2.8.1
     transitivePeerDependencies:
       - supports-color
+    optional: true
 
-  '@azure/msal-browser@5.8.0':
+  '@azure/msal-browser@5.9.0':
     dependencies:
-      '@azure/msal-common': 16.5.1
+      '@azure/msal-common': 16.5.2
+    optional: true
 
-  '@azure/msal-common@16.5.1': {}
+  '@azure/msal-common@16.5.2':
+    optional: true
 
-  '@azure/msal-node@5.1.4':
+  '@azure/msal-node@5.1.5':
     dependencies:
-      '@azure/msal-common': 16.5.1
+      '@azure/msal-common': 16.5.2
       jsonwebtoken: 9.0.3
-      uuid: 8.3.2
+    optional: true
 
   '@babel/code-frame@7.29.0':
     dependencies:
@@ -5881,7 +5932,7 @@ snapshots:
 
   '@colors/colors@1.6.0': {}
 
-  '@datadog/flagging-core@1.1.1':
+  '@datadog/flagging-core@0.3.3':
     dependencies:
       spark-md5: 3.0.2
     optional: true
@@ -5905,9 +5956,10 @@ snapshots:
       node-gyp-build: 3.9.0
     optional: true
 
-  '@datadog/openfeature-node-server@1.1.1':
+  '@datadog/openfeature-node-server@1.1.2(@openfeature/server-sdk@1.21.0(@openfeature/core@1.10.0))':
     dependencies:
-      '@datadog/flagging-core': 1.1.1
+      '@datadog/flagging-core': 0.3.3
+      '@openfeature/server-sdk': 1.21.0(@openfeature/core@1.10.0)
     optional: true
 
   '@datadog/pprof@5.14.1':
@@ -6152,7 +6204,7 @@ snapshots:
     dependencies:
       lodash.camelcase: 4.3.0
       long: 5.3.2
-      protobufjs: 7.5.5
+      protobufjs: 7.5.6
       yargs: 17.7.2
 
   '@grpc/proto-loader@0.8.0':
@@ -6234,7 +6286,8 @@ snapshots:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.5.5
 
-  '@js-joda/core@5.7.0': {}
+  '@js-joda/core@5.7.0':
+    optional: true
 
   '@js-sdsl/ordered-map@4.4.2': {}
 
@@ -6246,12 +6299,12 @@ snapshots:
     dependencies:
       zod: 4.3.6
 
-  '@lokalise/aws-config@8.1.0(421050fd72032a50239b897cbd9a7ab5)':
+  '@lokalise/aws-config@8.1.0(82f3e04e636fc3cd64e424e607e3ae7d)':
     dependencies:
       '@aws-sdk/client-sns': 3.1033.0
       '@aws-sdk/client-sqs': 3.1033.0
       '@aws-sdk/credential-providers': 3.1033.0
-      '@lokalise/fastify-extras': 30.7.2(@fastify/jwt@10.0.0)(@lokalise/api-contracts@6.8.0(zod@4.3.6))(@lokalise/background-jobs-common@14.2.1(bullmq@5.75.2)(ioredis@5.10.1)(pino@10.3.1)(toad-scheduler@3.1.0)(zod@4.3.6))(@lokalise/node-core@14.7.4(zod@4.3.6))(@opentelemetry/api@1.9.1)(bullmq@5.75.2)(dd-trace@5.98.0(@emnapi/core@1.9.2)(@emnapi/runtime@1.9.2))(fastify-type-provider-zod@6.1.0(@fastify/swagger@9.7.0)(fastify@5.8.5)(openapi-types@12.1.3)(zod@4.3.6))(fastify@5.8.5)(ioredis@5.10.1)(newrelic@13.19.2)(pino@10.3.1)(zod@4.3.6)
+      '@lokalise/fastify-extras': 30.7.2(@fastify/jwt@10.0.0)(@lokalise/api-contracts@6.8.0(zod@4.3.6))(@lokalise/background-jobs-common@14.2.1(bullmq@5.75.2)(ioredis@5.10.1)(pino@10.3.1)(toad-scheduler@3.1.0)(zod@4.3.6))(@lokalise/node-core@14.7.4(zod@4.3.6))(@opentelemetry/api@1.9.1)(bullmq@5.75.2)(dd-trace@5.98.0(@emnapi/core@1.9.2)(@emnapi/runtime@1.9.2)(@openfeature/server-sdk@1.21.0(@openfeature/core@1.10.0)))(fastify-type-provider-zod@6.1.0(@fastify/swagger@9.7.0)(fastify@5.8.5)(openapi-types@12.1.3)(zod@4.3.6))(fastify@5.8.5)(ioredis@5.10.1)(newrelic@13.19.2)(pino@10.3.1)(zod@4.3.6)
       '@lokalise/node-core': 14.7.4(zod@4.3.6)
       '@lokalise/universal-ts-utils': 4.10.0
       '@message-queue-toolkit/core': 25.4.0(zod@4.3.6)
@@ -6296,7 +6349,7 @@ snapshots:
       fastify: 5.8.5
       zod: 4.3.6
 
-  '@lokalise/fastify-extras@30.7.2(@fastify/jwt@10.0.0)(@lokalise/api-contracts@6.8.0(zod@4.3.6))(@lokalise/background-jobs-common@14.2.1(bullmq@5.75.2)(ioredis@5.10.1)(pino@10.3.1)(toad-scheduler@3.1.0)(zod@4.3.6))(@lokalise/node-core@14.7.4(zod@4.3.6))(@opentelemetry/api@1.9.1)(bullmq@5.75.2)(dd-trace@5.98.0(@emnapi/core@1.9.2)(@emnapi/runtime@1.9.2))(fastify-type-provider-zod@6.1.0(@fastify/swagger@9.7.0)(fastify@5.8.5)(openapi-types@12.1.3)(zod@4.3.6))(fastify@5.8.5)(ioredis@5.10.1)(newrelic@13.19.2)(pino@10.3.1)(zod@4.3.6)':
+  '@lokalise/fastify-extras@30.7.2(@fastify/jwt@10.0.0)(@lokalise/api-contracts@6.8.0(zod@4.3.6))(@lokalise/background-jobs-common@14.2.1(bullmq@5.75.2)(ioredis@5.10.1)(pino@10.3.1)(toad-scheduler@3.1.0)(zod@4.3.6))(@lokalise/node-core@14.7.4(zod@4.3.6))(@opentelemetry/api@1.9.1)(bullmq@5.75.2)(dd-trace@5.98.0(@emnapi/core@1.9.2)(@emnapi/runtime@1.9.2)(@openfeature/server-sdk@1.21.0(@openfeature/core@1.10.0)))(fastify-type-provider-zod@6.1.0(@fastify/swagger@9.7.0)(fastify@5.8.5)(openapi-types@12.1.3)(zod@4.3.6))(fastify@5.8.5)(ioredis@5.10.1)(newrelic@13.19.2)(pino@10.3.1)(zod@4.3.6)':
     dependencies:
       '@amplitude/analytics-node': 1.5.54
       '@bugsnag/js': 8.9.0
@@ -6309,7 +6362,7 @@ snapshots:
       '@splitsoftware/splitio': 11.11.1
       '@supercharge/promise-pool': 3.3.0
       bullmq: 5.75.2
-      dd-trace: 5.98.0(@emnapi/core@1.9.2)(@emnapi/runtime@1.9.2)
+      dd-trace: 5.98.0(@emnapi/core@1.9.2)(@emnapi/runtime@1.9.2)(@openfeature/server-sdk@1.21.0(@openfeature/core@1.10.0))
       fastify: 5.8.5
       fastify-metrics: 13.2.0(fastify@5.8.5)
       fastify-plugin: 5.1.0
@@ -6353,10 +6406,10 @@ snapshots:
       tslib: 2.8.1
       zod: 4.3.6
 
-  '@lokalise/opentelemetry-fastify-bootstrap@2.2.0(@fastify/otel@0.17.1(@opentelemetry/api@1.9.1))(@opentelemetry/auto-instrumentations-node@0.68.0(@opentelemetry/api@1.9.1)(@opentelemetry/core@2.7.0(@opentelemetry/api@1.9.1)))(@opentelemetry/exporter-trace-otlp-grpc@0.210.0(@opentelemetry/api@1.9.1))(@opentelemetry/sdk-node@0.210.0(@opentelemetry/api@1.9.1))(@opentelemetry/sdk-trace-base@2.4.0(@opentelemetry/api@1.9.1))(fastify@5.8.5)':
+  '@lokalise/opentelemetry-fastify-bootstrap@2.2.0(@fastify/otel@0.17.1(@opentelemetry/api@1.9.1))(@opentelemetry/auto-instrumentations-node@0.68.0(@opentelemetry/api@1.9.1)(@opentelemetry/core@2.7.1(@opentelemetry/api@1.9.1)))(@opentelemetry/exporter-trace-otlp-grpc@0.210.0(@opentelemetry/api@1.9.1))(@opentelemetry/sdk-node@0.210.0(@opentelemetry/api@1.9.1))(@opentelemetry/sdk-trace-base@2.4.0(@opentelemetry/api@1.9.1))(fastify@5.8.5)':
     dependencies:
       '@fastify/otel': 0.17.1(@opentelemetry/api@1.9.1)
-      '@opentelemetry/auto-instrumentations-node': 0.68.0(@opentelemetry/api@1.9.1)(@opentelemetry/core@2.7.0(@opentelemetry/api@1.9.1))
+      '@opentelemetry/auto-instrumentations-node': 0.68.0(@opentelemetry/api@1.9.1)(@opentelemetry/core@2.7.1(@opentelemetry/api@1.9.1))
       '@opentelemetry/exporter-trace-otlp-grpc': 0.210.0(@opentelemetry/api@1.9.1)
       '@opentelemetry/sdk-node': 0.210.0(@opentelemetry/api@1.9.1)
       '@opentelemetry/sdk-trace-base': 2.4.0(@opentelemetry/api@1.9.1)
@@ -6452,7 +6505,7 @@ snapshots:
   '@msgpackr-extract/msgpackr-extract-win32-x64@3.0.3':
     optional: true
 
-  '@mswjs/interceptors@0.41.5':
+  '@mswjs/interceptors@0.41.7':
     dependencies:
       '@open-draft/deferred-promise': 2.2.0
       '@open-draft/logger': 0.3.0
@@ -6530,6 +6583,14 @@ snapshots:
 
   '@open-draft/until@2.1.0': {}
 
+  '@openfeature/core@1.10.0':
+    optional: true
+
+  '@openfeature/server-sdk@1.21.0(@openfeature/core@1.10.0)':
+    dependencies:
+      '@openfeature/core': 1.10.0
+    optional: true
+
   '@opentelemetry/api-logs@0.201.1':
     dependencies:
       '@opentelemetry/api': 1.9.1
@@ -6550,17 +6611,17 @@ snapshots:
     dependencies:
       '@opentelemetry/api': 1.9.1
 
-  '@opentelemetry/api-logs@0.215.0':
+  '@opentelemetry/api-logs@0.216.0':
     dependencies:
       '@opentelemetry/api': 1.9.1
     optional: true
 
   '@opentelemetry/api@1.9.1': {}
 
-  '@opentelemetry/auto-instrumentations-node@0.68.0(@opentelemetry/api@1.9.1)(@opentelemetry/core@2.7.0(@opentelemetry/api@1.9.1))':
+  '@opentelemetry/auto-instrumentations-node@0.68.0(@opentelemetry/api@1.9.1)(@opentelemetry/core@2.7.1(@opentelemetry/api@1.9.1))':
     dependencies:
       '@opentelemetry/api': 1.9.1
-      '@opentelemetry/core': 2.7.0(@opentelemetry/api@1.9.1)
+      '@opentelemetry/core': 2.7.1(@opentelemetry/api@1.9.1)
       '@opentelemetry/instrumentation': 0.210.0(@opentelemetry/api@1.9.1)
       '@opentelemetry/instrumentation-amqplib': 0.57.0(@opentelemetry/api@1.9.1)
       '@opentelemetry/instrumentation-aws-lambda': 0.62.0(@opentelemetry/api@1.9.1)
@@ -6635,6 +6696,11 @@ snapshots:
       '@opentelemetry/semantic-conventions': 1.40.0
 
   '@opentelemetry/core@2.7.0(@opentelemetry/api@1.9.1)':
+    dependencies:
+      '@opentelemetry/api': 1.9.1
+      '@opentelemetry/semantic-conventions': 1.40.0
+
+  '@opentelemetry/core@2.7.1(@opentelemetry/api@1.9.1)':
     dependencies:
       '@opentelemetry/api': 1.9.1
       '@opentelemetry/semantic-conventions': 1.40.0
@@ -7168,7 +7234,7 @@ snapshots:
       '@opentelemetry/sdk-logs': 0.201.1(@opentelemetry/api@1.9.1)
       '@opentelemetry/sdk-metrics': 2.0.1(@opentelemetry/api@1.9.1)
       '@opentelemetry/sdk-trace-base': 2.0.1(@opentelemetry/api@1.9.1)
-      protobufjs: 7.5.5
+      protobufjs: 7.5.6
 
   '@opentelemetry/otlp-transformer@0.210.0(@opentelemetry/api@1.9.1)':
     dependencies:
@@ -7247,6 +7313,12 @@ snapshots:
       '@opentelemetry/core': 2.7.0(@opentelemetry/api@1.9.1)
       '@opentelemetry/semantic-conventions': 1.40.0
 
+  '@opentelemetry/resources@2.7.1(@opentelemetry/api@1.9.1)':
+    dependencies:
+      '@opentelemetry/api': 1.9.1
+      '@opentelemetry/core': 2.7.1(@opentelemetry/api@1.9.1)
+      '@opentelemetry/semantic-conventions': 1.40.0
+
   '@opentelemetry/sdk-logs@0.201.1(@opentelemetry/api@1.9.1)':
     dependencies:
       '@opentelemetry/api': 1.9.1
@@ -7280,11 +7352,11 @@ snapshots:
       '@opentelemetry/core': 2.4.0(@opentelemetry/api@1.9.1)
       '@opentelemetry/resources': 2.4.0(@opentelemetry/api@1.9.1)
 
-  '@opentelemetry/sdk-metrics@2.7.0(@opentelemetry/api@1.9.1)':
+  '@opentelemetry/sdk-metrics@2.7.1(@opentelemetry/api@1.9.1)':
     dependencies:
       '@opentelemetry/api': 1.9.1
-      '@opentelemetry/core': 2.7.0(@opentelemetry/api@1.9.1)
-      '@opentelemetry/resources': 2.7.0(@opentelemetry/api@1.9.1)
+      '@opentelemetry/core': 2.7.1(@opentelemetry/api@1.9.1)
+      '@opentelemetry/resources': 2.7.1(@opentelemetry/api@1.9.1)
 
   '@opentelemetry/sdk-node@0.210.0(@opentelemetry/api@1.9.1)':
     dependencies:
@@ -7515,6 +7587,8 @@ snapshots:
 
   '@protobufjs/codegen@2.0.4': {}
 
+  '@protobufjs/codegen@2.0.5': {}
+
   '@protobufjs/eventemitter@1.1.0': {}
 
   '@protobufjs/fetch@1.1.0':
@@ -7526,11 +7600,15 @@ snapshots:
 
   '@protobufjs/inquire@1.1.0': {}
 
+  '@protobufjs/inquire@1.1.1': {}
+
   '@protobufjs/path@1.1.2': {}
 
   '@protobufjs/pool@1.1.0': {}
 
   '@protobufjs/utf8@1.1.0': {}
+
+  '@protobufjs/utf8@1.1.1': {}
 
   '@readme/better-ajv-errors@2.4.0(ajv@8.18.0)':
     dependencies:
@@ -8010,7 +8088,8 @@ snapshots:
 
   '@supercharge/promise-pool@3.3.0': {}
 
-  '@tediousjs/connection-string@0.5.0': {}
+  '@tediousjs/connection-string@0.5.0':
+    optional: true
 
   '@tootallnate/quickjs-emscripten@0.23.0': {}
 
@@ -8064,6 +8143,7 @@ snapshots:
     transitivePeerDependencies:
       - '@azure/core-client'
       - supports-color
+    optional: true
 
   '@types/mysql@2.15.27':
     dependencies:
@@ -8090,6 +8170,7 @@ snapshots:
   '@types/readable-stream@4.0.23':
     dependencies:
       '@types/node': 25.6.0
+    optional: true
 
   '@types/seedrandom@3.0.8': {}
 
@@ -8118,6 +8199,7 @@ snapshots:
       tslib: 2.8.1
     transitivePeerDependencies:
       - supports-color
+    optional: true
 
   '@tyriar/fibonacci-heap@2.0.9': {}
 
@@ -8184,6 +8266,7 @@ snapshots:
   abort-controller@3.0.0:
     dependencies:
       event-target-shim: 5.0.1
+    optional: true
 
   abstract-logging@2.0.1: {}
 
@@ -8279,7 +8362,8 @@ snapshots:
 
   base64-arraybuffer@1.0.2: {}
 
-  base64-js@1.5.1: {}
+  base64-js@1.5.1:
+    optional: true
 
   basic-ftp@5.3.0: {}
 
@@ -8300,6 +8384,7 @@ snapshots:
       buffer: 6.0.3
       inherits: 2.0.4
       readable-stream: 4.7.0
+    optional: true
 
   bloom-filters@3.0.4:
     dependencies:
@@ -8340,7 +8425,8 @@ snapshots:
 
   brotli-wasm@3.0.1: {}
 
-  buffer-equal-constant-time@1.0.1: {}
+  buffer-equal-constant-time@1.0.1:
+    optional: true
 
   buffer-from@1.1.2: {}
 
@@ -8356,6 +8442,7 @@ snapshots:
     dependencies:
       base64-js: 1.5.1
       ieee754: 1.2.1
+    optional: true
 
   bullmq@5.75.2:
     dependencies:
@@ -8372,6 +8459,7 @@ snapshots:
   bundle-name@4.1.0:
     dependencies:
       run-applescript: 7.1.0
+    optional: true
 
   byline@5.0.0: {}
 
@@ -8420,7 +8508,8 @@ snapshots:
 
   colorette@2.0.20: {}
 
-  commander@11.1.0: {}
+  commander@11.1.0:
+    optional: true
 
   common-tags@1.8.2: {}
 
@@ -8510,7 +8599,7 @@ snapshots:
 
   dc-polyfill@0.1.10: {}
 
-  dd-trace@5.98.0(@emnapi/core@1.9.2)(@emnapi/runtime@1.9.2):
+  dd-trace@5.98.0(@emnapi/core@1.9.2)(@emnapi/runtime@1.9.2)(@openfeature/server-sdk@1.21.0(@openfeature/core@1.10.0)):
     dependencies:
       dc-polyfill: 0.1.10
       import-in-the-middle: 3.0.1
@@ -8519,11 +8608,11 @@ snapshots:
       '@datadog/native-appsec': 11.0.1
       '@datadog/native-iast-taint-tracking': 4.1.0
       '@datadog/native-metrics': 3.1.1
-      '@datadog/openfeature-node-server': 1.1.1
+      '@datadog/openfeature-node-server': 1.1.2(@openfeature/server-sdk@1.21.0(@openfeature/core@1.10.0))
       '@datadog/pprof': 5.14.1
       '@datadog/wasm-js-rewriter': 5.0.1
       '@opentelemetry/api': 1.9.1
-      '@opentelemetry/api-logs': 0.215.0
+      '@opentelemetry/api-logs': 0.216.0
       oxc-parser: 0.121.0(@emnapi/core@1.9.2)(@emnapi/runtime@1.9.2)
     transitivePeerDependencies:
       - '@emnapi/core'
@@ -8538,14 +8627,17 @@ snapshots:
     dependencies:
       ms: 2.1.3
 
-  default-browser-id@5.0.1: {}
+  default-browser-id@5.0.1:
+    optional: true
 
   default-browser@5.5.0:
     dependencies:
       bundle-name: 4.1.0
       default-browser-id: 5.0.1
+    optional: true
 
-  define-lazy-prop@3.0.0: {}
+  define-lazy-prop@3.0.0:
+    optional: true
 
   degenerator@5.0.1:
     dependencies:
@@ -8575,7 +8667,7 @@ snapshots:
     dependencies:
       is-obj: 2.0.0
 
-  drizzle-kit@1.0.0-beta.22-41a7d21:
+  drizzle-kit@1.0.0-beta.23:
     dependencies:
       '@drizzle-team/brocli': 0.11.0
       '@js-temporal/polyfill': 0.5.1
@@ -8583,20 +8675,19 @@ snapshots:
       get-tsconfig: 4.14.0
       jiti: 2.6.1
 
-  drizzle-orm@1.0.0-beta.22-41a7d21(@opentelemetry/api@1.9.1)(@types/mssql@9.1.11(@azure/core-client@1.10.1))(@types/pg@8.15.6)(mssql@11.0.1(@azure/core-client@1.10.1))(postgres@3.4.9)(valibot@1.3.1(typescript@6.0.3))(zod@4.3.6):
-    dependencies:
-      '@types/mssql': 9.1.11(@azure/core-client@1.10.1)
-      mssql: 11.0.1(@azure/core-client@1.10.1)
+  drizzle-orm@1.0.0-beta.23(@opentelemetry/api@1.9.1)(@types/mssql@9.1.11(@azure/core-client@1.10.1))(@types/pg@8.15.6)(mssql@11.0.1(@azure/core-client@1.10.1))(postgres@3.4.9)(valibot@1.3.1(typescript@6.0.3))(zod@4.3.6):
     optionalDependencies:
       '@opentelemetry/api': 1.9.1
+      '@types/mssql': 9.1.11(@azure/core-client@1.10.1)
       '@types/pg': 8.15.6
+      mssql: 11.0.1(@azure/core-client@1.10.1)
       postgres: 3.4.9
       valibot: 1.3.1(typescript@6.0.3)
       zod: 4.3.6
 
-  drizzle-zod@1.0.0-beta.14-56703c9(drizzle-orm@1.0.0-beta.22-41a7d21(@opentelemetry/api@1.9.1)(@types/mssql@9.1.11(@azure/core-client@1.10.1))(@types/pg@8.15.6)(mssql@11.0.1(@azure/core-client@1.10.1))(postgres@3.4.9)(valibot@1.3.1(typescript@6.0.3))(zod@4.3.6))(zod@4.3.6):
+  drizzle-zod@1.0.0-beta.14-56703c9(drizzle-orm@1.0.0-beta.23(@opentelemetry/api@1.9.1)(@types/mssql@9.1.11(@azure/core-client@1.10.1))(@types/pg@8.15.6)(mssql@11.0.1(@azure/core-client@1.10.1))(postgres@3.4.9)(valibot@1.3.1(typescript@6.0.3))(zod@4.3.6))(zod@4.3.6):
     dependencies:
-      drizzle-orm: 1.0.0-beta.22-41a7d21(@opentelemetry/api@1.9.1)(@types/mssql@9.1.11(@azure/core-client@1.10.1))(@types/pg@8.15.6)(mssql@11.0.1(@azure/core-client@1.10.1))(postgres@3.4.9)(valibot@1.3.1(typescript@6.0.3))(zod@4.3.6)
+      drizzle-orm: 1.0.0-beta.23(@opentelemetry/api@1.9.1)(@types/mssql@9.1.11(@azure/core-client@1.10.1))(@types/pg@8.15.6)(mssql@11.0.1(@azure/core-client@1.10.1))(postgres@3.4.9)(valibot@1.3.1(typescript@6.0.3))(zod@4.3.6)
       zod: 4.3.6
 
   dunder-proto@1.0.1:
@@ -8705,11 +8796,13 @@ snapshots:
 
   etag@1.8.1: {}
 
-  event-target-shim@5.0.1: {}
+  event-target-shim@5.0.1:
+    optional: true
 
   eventemitter3@3.1.2: {}
 
-  events@3.3.0: {}
+  events@3.3.0:
+    optional: true
 
   expect-type@1.3.0: {}
 
@@ -9107,12 +9200,14 @@ snapshots:
   iconv-lite@0.6.3:
     dependencies:
       safer-buffer: 2.1.2
+    optional: true
 
   iconv-lite@0.7.2:
     dependencies:
       safer-buffer: 2.1.2
 
-  ieee754@1.2.1: {}
+  ieee754@1.2.1:
+    optional: true
 
   ignore@7.0.5: {}
 
@@ -9165,7 +9260,8 @@ snapshots:
     dependencies:
       hasown: 2.0.3
 
-  is-docker@3.0.0: {}
+  is-docker@3.0.0:
+    optional: true
 
   is-extendable@0.1.1: {}
 
@@ -9180,6 +9276,7 @@ snapshots:
   is-inside-container@1.0.0:
     dependencies:
       is-docker: 3.0.0
+    optional: true
 
   is-invalid-path@1.0.2: {}
 
@@ -9198,6 +9295,7 @@ snapshots:
   is-wsl@3.1.1:
     dependencies:
       is-inside-container: 1.0.0
+    optional: true
 
   isarray@1.0.0: {}
 
@@ -9228,7 +9326,8 @@ snapshots:
 
   joycon@3.1.1: {}
 
-  js-md4@0.3.2: {}
+  js-md4@0.3.2:
+    optional: true
 
   js-tokens@10.0.0: {}
 
@@ -9280,6 +9379,7 @@ snapshots:
       lodash.once: 4.1.1
       ms: 2.1.3
       semver: 7.7.4
+    optional: true
 
   junk@4.0.1: {}
 
@@ -9288,11 +9388,13 @@ snapshots:
       buffer-equal-constant-time: 1.0.1
       ecdsa-sig-formatter: 1.0.11
       safe-buffer: 5.2.1
+    optional: true
 
   jws@4.0.1:
     dependencies:
       jwa: 2.0.1
       safe-buffer: 5.2.1
+    optional: true
 
   layered-loader@14.3.0:
     dependencies:
@@ -9366,21 +9468,28 @@ snapshots:
 
   lodash.defaults@4.2.0: {}
 
-  lodash.includes@4.3.0: {}
+  lodash.includes@4.3.0:
+    optional: true
 
   lodash.isarguments@3.1.0: {}
 
-  lodash.isboolean@3.0.3: {}
+  lodash.isboolean@3.0.3:
+    optional: true
 
-  lodash.isinteger@4.0.4: {}
+  lodash.isinteger@4.0.4:
+    optional: true
 
-  lodash.isnumber@3.0.3: {}
+  lodash.isnumber@3.0.3:
+    optional: true
 
-  lodash.isplainobject@4.0.6: {}
+  lodash.isplainobject@4.0.6:
+    optional: true
 
-  lodash.isstring@4.0.1: {}
+  lodash.isstring@4.0.1:
+    optional: true
 
-  lodash.once@4.1.1: {}
+  lodash.once@4.1.1:
+    optional: true
 
   lodash@4.18.1: {}
 
@@ -9547,11 +9656,12 @@ snapshots:
     transitivePeerDependencies:
       - '@azure/core-client'
       - supports-color
+    optional: true
 
   msw@2.13.4(@types/node@25.6.0)(typescript@6.0.3):
     dependencies:
       '@inquirer/confirm': 6.0.12(@types/node@25.6.0)
-      '@mswjs/interceptors': 0.41.5
+      '@mswjs/interceptors': 0.41.7
       '@open-draft/deferred-promise': 3.0.0
       '@types/statuses': 2.0.6
       cookie: 1.1.1
@@ -9596,11 +9706,11 @@ snapshots:
       '@newrelic/security-agent': 3.0.3
       '@opentelemetry/api': 1.9.1
       '@opentelemetry/api-logs': 0.203.0
-      '@opentelemetry/core': 2.7.0(@opentelemetry/api@1.9.1)
+      '@opentelemetry/core': 2.7.1(@opentelemetry/api@1.9.1)
       '@opentelemetry/exporter-metrics-otlp-proto': 0.201.1(@opentelemetry/api@1.9.1)
-      '@opentelemetry/resources': 2.7.0(@opentelemetry/api@1.9.1)
+      '@opentelemetry/resources': 2.7.1(@opentelemetry/api@1.9.1)
       '@opentelemetry/sdk-logs': 0.203.0(@opentelemetry/api@1.9.1)
-      '@opentelemetry/sdk-metrics': 2.7.0(@opentelemetry/api@1.9.1)
+      '@opentelemetry/sdk-metrics': 2.7.1(@opentelemetry/api@1.9.1)
       '@opentelemetry/sdk-trace-base': 2.4.0(@opentelemetry/api@1.9.1)
       '@tyriar/fibonacci-heap': 2.0.9
       concat-stream: 2.0.0
@@ -9683,6 +9793,7 @@ snapshots:
       define-lazy-prop: 3.0.0
       is-inside-container: 1.0.0
       wsl-utils: 0.1.0
+    optional: true
 
   openapi-types@12.1.3: {}
 
@@ -9833,7 +9944,7 @@ snapshots:
       sonic-boom: 4.2.1
       thread-stream: 4.0.0
 
-  postcss@8.5.10:
+  postcss@8.5.12:
     dependencies:
       nanoid: 3.3.11
       picocolors: 1.1.1
@@ -9870,7 +9981,8 @@ snapshots:
 
   process-warning@5.0.0: {}
 
-  process@0.11.10: {}
+  process@0.11.10:
+    optional: true
 
   prom-client@15.1.3:
     dependencies:
@@ -9889,6 +10001,21 @@ snapshots:
       '@protobufjs/path': 1.1.2
       '@protobufjs/pool': 1.1.0
       '@protobufjs/utf8': 1.1.0
+      '@types/node': 25.6.0
+      long: 5.3.2
+
+  protobufjs@7.5.6:
+    dependencies:
+      '@protobufjs/aspromise': 1.1.2
+      '@protobufjs/base64': 1.1.2
+      '@protobufjs/codegen': 2.0.5
+      '@protobufjs/eventemitter': 1.1.0
+      '@protobufjs/fetch': 1.1.0
+      '@protobufjs/float': 1.0.2
+      '@protobufjs/inquire': 1.1.1
+      '@protobufjs/path': 1.1.2
+      '@protobufjs/pool': 1.1.0
+      '@protobufjs/utf8': 1.1.1
       '@types/node': 25.6.0
       long: 5.3.2
 
@@ -9969,6 +10096,7 @@ snapshots:
       events: 3.3.0
       process: 0.11.10
       string_decoder: 1.3.0
+    optional: true
 
   real-require@0.2.0: {}
 
@@ -10063,7 +10191,8 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  run-applescript@7.1.0: {}
+  run-applescript@7.1.0:
+    optional: true
 
   run-parallel@1.2.0:
     dependencies:
@@ -10193,7 +10322,8 @@ snapshots:
 
   split2@4.2.0: {}
 
-  sprintf-js@1.1.3: {}
+  sprintf-js@1.1.3:
+    optional: true
 
   sqs-consumer@14.2.8(@aws-sdk/client-sqs@3.1033.0):
     dependencies:
@@ -10289,7 +10419,8 @@ snapshots:
       readable-stream: 3.6.2
     optional: true
 
-  tarn@3.0.2: {}
+  tarn@3.0.2:
+    optional: true
 
   tdigest@0.1.2:
     dependencies:
@@ -10310,6 +10441,7 @@ snapshots:
     transitivePeerDependencies:
       - '@azure/core-client'
       - supports-color
+    optional: true
 
   tedious@19.2.1(@azure/core-client@1.10.1):
     dependencies:
@@ -10326,6 +10458,7 @@ snapshots:
     transitivePeerDependencies:
       - '@azure/core-client'
       - supports-color
+    optional: true
 
   thread-stream@4.0.0:
     dependencies:
@@ -10342,11 +10475,11 @@ snapshots:
 
   tinyrainbow@3.1.0: {}
 
-  tldts-core@7.0.28: {}
+  tldts-core@7.0.29: {}
 
-  tldts@7.0.28:
+  tldts@7.0.29:
     dependencies:
-      tldts-core: 7.0.28
+      tldts-core: 7.0.29
 
   tmp@0.2.5: {}
 
@@ -10364,7 +10497,7 @@ snapshots:
 
   tough-cookie@6.0.1:
     dependencies:
-      tldts: 7.0.28
+      tldts: 7.0.29
 
   tr46@0.0.3: {}
 
@@ -10434,8 +10567,6 @@ snapshots:
 
   uuid@11.1.0: {}
 
-  uuid@8.3.2: {}
-
   uuid@9.0.1: {}
 
   uuidv7@1.2.1: {}
@@ -10450,7 +10581,7 @@ snapshots:
     dependencies:
       lightningcss: 1.32.0
       picomatch: 4.0.4
-      postcss: 8.5.10
+      postcss: 8.5.12
       rolldown: 1.0.0-rc.16
       tinyglobby: 0.2.16
     optionalDependencies:
@@ -10523,6 +10654,7 @@ snapshots:
   wsl-utils@0.1.0:
     dependencies:
       is-wsl: 3.1.1
+    optional: true
 
   xtend@4.0.2: {}
 
