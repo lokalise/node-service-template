@@ -48,7 +48,7 @@
         "@fastify/otel": "0.17.1",
         "@fastify/schedule": "^6.0.0",
         "@fastify/swagger": "^9.7.0",
-        "@lokalise/api-contracts": "^6.8.0",
+        "@lokalise/api-contracts": "^6.9.0",
         "@lokalise/aws-config": "^8.1.0",
         "@lokalise/backend-http-client": "^10.1.0",
         "@lokalise/background-jobs-common": "^14.2.1",
