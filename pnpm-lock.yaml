@@ -49,22 +49,22 @@ importers:
         version: 6.8.0(zod@4.3.6)
       '@lokalise/aws-config':
         specifier: ^8.1.0
-        version: 8.1.0(82f3e04e636fc3cd64e424e607e3ae7d)
+        version: 8.1.0(816004b4db49a03f3c168e06e533e1ca)
       '@lokalise/backend-http-client':
         specifier: ^10.1.0
         version: 10.1.0(@lokalise/api-contracts@6.8.0(zod@4.3.6))(@lokalise/node-core@14.7.4(zod@4.3.6))(zod@4.3.6)
       '@lokalise/background-jobs-common':
         specifier: ^14.2.1
-        version: 14.2.1(bullmq@5.75.2)(ioredis@5.10.1)(pino@10.3.1)(toad-scheduler@3.1.0)(zod@4.3.6)
+        version: 14.2.1(bullmq@5.76.4)(ioredis@5.10.1)(pino@10.3.1)(toad-scheduler@3.1.0)(zod@4.3.6)
       '@lokalise/fastify-api-contracts':
         specifier: ^5.3.1
         version: 5.3.1(@lokalise/api-contracts@6.8.0(zod@4.3.6))(@lokalise/node-core@14.7.4(zod@4.3.6))(fastify@5.8.5)(zod@4.3.6)
       '@lokalise/fastify-extras':
         specifier: ^30.7.2
-        version: 30.7.2(@fastify/jwt@10.0.0)(@lokalise/api-contracts@6.8.0(zod@4.3.6))(@lokalise/background-jobs-common@14.2.1(bullmq@5.75.2)(ioredis@5.10.1)(pino@10.3.1)(toad-scheduler@3.1.0)(zod@4.3.6))(@lokalise/node-core@14.7.4(zod@4.3.6))(@opentelemetry/api@1.9.1)(bullmq@5.75.2)(dd-trace@5.98.0(@emnapi/core@1.9.2)(@emnapi/runtime@1.9.2)(@openfeature/server-sdk@1.21.0(@openfeature/core@1.10.0)))(fastify-type-provider-zod@6.1.0(@fastify/swagger@9.7.0)(fastify@5.8.5)(openapi-types@12.1.3)(zod@4.3.6))(fastify@5.8.5)(ioredis@5.10.1)(newrelic@13.19.2)(pino@10.3.1)(zod@4.3.6)
+        version: 30.7.2(@fastify/jwt@10.0.0)(@lokalise/api-contracts@6.8.0(zod@4.3.6))(@lokalise/background-jobs-common@14.2.1(bullmq@5.76.4)(ioredis@5.10.1)(pino@10.3.1)(toad-scheduler@3.1.0)(zod@4.3.6))(@lokalise/node-core@14.7.4(zod@4.3.6))(@opentelemetry/api@1.9.1)(bullmq@5.76.4)(dd-trace@5.98.0(@emnapi/core@1.9.2)(@emnapi/runtime@1.9.2)(@openfeature/server-sdk@1.21.0(@openfeature/core@1.10.0)))(fastify-type-provider-zod@6.1.0(@fastify/swagger@9.7.0)(fastify@5.8.5)(openapi-types@12.1.3)(zod@4.3.6))(fastify@5.8.5)(ioredis@5.10.1)(newrelic@13.19.2)(pino@10.3.1)(zod@4.3.6)
       '@lokalise/healthcheck-utils':
         specifier: ^6.0.0
-        version: 6.0.0(@lokalise/background-jobs-common@14.2.1(bullmq@5.75.2)(ioredis@5.10.1)(pino@10.3.1)(toad-scheduler@3.1.0)(zod@4.3.6))(ioredis@5.10.1)(prom-client@15.1.3)(toad-scheduler@3.1.0)(zod@4.3.6)
+        version: 6.0.0(@lokalise/background-jobs-common@14.2.1(bullmq@5.76.4)(ioredis@5.10.1)(pino@10.3.1)(toad-scheduler@3.1.0)(zod@4.3.6))(ioredis@5.10.1)(prom-client@15.1.3)(toad-scheduler@3.1.0)(zod@4.3.6)
       '@lokalise/id-utils':
         specifier: ^3.0.1
         version: 3.0.1
@@ -123,8 +123,8 @@ importers:
         specifier: ^6.4.0
         version: 6.4.0(awilix@13.0.3)
       bullmq:
-        specifier: ^5.74.1
-        version: 5.75.2
+        specifier: ^5.76.4
+        version: 5.76.4
       drizzle-kit:
         specifier: 1.0.0-beta.23
         version: 1.0.0-beta.23
@@ -1257,8 +1257,8 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@mswjs/interceptors@0.41.7':
-    resolution: {integrity: sha512-D0nkS5+sx87mYpxFqASImCineYoEl9wGlUPrzkuS0ohzG8wfophLpE+I76qGJ0slLAVI19do5SI9pWJNCVf4fg==}
+  '@mswjs/interceptors@0.41.8':
+    resolution: {integrity: sha512-pRLMNKTSGRoLq+KnEB/7OY5vijw1XmcheAAOiv6pj7W1FG32kAGqj1C/RK/cqxRGr1Fh+zBi8sDur8kj3EQv6A==}
     engines: {node: '>=18'}
 
   '@napi-rs/wasm-runtime@1.1.4':
@@ -1332,8 +1332,8 @@ packages:
     resolution: {integrity: sha512-40lSJeqYO8Uz2Yj7u94/SJWE/wONa7rmMKjI1ZcIjgf3MHNHv1OZUCrCETGuaRF62d5pQD1wKIW+L4lmSMTzZA==}
     engines: {node: '>=8.0.0'}
 
-  '@opentelemetry/api-logs@0.216.0':
-    resolution: {integrity: sha512-KmGTgvxTJ0J01d4mOeX1wMV5NUTNf9HebIuOOGDfIn0a/IrnXIQbOnlylDyl9tkDv4h0DUpdI/GqCdLzfTkUXg==}
+  '@opentelemetry/api-logs@0.217.0':
+    resolution: {integrity: sha512-Cdq0jW2lknrNfrAm92MyEAvpe2cRsKjdnQLHUL6xRA4IVUnsWx6P65E7NcUO0Y+L4w1Aee5iV8FvjSwd+lrs9A==}
     engines: {node: '>=8.0.0'}
 
   '@opentelemetry/api@1.9.1':
@@ -2480,8 +2480,8 @@ packages:
   '@tootallnate/quickjs-emscripten@0.23.0':
     resolution: {integrity: sha512-C5Mc6rdnsaJDjO3UpGW/CQTHtCKaYlScZTly4JIu97Jxo/odCiH0ITnDXSJPTOrEKk/ycSZ0AOgTmkDtkOsvIA==}
 
-  '@tybys/wasm-util@0.10.1':
-    resolution: {integrity: sha512-9tTaPJLSiejZKx+Bmog4uSubteqTvFrVrURwkmHixBo0G4seD0zUxp98E1DzUBJxLQ3NPwXrGKDiVjwx/DpPsg==}
+  '@tybys/wasm-util@0.10.2':
+    resolution: {integrity: sha512-RoBvJ2X0wuKlWFIjrwffGw1IqZHKQqzIchKaadZZfnNpsAYp2mM0h36JtPCjNDAHGgYez/15uMBpfGwchhiMgg==}
 
   '@types/amqplib@0.10.8':
     resolution: {integrity: sha512-vtDp8Pk1wsE/AuQ8/Rgtm6KUZYqcnTgNvEHwzCkX8rL7AGsC6zqAfKAAJhUZXFhM/Pp++tbnUHiam/8vVpPztA==}
@@ -2506,6 +2506,9 @@ packages:
 
   '@types/estree@1.0.8':
     resolution: {integrity: sha512-dWHzHa2WqEXI/O1E9OjrocMTKJl2mSrEolh1Iomrv6U+JuNwaHXsXx9bLu5gG7BUWFIN0skIQJQ/L1rIex4X6w==}
+
+  '@types/estree@1.0.9':
+    resolution: {integrity: sha512-GhdPgy1el4/ImP05X05Uw4cw2/M93BCUmnEvWZNStlCzEKME4Fkk+YpoA5OiHNQmoS7Cafb8Xa3Pya8m1Qrzeg==}
 
   '@types/ioredis@4.28.10':
     resolution: {integrity: sha512-69LyhUgrXdgcNDv7ogs1qXZomnfOEnSmrmMFqKgt1XMJxmoOSG/u3wYy13yACIfKuMJ8IhKgHafDO3sx19zVQQ==}
@@ -2779,8 +2782,9 @@ packages:
   buffer@6.0.3:
     resolution: {integrity: sha512-FTiCpNxtwiZZHEZbcbTIcZjERVICn9yq/pDFkTl95/AxzD1naBctN7YO68riM/gLSDY7sdrMby8hofADYuuqOA==}
 
-  bullmq@5.75.2:
-    resolution: {integrity: sha512-5GDO2L5OfzogDxzJCeT7icYdI41vQZ5Wuw2z4EqpfPc1m4/gxyg0sEATULGPdR1sMw0kwCPqbehiIPseXxBX9A==}
+  bullmq@5.76.4:
+    resolution: {integrity: sha512-hVAplia7zfN3BxSCgAoRInJnbemfLwJdQLqJy/txEX8UMSTAeg0saPFNGWIlzES/Ct5xQ20TUaik/XwS99DOMA==}
+    engines: {node: '>=12.22.0'}
 
   bundle-name@4.1.0:
     resolution: {integrity: sha512-tjwM5exMg6BGRI+kNmTntNsvdZS1X8BFYS6tnJ2hdH0kVxM6/eVZ2xy+FqStSWvYmtfFMDLIxurorHwDKfDz5Q==}
@@ -3502,6 +3506,10 @@ packages:
     resolution: {integrity: sha512-5bJ+nf/UCpAjHM8i06fl7eLyVC9iuNAjm9qzkiu2ZGhM0VscSvS6WDPfAwkdkBuoXGM9FJSbKl6wylMwP9Ktig==}
     engines: {node: ^12.22.0 || ^14.16.0 || ^16.0.0 || >=17.0.0}
 
+  graphql@16.14.0:
+    resolution: {integrity: sha512-BBvQ/406p+4CZbTpCbVPSxfzrZrbnuWSP1ELYgyS6B+hNeKzgrdB4JczCa5VZUBQrDa9hUngm0KnexY6pJRN5Q==}
+    engines: {node: ^12.22.0 || ^14.16.0 || ^16.0.0 || >=17.0.0}
+
   has-flag@4.0.0:
     resolution: {integrity: sha512-EykJT/Q1KjTWctppgIAgfSO0tKVuZUjhgMr17kqTumMl6Afv3EISleU7qZUzoXDFTAHTDC4NOoG/ZxU3EvlMPQ==}
     engines: {node: '>=8'}
@@ -3601,8 +3609,8 @@ packages:
     resolution: {integrity: sha512-i2R6zNFDwgEHJyQUtJEk0XFi1i0dPFn/oqjK3/vPCcDeJvW5NQ83V8QbicfF1SupOaB0h8ntgBC2YiE7dfyctQ==}
     engines: {node: '>=4'}
 
-  is-core-module@2.16.1:
-    resolution: {integrity: sha512-UfoeMA6fIJ8wTYFEUjelnaGI67v6+N7qXJEvQuIGa99l4xsCruSYOVSQ0uPANn4dAzm8lkYPaKLrrijLq7x23w==}
+  is-core-module@2.16.2:
+    resolution: {integrity: sha512-evOr8xfXKxE6qSR0hSXL2r3sd7ALj8+7jQEUvPYcm5sgZFdJ+AYzT6yNmJenvIYQBgIGwfwz08sL8zoL7yq2BA==}
     engines: {node: '>= 0.4'}
 
   is-docker@3.0.0:
@@ -4008,8 +4016,8 @@ packages:
   nan@2.26.2:
     resolution: {integrity: sha512-0tTvBTYkt3tdGw22nrAy50x7gpbGCCFH3AFcyS5WiUu7Eu4vWlri1woE6qHBSfy11vksDqkiwjOnlR7WV8G1Hw==}
 
-  nanoid@3.3.11:
-    resolution: {integrity: sha512-N8SpfPUnUp1bK+PMYW8qSWdl9U+wwNWI4QKxOYDy9JAro3WMX7p2OeVRF9v+347pnakNevPmiHhNmZ2HbFA76w==}
+  nanoid@3.3.12:
+    resolution: {integrity: sha512-ZB9RH/39qpq5Vu6Y+NmUaFhQR6pp+M2Xt76XBnEwDaGcVAqhlvxrl3B2bKS5D3NH3QR76v3aSrKaF/Kiy7lEtQ==}
     engines: {node: ^10 || ^12 || ^13.7 || ^14 || >=15.0.1}
     hasBin: true
 
@@ -4034,8 +4042,8 @@ packages:
     engines: {node: '>=20', npm: '>=6.0.0'}
     hasBin: true
 
-  node-abi@3.89.0:
-    resolution: {integrity: sha512-6u9UwL0HlAl21+agMN3YAMXcKByMqwGx+pq+P76vii5f7hTPtKDp08/H9py6DY+cfDw7kQNTGEj/rly3IgbNQA==}
+  node-abi@3.92.0:
+    resolution: {integrity: sha512-KdHvFWZjEKDf0cakgFjebl371GPsISX2oZHcuyKqM7DtogIsHrqKeLTo8wBHxaXRAQlY2PsPlZmfo+9ZCxEREQ==}
     engines: {node: '>=10'}
 
   node-abort-controller@3.1.1:
@@ -4219,8 +4227,8 @@ packages:
     resolution: {integrity: sha512-r34yH/GlQpKZbU1BvFFqOjhISRo1MNx1tWYsYvmj6KIRHSPMT2+yHOEb1SG6NMvRoHRF0a07kCOox/9yakl1vg==}
     hasBin: true
 
-  postcss@8.5.12:
-    resolution: {integrity: sha512-W62t/Se6rA0Az3DfCL0AqJwXuKwBeYg6nOaIgzP+xZ7N5BFCI7DYi1qs6ygUYT6rvfi6t9k65UMLJC+PHZpDAA==}
+  postcss@8.5.14:
+    resolution: {integrity: sha512-SoSL4+OSEtR99LHFZQiJLkT59C5B1amGO1NzTwj7TT1qCUgUO6hxOvzkOYxD+vMrXBM3XJIKzokoERdqQq/Zmg==}
     engines: {node: ^10 || ^12 || >=14}
 
   postgres-array@2.0.0:
@@ -4391,8 +4399,8 @@ packages:
     resolution: {integrity: sha512-I1XxrZSQ+oErkRR4jYbAyEEu2I0avBvvMM5JN+6EBprOGRCs63ENqZ3vjavq8fBw2+62G5LF5XelKwuJpcvcxw==}
     engines: {node: '>=10'}
 
-  rettime@0.11.8:
-    resolution: {integrity: sha512-0fERGXktJTyJ+h8fBEiPxHPEFOu0h15JY7JtwrOVqR5K+vb99ho6IyOo7ekLS3h4sJCzIDy4VWKIbZUfe9njmg==}
+  rettime@0.11.11:
+    resolution: {integrity: sha512-ILJRqVWBCTlg9r42fFgwVZx1gnFAcQF8mRoMkbgQfIrjEDf9nbBFDFx00oloOa+Q869FUtaYDXZvEfnecQSCoQ==}
 
   reusify@1.1.0:
     resolution: {integrity: sha512-g6QUff04oZpHs0eG5p83rFLhHeV00ug/Yf9nZM6fLeUrPguBTkTQOdpAWWspMh55TZfVQDPaN3NQJfbVRAxdIw==}
@@ -4666,11 +4674,11 @@ packages:
     resolution: {integrity: sha512-Bf+ILmBgretUrdJxzXM0SgXLZ3XfiaUuOj/IKQHuTXip+05Xn+uyEYdVg0kYDipTBcLrCVyUzAPz7QmArb0mmw==}
     engines: {node: '>=14.0.0'}
 
-  tldts-core@7.0.29:
-    resolution: {integrity: sha512-W99NuU7b1DcG3uJ3v9k9VztCH3WialNbBkBft5wCs8V8mexu0XQqaZEYb9l9RNNzK8+3EJ9PKWB0/RUtTQ/o+Q==}
+  tldts-core@7.0.30:
+    resolution: {integrity: sha512-uiHN8PIB1VmWyS98eZYja4xzlYqeFZVjb4OuYlJQnZAuJhMw4PbKQOKgHKhBdJR3FE/t5mUQ1Kd80++B+qhD1Q==}
 
-  tldts@7.0.29:
-    resolution: {integrity: sha512-JIXCerhudr/N6OWLwLF1HVsTTUo7ry6qHa5eWZEkiMuxsIiAACL55tGLfqfHfoH7QaMQUW8fngD7u7TxWexYQg==}
+  tldts@7.0.30:
+    resolution: {integrity: sha512-ELrFxuqsDdHUwoh0XxDbxuLD3Wnz49Z57IFvTtvWy1hJdcMZjXLIuonjilCiWHlT2GbE4Wlv1wKVTzDFnXH1aw==}
     hasBin: true
 
   tmp@0.2.5:
@@ -4787,10 +4795,6 @@ packages:
   utils-merge@1.0.1:
     resolution: {integrity: sha512-pMZTvIkT1d+TFGvDOqodOclx0QWkkgi6Tdoa8gC8ffGAAqz9pzPTZWAybbsHHoED/ztMtkv/VoYTYyShUn81hA==}
     engines: {node: '>= 0.4.0'}
-
-  uuid@11.1.0:
-    resolution: {integrity: sha512-0/A9rDy9P7cJ+8w1c9WD9V//9Wj15Ce2MPz8Ri6032usz+NfePxx5AcN3bN+r6ZL6jEo066/yNYB3tn4pQEx+A==}
-    hasBin: true
 
   uuid@9.0.1:
     resolution: {integrity: sha512-b+1eJOlsR9K8HJpow9Ok3fiWOWSIcIzXodvv0rQjVoOVNpWMpxf1wZNpt4y9h10odCNrqnYp1OBzRktckBe3sA==}
@@ -4999,7 +5003,7 @@ snapshots:
 
   '@apm-js-collab/code-transformer@0.12.0':
     dependencies:
-      '@types/estree': 1.0.8
+      '@types/estree': 1.0.9
       astring: 1.9.0
       esquery: 1.7.0
       meriyah: 6.1.4
@@ -6299,12 +6303,12 @@ snapshots:
     dependencies:
       zod: 4.3.6
 
-  '@lokalise/aws-config@8.1.0(82f3e04e636fc3cd64e424e607e3ae7d)':
+  '@lokalise/aws-config@8.1.0(816004b4db49a03f3c168e06e533e1ca)':
     dependencies:
       '@aws-sdk/client-sns': 3.1033.0
       '@aws-sdk/client-sqs': 3.1033.0
       '@aws-sdk/credential-providers': 3.1033.0
-      '@lokalise/fastify-extras': 30.7.2(@fastify/jwt@10.0.0)(@lokalise/api-contracts@6.8.0(zod@4.3.6))(@lokalise/background-jobs-common@14.2.1(bullmq@5.75.2)(ioredis@5.10.1)(pino@10.3.1)(toad-scheduler@3.1.0)(zod@4.3.6))(@lokalise/node-core@14.7.4(zod@4.3.6))(@opentelemetry/api@1.9.1)(bullmq@5.75.2)(dd-trace@5.98.0(@emnapi/core@1.9.2)(@emnapi/runtime@1.9.2)(@openfeature/server-sdk@1.21.0(@openfeature/core@1.10.0)))(fastify-type-provider-zod@6.1.0(@fastify/swagger@9.7.0)(fastify@5.8.5)(openapi-types@12.1.3)(zod@4.3.6))(fastify@5.8.5)(ioredis@5.10.1)(newrelic@13.19.2)(pino@10.3.1)(zod@4.3.6)
+      '@lokalise/fastify-extras': 30.7.2(@fastify/jwt@10.0.0)(@lokalise/api-contracts@6.8.0(zod@4.3.6))(@lokalise/background-jobs-common@14.2.1(bullmq@5.76.4)(ioredis@5.10.1)(pino@10.3.1)(toad-scheduler@3.1.0)(zod@4.3.6))(@lokalise/node-core@14.7.4(zod@4.3.6))(@opentelemetry/api@1.9.1)(bullmq@5.76.4)(dd-trace@5.98.0(@emnapi/core@1.9.2)(@emnapi/runtime@1.9.2)(@openfeature/server-sdk@1.21.0(@openfeature/core@1.10.0)))(fastify-type-provider-zod@6.1.0(@fastify/swagger@9.7.0)(fastify@5.8.5)(openapi-types@12.1.3)(zod@4.3.6))(fastify@5.8.5)(ioredis@5.10.1)(newrelic@13.19.2)(pino@10.3.1)(zod@4.3.6)
       '@lokalise/node-core': 14.7.4(zod@4.3.6)
       '@lokalise/universal-ts-utils': 4.10.0
       '@message-queue-toolkit/core': 25.4.0(zod@4.3.6)
@@ -6321,11 +6325,11 @@ snapshots:
       undici-retry: 7.0.0(undici@7.25.0)
       zod: 4.3.6
 
-  '@lokalise/background-jobs-common@14.2.1(bullmq@5.75.2)(ioredis@5.10.1)(pino@10.3.1)(toad-scheduler@3.1.0)(zod@4.3.6)':
+  '@lokalise/background-jobs-common@14.2.1(bullmq@5.76.4)(ioredis@5.10.1)(pino@10.3.1)(toad-scheduler@3.1.0)(zod@4.3.6)':
     dependencies:
       '@lokalise/id-utils': 3.0.1
       '@lokalise/node-core': 14.7.4(zod@4.3.6)
-      bullmq: 5.75.2
+      bullmq: 5.76.4
       ioredis: 5.10.1
       pino: 10.3.1
       redis-semaphore: 5.7.0(ioredis@5.10.1)
@@ -6349,19 +6353,19 @@ snapshots:
       fastify: 5.8.5
       zod: 4.3.6
 
-  '@lokalise/fastify-extras@30.7.2(@fastify/jwt@10.0.0)(@lokalise/api-contracts@6.8.0(zod@4.3.6))(@lokalise/background-jobs-common@14.2.1(bullmq@5.75.2)(ioredis@5.10.1)(pino@10.3.1)(toad-scheduler@3.1.0)(zod@4.3.6))(@lokalise/node-core@14.7.4(zod@4.3.6))(@opentelemetry/api@1.9.1)(bullmq@5.75.2)(dd-trace@5.98.0(@emnapi/core@1.9.2)(@emnapi/runtime@1.9.2)(@openfeature/server-sdk@1.21.0(@openfeature/core@1.10.0)))(fastify-type-provider-zod@6.1.0(@fastify/swagger@9.7.0)(fastify@5.8.5)(openapi-types@12.1.3)(zod@4.3.6))(fastify@5.8.5)(ioredis@5.10.1)(newrelic@13.19.2)(pino@10.3.1)(zod@4.3.6)':
+  '@lokalise/fastify-extras@30.7.2(@fastify/jwt@10.0.0)(@lokalise/api-contracts@6.8.0(zod@4.3.6))(@lokalise/background-jobs-common@14.2.1(bullmq@5.76.4)(ioredis@5.10.1)(pino@10.3.1)(toad-scheduler@3.1.0)(zod@4.3.6))(@lokalise/node-core@14.7.4(zod@4.3.6))(@opentelemetry/api@1.9.1)(bullmq@5.76.4)(dd-trace@5.98.0(@emnapi/core@1.9.2)(@emnapi/runtime@1.9.2)(@openfeature/server-sdk@1.21.0(@openfeature/core@1.10.0)))(fastify-type-provider-zod@6.1.0(@fastify/swagger@9.7.0)(fastify@5.8.5)(openapi-types@12.1.3)(zod@4.3.6))(fastify@5.8.5)(ioredis@5.10.1)(newrelic@13.19.2)(pino@10.3.1)(zod@4.3.6)':
     dependencies:
       '@amplitude/analytics-node': 1.5.54
       '@bugsnag/js': 8.9.0
       '@fastify/jwt': 10.0.0
       '@lokalise/api-contracts': 6.8.0(zod@4.3.6)
-      '@lokalise/background-jobs-common': 14.2.1(bullmq@5.75.2)(ioredis@5.10.1)(pino@10.3.1)(toad-scheduler@3.1.0)(zod@4.3.6)
+      '@lokalise/background-jobs-common': 14.2.1(bullmq@5.76.4)(ioredis@5.10.1)(pino@10.3.1)(toad-scheduler@3.1.0)(zod@4.3.6)
       '@lokalise/error-utils': 3.0.0(@lokalise/node-core@14.7.4(zod@4.3.6))
       '@lokalise/node-core': 14.7.4(zod@4.3.6)
       '@opentelemetry/api': 1.9.1
       '@splitsoftware/splitio': 11.11.1
       '@supercharge/promise-pool': 3.3.0
-      bullmq: 5.75.2
+      bullmq: 5.76.4
       dd-trace: 5.98.0(@emnapi/core@1.9.2)(@emnapi/runtime@1.9.2)(@openfeature/server-sdk@1.21.0(@openfeature/core@1.10.0))
       fastify: 5.8.5
       fastify-metrics: 13.2.0(fastify@5.8.5)
@@ -6378,9 +6382,9 @@ snapshots:
       - encoding
       - supports-color
 
-  '@lokalise/healthcheck-utils@6.0.0(@lokalise/background-jobs-common@14.2.1(bullmq@5.75.2)(ioredis@5.10.1)(pino@10.3.1)(toad-scheduler@3.1.0)(zod@4.3.6))(ioredis@5.10.1)(prom-client@15.1.3)(toad-scheduler@3.1.0)(zod@4.3.6)':
+  '@lokalise/healthcheck-utils@6.0.0(@lokalise/background-jobs-common@14.2.1(bullmq@5.76.4)(ioredis@5.10.1)(pino@10.3.1)(toad-scheduler@3.1.0)(zod@4.3.6))(ioredis@5.10.1)(prom-client@15.1.3)(toad-scheduler@3.1.0)(zod@4.3.6)':
     dependencies:
-      '@lokalise/background-jobs-common': 14.2.1(bullmq@5.75.2)(ioredis@5.10.1)(pino@10.3.1)(toad-scheduler@3.1.0)(zod@4.3.6)
+      '@lokalise/background-jobs-common': 14.2.1(bullmq@5.76.4)(ioredis@5.10.1)(pino@10.3.1)(toad-scheduler@3.1.0)(zod@4.3.6)
       '@lokalise/node-core': 14.7.4(zod@4.3.6)
       '@supercharge/promise-pool': 3.3.0
       ioredis: 5.10.1
@@ -6505,7 +6509,7 @@ snapshots:
   '@msgpackr-extract/msgpackr-extract-win32-x64@3.0.3':
     optional: true
 
-  '@mswjs/interceptors@0.41.7':
+  '@mswjs/interceptors@0.41.8':
     dependencies:
       '@open-draft/deferred-promise': 2.2.0
       '@open-draft/logger': 0.3.0
@@ -6518,7 +6522,7 @@ snapshots:
     dependencies:
       '@emnapi/core': 1.9.2
       '@emnapi/runtime': 1.9.2
-      '@tybys/wasm-util': 0.10.1
+      '@tybys/wasm-util': 0.10.2
     optional: true
 
   '@newrelic/fn-inspect@4.4.0':
@@ -6611,7 +6615,7 @@ snapshots:
     dependencies:
       '@opentelemetry/api': 1.9.1
 
-  '@opentelemetry/api-logs@0.216.0':
+  '@opentelemetry/api-logs@0.217.0':
     dependencies:
       '@opentelemetry/api': 1.9.1
     optional: true
@@ -8093,7 +8097,7 @@ snapshots:
 
   '@tootallnate/quickjs-emscripten@0.23.0': {}
 
-  '@tybys/wasm-util@0.10.1':
+  '@tybys/wasm-util@0.10.2':
     dependencies:
       tslib: 2.8.1
     optional: true
@@ -8124,6 +8128,8 @@ snapshots:
   '@types/deep-eql@4.0.2': {}
 
   '@types/estree@1.0.8': {}
+
+  '@types/estree@1.0.9': {}
 
   '@types/ioredis@4.28.10':
     dependencies:
@@ -8444,7 +8450,7 @@ snapshots:
       ieee754: 1.2.1
     optional: true
 
-  bullmq@5.75.2:
+  bullmq@5.76.4:
     dependencies:
       cron-parser: 4.9.0
       ioredis: 5.10.1
@@ -8452,7 +8458,6 @@ snapshots:
       node-abort-controller: 3.1.1
       semver: 7.7.4
       tslib: 2.8.1
-      uuid: 11.1.0
     transitivePeerDependencies:
       - supports-color
 
@@ -8612,7 +8617,7 @@ snapshots:
       '@datadog/pprof': 5.14.1
       '@datadog/wasm-js-rewriter': 5.0.1
       '@opentelemetry/api': 1.9.1
-      '@opentelemetry/api-logs': 0.216.0
+      '@opentelemetry/api-logs': 0.217.0
       oxc-parser: 0.121.0(@emnapi/core@1.9.2)(@emnapi/runtime@1.9.2)
     transitivePeerDependencies:
       - '@emnapi/core'
@@ -9138,6 +9143,8 @@ snapshots:
 
   graphql@16.13.2: {}
 
+  graphql@16.14.0: {}
+
   has-flag@4.0.0: {}
 
   has-symbols@1.1.0: {}
@@ -9256,7 +9263,7 @@ snapshots:
 
   is-buffer@2.0.5: {}
 
-  is-core-module@2.16.1:
+  is-core-module@2.16.2:
     dependencies:
       hasown: 2.0.3
 
@@ -9661,17 +9668,17 @@ snapshots:
   msw@2.13.4(@types/node@25.6.0)(typescript@6.0.3):
     dependencies:
       '@inquirer/confirm': 6.0.12(@types/node@25.6.0)
-      '@mswjs/interceptors': 0.41.7
+      '@mswjs/interceptors': 0.41.8
       '@open-draft/deferred-promise': 3.0.0
       '@types/statuses': 2.0.6
       cookie: 1.1.1
-      graphql: 16.13.2
+      graphql: 16.14.0
       headers-polyfill: 5.0.1
       is-node-process: 1.2.0
       outvariant: 1.4.3
       path-to-regexp: 6.3.0
       picocolors: 1.1.1
-      rettime: 0.11.8
+      rettime: 0.11.11
       statuses: 2.0.2
       strict-event-emitter: 0.5.1
       tough-cookie: 6.0.1
@@ -9688,7 +9695,7 @@ snapshots:
   nan@2.26.2:
     optional: true
 
-  nanoid@3.3.11: {}
+  nanoid@3.3.12: {}
 
   nanoid@5.1.9: {}
 
@@ -9733,7 +9740,7 @@ snapshots:
       - supports-color
       - utf-8-validate
 
-  node-abi@3.89.0:
+  node-abi@3.92.0:
     dependencies:
       semver: 7.7.4
     optional: true
@@ -9944,9 +9951,9 @@ snapshots:
       sonic-boom: 4.2.1
       thread-stream: 4.0.0
 
-  postcss@8.5.12:
+  postcss@8.5.14:
     dependencies:
-      nanoid: 3.3.11
+      nanoid: 3.3.12
       picocolors: 1.1.1
       source-map-js: 1.2.1
 
@@ -9969,7 +9976,7 @@ snapshots:
     dependencies:
       minimist: 1.2.8
       mkdirp-classic: 0.5.3
-      node-abi: 3.89.0
+      node-abi: 3.92.0
       npm-run-path: 3.1.0
       pump: 3.0.4
       tar-fs: 2.1.4
@@ -10146,13 +10153,13 @@ snapshots:
   resolve@1.22.12:
     dependencies:
       es-errors: 1.3.0
-      is-core-module: 2.16.1
+      is-core-module: 2.16.2
       path-parse: 1.0.7
       supports-preserve-symlinks-flag: 1.0.0
 
   ret@0.5.0: {}
 
-  rettime@0.11.8: {}
+  rettime@0.11.11: {}
 
   reusify@1.1.0: {}
 
@@ -10475,11 +10482,11 @@ snapshots:
 
   tinyrainbow@3.1.0: {}
 
-  tldts-core@7.0.29: {}
+  tldts-core@7.0.30: {}
 
-  tldts@7.0.29:
+  tldts@7.0.30:
     dependencies:
-      tldts-core: 7.0.29
+      tldts-core: 7.0.30
 
   tmp@0.2.5: {}
 
@@ -10497,7 +10504,7 @@ snapshots:
 
   tough-cookie@6.0.1:
     dependencies:
-      tldts: 7.0.29
+      tldts: 7.0.30
 
   tr46@0.0.3: {}
 
@@ -10565,8 +10572,6 @@ snapshots:
 
   utils-merge@1.0.1: {}
 
-  uuid@11.1.0: {}
-
   uuid@9.0.1: {}
 
   uuidv7@1.2.1: {}
@@ -10581,7 +10586,7 @@ snapshots:
     dependencies:
       lightningcss: 1.32.0
       picomatch: 4.0.4
-      postcss: 8.5.12
+      postcss: 8.5.14
       rolldown: 1.0.0-rc.16
       tinyglobby: 0.2.16
     optionalDependencies:
