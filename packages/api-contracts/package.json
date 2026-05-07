@@ -19,12 +19,12 @@
         "prepublishOnly": "pnpm run clean && pnpm run build"
     },
     "peerDependencies": {
-        "@lokalise/api-contracts": "^6.8.0",
+        "@lokalise/api-contracts": "^6.9.0",
         "@lokalise/zod-extras": "^3.0.2",
         "zod": "^4.3.6"
     },
     "devDependencies": {
-        "@lokalise/api-contracts": "^6.8.0",
+        "@lokalise/api-contracts": "^6.9.0",
         "@lokalise/tsconfig": "^3.1.0",
         "@lokalise/zod-extras": "^3.0.2",
         "typescript": "^6.0.3",
