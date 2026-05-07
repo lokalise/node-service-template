@@ -67,7 +67,7 @@
         "@message-queue-toolkit/sns": "^24.6.0",
         "@message-queue-toolkit/sqs": "^24.2.1",
         "@node-service-template/api-contracts": "workspace:*",
-        "@opentelemetry/auto-instrumentations-node": "0.68.0",
+        "@opentelemetry/auto-instrumentations-node": "0.74.0",
         "@opentelemetry/exporter-trace-otlp-grpc": "0.210.0",
         "@opentelemetry/instrumentation": "^0.214.0",
         "@scalar/fastify-api-reference": "^1.55.0",
