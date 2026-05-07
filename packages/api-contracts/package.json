@@ -20,13 +20,13 @@
     },
     "peerDependencies": {
         "@lokalise/api-contracts": "^6.8.0",
-        "@lokalise/zod-extras": "^3.0.1",
+        "@lokalise/zod-extras": "^3.0.2",
         "zod": "^4.3.6"
     },
     "devDependencies": {
         "@lokalise/api-contracts": "^6.8.0",
         "@lokalise/tsconfig": "^3.1.0",
-        "@lokalise/zod-extras": "^3.0.1",
+        "@lokalise/zod-extras": "^3.0.2",
         "typescript": "^6.0.3",
         "zod": "^4.3.6"
     }
