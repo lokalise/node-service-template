@@ -78,8 +78,8 @@ importers:
         specifier: ^4.10.0
         version: 4.10.0
       '@lokalise/zod-extras':
-        specifier: ^3.0.1
-        version: 3.0.1
+        specifier: ^3.0.2
+        version: 3.0.2
       '@message-queue-toolkit/amqp':
         specifier: ^24.0.0
         version: 24.0.0(@message-queue-toolkit/core@25.4.0(zod@4.3.6))(@message-queue-toolkit/schemas@7.1.0(zod@4.3.6))(amqplib@1.0.3)(zod@4.3.6)
@@ -275,8 +275,8 @@ importers:
         specifier: ^3.1.0
         version: 3.1.0
       '@lokalise/zod-extras':
-        specifier: ^3.0.1
-        version: 3.0.1
+        specifier: ^3.0.2
+        version: 3.0.2
       typescript:
         specifier: ^6.0.3
         version: 6.0.3
@@ -1181,8 +1181,8 @@ packages:
   '@lokalise/universal-ts-utils@4.10.0':
     resolution: {integrity: sha512-+k99TEjNikAqIEZCZZ6ltQ9lJveeHMNYzJmSClS4iBz+RLf67+8m2HDrPZ3J7MMWCGync2UGx7m8tjCNPJP3Aw==}
 
-  '@lokalise/zod-extras@3.0.1':
-    resolution: {integrity: sha512-8IeDRUXihiV6CrjBmJHObQrvr4JV3SZeotD1ebO9Z2pphfSSxTc87RTLfewjlmHvJh9q7s0uCVKKNTji2CIKRw==}
+  '@lokalise/zod-extras@3.0.2':
+    resolution: {integrity: sha512-ldy0L9wqzCnIPiM0kwC20wYHxBs0Eyd/2LjpaoLIFUJt14gQRHfJzf7AZxF7KAQGXWibDfwVzxJ01LZegUzdVQ==}
 
   '@lukeed/ms@2.0.2':
     resolution: {integrity: sha512-9I2Zn6+NJLfaGoz9jN3lpwDgAYvfGeNYdbAIjJOqzs4Tpc+VU3Jqq4IofSUBKajiDS8k9fZIg18/z13mpk1bsA==}
@@ -6464,7 +6464,7 @@ snapshots:
 
   '@lokalise/universal-ts-utils@4.10.0': {}
 
-  '@lokalise/zod-extras@3.0.1': {}
+  '@lokalise/zod-extras@3.0.2': {}
 
   '@lukeed/ms@2.0.2': {}
 
