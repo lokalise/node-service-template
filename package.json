@@ -99,7 +99,7 @@
     },
     "devDependencies": {
         "@amplitude/analytics-types": "^2.11.1",
-        "@biomejs/biome": "2.4.12",
+        "@biomejs/biome": "2.4.13",
         "@lokalise/biome-config": "^3.1.1",
         "@lokalise/tsconfig": "^3.1.0",
         "@lokalise/universal-testing-utils": "^3.5.1",
@@ -117,10 +117,10 @@
         "yaml": "^2.8.3"
     },
     "optionalDependencies": {
-        "@biomejs/cli-darwin-arm64": "^2.3.15",
-        "@biomejs/cli-linux-arm64": "^2.3.15",
-        "@biomejs/cli-linux-x64": "^2.3.15",
-        "@biomejs/cli-win32-x64": "^2.3.15",
+        "@biomejs/cli-darwin-arm64": "^2.4.13",
+        "@biomejs/cli-linux-arm64": "^2.4.13",
+        "@biomejs/cli-linux-x64": "^2.4.13",
+        "@biomejs/cli-win32-x64": "^2.4.13",
         "@esbuild/darwin-arm64": "^0.28.0",
         "@esbuild/linux-arm64": "^0.28.0",
         "@esbuild/linux-x64": "^0.28.0",
