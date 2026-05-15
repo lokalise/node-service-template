@@ -58,8 +58,7 @@
 
 - `METRICS_ENABLED` (optional)  
   Type: `string`  
-  Description: Whether to enable Prometheus metrics collection  
-  Default: `true`
+  Description: Whether to enable Prometheus metrics collection
 
 ## Db
 
@@ -93,20 +92,17 @@
 
 - `REDIS_USE_TLS` (optional)  
   Type: `string`  
-  Description: Whether to use TLS/SSL for Redis connection  
-  Default: `true`
+  Description: Whether to use TLS/SSL for Redis connection
 
 - `REDIS_COMMAND_TIMEOUT` (optional)  
   Type: `integer`  
   Description: Command execution timeout in milliseconds  
-  Min value: `0`  
-  Max value: `9007199254740991`
+  Min value: `0`
 
 - `REDIS_CONNECT_TIMEOUT` (optional)  
   Type: `integer`  
   Description: Initial connection timeout in milliseconds  
-  Min value: `0`  
-  Max value: `9007199254740991`
+  Min value: `0`
 
 ## Scheduler
 
@@ -134,20 +130,17 @@
 
 - `SCHEDULER_REDIS_USE_TLS` (optional)  
   Type: `string`  
-  Description: Whether to use TLS/SSL for scheduler Redis connection  
-  Default: `true`
+  Description: Whether to use TLS/SSL for scheduler Redis connection
 
 - `SCHEDULER_REDIS_COMMAND_TIMEOUT` (optional)  
   Type: `integer`  
   Description: Scheduler command execution timeout in milliseconds  
-  Min value: `0`  
-  Max value: `9007199254740991`
+  Min value: `0`
 
 - `SCHEDULER_REDIS_CONNECT_TIMEOUT` (optional)  
   Type: `integer`  
   Description: Scheduler initial connection timeout in milliseconds  
-  Min value: `0`  
-  Max value: `9007199254740991`
+  Min value: `0`
 
 ## Amqp
 
@@ -176,8 +169,7 @@
 
 - `AMQP_USE_TLS` (optional)  
   Type: `string`  
-  Description: Whether to use TLS/SSL for AMQP connection  
-  Default: `true`
+  Description: Whether to use TLS/SSL for AMQP connection
 
 ## Aws
 
@@ -224,16 +216,14 @@
 - `DELETE_OLD_USERS_JOB_PERIOD_IN_SECS` (required)  
   Type: `integer`  
   Description: Period in seconds for deleting old users job  
-  Min value: `0`  
-  Max value: `9007199254740991`
+  Min value: `0`
 
 ## Jobs ProcessLogFilesJob
 
 - `PROCESS_LOGS_FILES_JOB_PERIOD_IN_SECS` (required)  
   Type: `integer`  
   Description: Period in seconds for processing log files job  
-  Min value: `0`  
-  Max value: `9007199254740991`
+  Min value: `0`
 
 ## Jobs SendEmailsJob
 
@@ -245,8 +235,7 @@
 
 - `OTEL_ENABLED` (optional)  
   Type: `string`  
-  Description: Whether to enable OpenTelemetry instrumentation    
-  Default: `true`
+  Description: Whether to enable OpenTelemetry instrumentation  
 
 - `OTEL_RESOURCE_ATTRIBUTES` (optional)  
   Type: `string`  
@@ -262,8 +251,7 @@
 
 - `BUGSNAG_ENABLED` (optional)  
   Type: `string`  
-  Description: Whether to send errors to Bugsnag  
-  Default: `true`
+  Description: Whether to send errors to Bugsnag
 
 - `BUGSNAG_KEY` (optional)  
   Type: `string`  
@@ -277,8 +265,7 @@
 
 - `AMPLITUDE_ENABLED` (optional)  
   Type: `string`  
-  Description: Whether to track analytics with Amplitude  
-  Default: `false`
+  Description: Whether to track analytics with Amplitude
 
 - `AMPLITUDE_KEY` (optional)  
   Type: `string`  
@@ -294,19 +281,16 @@
   Type: `integer`  
   Description: Event batch upload interval in milliseconds  
   Min value: `0`  
-  Max value: `9007199254740991`  
   Default: `10000`
 
 - `AMPLITUDE_FLUSH_QUEUE_SIZE` (optional)  
   Type: `integer`  
   Description: Maximum events per batch upload  
   Min value: `0`  
-  Max value: `9007199254740991`  
   Default: `300`
 
 - `AMPLITUDE_FLUSH_MAX_RETRIES` (optional)  
   Type: `integer`  
   Description: Maximum retry attempts for failed uploads  
   Min value: `0`  
-  Max value: `9007199254740991`  
   Default: `12`
