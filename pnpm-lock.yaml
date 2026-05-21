@@ -199,8 +199,8 @@ importers:
         specifier: ^3.1.1
         version: 3.1.1
       '@lokalise/tsconfig':
-        specifier: ^3.1.0
-        version: 3.1.0
+        specifier: ^4.0.0
+        version: 4.0.0
       '@lokalise/universal-testing-utils':
         specifier: ^3.5.1
         version: 3.6.0(@lokalise/api-contracts@6.11.0(zod@4.4.3))(mockttp@4.4.1)(msw@2.14.6(@types/node@25.8.0)(typescript@6.0.3))(zod@4.4.3)
@@ -272,8 +272,8 @@ importers:
         specifier: ^6.9.0
         version: 6.11.0(zod@4.4.3)
       '@lokalise/tsconfig':
-        specifier: ^3.1.0
-        version: 3.1.0
+        specifier: ^4.0.0
+        version: 4.0.0
       '@lokalise/zod-extras':
         specifier: ^3.0.2
         version: 3.0.2
@@ -1118,8 +1118,8 @@ packages:
       '@opentelemetry/sdk-trace-base': ^2.4.0
       fastify: ^5.0.0
 
-  '@lokalise/tsconfig@3.1.0':
-    resolution: {integrity: sha512-ynvdBlAYEV77EpBImC0XHnTgkwX8eQhYbGmz6NimlIBkF9SHaVKEuK58dyV4ADxxhXyYEPmnDzAqlDB9IAEf1w==}
+  '@lokalise/tsconfig@4.0.0':
+    resolution: {integrity: sha512-rWFqZPUa+odx1zdrEYmk4Sgmy1mnNnX6EYfV+Yn9NvonFfmUcWBoehqka9qxIIrDWwvnsEVSZGEpbdGfnWmPpw==}
 
   '@lokalise/universal-testing-utils@3.6.0':
     resolution: {integrity: sha512-D4xEvwYUzuu2uMxHAfQtbofpd6dZrwloS/niYZFPCDlJpugdCOoljdKhfjmZvSp5S7YihzaNdLEf1f4qTFsaGg==}
@@ -5815,7 +5815,7 @@ snapshots:
       '@opentelemetry/sdk-trace-base': 2.7.1(@opentelemetry/api@1.9.1)
       fastify: 5.8.5
 
-  '@lokalise/tsconfig@3.1.0': {}
+  '@lokalise/tsconfig@4.0.0': {}
 
   '@lokalise/universal-testing-utils@3.6.0(@lokalise/api-contracts@6.11.0(zod@4.4.3))(mockttp@4.4.1)(msw@2.14.6(@types/node@25.8.0)(typescript@6.0.3))(zod@4.4.3)':
     dependencies:

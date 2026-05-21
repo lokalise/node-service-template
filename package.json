@@ -100,7 +100,7 @@
         "@amplitude/analytics-types": "^2.11.1",
         "@biomejs/biome": "2.4.13",
         "@lokalise/biome-config": "^3.1.1",
-        "@lokalise/tsconfig": "^3.1.0",
+        "@lokalise/tsconfig": "^4.0.0",
         "@lokalise/universal-testing-utils": "^3.5.1",
         "@readme/openapi-parser": "^6.0.1",
         "@types/amqplib": "^0.10.8",
