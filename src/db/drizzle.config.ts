@@ -11,4 +11,7 @@ export default defineConfig({
   dbCredentials: {
     url: config.db.databaseUrl,
   },
+  migrations: {
+    schema: 'migrations', // adjust if you want to have per-service migration schemas
+  },
 })
