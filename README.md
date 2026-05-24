@@ -82,7 +82,7 @@ are relevant for the technological stack of your organization, and replace `@lok
 
 ## Getting Started
 
-1. Make sure your node version is compatible with the requirements in [package.json](package.json). We are working with `node >= 22` and recommend using a version manager, such as [nvm](https://github.com/nvm-sh/nvm), to manage multiple Node versions on your device if needed.
+1. Make sure your node version is compatible with the requirements in [package.json](package.json). We are working with `node >= 24` and recommend using a version manager, such as [nvm](https://github.com/nvm-sh/nvm), to manage multiple Node versions on your device if needed.
 
 2. Install [pnpm](https://pnpm.io/installation) (this project uses pnpm as its package manager — see the `packageManager` field in [package.json](package.json)). The easiest way on a recent Node.js is to enable Corepack:
 

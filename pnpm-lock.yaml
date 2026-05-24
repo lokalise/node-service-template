@@ -49,7 +49,7 @@ importers:
         version: 6.11.0(zod@4.4.3)
       '@lokalise/aws-config':
         specifier: ^8.1.0
-        version: 8.1.0(d4e038ff4d994a6b3caa807f6aa383c7)
+        version: 8.1.0(36ba22a6d19c93a04226e1bd2d1705b4)
       '@lokalise/backend-http-client':
         specifier: ^10.1.0
         version: 10.3.1(@lokalise/api-contracts@6.11.0(zod@4.4.3))(@lokalise/node-core@14.8.1(zod@4.4.3))(zod@4.4.3)
@@ -65,9 +65,6 @@ importers:
       '@lokalise/healthcheck-utils':
         specifier: ^6.0.0
         version: 6.0.0(@lokalise/background-jobs-common@14.3.0(bullmq@5.76.8)(ioredis@5.10.1)(pino@10.3.1)(toad-scheduler@3.1.0)(zod@4.4.3))(ioredis@5.10.1)(prom-client@15.1.3)(toad-scheduler@3.1.0)(zod@4.4.3)
-      '@lokalise/id-utils':
-        specifier: ^3.0.1
-        version: 3.0.1
       '@lokalise/node-core':
         specifier: ^14.7.4
         version: 14.8.1(zod@4.4.3)
@@ -81,23 +78,23 @@ importers:
         specifier: ^3.0.2
         version: 3.0.2
       '@message-queue-toolkit/amqp':
-        specifier: ^24.0.0
-        version: 24.0.0(@message-queue-toolkit/core@25.5.0(zod@4.4.3))(@message-queue-toolkit/schemas@7.1.0(zod@4.4.3))(amqplib@1.2.0)(zod@4.4.3)
+        specifier: ^24.1.0
+        version: 24.1.0(@message-queue-toolkit/core@26.0.0(zod@4.4.3))(@message-queue-toolkit/schemas@7.1.0(zod@4.4.3))(amqplib@1.2.0)(zod@4.4.3)
       '@message-queue-toolkit/core':
-        specifier: ^25.4.0
-        version: 25.5.0(zod@4.4.3)
+        specifier: ^26.0.0
+        version: 26.0.0(zod@4.4.3)
       '@message-queue-toolkit/metrics':
         specifier: ^4.4.2
-        version: 4.4.2(@message-queue-toolkit/core@25.5.0(zod@4.4.3))(prom-client@15.1.3)(zod@4.4.3)
+        version: 4.4.2(@message-queue-toolkit/core@26.0.0(zod@4.4.3))(prom-client@15.1.3)(zod@4.4.3)
       '@message-queue-toolkit/schemas':
         specifier: ^7.1.0
         version: 7.1.0(zod@4.4.3)
       '@message-queue-toolkit/sns':
-        specifier: ^24.6.0
-        version: 24.6.1(@aws-sdk/client-sns@3.1047.0)(@aws-sdk/client-sqs@3.1047.0)(@aws-sdk/client-sts@3.1047.0)(@message-queue-toolkit/core@25.5.0(zod@4.4.3))(@message-queue-toolkit/schemas@7.1.0(zod@4.4.3))(@message-queue-toolkit/sqs@24.2.1(@aws-sdk/client-sqs@3.1047.0)(@message-queue-toolkit/core@25.5.0(zod@4.4.3))(zod@4.4.3))(zod@4.4.3)
+        specifier: ^25.0.0
+        version: 25.0.0(@aws-sdk/client-sns@3.1047.0)(@aws-sdk/client-sqs@3.1047.0)(@aws-sdk/client-sts@3.1047.0)(@message-queue-toolkit/core@26.0.0(zod@4.4.3))(@message-queue-toolkit/schemas@7.1.0(zod@4.4.3))(@message-queue-toolkit/sqs@25.0.0(@aws-sdk/client-sqs@3.1047.0)(@message-queue-toolkit/core@26.0.0(zod@4.4.3))(zod@4.4.3))(zod@4.4.3)
       '@message-queue-toolkit/sqs':
-        specifier: ^24.2.1
-        version: 24.2.1(@aws-sdk/client-sqs@3.1047.0)(@message-queue-toolkit/core@25.5.0(zod@4.4.3))(zod@4.4.3)
+        specifier: ^25.0.0
+        version: 25.0.0(@aws-sdk/client-sqs@3.1047.0)(@message-queue-toolkit/core@26.0.0(zod@4.4.3))(zod@4.4.3)
       '@node-service-template/api-contracts':
         specifier: workspace:*
         version: link:packages/api-contracts
@@ -203,7 +200,7 @@ importers:
         version: 4.0.0
       '@lokalise/universal-testing-utils':
         specifier: ^3.5.1
-        version: 3.6.0(@lokalise/api-contracts@6.11.0(zod@4.4.3))(mockttp@4.4.1)(msw@2.14.6(@types/node@25.8.0)(typescript@6.0.3))(zod@4.4.3)
+        version: 3.6.0(@lokalise/api-contracts@6.11.0(zod@4.4.3))(mockttp@4.4.1)(msw@2.14.6(@types/node@25.9.1)(typescript@6.0.3))(zod@4.4.3)
       '@readme/openapi-parser':
         specifier: ^6.0.1
         version: 6.1.1(openapi-types@12.1.3)
@@ -211,8 +208,8 @@ importers:
         specifier: ^0.10.8
         version: 0.10.8
       '@types/node':
-        specifier: ^25.6.0
-        version: 25.8.0
+        specifier: ^25.9.1
+        version: 25.9.1
       '@vitest/coverage-v8':
         specifier: ^4.1.4
         version: 4.1.6(vitest@4.1.6)
@@ -236,7 +233,7 @@ importers:
         version: 6.0.3
       vitest:
         specifier: ^4.1.4
-        version: 4.1.6(@opentelemetry/api@1.9.1)(@types/node@25.8.0)(@vitest/coverage-v8@4.1.6)(msw@2.14.6(@types/node@25.8.0)(typescript@6.0.3))(vite@8.0.13(@types/node@25.8.0)(jiti@2.7.0)(yaml@2.9.0))
+        version: 4.1.6(@opentelemetry/api@1.9.1)(@types/node@25.9.1)(@vitest/coverage-v8@4.1.6)(msw@2.14.6(@types/node@25.9.1)(typescript@6.0.3))(vite@8.0.13(@types/node@25.9.1)(jiti@2.7.0)(yaml@2.9.0))
       yaml:
         specifier: ^2.8.3
         version: 2.9.0
@@ -551,36 +548,42 @@ packages:
     engines: {node: '>=14.21.3'}
     cpu: [arm64]
     os: [linux]
+    libc: [musl]
 
   '@biomejs/cli-linux-arm64@2.4.13':
     resolution: {integrity: sha512-NzkUDSqfvMBrPplKgVr3aXLHZ2NEELvvF4vZxXulEylKWIGqlvNEcwUcj9OLrn75TD3lJ/GIqCVlBwd1MZCuYQ==}
     engines: {node: '>=14.21.3'}
     cpu: [arm64]
     os: [linux]
+    libc: [glibc]
 
   '@biomejs/cli-linux-arm64@2.4.15':
     resolution: {integrity: sha512-owaAMZD/T4LrD0ELNCk0Km3qrRHuM0X6EAyVE1FSqGY0rbLoiDLrO4Us2tllm6cAeB2Ioa9C2C08NZPdr8+0Ug==}
     engines: {node: '>=14.21.3'}
     cpu: [arm64]
     os: [linux]
+    libc: [glibc]
 
   '@biomejs/cli-linux-x64-musl@2.4.13':
     resolution: {integrity: sha512-Z601MienRgTBDza/+u2CH3RSrWoXo9rtr8NK6A4KJzqGgfxx+H3VlyLgTJ4sRo40T3pIsqpTmiOQEvYzQvBRvQ==}
     engines: {node: '>=14.21.3'}
     cpu: [x64]
     os: [linux]
+    libc: [musl]
 
   '@biomejs/cli-linux-x64@2.4.13':
     resolution: {integrity: sha512-Az3ZZedYRBo9EQzNnD9SxFcR1G5QsGo6VEc2hIyVPZ1rdKwee/7E9oeBBZFpE8Z44ekxsDQBqbiWGW5ShOhUSQ==}
     engines: {node: '>=14.21.3'}
     cpu: [x64]
     os: [linux]
+    libc: [glibc]
 
   '@biomejs/cli-linux-x64@2.4.15':
     resolution: {integrity: sha512-0jj7THz12GbUOLmMibktK6DZjqz2zV64KFxyBtcFTKPiiOIY0a7vns1elpO1dERvxpsZ5ik0oFfz0oGwFde1+g==}
     engines: {node: '>=14.21.3'}
     cpu: [x64]
     os: [linux]
+    libc: [glibc]
 
   '@biomejs/cli-win32-arm64@2.4.13':
     resolution: {integrity: sha512-Px9PS2B5/Q183bUwy/5VHqp3J2lzdOCeVGzMpphYfl8oSa7VDCqenBdqWpy6DCy/en4Rbf/Y1RieZF6dJPcc9A==}
@@ -1139,17 +1142,17 @@ packages:
     resolution: {integrity: sha512-9I2Zn6+NJLfaGoz9jN3lpwDgAYvfGeNYdbAIjJOqzs4Tpc+VU3Jqq4IofSUBKajiDS8k9fZIg18/z13mpk1bsA==}
     engines: {node: '>=8'}
 
-  '@message-queue-toolkit/amqp@24.0.0':
-    resolution: {integrity: sha512-DVPVav8dCzbfOAuP8kOTZBktez8kogy18UVZigmBQZdDniTcW3feA8vDsQWFe9UJDTYGzDa1AesP5sYwsNs91A==}
+  '@message-queue-toolkit/amqp@24.1.0':
+    resolution: {integrity: sha512-S6bQotTefi28bMlWvH78JHf6gPHv7FQDTHsvJ1JQRoa/9lzNlbwFjIGLeWCW1VKQwpGY3UrWqzcaFPDOKvXknA==}
     engines: {node: '>=18'}
     peerDependencies:
       '@message-queue-toolkit/core': '>=25.0.0'
       '@message-queue-toolkit/schemas': '>=7.0.0'
-      amqplib: ^1.0.3
+      amqplib: ^2.0.1
       zod: '>=3.25.76 <5.0.0'
 
-  '@message-queue-toolkit/core@25.5.0':
-    resolution: {integrity: sha512-QJHIktu1WOHtiys7LS/772IbhwyHoa61AZEAC4o5vZPaJ5jUPB9hXbbhwOgjYSFIGvx/meUszaA9lzTOL9R8lQ==}
+  '@message-queue-toolkit/core@26.0.0':
+    resolution: {integrity: sha512-6c5sOZ1s7T1QIeqWHzrdM7vWNa1WJdsLI4ELH/7dMSFrd+Re8SdTFhtr55qQv2lpDka3akgr9on0tuB2F/9WZg==}
     peerDependencies:
       zod: '>=3.25.76 <5.0.0'
 
@@ -1164,22 +1167,24 @@ packages:
     peerDependencies:
       zod: '>=3.25.76 <5.0.0'
 
-  '@message-queue-toolkit/sns@24.6.1':
-    resolution: {integrity: sha512-QBBHdpjJV2nouLDJdHHpeU1aNFfyof32q/vmvmIBNnK1UHvOxkRQZctzmkBh2C1hqYccE84U860YTeR5Kc3l8g==}
+  '@message-queue-toolkit/sns@25.0.0':
+    resolution: {integrity: sha512-acMgk8jPVKC3OX9UnQF0tsdJZkqGXjGsjiLAnNDLLD5Qt4UiZ0HlTSHgwrMwPD+E9QJ2wO9gLqJJl+Aax9S/SQ==}
+    engines: {node: '>=22.0.0'}
     peerDependencies:
       '@aws-sdk/client-sns': ^3.632.0
-      '@aws-sdk/client-sqs': ^3.632.0
+      '@aws-sdk/client-sqs': ^3.1034.0
       '@aws-sdk/client-sts': ^3.632.0
-      '@message-queue-toolkit/core': '>=24.0.0'
+      '@message-queue-toolkit/core': '>=26.0.0'
       '@message-queue-toolkit/schemas': '>=7.0.0'
       '@message-queue-toolkit/sqs': '>=23.0.0'
       zod: '>=3.25.76 <5.0.0'
 
-  '@message-queue-toolkit/sqs@24.2.1':
-    resolution: {integrity: sha512-R3+XSzvBUStsjbjKWtTIb64PD/4+cUM0CrqiATuPj4XUK0WTzCYhHF42okk+6k1Nv5H3U7P1gGXgeotBGRKadg==}
+  '@message-queue-toolkit/sqs@25.0.0':
+    resolution: {integrity: sha512-9bq2iKi7lrh7KHaj6QQDQx2wXKAmSCRfTmksZpc+4onay6G8diwAg3/xjaN/01m/oyH3U2+iiHlwVfhKR0G95Q==}
+    engines: {node: '>=22.0.0'}
     peerDependencies:
-      '@aws-sdk/client-sqs': ^3.632.0
-      '@message-queue-toolkit/core': '>=25.0.0'
+      '@aws-sdk/client-sqs': ^3.1034.0
+      '@message-queue-toolkit/core': '>=26.0.0'
       zod: '>=3.25.76 <5.0.0'
 
   '@msgpackr-extract/msgpackr-extract-darwin-arm64@3.0.3':
@@ -1908,48 +1913,56 @@ packages:
     engines: {node: ^20.19.0 || >=22.12.0}
     cpu: [arm64]
     os: [linux]
+    libc: [glibc]
 
   '@oxc-parser/binding-linux-arm64-musl@0.129.0':
     resolution: {integrity: sha512-GghE/bf9ZqgqZFxLacgP0ImVD6UiLKQOpvpgUoIsqjopu2ms/+p1L0d0Dv2Sck+8p0FbKS2WE3IjqmIlLbxJgA==}
     engines: {node: ^20.19.0 || >=22.12.0}
     cpu: [arm64]
     os: [linux]
+    libc: [musl]
 
   '@oxc-parser/binding-linux-ppc64-gnu@0.129.0':
     resolution: {integrity: sha512-A2PW0UbERzKGV6fKX1zoe2Tkc1zVcEJSSPW9IUSKbZAPuPe+M5/5hTA+6fQbWmevabe2B3IDky66a1lFGjpBKA==}
     engines: {node: ^20.19.0 || >=22.12.0}
     cpu: [ppc64]
     os: [linux]
+    libc: [glibc]
 
   '@oxc-parser/binding-linux-riscv64-gnu@0.129.0':
     resolution: {integrity: sha512-omwxd9H+jrl1T72RI666k4ho7Eli2iHdELzf+dL0D+uXThNZXYJCbKjm5rK2hrHmDy4O+NWv7+khBrEkorLsgw==}
     engines: {node: ^20.19.0 || >=22.12.0}
     cpu: [riscv64]
     os: [linux]
+    libc: [glibc]
 
   '@oxc-parser/binding-linux-riscv64-musl@0.129.0':
     resolution: {integrity: sha512-v2hi8id+M8C0uY8uuG2t2a5vr8H9XyHXiHL12yMdMNtgn04nnM/8hlOGuoJuxVc07PhClNiaoSaY2eXehSRa7w==}
     engines: {node: ^20.19.0 || >=22.12.0}
     cpu: [riscv64]
     os: [linux]
+    libc: [musl]
 
   '@oxc-parser/binding-linux-s390x-gnu@0.129.0':
     resolution: {integrity: sha512-UXrdDyLh1Obgj5X+IVVXWoo5/FJbFsU8/uLQ/M9lkVUwBUKpRFxNEhzwBNv21qqdKgAh+pr2CCVD8J1JfRPsIQ==}
     engines: {node: ^20.19.0 || >=22.12.0}
     cpu: [s390x]
     os: [linux]
+    libc: [glibc]
 
   '@oxc-parser/binding-linux-x64-gnu@0.129.0':
     resolution: {integrity: sha512-hsL/3/kdX9FGLqOj8DR3Eki4Y6zO1i3+ZHhiPwX0hDt4n+18abkfUzePCv3h8SShprwCmwdxPnlrebZ5+MZ+cw==}
     engines: {node: ^20.19.0 || >=22.12.0}
     cpu: [x64]
     os: [linux]
+    libc: [glibc]
 
   '@oxc-parser/binding-linux-x64-musl@0.129.0':
     resolution: {integrity: sha512-kdXvJ4crOeRld3vWl0J0VU4nmnT4pZ3lKGA5tZ1y0UPWsBtElDYd+jsz4lE36tpAbCiWm0M0PG0laUNBSE+Wlw==}
     engines: {node: ^20.19.0 || >=22.12.0}
     cpu: [x64]
     os: [linux]
+    libc: [musl]
 
   '@oxc-parser/binding-openharmony-arm64@0.129.0':
     resolution: {integrity: sha512-DusJfcK7EGwf9TEakB+z6SXCLdHGvDZ8U8882bzWb4oVrORHpbkFl9npS7cN3YC2axcVKoktbxZevS1nxVCKFw==}
@@ -2134,36 +2147,42 @@ packages:
     engines: {node: ^20.19.0 || >=22.12.0}
     cpu: [arm64]
     os: [linux]
+    libc: [glibc]
 
   '@rolldown/binding-linux-arm64-musl@1.0.1':
     resolution: {integrity: sha512-uwNwFpwKeNiZawfAWBgg0VIztPTV3ihhh1vV334h9ivnNLorxnQMU6Fz8wG1Zb4Qh9LC1/MkcyT3YlDXG3Rsgg==}
     engines: {node: ^20.19.0 || >=22.12.0}
     cpu: [arm64]
     os: [linux]
+    libc: [musl]
 
   '@rolldown/binding-linux-ppc64-gnu@1.0.1':
     resolution: {integrity: sha512-zY1bul7OWr7DFBiJ++wofXvnr8B45ce3QsQUhKrIhXsygAh7bTkwyeM1bi1a2g5C/yC/N8TZyGDEoMfm/l9mpg==}
     engines: {node: ^20.19.0 || >=22.12.0}
     cpu: [ppc64]
     os: [linux]
+    libc: [glibc]
 
   '@rolldown/binding-linux-s390x-gnu@1.0.1':
     resolution: {integrity: sha512-0frlsT/f4Ft6I7SMESTKnF3cZsdicQn1dCMkF/jT9wDLE+gGoiQfv1nmT9e+s7s/fekvvy6tZM2jHvI2tkbJDQ==}
     engines: {node: ^20.19.0 || >=22.12.0}
     cpu: [s390x]
     os: [linux]
+    libc: [glibc]
 
   '@rolldown/binding-linux-x64-gnu@1.0.1':
     resolution: {integrity: sha512-XABVmGp9Tg0WspTVvwduTc4fpqy6JnAUrSQe6OuyqD/03nI7r0O9OWUkMIwFrjKAIqolvqoA4ZrJppgwE0Gxmw==}
     engines: {node: ^20.19.0 || >=22.12.0}
     cpu: [x64]
     os: [linux]
+    libc: [glibc]
 
   '@rolldown/binding-linux-x64-musl@1.0.1':
     resolution: {integrity: sha512-bV4fzswuzVcKD90o/VM6QqKxnxlDq0g2BISDLNVmxrnhpv1DDbyPhCIjYfvzYLV+MvkKKnQt2Q6AO86SEBULUQ==}
     engines: {node: ^20.19.0 || >=22.12.0}
     cpu: [x64]
     os: [linux]
+    libc: [musl]
 
   '@rolldown/binding-openharmony-arm64@1.0.1':
     resolution: {integrity: sha512-/Mh0Zhq3OP7fVs0kcQHZP6lZEthMGTaSf8UBQYSFEZDWGXXlEC+nJ6EqenaK2t4LBXMe3A+K/G2BVXXdtOr4PQ==}
@@ -2331,9 +2350,6 @@ packages:
 
   '@types/mysql@2.15.27':
     resolution: {integrity: sha512-YfWiV16IY0OeBfBCk8+hXKmdTKrKlwKN1MNKAPBu5JYxLwBEZl7QzeEpGnlZb3VMGJrrGmB84gXiH+ofs/TezA==}
-
-  '@types/node@25.8.0':
-    resolution: {integrity: sha512-TCFSk8IZh+iLX1xtksoBVtdmgL+1IX0fC9BeU4QqFSuNdN/K+HUlhqOzEmSYYpZUVsLYcPqc9KX+60iDuninSQ==}
 
   '@types/node@25.9.1':
     resolution: {integrity: sha512-xfrlY7UD5rMJk3ZVJP8BNzS28J36YJg+xp+LPXV1TdWxr8uMH5A860QNxYDGQe/ylDSgjxE52Q9VnO7p75tJxg==}
@@ -3555,24 +3571,28 @@ packages:
     engines: {node: '>= 12.0.0'}
     cpu: [arm64]
     os: [linux]
+    libc: [glibc]
 
   lightningcss-linux-arm64-musl@1.32.0:
     resolution: {integrity: sha512-UpQkoenr4UJEzgVIYpI80lDFvRmPVg6oqboNHfoH4CQIfNA+HOrZ7Mo7KZP02dC6LjghPQJeBsvXhJod/wnIBg==}
     engines: {node: '>= 12.0.0'}
     cpu: [arm64]
     os: [linux]
+    libc: [musl]
 
   lightningcss-linux-x64-gnu@1.32.0:
     resolution: {integrity: sha512-V7Qr52IhZmdKPVr+Vtw8o+WLsQJYCTd8loIfpDaMRWGUZfBOYEJeyJIkqGIDMZPwPx24pUMfwSxxI8phr/MbOA==}
     engines: {node: '>= 12.0.0'}
     cpu: [x64]
     os: [linux]
+    libc: [glibc]
 
   lightningcss-linux-x64-musl@1.32.0:
     resolution: {integrity: sha512-bYcLp+Vb0awsiXg/80uCRezCYHNg1/l3mt0gzHnWV9XP1W5sKa5/TCdGWaR/zBM2PeF/HbsQv/j2URNOiVuxWg==}
     engines: {node: '>= 12.0.0'}
     cpu: [x64]
     os: [linux]
+    libc: [musl]
 
   lightningcss-win32-arm64-msvc@1.32.0:
     resolution: {integrity: sha512-8SbC8BR40pS6baCM8sbtYDSwEVQd4JlFTOlaD3gWGHfThTcABnNDBda6eTZeqbofalIJhFx0qKzgHJmcPTnGdw==}
@@ -4261,11 +4281,11 @@ packages:
     resolution: {integrity: sha512-UcjcJOWknrNkF6PLX83qcHM6KHgVKNkV62Y8a5uYDVv9ydGQVwAHMKqHdJje1VTWpljG0WYpCDhrCdAOYH4TWg==}
     engines: {node: '>= 10.x'}
 
-  sqs-consumer@14.2.8:
-    resolution: {integrity: sha512-Iq3AdASfsxY2s3KL88aPRGgvST3gviZphL5teTKxUqDZzXRIB8s6SWATft+v7YaGMspCs8BwrOKo9vD6ltcJmw==}
-    engines: {node: '>=20.0.0'}
+  sqs-consumer@15.0.1:
+    resolution: {integrity: sha512-cDcSkekXxhLMn3u+FSnAG3Ryh6jwHMPna1/oqs2dUL0gvUXOLLMa2Yzu0K4QqwVyaH0MDZw1IU7+W+W618/xcw==}
+    engines: {node: '>=22.0.0'}
     peerDependencies:
-      '@aws-sdk/client-sqs': ^3.1018.0
+      '@aws-sdk/client-sqs': ^3.1034.0
 
   stack-generator@2.0.10:
     resolution: {integrity: sha512-mwnua/hkqM6pF4k8SnmZ2zfETsRUpWXREfA/goT8SLCV4iOFa4bzOX2nDipWAZFPTjLvQB82f5yaodMVhK0yJQ==}
@@ -5604,7 +5624,7 @@ snapshots:
 
   '@httptoolkit/httpolyglot@3.1.0':
     dependencies:
-      '@types/node': 25.8.0
+      '@types/node': 25.9.1
 
   '@httptoolkit/subscriptions-transport-ws@0.11.2(graphql@16.14.0)':
     dependencies:
@@ -5638,30 +5658,30 @@ snapshots:
 
   '@inquirer/ansi@2.0.5': {}
 
-  '@inquirer/confirm@6.0.13(@types/node@25.8.0)':
+  '@inquirer/confirm@6.0.13(@types/node@25.9.1)':
     dependencies:
-      '@inquirer/core': 11.1.10(@types/node@25.8.0)
-      '@inquirer/type': 4.0.5(@types/node@25.8.0)
+      '@inquirer/core': 11.1.10(@types/node@25.9.1)
+      '@inquirer/type': 4.0.5(@types/node@25.9.1)
     optionalDependencies:
-      '@types/node': 25.8.0
+      '@types/node': 25.9.1
 
-  '@inquirer/core@11.1.10(@types/node@25.8.0)':
+  '@inquirer/core@11.1.10(@types/node@25.9.1)':
     dependencies:
       '@inquirer/ansi': 2.0.5
       '@inquirer/figures': 2.0.5
-      '@inquirer/type': 4.0.5(@types/node@25.8.0)
+      '@inquirer/type': 4.0.5(@types/node@25.9.1)
       cli-width: 4.1.0
       fast-wrap-ansi: 0.2.2
       mute-stream: 3.0.0
       signal-exit: 4.1.0
     optionalDependencies:
-      '@types/node': 25.8.0
+      '@types/node': 25.9.1
 
   '@inquirer/figures@2.0.5': {}
 
-  '@inquirer/type@4.0.5(@types/node@25.8.0)':
+  '@inquirer/type@4.0.5(@types/node@25.9.1)':
     optionalDependencies:
-      '@types/node': 25.8.0
+      '@types/node': 25.9.1
 
   '@ioredis/commands@1.5.1': {}
 
@@ -5684,7 +5704,7 @@ snapshots:
     dependencies:
       zod: 4.4.3
 
-  '@lokalise/aws-config@8.1.0(d4e038ff4d994a6b3caa807f6aa383c7)':
+  '@lokalise/aws-config@8.1.0(36ba22a6d19c93a04226e1bd2d1705b4)':
     dependencies:
       '@aws-sdk/client-sns': 3.1047.0
       '@aws-sdk/client-sqs': 3.1047.0
@@ -5692,9 +5712,9 @@ snapshots:
       '@lokalise/fastify-extras': 30.7.2(@fastify/jwt@10.0.0)(@lokalise/api-contracts@6.11.0(zod@4.4.3))(@lokalise/background-jobs-common@14.3.0(bullmq@5.76.8)(ioredis@5.10.1)(pino@10.3.1)(toad-scheduler@3.1.0)(zod@4.4.3))(@lokalise/node-core@14.8.1(zod@4.4.3))(@opentelemetry/api@1.9.1)(bullmq@5.76.8)(dd-trace@5.103.0(@openfeature/server-sdk@1.21.0(@openfeature/core@1.10.0)))(fastify-type-provider-zod@6.1.0(@fastify/swagger@9.7.0)(fastify@5.8.5)(openapi-types@12.1.3)(zod@4.4.3))(fastify@5.8.5)(ioredis@5.10.1)(newrelic@13.20.0)(pino@10.3.1)(zod@4.4.3)
       '@lokalise/node-core': 14.8.1(zod@4.4.3)
       '@lokalise/universal-ts-utils': 4.10.0
-      '@message-queue-toolkit/core': 25.5.0(zod@4.4.3)
-      '@message-queue-toolkit/sns': 24.6.1(@aws-sdk/client-sns@3.1047.0)(@aws-sdk/client-sqs@3.1047.0)(@aws-sdk/client-sts@3.1047.0)(@message-queue-toolkit/core@25.5.0(zod@4.4.3))(@message-queue-toolkit/schemas@7.1.0(zod@4.4.3))(@message-queue-toolkit/sqs@24.2.1(@aws-sdk/client-sqs@3.1047.0)(@message-queue-toolkit/core@25.5.0(zod@4.4.3))(zod@4.4.3))(zod@4.4.3)
-      '@message-queue-toolkit/sqs': 24.2.1(@aws-sdk/client-sqs@3.1047.0)(@message-queue-toolkit/core@25.5.0(zod@4.4.3))(zod@4.4.3)
+      '@message-queue-toolkit/core': 26.0.0(zod@4.4.3)
+      '@message-queue-toolkit/sns': 25.0.0(@aws-sdk/client-sns@3.1047.0)(@aws-sdk/client-sqs@3.1047.0)(@aws-sdk/client-sts@3.1047.0)(@message-queue-toolkit/core@26.0.0(zod@4.4.3))(@message-queue-toolkit/schemas@7.1.0(zod@4.4.3))(@message-queue-toolkit/sqs@25.0.0(@aws-sdk/client-sqs@3.1047.0)(@message-queue-toolkit/core@26.0.0(zod@4.4.3))(zod@4.4.3))(zod@4.4.3)
+      '@message-queue-toolkit/sqs': 25.0.0(@aws-sdk/client-sqs@3.1047.0)(@message-queue-toolkit/core@26.0.0(zod@4.4.3))(zod@4.4.3)
       envase: 1.4.0
       zod: 4.4.3
 
@@ -5803,11 +5823,11 @@ snapshots:
 
   '@lokalise/tsconfig@4.0.0': {}
 
-  '@lokalise/universal-testing-utils@3.6.0(@lokalise/api-contracts@6.11.0(zod@4.4.3))(mockttp@4.4.1)(msw@2.14.6(@types/node@25.8.0)(typescript@6.0.3))(zod@4.4.3)':
+  '@lokalise/universal-testing-utils@3.6.0(@lokalise/api-contracts@6.11.0(zod@4.4.3))(mockttp@4.4.1)(msw@2.14.6(@types/node@25.9.1)(typescript@6.0.3))(zod@4.4.3)':
     dependencies:
       '@lokalise/api-contracts': 6.11.0(zod@4.4.3)
       mockttp: 4.4.1
-      msw: 2.14.6(@types/node@25.8.0)(typescript@6.0.3)
+      msw: 2.14.6(@types/node@25.9.1)(typescript@6.0.3)
       zod: 4.4.3
 
   '@lokalise/universal-ts-utils@4.10.0': {}
@@ -5816,15 +5836,15 @@ snapshots:
 
   '@lukeed/ms@2.0.2': {}
 
-  '@message-queue-toolkit/amqp@24.0.0(@message-queue-toolkit/core@25.5.0(zod@4.4.3))(@message-queue-toolkit/schemas@7.1.0(zod@4.4.3))(amqplib@1.2.0)(zod@4.4.3)':
+  '@message-queue-toolkit/amqp@24.1.0(@message-queue-toolkit/core@26.0.0(zod@4.4.3))(@message-queue-toolkit/schemas@7.1.0(zod@4.4.3))(amqplib@1.2.0)(zod@4.4.3)':
     dependencies:
       '@lokalise/node-core': 14.8.1(zod@4.4.3)
-      '@message-queue-toolkit/core': 25.5.0(zod@4.4.3)
+      '@message-queue-toolkit/core': 26.0.0(zod@4.4.3)
       '@message-queue-toolkit/schemas': 7.1.0(zod@4.4.3)
       amqplib: 1.2.0
       zod: 4.4.3
 
-  '@message-queue-toolkit/core@25.5.0(zod@4.4.3)':
+  '@message-queue-toolkit/core@26.0.0(zod@4.4.3)':
     dependencies:
       '@lokalise/node-core': 14.8.1(zod@4.4.3)
       '@lokalise/universal-ts-utils': 4.10.0
@@ -5836,11 +5856,11 @@ snapshots:
       toad-cache: 3.7.0
       zod: 4.4.3
 
-  '@message-queue-toolkit/metrics@4.4.2(@message-queue-toolkit/core@25.5.0(zod@4.4.3))(prom-client@15.1.3)(zod@4.4.3)':
+  '@message-queue-toolkit/metrics@4.4.2(@message-queue-toolkit/core@26.0.0(zod@4.4.3))(prom-client@15.1.3)(zod@4.4.3)':
     dependencies:
       '@lokalise/node-core': 14.8.1(zod@4.4.3)
       '@lokalise/universal-ts-utils': 4.10.0
-      '@message-queue-toolkit/core': 25.5.0(zod@4.4.3)
+      '@message-queue-toolkit/core': 26.0.0(zod@4.4.3)
       prom-client: 15.1.3
     transitivePeerDependencies:
       - zod
@@ -5849,26 +5869,26 @@ snapshots:
     dependencies:
       zod: 4.4.3
 
-  '@message-queue-toolkit/sns@24.6.1(@aws-sdk/client-sns@3.1047.0)(@aws-sdk/client-sqs@3.1047.0)(@aws-sdk/client-sts@3.1047.0)(@message-queue-toolkit/core@25.5.0(zod@4.4.3))(@message-queue-toolkit/schemas@7.1.0(zod@4.4.3))(@message-queue-toolkit/sqs@24.2.1(@aws-sdk/client-sqs@3.1047.0)(@message-queue-toolkit/core@25.5.0(zod@4.4.3))(zod@4.4.3))(zod@4.4.3)':
+  '@message-queue-toolkit/sns@25.0.0(@aws-sdk/client-sns@3.1047.0)(@aws-sdk/client-sqs@3.1047.0)(@aws-sdk/client-sts@3.1047.0)(@message-queue-toolkit/core@26.0.0(zod@4.4.3))(@message-queue-toolkit/schemas@7.1.0(zod@4.4.3))(@message-queue-toolkit/sqs@25.0.0(@aws-sdk/client-sqs@3.1047.0)(@message-queue-toolkit/core@26.0.0(zod@4.4.3))(zod@4.4.3))(zod@4.4.3)':
     dependencies:
       '@aws-sdk/client-sns': 3.1047.0
       '@aws-sdk/client-sqs': 3.1047.0
       '@aws-sdk/client-sts': 3.1047.0
       '@lokalise/node-core': 14.8.1(zod@4.4.3)
-      '@message-queue-toolkit/core': 25.5.0(zod@4.4.3)
+      '@message-queue-toolkit/core': 26.0.0(zod@4.4.3)
       '@message-queue-toolkit/schemas': 7.1.0(zod@4.4.3)
-      '@message-queue-toolkit/sqs': 24.2.1(@aws-sdk/client-sqs@3.1047.0)(@message-queue-toolkit/core@25.5.0(zod@4.4.3))(zod@4.4.3)
-      sqs-consumer: 14.2.8(@aws-sdk/client-sqs@3.1047.0)
+      '@message-queue-toolkit/sqs': 25.0.0(@aws-sdk/client-sqs@3.1047.0)(@message-queue-toolkit/core@26.0.0(zod@4.4.3))(zod@4.4.3)
+      sqs-consumer: 15.0.1(@aws-sdk/client-sqs@3.1047.0)
       zod: 4.4.3
     transitivePeerDependencies:
       - supports-color
 
-  '@message-queue-toolkit/sqs@24.2.1(@aws-sdk/client-sqs@3.1047.0)(@message-queue-toolkit/core@25.5.0(zod@4.4.3))(zod@4.4.3)':
+  '@message-queue-toolkit/sqs@25.0.0(@aws-sdk/client-sqs@3.1047.0)(@message-queue-toolkit/core@26.0.0(zod@4.4.3))(zod@4.4.3)':
     dependencies:
       '@aws-sdk/client-sqs': 3.1047.0
       '@lokalise/node-core': 14.8.1(zod@4.4.3)
-      '@message-queue-toolkit/core': 25.5.0(zod@4.4.3)
-      sqs-consumer: 14.2.8(@aws-sdk/client-sqs@3.1047.0)
+      '@message-queue-toolkit/core': 26.0.0(zod@4.4.3)
+      sqs-consumer: 15.0.1(@aws-sdk/client-sqs@3.1047.0)
       zod: 4.4.3
     transitivePeerDependencies:
       - supports-color
@@ -7269,7 +7289,7 @@ snapshots:
 
   '@types/amqplib@0.10.8':
     dependencies:
-      '@types/node': 25.8.0
+      '@types/node': 25.9.1
 
   '@types/aws-lambda@8.10.161': {}
 
@@ -7288,7 +7308,7 @@ snapshots:
 
   '@types/cors@2.8.19':
     dependencies:
-      '@types/node': 25.8.0
+      '@types/node': 25.9.1
 
   '@types/deep-eql@4.0.2': {}
 
@@ -7307,10 +7327,6 @@ snapshots:
   '@types/mysql@2.15.27':
     dependencies:
       '@types/node': 25.9.1
-
-  '@types/node@25.8.0':
-    dependencies:
-      undici-types: 7.24.6
 
   '@types/node@25.9.1':
     dependencies:
@@ -7346,7 +7362,7 @@ snapshots:
 
   '@types/ws@8.18.1':
     dependencies:
-      '@types/node': 25.8.0
+      '@types/node': 25.9.1
 
   '@types/zen-observable@0.8.3': {}
 
@@ -7364,7 +7380,7 @@ snapshots:
       obug: 2.1.1
       std-env: 4.1.0
       tinyrainbow: 3.1.0
-      vitest: 4.1.6(@opentelemetry/api@1.9.1)(@types/node@25.8.0)(@vitest/coverage-v8@4.1.6)(msw@2.14.6(@types/node@25.8.0)(typescript@6.0.3))(vite@8.0.13(@types/node@25.8.0)(jiti@2.7.0)(yaml@2.9.0))
+      vitest: 4.1.6(@opentelemetry/api@1.9.1)(@types/node@25.9.1)(@vitest/coverage-v8@4.1.6)(msw@2.14.6(@types/node@25.9.1)(typescript@6.0.3))(vite@8.0.13(@types/node@25.9.1)(jiti@2.7.0)(yaml@2.9.0))
 
   '@vitest/expect@4.1.6':
     dependencies:
@@ -7375,14 +7391,14 @@ snapshots:
       chai: 6.2.2
       tinyrainbow: 3.1.0
 
-  '@vitest/mocker@4.1.6(msw@2.14.6(@types/node@25.8.0)(typescript@6.0.3))(vite@8.0.13(@types/node@25.8.0)(jiti@2.7.0)(yaml@2.9.0))':
+  '@vitest/mocker@4.1.6(msw@2.14.6(@types/node@25.9.1)(typescript@6.0.3))(vite@8.0.13(@types/node@25.9.1)(jiti@2.7.0)(yaml@2.9.0))':
     dependencies:
       '@vitest/spy': 4.1.6
       estree-walker: 3.0.3
       magic-string: 0.30.21
     optionalDependencies:
-      msw: 2.14.6(@types/node@25.8.0)(typescript@6.0.3)
-      vite: 8.0.13(@types/node@25.8.0)(jiti@2.7.0)(yaml@2.9.0)
+      msw: 2.14.6(@types/node@25.9.1)(typescript@6.0.3)
+      vite: 8.0.13(@types/node@25.9.1)(jiti@2.7.0)(yaml@2.9.0)
 
   '@vitest/pretty-format@4.1.6':
     dependencies:
@@ -7761,7 +7777,7 @@ snapshots:
 
   destroyable-server@1.1.1:
     dependencies:
-      '@types/node': 25.8.0
+      '@types/node': 25.9.1
 
   detect-libc@2.1.2: {}
 
@@ -8630,7 +8646,7 @@ snapshots:
       '@peculiar/asn1-x509-attr': 2.6.1
       '@peculiar/x509': 1.14.3
       '@types/cors': 2.8.19
-      '@types/node': 25.8.0
+      '@types/node': 25.9.1
       async-mutex: 0.5.0
       base64-arraybuffer: 1.0.2
       cacheable-lookup: 6.1.0
@@ -8687,9 +8703,9 @@ snapshots:
     optionalDependencies:
       msgpackr-extract: 3.0.3
 
-  msw@2.14.6(@types/node@25.8.0)(typescript@6.0.3):
+  msw@2.14.6(@types/node@25.9.1)(typescript@6.0.3):
     dependencies:
-      '@inquirer/confirm': 6.0.13(@types/node@25.8.0)
+      '@inquirer/confirm': 6.0.13(@types/node@25.9.1)
       '@mswjs/interceptors': 0.41.9
       '@open-draft/deferred-promise': 3.0.0
       '@types/statuses': 2.0.6
@@ -9027,7 +9043,7 @@ snapshots:
       '@protobufjs/path': 1.1.2
       '@protobufjs/pool': 1.1.0
       '@protobufjs/utf8': 1.1.1
-      '@types/node': 25.8.0
+      '@types/node': 25.9.1
       long: 5.3.2
 
   protobufjs@7.6.0:
@@ -9057,7 +9073,7 @@ snapshots:
       '@protobufjs/path': 1.1.2
       '@protobufjs/pool': 1.1.0
       '@protobufjs/utf8': 1.1.1
-      '@types/node': 25.8.0
+      '@types/node': 25.9.1
       long: 5.3.2
 
   proxy-addr@2.0.7:
@@ -9097,7 +9113,7 @@ snapshots:
 
   read-tls-client-hello@2.0.0:
     dependencies:
-      '@types/node': 25.8.0
+      '@types/node': 25.9.1
 
   readable-stream@2.3.8:
     dependencies:
@@ -9338,7 +9354,7 @@ snapshots:
 
   split2@4.2.0: {}
 
-  sqs-consumer@14.2.8(@aws-sdk/client-sqs@3.1047.0):
+  sqs-consumer@15.0.1(@aws-sdk/client-sqs@3.1047.0):
     dependencies:
       '@aws-sdk/client-sqs': 3.1047.0
       debug: 4.4.3
@@ -9551,7 +9567,7 @@ snapshots:
 
   vary@1.1.2: {}
 
-  vite@8.0.13(@types/node@25.8.0)(jiti@2.7.0)(yaml@2.9.0):
+  vite@8.0.13(@types/node@25.9.1)(jiti@2.7.0)(yaml@2.9.0):
     dependencies:
       lightningcss: 1.32.0
       picomatch: 4.0.4
@@ -9559,15 +9575,15 @@ snapshots:
       rolldown: 1.0.1
       tinyglobby: 0.2.16
     optionalDependencies:
-      '@types/node': 25.8.0
+      '@types/node': 25.9.1
       fsevents: 2.3.3
       jiti: 2.7.0
       yaml: 2.9.0
 
-  vitest@4.1.6(@opentelemetry/api@1.9.1)(@types/node@25.8.0)(@vitest/coverage-v8@4.1.6)(msw@2.14.6(@types/node@25.8.0)(typescript@6.0.3))(vite@8.0.13(@types/node@25.8.0)(jiti@2.7.0)(yaml@2.9.0)):
+  vitest@4.1.6(@opentelemetry/api@1.9.1)(@types/node@25.9.1)(@vitest/coverage-v8@4.1.6)(msw@2.14.6(@types/node@25.9.1)(typescript@6.0.3))(vite@8.0.13(@types/node@25.9.1)(jiti@2.7.0)(yaml@2.9.0)):
     dependencies:
       '@vitest/expect': 4.1.6
-      '@vitest/mocker': 4.1.6(msw@2.14.6(@types/node@25.8.0)(typescript@6.0.3))(vite@8.0.13(@types/node@25.8.0)(jiti@2.7.0)(yaml@2.9.0))
+      '@vitest/mocker': 4.1.6(msw@2.14.6(@types/node@25.9.1)(typescript@6.0.3))(vite@8.0.13(@types/node@25.9.1)(jiti@2.7.0)(yaml@2.9.0))
       '@vitest/pretty-format': 4.1.6
       '@vitest/runner': 4.1.6
       '@vitest/snapshot': 4.1.6
@@ -9584,11 +9600,11 @@ snapshots:
       tinyexec: 1.1.2
       tinyglobby: 0.2.16
       tinyrainbow: 3.1.0
-      vite: 8.0.13(@types/node@25.8.0)(jiti@2.7.0)(yaml@2.9.0)
+      vite: 8.0.13(@types/node@25.9.1)(jiti@2.7.0)(yaml@2.9.0)
       why-is-node-running: 2.3.0
     optionalDependencies:
       '@opentelemetry/api': 1.9.1
-      '@types/node': 25.8.0
+      '@types/node': 25.9.1
       '@vitest/coverage-v8': 4.1.6(vitest@4.1.6)
     transitivePeerDependencies:
       - msw

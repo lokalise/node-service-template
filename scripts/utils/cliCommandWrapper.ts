@@ -1,6 +1,6 @@
+import { randomUUIDv7 } from 'node:crypto'
 import { type ParseArgsOptionsConfig, parseArgs } from 'node:util'
 import type { RequestContext } from '@lokalise/fastify-extras'
-import { generateMonotonicUuid } from '@lokalise/id-utils'
 import { isError, stringValueSerializer } from '@lokalise/node-core'
 import { ENABLE_ALL } from 'opinionated-machine'
 import pino from 'pino'
@@ -61,7 +61,7 @@ export const cliCommandWrapper = async <ArgsSchema extends z.Schema | undefined>
     jobQueuesEnabled: ENABLE_ALL,
   })
 
-  const requestId = generateMonotonicUuid()
+  const requestId = randomUUIDv7()
   const reqContext: RequestContext = {
     reqId: requestId,
     logger: app.diContainer.cradle.logger.child({

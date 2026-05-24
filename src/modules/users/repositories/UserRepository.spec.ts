@@ -1,5 +1,5 @@
+import { randomUUIDv7 } from 'node:crypto'
 import type { Cradle } from '@fastify/awilix'
-import { generateUuid7 } from '@lokalise/id-utils'
 import type { AwilixContainer } from 'awilix'
 import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest'
 
@@ -29,7 +29,7 @@ describe('UserRepository', () => {
 
   describe('getUser', () => {
     it('Returns null for non-existing user', async () => {
-      const result = await userRepository.getUser(generateUuid7())
+      const result = await userRepository.getUser(randomUUIDv7())
 
       expect(result).toBeNull()
     })
@@ -37,7 +37,7 @@ describe('UserRepository', () => {
     it('Returns value for existing user', async () => {
       const user = await userRepository.createUser({
         ...TEST_USER_1,
-        id: generateUuid7(),
+        id: randomUUIDv7(),
       })
 
       const result = await userRepository.getUser(user.id)
@@ -76,7 +76,7 @@ describe('UserRepository', () => {
     })
 
     it('returns null for non-existing user to delete', async () => {
-      const deletionResult = await userRepository.deleteUser(generateUuid7())
+      const deletionResult = await userRepository.deleteUser(randomUUIDv7())
 
       expect(deletionResult).toBeNull()
     })
@@ -99,7 +99,7 @@ describe('UserRepository', () => {
     })
 
     it('returns null for non-existing user to update', async () => {
-      const updatedUser = await userRepository.updateUser(generateUuid7(), {
+      const updatedUser = await userRepository.updateUser(randomUUIDv7(), {
         name: 'Hello world!',
       })
 

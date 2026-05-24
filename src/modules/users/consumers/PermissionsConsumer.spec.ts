@@ -1,5 +1,5 @@
+import { randomUUIDv7 } from 'node:crypto'
 import type { Cradle } from '@fastify/awilix'
-import { generateUuid7 } from '@lokalise/id-utils'
 import { type MessagePublishType, waitAndRetry } from '@message-queue-toolkit/core'
 import type { Channel } from 'amqplib'
 import type { AwilixContainer } from 'awilix'
@@ -18,7 +18,7 @@ import type { PermissionsService } from '../services/PermissionsService.ts'
 import { PermissionConsumer } from './PermissionConsumer.ts'
 import type { PermissionsMessages } from './permissionsMessageSchemas.ts'
 
-const userIds = [generateUuid7(), generateUuid7(), generateUuid7()]
+const userIds = [randomUUIDv7(), randomUUIDv7(), randomUUIDv7()]
 const perms: [string, ...string[]] = ['perm1', 'perm2']
 const testRequestContext = createRequestContext()
 

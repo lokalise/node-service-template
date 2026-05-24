@@ -1,7 +1,7 @@
 # syntax=docker/dockerfile:1
 
 # ---- Base Node ----
-FROM node:24.15.0-trixie-slim AS base
+FROM node:24.16.0-trixie-slim AS base
 
 RUN set -ex && \
     apt-get update && \
