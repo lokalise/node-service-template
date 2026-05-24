@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.11.0] - 2026-05-24
+
+- Bump minimum Node.js to `>=24.16.0` and Docker base image to `node:24.16.0-trixie-slim` to pick up native `crypto.randomUUIDv7` (Node 24.16+)
+- Replace `generateUuid7` from `@lokalise/id-utils` with native `crypto.randomUUIDv7` in `src/db/schema/{user,post}.ts` and the affected specs; replace `generateMonotonicUuid` with `randomUUIDv7` for the per-invocation CLI request id in `scripts/utils/cliCommandWrapper.ts`
+- Drop `@lokalise/id-utils` as a direct dependency (still pulled transitively via `@lokalise/background-jobs-common`)
+- Add `src/types/node-crypto.d.ts` ambient declaration for `crypto.randomUUIDv7` until `@types/node` ships the typing; bump `@types/node` to `^25.9.1`
+- Bump `packageManager` from `pnpm@10.18.2` to `pnpm@11.2.2`; pnpm 11 auto-added an `allowBuilds:` entry for `msw` in `pnpm-workspace.yaml` that needs an explicit `true`/`false`
+- Refresh `README.md` to state `node >= 24` (was stale `node >= 22`)
+
 ## [1.10.0] - 2026-04-28
 
 - Upgrade OpenAPI spec to 3.1.0 and set `zodToJsonConfig.target` to `draft-2020-12` in `createJsonSchemaTransform`; fixes nullable objects and arrays being incorrectly described in Scalar API reference docs
