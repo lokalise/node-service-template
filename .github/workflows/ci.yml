@@ -9,7 +9,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [24.x]
+        node-version: [24.16, 26.x]
 
     steps:
       - uses: actions/checkout@v6
