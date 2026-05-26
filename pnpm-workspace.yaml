@@ -2,5 +2,6 @@ packages:
   - packages/*
 allowBuilds:
   msw: false
+  protobufjs: false
 minimumReleaseAgeExclude:
   - '@message-queue-toolkit/sns@25.0.1'

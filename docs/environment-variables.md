@@ -57,8 +57,9 @@
 ## App Metrics
 
 - `METRICS_ENABLED` (optional)  
-  Type: `string`  
-  Description: Whether to enable Prometheus metrics collection
+  Type: `boolean`  
+  Description: Whether to enable Prometheus metrics collection  
+  Default: `true`
 
 ## Db
 
@@ -91,8 +92,9 @@
   Description: Redis authentication password
 
 - `REDIS_USE_TLS` (optional)  
-  Type: `string`  
-  Description: Whether to use TLS/SSL for Redis connection
+  Type: `boolean`  
+  Description: Whether to use TLS/SSL for Redis connection  
+  Default: `true`
 
 - `REDIS_COMMAND_TIMEOUT` (optional)  
   Type: `integer`  
@@ -129,8 +131,9 @@
   Description: Scheduler Redis authentication password
 
 - `SCHEDULER_REDIS_USE_TLS` (optional)  
-  Type: `string`  
-  Description: Whether to use TLS/SSL for scheduler Redis connection
+  Type: `boolean`  
+  Description: Whether to use TLS/SSL for scheduler Redis connection  
+  Default: `true`
 
 - `SCHEDULER_REDIS_COMMAND_TIMEOUT` (optional)  
   Type: `integer`  
@@ -168,8 +171,9 @@
   Default: ``
 
 - `AMQP_USE_TLS` (optional)  
-  Type: `string`  
-  Description: Whether to use TLS/SSL for AMQP connection
+  Type: `boolean`  
+  Description: Whether to use TLS/SSL for AMQP connection  
+  Default: `true`
 
 ## Aws
 
@@ -234,8 +238,14 @@
 ## Vendors Opentelemetry
 
 - `OTEL_ENABLED` (optional)  
-  Type: `string`  
-  Description: Whether to enable OpenTelemetry instrumentation  
+  Type: `boolean`  
+  Description: Whether to enable OpenTelemetry instrumentation    
+  Default: `true`
+
+- `OTEL_CONSOLE_SPANS_ENABLED` (optional)  
+  Type: `boolean`  
+  Description: Print OpenTelemetry spans to stdout for local debugging (forced off in production)  
+  Default: `false`
 
 - `OTEL_RESOURCE_ATTRIBUTES` (optional)  
   Type: `string`  
@@ -250,8 +260,9 @@
 ## Vendors Bugsnag
 
 - `BUGSNAG_ENABLED` (optional)  
-  Type: `string`  
-  Description: Whether to send errors to Bugsnag
+  Type: `boolean`  
+  Description: Whether to send errors to Bugsnag  
+  Default: `true`
 
 - `BUGSNAG_KEY` (optional)  
   Type: `string`  
@@ -264,8 +275,9 @@
 ## Vendors Amplitude
 
 - `AMPLITUDE_ENABLED` (optional)  
-  Type: `string`  
-  Description: Whether to track analytics with Amplitude
+  Type: `boolean`  
+  Description: Whether to track analytics with Amplitude  
+  Default: `false`
 
 - `AMPLITUDE_KEY` (optional)  
   Type: `string`  

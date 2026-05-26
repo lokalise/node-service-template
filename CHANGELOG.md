@@ -1,5 +1,16 @@
 # Changelog
 
+## [1.12.0] - 2026-05-26
+
+- Bump all `package.json` dependencies to latest allowed by pnpm's `minimum-release-age` filter; notable major bumps: `amqplib` 1 → 2, `awilix-manager` 6 → 7, `toad-scheduler` 3 → 4, `@lokalise/backend-http-client` 10 → 11, `@lokalise/fastify-extras` 30 → 31, plus the OTel ecosystem (`@fastify/otel` 0.17.1 → 0.18.1, `@opentelemetry/exporter-trace-otlp-grpc` 0.210.0 → 0.218.0)
+- Port `src/integrations/commonRetryConfig.ts` to the reshaped retry API in `@lokalise/backend-http-client@11` (`maxAttempts`/`delayResolver` → `maxRetries`/inline `delay` callback)
+- Add `OTEL_CONSOLE_SPANS_ENABLED` env var to print OTel spans to stdout for local debugging; forced off in `src/server.ts` when `NODE_ENV=production` so span payloads never leak to stdout in deployed environments
+- Add `src/infrastructure/openTelemetryBootstrap.spec.ts` — integration test that boots the real `getApp()` with an `InMemorySpanExporter` wired through `initOpenTelemetry`'s `spanProcessors` option, asserts the top-level `@fastify/otel` `request` span is emitted with the expected `http.*` attributes (uses `vi.waitFor` to avoid timing flakiness)
+- Add `src/integrations/commonRetryConfig.spec.ts` covering the inline `delay` function
+- Add `@opentelemetry/sdk-trace-base` as a devDependency (for `InMemorySpanExporter` / `SimpleSpanProcessor`)
+- Mark `protobufjs` as `allowBuilds: false` in `pnpm-workspace.yaml` (matches the existing `msw` opt-out pattern) for the new transitive build script
+- Align `packages/api-contracts/package.json` peerDependencies with devDependencies (`@lokalise/api-contracts ^6.11.0`, `zod ^4.4.3`)
+
 ## [1.11.0] - 2026-05-24
 
 - Bump minimum Node.js to `>=24.16.0` and Docker base image to `node:24.16.0-trixie-slim` to pick up native `crypto.randomUUIDv7` (Node 24.16+)
