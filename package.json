@@ -1,6 +1,6 @@
 {
     "name": "node-service-template",
-    "version": "1.12.0",
+    "version": "1.12.1",
     "engines": {
         "node": ">=24.16.0"
     },
@@ -55,7 +55,7 @@
         "@lokalise/fastify-extras": "^31.0.0",
         "@lokalise/healthcheck-utils": "^6.0.0",
         "@lokalise/node-core": "^14.8.1",
-        "@lokalise/opentelemetry-fastify-bootstrap": "^2.2.0",
+        "@lokalise/opentelemetry-fastify-bootstrap": "^3.0.0",
         "@lokalise/universal-ts-utils": "^4.10.0",
         "@lokalise/zod-extras": "^3.0.2",
         "@message-queue-toolkit/amqp": "^24.1.0",

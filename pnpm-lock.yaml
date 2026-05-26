@@ -69,8 +69,8 @@ importers:
         specifier: ^14.8.1
         version: 14.8.1(zod@4.4.3)
       '@lokalise/opentelemetry-fastify-bootstrap':
-        specifier: ^2.2.0
-        version: 2.2.0(@fastify/otel@0.18.1(@opentelemetry/api@1.9.1))(@opentelemetry/auto-instrumentations-node@0.76.0(@opentelemetry/api@1.9.1)(@opentelemetry/core@2.7.1(@opentelemetry/api@1.9.1)))(@opentelemetry/exporter-trace-otlp-grpc@0.218.0(@opentelemetry/api@1.9.1))(@opentelemetry/sdk-node@0.218.0(@opentelemetry/api@1.9.1))(@opentelemetry/sdk-trace-base@2.7.1(@opentelemetry/api@1.9.1))(fastify@5.8.5)
+        specifier: ^3.0.0
+        version: 3.0.0(@fastify/otel@0.18.1(@opentelemetry/api@1.9.1))(@opentelemetry/auto-instrumentations-node@0.76.0(@opentelemetry/api@1.9.1)(@opentelemetry/core@2.7.1(@opentelemetry/api@1.9.1)))(@opentelemetry/exporter-trace-otlp-grpc@0.218.0(@opentelemetry/api@1.9.1))(@opentelemetry/sdk-node@0.218.0(@opentelemetry/api@1.9.1))(@opentelemetry/sdk-trace-base@2.7.1(@opentelemetry/api@1.9.1))(fastify@5.8.5)
       '@lokalise/universal-ts-utils':
         specifier: ^4.10.0
         version: 4.10.0
@@ -1027,14 +1027,14 @@ packages:
     peerDependencies:
       zod: '>=3.25.76 <5.0.0'
 
-  '@lokalise/opentelemetry-fastify-bootstrap@2.2.0':
-    resolution: {integrity: sha512-X+hQLyF5DYZjWHLZ9sKSbfZ2Omp4FwoCfv+bbAty8EUup6FkHYZddBhyj3p/PjX/Zau/rQl/dbhpwBrxWgwFEQ==}
+  '@lokalise/opentelemetry-fastify-bootstrap@3.0.0':
+    resolution: {integrity: sha512-lASlgyH2980rd9Ejl8sgEdVf/8qt9yqzmS5B1AdS7OteLNYX+P7FkaBEZ2hwlYVMZQEPrp+trQjHJLjHds6+cA==}
     peerDependencies:
-      '@fastify/otel': 0.17.1
-      '@opentelemetry/auto-instrumentations-node': ^0.68.0
-      '@opentelemetry/exporter-trace-otlp-grpc': ^0.210.0
-      '@opentelemetry/sdk-node': ^0.210.0
-      '@opentelemetry/sdk-trace-base': ^2.4.0
+      '@fastify/otel': 0.18.1
+      '@opentelemetry/auto-instrumentations-node': ^0.76.0
+      '@opentelemetry/exporter-trace-otlp-grpc': ^0.218.0
+      '@opentelemetry/sdk-node': ^0.218.0
+      '@opentelemetry/sdk-trace-base': ^2.7.1
       fastify: ^5.0.0
 
   '@lokalise/tsconfig@4.0.0':
@@ -5181,7 +5181,7 @@ snapshots:
       tslib: 2.8.1
       zod: 4.4.3
 
-  '@lokalise/opentelemetry-fastify-bootstrap@2.2.0(@fastify/otel@0.18.1(@opentelemetry/api@1.9.1))(@opentelemetry/auto-instrumentations-node@0.76.0(@opentelemetry/api@1.9.1)(@opentelemetry/core@2.7.1(@opentelemetry/api@1.9.1)))(@opentelemetry/exporter-trace-otlp-grpc@0.218.0(@opentelemetry/api@1.9.1))(@opentelemetry/sdk-node@0.218.0(@opentelemetry/api@1.9.1))(@opentelemetry/sdk-trace-base@2.7.1(@opentelemetry/api@1.9.1))(fastify@5.8.5)':
+  '@lokalise/opentelemetry-fastify-bootstrap@3.0.0(@fastify/otel@0.18.1(@opentelemetry/api@1.9.1))(@opentelemetry/auto-instrumentations-node@0.76.0(@opentelemetry/api@1.9.1)(@opentelemetry/core@2.7.1(@opentelemetry/api@1.9.1)))(@opentelemetry/exporter-trace-otlp-grpc@0.218.0(@opentelemetry/api@1.9.1))(@opentelemetry/sdk-node@0.218.0(@opentelemetry/api@1.9.1))(@opentelemetry/sdk-trace-base@2.7.1(@opentelemetry/api@1.9.1))(fastify@5.8.5)':
     dependencies:
       '@fastify/otel': 0.18.1(@opentelemetry/api@1.9.1)
       '@opentelemetry/auto-instrumentations-node': 0.76.0(@opentelemetry/api@1.9.1)(@opentelemetry/core@2.7.1(@opentelemetry/api@1.9.1))
