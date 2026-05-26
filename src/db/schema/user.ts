@@ -1,4 +1,4 @@
-import { generateUuid7 } from '@lokalise/id-utils'
+import { randomUUIDv7 } from 'node:crypto'
 import { index, integer, pgSchema, uniqueIndex, uuid, varchar } from 'drizzle-orm/pg-core'
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod'
 import { z } from 'zod/v4'
@@ -8,7 +8,7 @@ export const userSchema = pgSchema('user')
 export const user = userSchema.table(
   'user',
   {
-    id: uuid('id').primaryKey().notNull().$defaultFn(generateUuid7),
+    id: uuid('id').primaryKey().notNull().$defaultFn(randomUUIDv7),
     age: integer('age'),
     email: varchar('email').notNull(),
     name: varchar('name').notNull(),
@@ -23,7 +23,7 @@ export const user = userSchema.table(
 export const profile = userSchema.table(
   'profile',
   {
-    id: uuid('id').primaryKey().notNull().$defaultFn(generateUuid7),
+    id: uuid('id').primaryKey().notNull().$defaultFn(randomUUIDv7),
     bio: varchar('bio'),
     age: integer('age'),
     email: varchar('email').notNull(),

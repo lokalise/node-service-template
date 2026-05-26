@@ -1,4 +1,4 @@
-import { generateUuid7 } from '@lokalise/id-utils'
+import { randomUUIDv7 } from 'node:crypto'
 import { boolean, index, pgSchema, timestamp, uuid, varchar } from 'drizzle-orm/pg-core'
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod'
 import type z from 'zod/v4'
@@ -8,7 +8,7 @@ export const postSchema = pgSchema('post')
 export const post = postSchema.table(
   'post',
   {
-    id: uuid('id').primaryKey().notNull().$defaultFn(generateUuid7),
+    id: uuid('id').primaryKey().notNull().$defaultFn(randomUUIDv7),
     createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
     updatedAt: timestamp('updated_at', { withTimezone: true }),
     title: varchar('title', { length: 256 }).notNull(),
