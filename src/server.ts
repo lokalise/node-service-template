@@ -5,6 +5,11 @@ import { startServer } from './serverInternal.ts'
 if (process.env.OTEL_ENABLED !== 'false') {
   initOpenTelemetry({
     skippedPaths: ['/health', '/ready', '/live', '/metrics', '/'],
+    // Local-only debugging aid. Forced off in production so span payloads
+    // never leak to stdout in deployed environments.
+    consoleSpans:
+      process.env.NODE_ENV !== 'production' &&
+      process.env.OTEL_CONSOLE_SPANS_ENABLED?.toLowerCase() === 'true',
   })
 }
 

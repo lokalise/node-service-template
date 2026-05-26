@@ -227,6 +227,15 @@ const envSchema = {
         'OTEL_ENABLED',
         z.stringbool().default(true).describe('Whether to enable OpenTelemetry instrumentation  '),
       ),
+      consoleSpansEnabled: envvar(
+        'OTEL_CONSOLE_SPANS_ENABLED',
+        z
+          .stringbool()
+          .default(false)
+          .describe(
+            'Print OpenTelemetry spans to stdout for local debugging (forced off in production)',
+          ),
+      ),
       _resourceAttributes: envvar(
         'OTEL_RESOURCE_ATTRIBUTES',
         z
