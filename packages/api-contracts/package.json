@@ -19,9 +19,9 @@
         "prepublishOnly": "pnpm run clean && pnpm run build"
     },
     "peerDependencies": {
-        "@lokalise/api-contracts": "^6.9.0",
+        "@lokalise/api-contracts": "^6.11.0",
         "@lokalise/zod-extras": "^3.0.2",
-        "zod": "^4.3.6"
+        "zod": "^4.4.3"
     },
     "devDependencies": {
         "@lokalise/api-contracts": "^6.11.0",
