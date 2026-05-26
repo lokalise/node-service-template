@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.12.1] - 2026-05-26
+
+- Bump `@lokalise/opentelemetry-fastify-bootstrap` from `^2.2.0` to `^3.0.0`; v3 is a peer-dependency-only major (it now requires `@fastify/otel 0.18.1`, `@opentelemetry/auto-instrumentations-node ^0.76.0`, `@opentelemetry/sdk-node`/`exporter-trace-otlp-grpc ^0.218.0`, `@opentelemetry/sdk-trace-base ^2.7.1` — all already pinned here), with no public API changes to `initOpenTelemetry`/`gracefulOtelShutdown`
+
 ## [1.12.0] - 2026-05-26
 
 - Bump all `package.json` dependencies to latest allowed by pnpm's `minimum-release-age` filter; notable major bumps: `amqplib` 1 → 2, `awilix-manager` 6 → 7, `toad-scheduler` 3 → 4, `@lokalise/backend-http-client` 10 → 11, `@lokalise/fastify-extras` 30 → 31, plus the OTel ecosystem (`@fastify/otel` 0.17.1 → 0.18.1, `@opentelemetry/exporter-trace-otlp-grpc` 0.210.0 → 0.218.0)
