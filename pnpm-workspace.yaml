@@ -5,3 +5,4 @@ allowBuilds:
   protobufjs: false
 minimumReleaseAgeExclude:
   - '@message-queue-toolkit/sns@25.0.1'
+  - '@lokalise/opentelemetry-fastify-bootstrap@3.0.0'
