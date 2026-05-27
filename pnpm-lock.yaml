@@ -128,9 +128,6 @@ importers:
       drizzle-orm:
         specifier: 1.0.0-rc.3
         version: 1.0.0-rc.3(@opentelemetry/api@1.9.1)(@types/pg@8.15.6)(postgres@3.4.9)(valibot@1.4.1(typescript@6.0.3))(zod@4.4.3)
-      drizzle-zod:
-        specifier: 1.0.0-beta.14-56703c9
-        version: 1.0.0-beta.14-56703c9(drizzle-orm@1.0.0-rc.3(@opentelemetry/api@1.9.1)(@types/pg@8.15.6)(postgres@3.4.9)(valibot@1.4.1(typescript@6.0.3))(zod@4.4.3))(zod@4.4.3)
       envase:
         specifier: ^1.5.0
         version: 1.5.0
@@ -2670,12 +2667,6 @@ packages:
         optional: true
       zod:
         optional: true
-
-  drizzle-zod@1.0.0-beta.14-56703c9:
-    resolution: {integrity: sha512-sipAZBLTu+Y6IU9275T3a682dXp7xHevbodsw7OgHSEg8FOht2TpjZFn3lEIlrV97yXdIlez4/v+0LXyJlgBLg==}
-    peerDependencies:
-      drizzle-orm: '>=1.0.0-beta.2'
-      zod: ^3.25.0 || ^4.0.0
 
   dunder-proto@1.0.1:
     resolution: {integrity: sha512-KIN/nDJBQRcXw0MLVhZE9iQHmG68qAVIBg9CqmUYjmQIhgij9U5MFvrqkUL5FbtyyzZuOeOt0zdeRe4UY7ct+A==}
@@ -6934,11 +6925,6 @@ snapshots:
       '@types/pg': 8.15.6
       postgres: 3.4.9
       valibot: 1.4.1(typescript@6.0.3)
-      zod: 4.4.3
-
-  drizzle-zod@1.0.0-beta.14-56703c9(drizzle-orm@1.0.0-rc.3(@opentelemetry/api@1.9.1)(@types/pg@8.15.6)(postgres@3.4.9)(valibot@1.4.1(typescript@6.0.3))(zod@4.4.3))(zod@4.4.3):
-    dependencies:
-      drizzle-orm: 1.0.0-rc.3(@opentelemetry/api@1.9.1)(@types/pg@8.15.6)(postgres@3.4.9)(valibot@1.4.1(typescript@6.0.3))(zod@4.4.3)
       zod: 4.4.3
 
   dunder-proto@1.0.1:
