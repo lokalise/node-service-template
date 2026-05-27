@@ -1,6 +1,6 @@
 {
     "name": "node-service-template",
-    "version": "1.12.1",
+    "version": "1.13.0",
     "engines": {
         "node": ">=24.16.0"
     },
