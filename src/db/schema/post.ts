@@ -1,6 +1,6 @@
 import { randomUUIDv7 } from 'node:crypto'
 import { boolean, index, pgSchema, timestamp, uuid, varchar } from 'drizzle-orm/pg-core'
-import { createInsertSchema, createSelectSchema } from 'drizzle-zod'
+import { createInsertSchema, createSelectSchema } from 'drizzle-orm/zod'
 import type z from 'zod/v4'
 
 export const postSchema = pgSchema('post')
