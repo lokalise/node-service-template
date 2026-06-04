@@ -82,7 +82,7 @@
         "fastify-no-icon": "^7.0.0",
         "fastify-plugin": "^5.1.0",
         "fastify-type-provider-zod": "^6.1.0",
-        "ioredis": "^5.10.1",
+        "ioredis": "^5.11.0",
         "layered-loader": "^14.4.0",
         "opinionated-machine": "^6.20.0",
         "pino": "^10.3.1",
