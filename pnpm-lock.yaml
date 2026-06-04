@@ -153,8 +153,8 @@ importers:
         specifier: ^5.10.1
         version: 5.10.1
       layered-loader:
-        specifier: ^14.3.1
-        version: 14.3.1
+        specifier: ^14.4.0
+        version: 14.4.0
       opinionated-machine:
         specifier: ^6.20.0
         version: 6.20.0(@lokalise/api-contracts@6.11.0(zod@4.4.3))(@lokalise/fastify-api-contracts@5.3.1(@lokalise/api-contracts@6.11.0(zod@4.4.3))(@lokalise/node-core@14.8.1(zod@4.4.3))(fastify@5.8.5)(zod@4.4.3))(@lokalise/node-core@14.8.1(zod@4.4.3))(awilix-manager@7.0.0(awilix@13.0.3))(awilix@13.0.3)(fastify-type-provider-zod@6.1.0(@fastify/swagger@9.7.0)(fastify@5.8.5)(openapi-types@12.1.3)(zod@4.4.3))(fastify@5.8.5)(zod@4.4.3)
@@ -3191,9 +3191,9 @@ packages:
     resolution: {integrity: sha512-Qush0uP+G8ZScpGMZvHUiRfI0YBWuB3gVBYlI0v0vvOJt5FLicco+IkP0a50LqTTQhmts/m6tP5SWE+USyIvcQ==}
     engines: {node: '>=12.20'}
 
-  layered-loader@14.3.1:
-    resolution: {integrity: sha512-y+3LvXOdnXfvUQkmOSz7uo14DGLUbHsXfUBlSuOumOhOa3XAMujcLytqqLgZqmz2J39jDEXkgkfZjP+v5mOs2A==}
-    engines: {node: '>=18'}
+  layered-loader@14.4.0:
+    resolution: {integrity: sha512-aaFuyxPDd04Ln6N/u3OtfhFlfhNEQuLSa1dZ+ZnJd7inCQXknuGbKlTOEXg6xqhB6VeVEhfnO6WgzVdU8JbolQ==}
+    engines: {node: '>=22'}
 
   layerr@3.0.0:
     resolution: {integrity: sha512-tv754Ki2dXpPVApOrjTyRo4/QegVb9eVFq4mjqp4+NM5NaX7syQvN5BBNfV/ZpAHCEHV24XdUVrBAoka4jt3pA==}
@@ -7545,7 +7545,7 @@ snapshots:
 
   junk@4.0.1: {}
 
-  layered-loader@14.3.1:
+  layered-loader@14.4.0:
     dependencies:
       ioredis: 5.10.1
       toad-cache: 3.7.1
