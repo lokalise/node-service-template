@@ -99,7 +99,7 @@
         "@biomejs/biome": "2.4.16",
         "@lokalise/biome-config": "^3.1.1",
         "@lokalise/tsconfig": "^4.0.0",
-        "@lokalise/universal-testing-utils": "^3.6.0",
+        "@lokalise/universal-testing-utils": "^3.8.0",
         "@opentelemetry/sdk-trace-base": "^2.7.1",
         "@readme/openapi-parser": "^6.1.1",
         "@types/amqplib": "^0.10.8",
