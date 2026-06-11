@@ -104,14 +104,14 @@
         "@readme/openapi-parser": "^6.1.1",
         "@types/amqplib": "^0.10.8",
         "@types/node": "^25.9.1",
-        "@vitest/coverage-v8": "^4.1.7",
+        "@vitest/coverage-v8": "^4.1.8",
         "cpy-cli": "^7.0.0",
         "cross-env": "^10.1.0",
         "fast-jwt": "^6.2.4",
         "fauxqs": "^2.7.0",
         "mockttp": "^4.4.2",
         "typescript": "^6.0.3",
-        "vitest": "^4.1.7",
+        "vitest": "^4.1.8",
         "yaml": "^2.9.0"
     },
     "optionalDependencies": {
