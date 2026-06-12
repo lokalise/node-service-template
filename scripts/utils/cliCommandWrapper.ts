@@ -69,7 +69,7 @@ export const cliCommandWrapper = async <ArgsSchema extends z.Schema | undefined>
     })
   } catch (err) {
     globalLogger.error(resolveGlobalErrorLogObject(err), `Failed to start ${cliCommandName}`)
-    process.exit(1)
+    return process.exit(1)
   }
 
   const requestId = randomUUIDv7()
