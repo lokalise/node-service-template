@@ -1,6 +1,9 @@
 import { afterEach, beforeEach, describe, expect, it, type MockInstance, vi } from 'vitest'
 import z from 'zod/v4'
+import { getApp } from '../../src/app.ts'
 import { cliCommandWrapper } from './cliCommandWrapper.ts'
+
+vi.mock('../../src/app.ts', { spy: true })
 
 describe('cliCommandWrapper', () => {
   let exitSpy: MockInstance
@@ -88,6 +91,19 @@ describe('cliCommandWrapper', () => {
     await cliCommandWrapper('command', () => {
       throw new Error()
     })
+    expect(exitSpy).toHaveBeenCalledWith(1)
+  })
+
+  it('should fail if app initialization fails', async () => {
+    vi.mocked(getApp).mockRejectedValueOnce(new Error('startup failure'))
+    // halt execution like the real process.exit, so the wrapper does not run past the catch
+    exitSpy.mockImplementation(() => {
+      throw new Error('process.exit called')
+    })
+
+    await expect(cliCommandWrapper('command', () => undefined)).rejects.toThrow(
+      'process.exit called',
+    )
     expect(exitSpy).toHaveBeenCalledWith(1)
   })
 })
