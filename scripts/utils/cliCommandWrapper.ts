@@ -1,7 +1,12 @@
 import { randomUUIDv7 } from 'node:crypto'
 import { type ParseArgsOptionsConfig, parseArgs } from 'node:util'
 import type { RequestContext } from '@lokalise/fastify-extras'
-import { isError, stringValueSerializer } from '@lokalise/node-core'
+import {
+  globalLogger,
+  isError,
+  resolveGlobalErrorLogObject,
+  stringValueSerializer,
+} from '@lokalise/node-core'
 import { ENABLE_ALL } from 'opinionated-machine'
 import pino from 'pino'
 import z from 'zod/v4'
@@ -52,14 +57,20 @@ export const cliCommandWrapper = async <ArgsSchema extends z.Schema | undefined>
   command: CliCommand<ArgsSchema>,
   argsSchema?: ArgsSchema,
 ): Promise<void> => {
-  const app = await getApp({
-    healthchecksEnabled: false,
-    monitoringEnabled: false,
-    periodicJobsEnabled: false,
-    messageQueueConsumersEnabled: false,
-    enqueuedJobWorkersEnabled: false,
-    jobQueuesEnabled: ENABLE_ALL,
-  })
+  let app: Awaited<ReturnType<typeof getApp>>
+  try {
+    app = await getApp({
+      healthchecksEnabled: false,
+      monitoringEnabled: false,
+      periodicJobsEnabled: false,
+      messageQueueConsumersEnabled: false,
+      enqueuedJobWorkersEnabled: false,
+      jobQueuesEnabled: ENABLE_ALL,
+    })
+  } catch (err) {
+    globalLogger.error(resolveGlobalErrorLogObject(err), `Failed to start ${cliCommandName}`)
+    process.exit(1)
+  }
 
   const requestId = randomUUIDv7()
   const reqContext: RequestContext = {
