@@ -4,6 +4,9 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+overrides:
+  ioredis: 5.11.1
+
 importers:
 
   .:
@@ -49,22 +52,22 @@ importers:
         version: 6.13.0(zod@4.4.3)
       '@lokalise/aws-config':
         specifier: ^9.0.0
-        version: 9.0.0(8d77fddacbdbb53a4e446c485fa0aeee)
+        version: 9.0.0(4a59be3348888123d45c19a0025f7379)
       '@lokalise/backend-http-client':
         specifier: ^11.2.0
         version: 11.2.0(@lokalise/api-contracts@6.13.0(zod@4.4.3))(@lokalise/node-core@14.8.1(zod@4.4.3))(zod@4.4.3)
       '@lokalise/background-jobs-common':
-        specifier: ^14.4.0
-        version: 14.4.0(bullmq@5.78.0)(ioredis@5.11.0)(pino@10.3.1)(toad-scheduler@4.0.1)(zod@4.4.3)
+        specifier: ^14.4.1
+        version: 14.4.1(bullmq@5.78.0)(ioredis@5.11.1)(pino@10.3.1)(toad-scheduler@4.0.1)(zod@4.4.3)
       '@lokalise/fastify-api-contracts':
         specifier: ^5.4.0
         version: 5.4.0(@lokalise/api-contracts@6.13.0(zod@4.4.3))(@lokalise/node-core@14.8.1(zod@4.4.3))(fastify@5.8.5)(zod@4.4.3)
       '@lokalise/fastify-extras':
         specifier: ^31.0.0
-        version: 31.0.0(@fastify/jwt@10.1.0)(@lokalise/api-contracts@6.13.0(zod@4.4.3))(@lokalise/background-jobs-common@14.4.0(bullmq@5.78.0)(ioredis@5.11.0)(pino@10.3.1)(toad-scheduler@4.0.1)(zod@4.4.3))(@lokalise/node-core@14.8.1(zod@4.4.3))(@opentelemetry/api@1.9.1)(bullmq@5.78.0)(dd-trace@5.103.0(@openfeature/server-sdk@1.21.0(@openfeature/core@1.10.0)))(fastify-type-provider-zod@6.1.0(@fastify/swagger@9.7.0)(fastify@5.8.5)(openapi-types@12.1.3)(zod@4.4.3))(fastify@5.8.5)(ioredis@5.11.0)(pino@10.3.1)(zod@4.4.3)
+        version: 31.0.0(@fastify/jwt@10.1.0)(@lokalise/api-contracts@6.13.0(zod@4.4.3))(@lokalise/background-jobs-common@14.4.1(bullmq@5.78.0)(ioredis@5.11.1)(pino@10.3.1)(toad-scheduler@4.0.1)(zod@4.4.3))(@lokalise/node-core@14.8.1(zod@4.4.3))(@opentelemetry/api@1.9.1)(bullmq@5.78.0)(dd-trace@5.103.0(@openfeature/server-sdk@1.21.0(@openfeature/core@1.10.0)))(fastify-type-provider-zod@6.1.0(@fastify/swagger@9.7.0)(fastify@5.8.5)(openapi-types@12.1.3)(zod@4.4.3))(fastify@5.8.5)(ioredis@5.11.1)(pino@10.3.1)(zod@4.4.3)
       '@lokalise/healthcheck-utils':
         specifier: ^6.0.0
-        version: 6.0.0(@lokalise/background-jobs-common@14.4.0(bullmq@5.78.0)(ioredis@5.11.0)(pino@10.3.1)(toad-scheduler@4.0.1)(zod@4.4.3))(ioredis@5.11.0)(prom-client@15.1.3)(toad-scheduler@4.0.1)(zod@4.4.3)
+        version: 6.0.0(@lokalise/background-jobs-common@14.4.1(bullmq@5.78.0)(ioredis@5.11.1)(pino@10.3.1)(toad-scheduler@4.0.1)(zod@4.4.3))(ioredis@5.11.1)(prom-client@15.1.3)(toad-scheduler@4.0.1)(zod@4.4.3)
       '@lokalise/node-core':
         specifier: ^14.8.1
         version: 14.8.1(zod@4.4.3)
@@ -79,22 +82,22 @@ importers:
         version: 3.0.2
       '@message-queue-toolkit/amqp':
         specifier: ^24.1.0
-        version: 24.1.0(@message-queue-toolkit/core@26.0.0(zod@4.4.3))(@message-queue-toolkit/schemas@7.1.0(zod@4.4.3))(amqplib@2.0.1)(zod@4.4.3)
+        version: 24.1.0(@message-queue-toolkit/core@26.1.0(zod@4.4.3))(@message-queue-toolkit/schemas@7.2.0(zod@4.4.3))(amqplib@2.0.1)(zod@4.4.3)
       '@message-queue-toolkit/core':
-        specifier: ^26.0.0
-        version: 26.0.0(zod@4.4.3)
+        specifier: ^26.1.0
+        version: 26.1.0(zod@4.4.3)
       '@message-queue-toolkit/metrics':
         specifier: ^4.4.2
-        version: 4.4.2(@message-queue-toolkit/core@26.0.0(zod@4.4.3))(prom-client@15.1.3)(zod@4.4.3)
+        version: 4.4.2(@message-queue-toolkit/core@26.1.0(zod@4.4.3))(prom-client@15.1.3)(zod@4.4.3)
       '@message-queue-toolkit/schemas':
-        specifier: ^7.1.0
-        version: 7.1.0(zod@4.4.3)
+        specifier: ^7.2.0
+        version: 7.2.0(zod@4.4.3)
       '@message-queue-toolkit/sns':
-        specifier: ^26.1.0
-        version: 26.1.0(@aws-sdk/client-sns@3.1061.0)(@aws-sdk/client-sqs@3.1061.0)(@aws-sdk/client-sts@3.1061.0)(@message-queue-toolkit/core@26.0.0(zod@4.4.3))(@message-queue-toolkit/schemas@7.1.0(zod@4.4.3))(@message-queue-toolkit/sqs@26.0.0(@aws-sdk/client-sqs@3.1061.0)(@message-queue-toolkit/core@26.0.0(zod@4.4.3))(zod@4.4.3))(zod@4.4.3)
+        specifier: ^26.2.0
+        version: 26.2.0(@aws-sdk/client-sns@3.1061.0)(@aws-sdk/client-sqs@3.1061.0)(@aws-sdk/client-sts@3.1061.0)(@message-queue-toolkit/core@26.1.0(zod@4.4.3))(@message-queue-toolkit/schemas@7.2.0(zod@4.4.3))(@message-queue-toolkit/sqs@26.1.0(@aws-sdk/client-sqs@3.1061.0)(@message-queue-toolkit/core@26.1.0(zod@4.4.3))(zod@4.4.3))(zod@4.4.3)
       '@message-queue-toolkit/sqs':
-        specifier: ^26.0.0
-        version: 26.0.0(@aws-sdk/client-sqs@3.1061.0)(@message-queue-toolkit/core@26.0.0(zod@4.4.3))(zod@4.4.3)
+        specifier: ^26.1.0
+        version: 26.1.0(@aws-sdk/client-sqs@3.1061.0)(@message-queue-toolkit/core@26.1.0(zod@4.4.3))(zod@4.4.3)
       '@node-service-template/api-contracts':
         specifier: workspace:*
         version: link:packages/api-contracts
@@ -108,8 +111,8 @@ importers:
         specifier: ^0.218.0
         version: 0.218.0(@opentelemetry/api@1.9.1)
       '@scalar/fastify-api-reference':
-        specifier: ^1.58.0
-        version: 1.58.0
+        specifier: ^1.59.3
+        version: 1.59.3
       amqplib:
         specifier: ^2.0.1
         version: 2.0.1
@@ -150,8 +153,8 @@ importers:
         specifier: ^6.1.0
         version: 6.1.0(@fastify/swagger@9.7.0)(fastify@5.8.5)(openapi-types@12.1.3)(zod@4.4.3)
       ioredis:
-        specifier: ^5.11.0
-        version: 5.11.0
+        specifier: 5.11.1
+        version: 5.11.1
       layered-loader:
         specifier: ^14.4.0
         version: 14.4.0
@@ -172,7 +175,7 @@ importers:
         version: 15.1.3
       redis-semaphore:
         specifier: ^5.7.0
-        version: 5.7.0(ioredis@5.11.0)
+        version: 5.7.0(ioredis@5.11.1)
       toad-scheduler:
         specifier: ^4.0.1
         version: 4.0.1
@@ -197,19 +200,16 @@ importers:
         version: 4.0.0
       '@lokalise/universal-testing-utils':
         specifier: ^3.8.0
-        version: 3.8.0(@lokalise/api-contracts@6.13.0(zod@4.4.3))(mockttp@4.4.2)(msw@2.14.6(@types/node@25.9.1)(typescript@6.0.3))(zod@4.4.3)
+        version: 3.8.0(@lokalise/api-contracts@6.13.0(zod@4.4.3))(mockttp@4.4.2)(msw@2.14.6(@types/node@25.9.3)(typescript@6.0.3))(zod@4.4.3)
       '@opentelemetry/sdk-trace-base':
         specifier: ^2.7.1
         version: 2.7.1(@opentelemetry/api@1.9.1)
       '@readme/openapi-parser':
         specifier: ^6.1.2
         version: 6.1.2(openapi-types@12.1.3)
-      '@types/amqplib':
-        specifier: ^0.10.8
-        version: 0.10.8
       '@types/node':
-        specifier: ^25.9.1
-        version: 25.9.1
+        specifier: ^25.9.3
+        version: 25.9.3
       '@vitest/coverage-v8':
         specifier: ^4.1.8
         version: 4.1.8(vitest@4.1.8)
@@ -233,7 +233,7 @@ importers:
         version: 6.0.3
       vitest:
         specifier: ^4.1.8
-        version: 4.1.8(@opentelemetry/api@1.9.1)(@types/node@25.9.1)(@vitest/coverage-v8@4.1.8)(msw@2.14.6(@types/node@25.9.1)(typescript@6.0.3))(vite@8.0.13(@types/node@25.9.1)(jiti@2.7.0)(yaml@2.9.0))
+        version: 4.1.8(@opentelemetry/api@1.9.1)(@types/node@25.9.3)(@vitest/coverage-v8@4.1.8)(msw@2.14.6(@types/node@25.9.3)(typescript@6.0.3))(vite@8.0.13(@types/node@25.9.3)(jiti@2.7.0)(yaml@2.9.0))
       yaml:
         specifier: ^2.9.0
         version: 2.9.0
@@ -922,9 +922,6 @@ packages:
   '@ioredis/commands@1.10.0':
     resolution: {integrity: sha512-UmeW7z4LfctwoQ5wkhVzgq8tXkreED2xZGpX+Bg+zA+WJFZCT6c062AfCK/Dfk81xZnnwdhJCUMkitihRaoC2Q==}
 
-  '@ioredis/commands@1.5.1':
-    resolution: {integrity: sha512-JH8ZL/ywcJyR9MmJ5BNqZllXNZQqQbnVZOqpPQqE1vHiFgAw4NHbvE0FOduNU8IX9babitBT46571OnPTT0Zcw==}
-
   '@jridgewell/resolve-uri@3.1.2':
     resolution: {integrity: sha512-bRISgCIjP20/tbWSPWMEi54QVPRZExkuD9lJL+UIxUKtwVJA8wW1Trb1jMs1RFXo1CBTNZ/5hpC9QvmKWdopKw==}
     engines: {node: '>=6.0.0'}
@@ -969,11 +966,11 @@ packages:
       '@lokalise/node-core': '>=13.1.0'
       zod: '>=3.25.56'
 
-  '@lokalise/background-jobs-common@14.4.0':
-    resolution: {integrity: sha512-FwjO0fZahNkGj3gkKya5TY5Q89riUhwjUeON4GmZaosXco1Qy+6XXYzmT81wdOJHoZW4EG+A3GTltor8W1Gm4w==}
+  '@lokalise/background-jobs-common@14.4.1':
+    resolution: {integrity: sha512-yuhmlwwVkV7uXmqFB47F1e0A4uy2ovv5M0sLcK3HMyvma1YyVaCX+4CaQ+Tx+TWhbu1oEdgAcm6eJF9f3MfhTQ==}
     peerDependencies:
       bullmq: ^5.28.2
-      ioredis: ^5.4.1
+      ioredis: 5.11.1
       pino: '>=9.7.0'
       toad-scheduler: ^4.0.1
       zod: '>=3.25.67'
@@ -1007,7 +1004,7 @@ packages:
       dd-trace: '>=5.0.0'
       fastify: ^5.7.1
       fastify-type-provider-zod: '>=6.0.0'
-      ioredis: ^5.7.0
+      ioredis: 5.11.1
       pino: '>=9.9.0'
       zod: '>=4.1.5'
 
@@ -1015,7 +1012,7 @@ packages:
     resolution: {integrity: sha512-wT5uqVhX2ZkEHak5xOU/s5L6HUKFWjPKmFrjLIV5BI4E/hWeLJTlxuuFN6iiIr1TWgOs2NFPVYYVKCc9VWmr0A==}
     peerDependencies:
       '@lokalise/background-jobs-common': '>=12.0.0'
-      ioredis: ^5.4.1
+      ioredis: 5.11.1
       prom-client: ^15.1.3
       toad-scheduler: ^3.1.0
 
@@ -1067,8 +1064,8 @@ packages:
       amqplib: ^2.0.1
       zod: '>=3.25.76 <5.0.0'
 
-  '@message-queue-toolkit/core@26.0.0':
-    resolution: {integrity: sha512-6c5sOZ1s7T1QIeqWHzrdM7vWNa1WJdsLI4ELH/7dMSFrd+Re8SdTFhtr55qQv2lpDka3akgr9on0tuB2F/9WZg==}
+  '@message-queue-toolkit/core@26.1.0':
+    resolution: {integrity: sha512-YmJdN6pDXc6uA2B5aIHF5EGm31gYuf9/kO/8qTGfron94V6FoV51K+x/c2Q6RCVuFTU5CBiVVucdAtg1tmlaZQ==}
     peerDependencies:
       zod: '>=3.25.76 <5.0.0'
 
@@ -1083,23 +1080,28 @@ packages:
     peerDependencies:
       zod: '>=3.25.76 <5.0.0'
 
-  '@message-queue-toolkit/sns@26.1.0':
-    resolution: {integrity: sha512-oJMNqjGEWyT3RL+MHBfDf+25Dq6yE02lGIuyFgAGqrCJwra9CaQeHBrvNyqYUoCr1loJ+S3MbXLmAToiKC9BrA==}
+  '@message-queue-toolkit/schemas@7.2.0':
+    resolution: {integrity: sha512-iuPbSeO1wm26tHPd5jIAmtllxVPRoMHHQbrqhsF5TpOfvDegXQ14lw/L5W2U7dWIYE+ErOvMWKTQAxdFZmza3A==}
+    peerDependencies:
+      zod: '>=3.25.67'
+
+  '@message-queue-toolkit/sns@26.2.0':
+    resolution: {integrity: sha512-CNx8gdXHGEP129OZ67AWx1crRdR62U0BAwkNDNvSnpGwkHf3ezarjxYmXD/uio32KK21qrdTbcdHos+ALcf/GA==}
     engines: {node: '>=22.0.0'}
     peerDependencies:
       '@aws-sdk/client-sns': ^3.632.0
-      '@aws-sdk/client-sqs': ^3.1034.0
+      '@aws-sdk/client-sqs': ^3.1051.0
       '@aws-sdk/client-sts': ^3.632.0
       '@message-queue-toolkit/core': '>=26.0.0'
       '@message-queue-toolkit/schemas': '>=7.0.0'
       '@message-queue-toolkit/sqs': '>=26.0.0'
       zod: '>=3.25.76 <5.0.0'
 
-  '@message-queue-toolkit/sqs@26.0.0':
-    resolution: {integrity: sha512-TDpFFa87a+mYDVXiGzB2IK+hK36t3xjuWCM5w5UJoWCGAFvaRFd48Sc7PeBobtfapdjUrF4JbSCaMim0IoubbQ==}
+  '@message-queue-toolkit/sqs@26.1.0':
+    resolution: {integrity: sha512-2bwVGYGuahGkasR9FQ4BgfVosODM0oodLX/ssi6ho+bpCNRhL9YMOHSQG0eEjpXGAU/MZr31PIhPn/gWVhnP8w==}
     engines: {node: '>=22.0.0'}
     peerDependencies:
-      '@aws-sdk/client-sqs': ^3.1034.0
+      '@aws-sdk/client-sqs': ^3.1051.0
       '@message-queue-toolkit/core': '>=26.0.0'
       zod: '>=3.25.76 <5.0.0'
 
@@ -1979,24 +1981,24 @@ packages:
   '@rolldown/pluginutils@1.0.1':
     resolution: {integrity: sha512-2j9bGt5Jh8hj+vPtgzPtl72j0yRxHAyumoo6TNfAjsLB04UtpSvPbPcDcBMxz7n+9CYB0c1GxQFxYRg2jimqGw==}
 
-  '@scalar/client-side-rendering@0.1.13':
-    resolution: {integrity: sha512-p8V4HgEWjaCpqsnhclg1pTfjE9JA0AWRr0ocBQHexoHo+pqnSs1d83Mv9rjH7R0FZJrlCSandZZeY3DMX2gYXQ==}
+  '@scalar/client-side-rendering@0.2.3':
+    resolution: {integrity: sha512-AazrKedEZ/JR/ze9UGrWCqpRp9T88QlgBZWVOYC8QAMISz5CGUDZKqpayz2iwGzzZAtKF0VW/Y0sbL7ERTvn6w==}
     engines: {node: '>=22'}
 
-  '@scalar/fastify-api-reference@1.58.0':
-    resolution: {integrity: sha512-1/WRYcKxfF9b7oZ5vUHdbfkrUbnoxM7sXZO+Rj98S9XGCSg8ayjnEusjRDI947dZvY7fiGtv5fEapTzo68EUCQ==}
+  '@scalar/fastify-api-reference@1.59.3':
+    resolution: {integrity: sha512-Lz6NVJYK8/w+tGZqq+dqBRTcSFTr2yggU/MwOdwKkKkpYNjm+kHICnPyztE7eS420aLJrG+0fcG433B8EQ0b8w==}
     engines: {node: '>=22'}
 
-  '@scalar/helpers@0.8.1':
-    resolution: {integrity: sha512-yuiuBCadP5bjAnIv23QvifVN/NaMi9xBF6b8Wdk4QOzwzLPJmp699MAdf33J0A5i2qKcvnu32iz/VkEJmQRe5g==}
+  '@scalar/helpers@0.8.2':
+    resolution: {integrity: sha512-qNbqUjSB3S4Gr4A0oANcm5G1Ip+EqBxICYKhe9YzmnaBpbmW6shxqpiivApTvvuDf+uIhR3uMwWyVQbYcGLsxA==}
     engines: {node: '>=22'}
 
-  '@scalar/json-magic@0.12.15':
-    resolution: {integrity: sha512-ZYgdYZ0jSZXQeyhG2lJ20FjzvKsaDRXk4bPguF/Ytl2nGBh9a6RIIr9NvVy4zAD67a/ahm+xipXlfoR1KtB5fg==}
+  '@scalar/json-magic@0.12.16':
+    resolution: {integrity: sha512-w8cDbZhHCzmIblWx92IVWoAXsbI4Fz3m++jiBANTSO1hgphF6UqEPQiCt3wnMPaxaanjMQxjS/iBk1UGXR2EGA==}
     engines: {node: '>=22'}
 
-  '@scalar/openapi-parser@0.28.6':
-    resolution: {integrity: sha512-gCl4r+rpmO+CKfwmmwI+GJVFhuNut7e6beUcD/xazanH4epkLT7V9ZgMv9YKbUBE73fkrOv6NJympeEGiU8aUw==}
+  '@scalar/openapi-parser@0.28.7':
+    resolution: {integrity: sha512-E6beEdTsJxUStxOmY1knQvSNJq6LTiXOsRX2WTrfmU6d/kiATn6IKkAU0kXtAZkaYCGU4UCEmBFHCMmNKn0JLA==}
     engines: {node: '>=22'}
 
   '@scalar/openapi-types@0.9.1':
@@ -2007,12 +2009,12 @@ packages:
     resolution: {integrity: sha512-D5b0rGLLZgmkO9mdW2j/ND1KBlH1u3RCpr87HPxv9P9ZSr6PtM5iLqFOJq0ACiaHjY2mikCrxgDmnUEhTzRpHQ==}
     engines: {node: '>=22'}
 
-  '@scalar/schemas@0.3.3':
-    resolution: {integrity: sha512-qDcgFu6ta5Z90L9D2P6DFKzYesU+FW5+m55SGmdI4iRMRCwj5umHpec2Y2W/SJcCF6bbUZawMxuOH2Ja6rUNpQ==}
+  '@scalar/schemas@0.4.3':
+    resolution: {integrity: sha512-YZ/FcxM5ctZ65m07q5DOOUhuQA5SjZvnoyP6jCCfoiaQ/aVXTDF1vZ1+RMYhKqDwfV/QCW36k0H/38aG/8lNyA==}
     engines: {node: '>=22'}
 
-  '@scalar/types@0.12.3':
-    resolution: {integrity: sha512-7zaXafbgTFmsJ/9AwYeExUWzXoZNyKOL0SEVAUWRaOndcjxpFCtwzuPrc1elMEWdHopWbY1Qe5pWKbE2aqG2HA==}
+  '@scalar/types@0.13.3':
+    resolution: {integrity: sha512-+rtVPVC7UPDGaqvBZY8FjXI5cW2xJtJDVsOGuoevRUBkJb3feSiBkGIZxYy0JkJCl9wVUi/PqGEcut6Nb3RnJw==}
     engines: {node: '>=22'}
 
   '@scalar/validation@0.6.0':
@@ -2066,7 +2068,7 @@ packages:
   '@splitsoftware/splitio-commons@2.12.0':
     resolution: {integrity: sha512-RN6CCeTZHV0oHTudQd+VVqVnJ6vUDgo95RUN4Lez2UM5Z/YVz9MQxtRoHcLYwCQEDf60yoTMB6bwHd8WlamgkQ==}
     peerDependencies:
-      ioredis: ^4.28.0 || ^5.0.0
+      ioredis: 5.11.1
     peerDependenciesMeta:
       ioredis:
         optional: true
@@ -2087,9 +2089,6 @@ packages:
 
   '@tybys/wasm-util@0.10.2':
     resolution: {integrity: sha512-RoBvJ2X0wuKlWFIjrwffGw1IqZHKQqzIchKaadZZfnNpsAYp2mM0h36JtPCjNDAHGgYez/15uMBpfGwchhiMgg==}
-
-  '@types/amqplib@0.10.8':
-    resolution: {integrity: sha512-vtDp8Pk1wsE/AuQ8/Rgtm6KUZYqcnTgNvEHwzCkX8rL7AGsC6zqAfKAAJhUZXFhM/Pp++tbnUHiam/8vVpPztA==}
 
   '@types/aws-lambda@8.10.161':
     resolution: {integrity: sha512-rUYdp+MQwSFocxIOcSsYSF3YYYC/uUpMbCY/mbO21vGqfrEYvNSoPyKYDj6RhXXpPfS0KstW9RwG3qXh9sL7FQ==}
@@ -2124,11 +2123,11 @@ packages:
   '@types/mysql@2.15.27':
     resolution: {integrity: sha512-YfWiV16IY0OeBfBCk8+hXKmdTKrKlwKN1MNKAPBu5JYxLwBEZl7QzeEpGnlZb3VMGJrrGmB84gXiH+ofs/TezA==}
 
-  '@types/node@25.9.1':
-    resolution: {integrity: sha512-xfrlY7UD5rMJk3ZVJP8BNzS28J36YJg+xp+LPXV1TdWxr8uMH5A860QNxYDGQe/ylDSgjxE52Q9VnO7p75tJxg==}
-
   '@types/node@25.9.2':
     resolution: {integrity: sha512-G05zqtJhcDLb8uslf5EjCxXg9G1KQxiV8OS0R26IC//Eoyitzqe8z37I7cqvnZlrlSfgocQRfSn/AHBZJJFyGw==}
+
+  '@types/node@25.9.3':
+    resolution: {integrity: sha512-603BddQMv3pUcr4U2dhujk83N2tTDVr/34wII2B6bJy6g+8WD6yUb11jszNs0gdi4PesVWl7ABt8nYMVpnLUcg==}
 
   '@types/oracledb@6.5.2':
     resolution: {integrity: sha512-kK1eBS/Adeyis+3OlBDMeQQuasIDLUYXsi2T15ccNJ0iyUpQ4xDF7svFu3+bGVrI0CMBUclPciz+lsQR3JX3TQ==}
@@ -2398,10 +2397,6 @@ packages:
 
   cluster-key-slot@1.1.1:
     resolution: {integrity: sha512-rwHwUfXL40Chm1r08yrhU3qpUvdVlgkKNeyeGPOxnW8/SyVDvgRaed/Uz54AqWNaTCAThlj6QAs3TZcKI0xDEw==}
-    engines: {node: '>=0.10.0'}
-
-  cluster-key-slot@1.1.2:
-    resolution: {integrity: sha512-RMr0FhtfXemyinomL4hrWcYJxmX6deFdCxpJzhDttxgO1+bcCnkk+9drydLVDmAMG7NE6aN/fl4F7ucU/90gAA==}
     engines: {node: '>=0.10.0'}
 
   color-convert@2.0.1:
@@ -3083,12 +3078,8 @@ packages:
   inherits@2.0.4:
     resolution: {integrity: sha512-k/vGaX4/Yla3WzyMCvTQOXYeIHvqOKtnqBduzTHpzpQZzAskKMhZ2K+EnBiSM9zGSoIFeMpXKxa4dYeZIQqewQ==}
 
-  ioredis@5.10.1:
-    resolution: {integrity: sha512-HuEDBTI70aYdx1v6U97SbNx9F1+svQKBDo30o0b9fw055LMepzpOOd0Ccg9Q6tbqmBSJaMuY0fB7yw9/vjBYCA==}
-    engines: {node: '>=12.22.0'}
-
-  ioredis@5.11.0:
-    resolution: {integrity: sha512-EZBErytyVovD8f6pDfG3Kb37N6Y3lmDA9NNj+4+IP13CzzHGeX+OyeRM2Um13khRzoBSzzL+5lVnCX8V2RLeMg==}
+  ioredis@5.11.1:
+    resolution: {integrity: sha512-ehuGcf94bQXhfagULNXrJdfnWO38v070jxSx/qE87Kjzmu2fU7ro5EFAb+OPituLqgfyuQaym5DlrNydW2sJ9A==}
     engines: {node: '>=12.22.0'}
 
   ip-address@10.2.0:
@@ -3310,12 +3301,6 @@ packages:
 
   lodash.camelcase@4.3.0:
     resolution: {integrity: sha512-TwuEnCnxbc3rAvhf/LbG7tJUDzhqXyFnv3dtzLOPgCG/hODL7WFnsbwktkD7yUV0RrreP/l1PALq/YSg6VvjlA==}
-
-  lodash.defaults@4.2.0:
-    resolution: {integrity: sha512-qjxPLHd3r5DnsdGacqOMU6pb/avJzdh9tFX2ymgoZE27BmjXrNy/y4LoaiTeAb+O3gL8AfpJGtqfX/ae2leYYQ==}
-
-  lodash.isarguments@3.1.0:
-    resolution: {integrity: sha512-chi4NHZlZqZD18a0imDHnZPrDeBbTtVN7GXMwuGdRH9qotxAjYs3aVLKc7zNOG9eddR5Ksd8rvFEBc9SsggPpg==}
 
   lodash@4.18.1:
     resolution: {integrity: sha512-dMInicTPVE8d1e5otfwmmjlxkZoUpiVLwyeTdUsi/Caj/gfzzblBcCE5sRHV/AsjuCmxWrte2TNGSYuCeCq+0Q==}
@@ -3736,7 +3721,7 @@ packages:
     resolution: {integrity: sha512-2xjl8eYVVTKX8O8C/H70iWEGx8BSOOzI5P1tQgXEO8A8dR2/BPgU7QctCfcXOHsQ7/IIkebv1ulEdo2iC2SwvA==}
     engines: {node: '>= 14.17.0'}
     peerDependencies:
-      ioredis: ^4.1.0 || ^5
+      ioredis: 5.11.1
     peerDependenciesMeta:
       ioredis:
         optional: true
@@ -4015,8 +4000,8 @@ packages:
     resolution: {integrity: sha512-kCwffuaH8ntKtygnWe1b4BJKWiCUH30n5KfoTr6IchcXOwR7chAOFJxFrH3vjANafUYrIA4a7SDL+nn7SiR4Sw==}
     hasBin: true
 
-  tmp@0.2.5:
-    resolution: {integrity: sha512-voyz6MApa1rQGUxT3E+BK7/ROe8itEx7vD8/HEvt4xwXucvQ5G5oeEiHkmHZJuBO21RpOf+YYm9MOivj709jow==}
+  tmp@0.2.7:
+    resolution: {integrity: sha512-e0votIpp4Uo2AJYSzVHV6xCcawuiez3DzqDAbrTc3YxBkplN6e+dM13ZeIcZnDg/QpSuU2zfZ3rzwY8ukEnaXw==}
     engines: {node: '>=14.14'}
 
   to-regex-range@5.0.1:
@@ -4043,6 +4028,10 @@ packages:
 
   ts-deepmerge@7.0.3:
     resolution: {integrity: sha512-Du/ZW2RfwV/D4cmA5rXafYjBQVuvu4qGiEEla4EmEHVHgRdx68Gftx7i66jn2bzHPwSVZY36Ae6OuDn9el4ZKA==}
+    engines: {node: '>=14.13.1'}
+
+  ts-deepmerge@8.0.0:
+    resolution: {integrity: sha512-133O+10nJmVI8w5xeVZPEv5PIrv7iaUae07wv1aH8XJH95Ur6YIhWAPhPyP1YPlbPS9fCVcNIZTu7m8urRVF0A==}
     engines: {node: '>=14.13.1'}
 
   tslib@1.14.1:
@@ -5026,7 +5015,7 @@ snapshots:
 
   '@httptoolkit/httpolyglot@3.1.0':
     dependencies:
-      '@types/node': 25.9.1
+      '@types/node': 25.9.2
 
   '@httptoolkit/subscriptions-transport-ws@0.11.2(graphql@16.14.0)':
     dependencies:
@@ -5060,34 +5049,32 @@ snapshots:
 
   '@inquirer/ansi@2.0.7': {}
 
-  '@inquirer/confirm@6.1.1(@types/node@25.9.1)':
+  '@inquirer/confirm@6.1.1(@types/node@25.9.3)':
     dependencies:
-      '@inquirer/core': 11.2.1(@types/node@25.9.1)
-      '@inquirer/type': 4.0.7(@types/node@25.9.1)
+      '@inquirer/core': 11.2.1(@types/node@25.9.3)
+      '@inquirer/type': 4.0.7(@types/node@25.9.3)
     optionalDependencies:
-      '@types/node': 25.9.1
+      '@types/node': 25.9.3
 
-  '@inquirer/core@11.2.1(@types/node@25.9.1)':
+  '@inquirer/core@11.2.1(@types/node@25.9.3)':
     dependencies:
       '@inquirer/ansi': 2.0.7
       '@inquirer/figures': 2.0.7
-      '@inquirer/type': 4.0.7(@types/node@25.9.1)
+      '@inquirer/type': 4.0.7(@types/node@25.9.3)
       cli-width: 4.1.0
       fast-wrap-ansi: 0.2.2
       mute-stream: 3.0.0
       signal-exit: 4.1.0
     optionalDependencies:
-      '@types/node': 25.9.1
+      '@types/node': 25.9.3
 
   '@inquirer/figures@2.0.7': {}
 
-  '@inquirer/type@4.0.7(@types/node@25.9.1)':
+  '@inquirer/type@4.0.7(@types/node@25.9.3)':
     optionalDependencies:
-      '@types/node': 25.9.1
+      '@types/node': 25.9.3
 
   '@ioredis/commands@1.10.0': {}
-
-  '@ioredis/commands@1.5.1': {}
 
   '@jridgewell/resolve-uri@3.1.2': {}
 
@@ -5108,17 +5095,17 @@ snapshots:
     dependencies:
       zod: 4.4.3
 
-  '@lokalise/aws-config@9.0.0(8d77fddacbdbb53a4e446c485fa0aeee)':
+  '@lokalise/aws-config@9.0.0(4a59be3348888123d45c19a0025f7379)':
     dependencies:
       '@aws-sdk/client-sns': 3.1061.0
       '@aws-sdk/client-sqs': 3.1061.0
       '@aws-sdk/credential-providers': 3.1061.0
-      '@lokalise/fastify-extras': 31.0.0(@fastify/jwt@10.1.0)(@lokalise/api-contracts@6.13.0(zod@4.4.3))(@lokalise/background-jobs-common@14.4.0(bullmq@5.78.0)(ioredis@5.11.0)(pino@10.3.1)(toad-scheduler@4.0.1)(zod@4.4.3))(@lokalise/node-core@14.8.1(zod@4.4.3))(@opentelemetry/api@1.9.1)(bullmq@5.78.0)(dd-trace@5.103.0(@openfeature/server-sdk@1.21.0(@openfeature/core@1.10.0)))(fastify-type-provider-zod@6.1.0(@fastify/swagger@9.7.0)(fastify@5.8.5)(openapi-types@12.1.3)(zod@4.4.3))(fastify@5.8.5)(ioredis@5.11.0)(pino@10.3.1)(zod@4.4.3)
+      '@lokalise/fastify-extras': 31.0.0(@fastify/jwt@10.1.0)(@lokalise/api-contracts@6.13.0(zod@4.4.3))(@lokalise/background-jobs-common@14.4.1(bullmq@5.78.0)(ioredis@5.11.1)(pino@10.3.1)(toad-scheduler@4.0.1)(zod@4.4.3))(@lokalise/node-core@14.8.1(zod@4.4.3))(@opentelemetry/api@1.9.1)(bullmq@5.78.0)(dd-trace@5.103.0(@openfeature/server-sdk@1.21.0(@openfeature/core@1.10.0)))(fastify-type-provider-zod@6.1.0(@fastify/swagger@9.7.0)(fastify@5.8.5)(openapi-types@12.1.3)(zod@4.4.3))(fastify@5.8.5)(ioredis@5.11.1)(pino@10.3.1)(zod@4.4.3)
       '@lokalise/node-core': 14.8.1(zod@4.4.3)
       '@lokalise/universal-ts-utils': 4.10.0
-      '@message-queue-toolkit/core': 26.0.0(zod@4.4.3)
-      '@message-queue-toolkit/sns': 26.1.0(@aws-sdk/client-sns@3.1061.0)(@aws-sdk/client-sqs@3.1061.0)(@aws-sdk/client-sts@3.1061.0)(@message-queue-toolkit/core@26.0.0(zod@4.4.3))(@message-queue-toolkit/schemas@7.1.0(zod@4.4.3))(@message-queue-toolkit/sqs@26.0.0(@aws-sdk/client-sqs@3.1061.0)(@message-queue-toolkit/core@26.0.0(zod@4.4.3))(zod@4.4.3))(zod@4.4.3)
-      '@message-queue-toolkit/sqs': 26.0.0(@aws-sdk/client-sqs@3.1061.0)(@message-queue-toolkit/core@26.0.0(zod@4.4.3))(zod@4.4.3)
+      '@message-queue-toolkit/core': 26.1.0(zod@4.4.3)
+      '@message-queue-toolkit/sns': 26.2.0(@aws-sdk/client-sns@3.1061.0)(@aws-sdk/client-sqs@3.1061.0)(@aws-sdk/client-sts@3.1061.0)(@message-queue-toolkit/core@26.1.0(zod@4.4.3))(@message-queue-toolkit/schemas@7.2.0(zod@4.4.3))(@message-queue-toolkit/sqs@26.1.0(@aws-sdk/client-sqs@3.1061.0)(@message-queue-toolkit/core@26.1.0(zod@4.4.3))(zod@4.4.3))(zod@4.4.3)
+      '@message-queue-toolkit/sqs': 26.1.0(@aws-sdk/client-sqs@3.1061.0)(@message-queue-toolkit/core@26.1.0(zod@4.4.3))(zod@4.4.3)
       envase: 1.5.0
       zod: 4.4.3
 
@@ -5130,16 +5117,16 @@ snapshots:
       undici: 8.3.0
       zod: 4.4.3
 
-  '@lokalise/background-jobs-common@14.4.0(bullmq@5.78.0)(ioredis@5.11.0)(pino@10.3.1)(toad-scheduler@4.0.1)(zod@4.4.3)':
+  '@lokalise/background-jobs-common@14.4.1(bullmq@5.78.0)(ioredis@5.11.1)(pino@10.3.1)(toad-scheduler@4.0.1)(zod@4.4.3)':
     dependencies:
       '@lokalise/id-utils': 3.0.1
       '@lokalise/node-core': 14.8.1(zod@4.4.3)
       bullmq: 5.78.0
-      ioredis: 5.11.0
+      ioredis: 5.11.1
       pino: 10.3.1
-      redis-semaphore: 5.7.0(ioredis@5.11.0)
+      redis-semaphore: 5.7.0(ioredis@5.11.1)
       toad-scheduler: 4.0.1
-      ts-deepmerge: 7.0.3
+      ts-deepmerge: 8.0.0
       zod: 4.4.3
     transitivePeerDependencies:
       - supports-color
@@ -5159,13 +5146,13 @@ snapshots:
       light-my-request: 6.6.0
       zod: 4.4.3
 
-  '@lokalise/fastify-extras@31.0.0(@fastify/jwt@10.1.0)(@lokalise/api-contracts@6.13.0(zod@4.4.3))(@lokalise/background-jobs-common@14.4.0(bullmq@5.78.0)(ioredis@5.11.0)(pino@10.3.1)(toad-scheduler@4.0.1)(zod@4.4.3))(@lokalise/node-core@14.8.1(zod@4.4.3))(@opentelemetry/api@1.9.1)(bullmq@5.78.0)(dd-trace@5.103.0(@openfeature/server-sdk@1.21.0(@openfeature/core@1.10.0)))(fastify-type-provider-zod@6.1.0(@fastify/swagger@9.7.0)(fastify@5.8.5)(openapi-types@12.1.3)(zod@4.4.3))(fastify@5.8.5)(ioredis@5.11.0)(pino@10.3.1)(zod@4.4.3)':
+  '@lokalise/fastify-extras@31.0.0(@fastify/jwt@10.1.0)(@lokalise/api-contracts@6.13.0(zod@4.4.3))(@lokalise/background-jobs-common@14.4.1(bullmq@5.78.0)(ioredis@5.11.1)(pino@10.3.1)(toad-scheduler@4.0.1)(zod@4.4.3))(@lokalise/node-core@14.8.1(zod@4.4.3))(@opentelemetry/api@1.9.1)(bullmq@5.78.0)(dd-trace@5.103.0(@openfeature/server-sdk@1.21.0(@openfeature/core@1.10.0)))(fastify-type-provider-zod@6.1.0(@fastify/swagger@9.7.0)(fastify@5.8.5)(openapi-types@12.1.3)(zod@4.4.3))(fastify@5.8.5)(ioredis@5.11.1)(pino@10.3.1)(zod@4.4.3)':
     dependencies:
       '@amplitude/analytics-node': 1.5.58
       '@bugsnag/js': 8.9.0
       '@fastify/jwt': 10.1.0
       '@lokalise/api-contracts': 6.13.0(zod@4.4.3)
-      '@lokalise/background-jobs-common': 14.4.0(bullmq@5.78.0)(ioredis@5.11.0)(pino@10.3.1)(toad-scheduler@4.0.1)(zod@4.4.3)
+      '@lokalise/background-jobs-common': 14.4.1(bullmq@5.78.0)(ioredis@5.11.1)(pino@10.3.1)(toad-scheduler@4.0.1)(zod@4.4.3)
       '@lokalise/error-utils': 3.0.0(@lokalise/node-core@14.8.1(zod@4.4.3))
       '@lokalise/node-core': 14.8.1(zod@4.4.3)
       '@opentelemetry/api': 1.9.1
@@ -5177,7 +5164,7 @@ snapshots:
       fastify-metrics: 13.2.0(fastify@5.8.5)
       fastify-plugin: 5.1.0
       fastify-type-provider-zod: 6.1.0(@fastify/swagger@9.7.0)(fastify@5.8.5)(openapi-types@12.1.3)(zod@4.4.3)
-      ioredis: 5.11.0
+      ioredis: 5.11.1
       pino: 10.3.1
       prom-client: 15.1.3
       toad-cache: 3.7.1
@@ -5187,14 +5174,14 @@ snapshots:
       - encoding
       - supports-color
 
-  '@lokalise/healthcheck-utils@6.0.0(@lokalise/background-jobs-common@14.4.0(bullmq@5.78.0)(ioredis@5.11.0)(pino@10.3.1)(toad-scheduler@4.0.1)(zod@4.4.3))(ioredis@5.11.0)(prom-client@15.1.3)(toad-scheduler@4.0.1)(zod@4.4.3)':
+  '@lokalise/healthcheck-utils@6.0.0(@lokalise/background-jobs-common@14.4.1(bullmq@5.78.0)(ioredis@5.11.1)(pino@10.3.1)(toad-scheduler@4.0.1)(zod@4.4.3))(ioredis@5.11.1)(prom-client@15.1.3)(toad-scheduler@4.0.1)(zod@4.4.3)':
     dependencies:
-      '@lokalise/background-jobs-common': 14.4.0(bullmq@5.78.0)(ioredis@5.11.0)(pino@10.3.1)(toad-scheduler@4.0.1)(zod@4.4.3)
+      '@lokalise/background-jobs-common': 14.4.1(bullmq@5.78.0)(ioredis@5.11.1)(pino@10.3.1)(toad-scheduler@4.0.1)(zod@4.4.3)
       '@lokalise/node-core': 14.8.1(zod@4.4.3)
       '@supercharge/promise-pool': 3.3.0
-      ioredis: 5.11.0
+      ioredis: 5.11.1
       prom-client: 15.1.3
-      redis-semaphore: 5.7.0(ioredis@5.11.0)
+      redis-semaphore: 5.7.0(ioredis@5.11.1)
       toad-cache: 3.7.1
       toad-scheduler: 4.0.1
     transitivePeerDependencies:
@@ -5226,11 +5213,11 @@ snapshots:
 
   '@lokalise/tsconfig@4.0.0': {}
 
-  '@lokalise/universal-testing-utils@3.8.0(@lokalise/api-contracts@6.13.0(zod@4.4.3))(mockttp@4.4.2)(msw@2.14.6(@types/node@25.9.1)(typescript@6.0.3))(zod@4.4.3)':
+  '@lokalise/universal-testing-utils@3.8.0(@lokalise/api-contracts@6.13.0(zod@4.4.3))(mockttp@4.4.2)(msw@2.14.6(@types/node@25.9.3)(typescript@6.0.3))(zod@4.4.3)':
     dependencies:
       '@lokalise/api-contracts': 6.13.0(zod@4.4.3)
       mockttp: 4.4.2
-      msw: 2.14.6(@types/node@25.9.1)(typescript@6.0.3)
+      msw: 2.14.6(@types/node@25.9.3)(typescript@6.0.3)
       zod: 4.4.3
 
   '@lokalise/universal-ts-utils@4.10.0': {}
@@ -5239,15 +5226,15 @@ snapshots:
 
   '@lukeed/ms@2.0.2': {}
 
-  '@message-queue-toolkit/amqp@24.1.0(@message-queue-toolkit/core@26.0.0(zod@4.4.3))(@message-queue-toolkit/schemas@7.1.0(zod@4.4.3))(amqplib@2.0.1)(zod@4.4.3)':
+  '@message-queue-toolkit/amqp@24.1.0(@message-queue-toolkit/core@26.1.0(zod@4.4.3))(@message-queue-toolkit/schemas@7.2.0(zod@4.4.3))(amqplib@2.0.1)(zod@4.4.3)':
     dependencies:
       '@lokalise/node-core': 14.8.1(zod@4.4.3)
-      '@message-queue-toolkit/core': 26.0.0(zod@4.4.3)
-      '@message-queue-toolkit/schemas': 7.1.0(zod@4.4.3)
+      '@message-queue-toolkit/core': 26.1.0(zod@4.4.3)
+      '@message-queue-toolkit/schemas': 7.2.0(zod@4.4.3)
       amqplib: 2.0.1
       zod: 4.4.3
 
-  '@message-queue-toolkit/core@26.0.0(zod@4.4.3)':
+  '@message-queue-toolkit/core@26.1.0(zod@4.4.3)':
     dependencies:
       '@lokalise/node-core': 14.8.1(zod@4.4.3)
       '@lokalise/universal-ts-utils': 4.10.0
@@ -5255,15 +5242,15 @@ snapshots:
       dot-prop: 10.1.0
       fast-equals: 6.0.0
       json-stream-stringify: 3.1.6
-      tmp: 0.2.5
+      tmp: 0.2.7
       toad-cache: 3.7.1
       zod: 4.4.3
 
-  '@message-queue-toolkit/metrics@4.4.2(@message-queue-toolkit/core@26.0.0(zod@4.4.3))(prom-client@15.1.3)(zod@4.4.3)':
+  '@message-queue-toolkit/metrics@4.4.2(@message-queue-toolkit/core@26.1.0(zod@4.4.3))(prom-client@15.1.3)(zod@4.4.3)':
     dependencies:
       '@lokalise/node-core': 14.8.1(zod@4.4.3)
       '@lokalise/universal-ts-utils': 4.10.0
-      '@message-queue-toolkit/core': 26.0.0(zod@4.4.3)
+      '@message-queue-toolkit/core': 26.1.0(zod@4.4.3)
       prom-client: 15.1.3
     transitivePeerDependencies:
       - zod
@@ -5272,25 +5259,29 @@ snapshots:
     dependencies:
       zod: 4.4.3
 
-  '@message-queue-toolkit/sns@26.1.0(@aws-sdk/client-sns@3.1061.0)(@aws-sdk/client-sqs@3.1061.0)(@aws-sdk/client-sts@3.1061.0)(@message-queue-toolkit/core@26.0.0(zod@4.4.3))(@message-queue-toolkit/schemas@7.1.0(zod@4.4.3))(@message-queue-toolkit/sqs@26.0.0(@aws-sdk/client-sqs@3.1061.0)(@message-queue-toolkit/core@26.0.0(zod@4.4.3))(zod@4.4.3))(zod@4.4.3)':
+  '@message-queue-toolkit/schemas@7.2.0(zod@4.4.3)':
+    dependencies:
+      zod: 4.4.3
+
+  '@message-queue-toolkit/sns@26.2.0(@aws-sdk/client-sns@3.1061.0)(@aws-sdk/client-sqs@3.1061.0)(@aws-sdk/client-sts@3.1061.0)(@message-queue-toolkit/core@26.1.0(zod@4.4.3))(@message-queue-toolkit/schemas@7.2.0(zod@4.4.3))(@message-queue-toolkit/sqs@26.1.0(@aws-sdk/client-sqs@3.1061.0)(@message-queue-toolkit/core@26.1.0(zod@4.4.3))(zod@4.4.3))(zod@4.4.3)':
     dependencies:
       '@aws-sdk/client-sns': 3.1061.0
       '@aws-sdk/client-sqs': 3.1061.0
       '@aws-sdk/client-sts': 3.1061.0
       '@lokalise/node-core': 14.8.1(zod@4.4.3)
-      '@message-queue-toolkit/core': 26.0.0(zod@4.4.3)
-      '@message-queue-toolkit/schemas': 7.1.0(zod@4.4.3)
-      '@message-queue-toolkit/sqs': 26.0.0(@aws-sdk/client-sqs@3.1061.0)(@message-queue-toolkit/core@26.0.0(zod@4.4.3))(zod@4.4.3)
+      '@message-queue-toolkit/core': 26.1.0(zod@4.4.3)
+      '@message-queue-toolkit/schemas': 7.2.0(zod@4.4.3)
+      '@message-queue-toolkit/sqs': 26.1.0(@aws-sdk/client-sqs@3.1061.0)(@message-queue-toolkit/core@26.1.0(zod@4.4.3))(zod@4.4.3)
       sqs-consumer: 15.0.2(@aws-sdk/client-sqs@3.1061.0)
       zod: 4.4.3
     transitivePeerDependencies:
       - supports-color
 
-  '@message-queue-toolkit/sqs@26.0.0(@aws-sdk/client-sqs@3.1061.0)(@message-queue-toolkit/core@26.0.0(zod@4.4.3))(zod@4.4.3)':
+  '@message-queue-toolkit/sqs@26.1.0(@aws-sdk/client-sqs@3.1061.0)(@message-queue-toolkit/core@26.1.0(zod@4.4.3))(zod@4.4.3)':
     dependencies:
       '@aws-sdk/client-sqs': 3.1061.0
       '@lokalise/node-core': 14.8.1(zod@4.4.3)
-      '@message-queue-toolkit/core': 26.0.0(zod@4.4.3)
+      '@message-queue-toolkit/core': 26.1.0(zod@4.4.3)
       sqs-consumer: 15.0.2(@aws-sdk/client-sqs@3.1061.0)
       zod: 4.4.3
     transitivePeerDependencies:
@@ -6354,32 +6345,32 @@ snapshots:
 
   '@rolldown/pluginutils@1.0.1': {}
 
-  '@scalar/client-side-rendering@0.1.13':
+  '@scalar/client-side-rendering@0.2.3':
     dependencies:
-      '@scalar/schemas': 0.3.3
-      '@scalar/types': 0.12.3
+      '@scalar/schemas': 0.4.3
+      '@scalar/types': 0.13.3
       '@scalar/validation': 0.6.0
 
-  '@scalar/fastify-api-reference@1.58.0':
+  '@scalar/fastify-api-reference@1.59.3':
     dependencies:
-      '@scalar/client-side-rendering': 0.1.13
-      '@scalar/openapi-parser': 0.28.6
+      '@scalar/client-side-rendering': 0.2.3
+      '@scalar/openapi-parser': 0.28.7
       '@scalar/openapi-types': 0.9.1
       fastify-plugin: 4.5.1
       github-slugger: 2.0.0
 
-  '@scalar/helpers@0.8.1': {}
+  '@scalar/helpers@0.8.2': {}
 
-  '@scalar/json-magic@0.12.15':
+  '@scalar/json-magic@0.12.16':
     dependencies:
-      '@scalar/helpers': 0.8.1
+      '@scalar/helpers': 0.8.2
       pathe: 2.0.3
       yaml: 2.9.0
 
-  '@scalar/openapi-parser@0.28.6':
+  '@scalar/openapi-parser@0.28.7':
     dependencies:
-      '@scalar/helpers': 0.8.1
-      '@scalar/json-magic': 0.12.15
+      '@scalar/helpers': 0.8.2
+      '@scalar/json-magic': 0.12.16
       '@scalar/openapi-types': 0.9.1
       '@scalar/openapi-upgrader': 0.2.9
       ajv: 8.20.0
@@ -6395,14 +6386,14 @@ snapshots:
     dependencies:
       '@scalar/openapi-types': 0.9.1
 
-  '@scalar/schemas@0.3.3':
+  '@scalar/schemas@0.4.3':
     dependencies:
-      '@scalar/helpers': 0.8.1
+      '@scalar/helpers': 0.8.2
       '@scalar/validation': 0.6.0
 
-  '@scalar/types@0.12.3':
+  '@scalar/types@0.13.3':
     dependencies:
-      '@scalar/helpers': 0.8.1
+      '@scalar/helpers': 0.8.2
       nanoid: 5.1.11
       type-fest: 5.7.0
       zod: 4.4.3
@@ -6465,18 +6456,18 @@ snapshots:
       '@smithy/util-buffer-from': 2.2.0
       tslib: 2.8.1
 
-  '@splitsoftware/splitio-commons@2.12.0(ioredis@5.11.0)':
+  '@splitsoftware/splitio-commons@2.12.0(ioredis@5.11.1)':
     dependencies:
       '@types/ioredis': 4.28.10
       tslib: 2.8.1
     optionalDependencies:
-      ioredis: 5.11.0
+      ioredis: 5.11.1
 
   '@splitsoftware/splitio@11.11.1':
     dependencies:
-      '@splitsoftware/splitio-commons': 2.12.0(ioredis@5.11.0)
+      '@splitsoftware/splitio-commons': 2.12.0(ioredis@5.11.1)
       bloom-filters: 3.0.4
-      ioredis: 5.11.0
+      ioredis: 5.11.1
       js-yaml: 4.1.1
       node-fetch: 2.7.0
       tslib: 2.8.1
@@ -6496,15 +6487,11 @@ snapshots:
       tslib: 2.8.1
     optional: true
 
-  '@types/amqplib@0.10.8':
-    dependencies:
-      '@types/node': 25.9.1
-
   '@types/aws-lambda@8.10.161': {}
 
   '@types/bunyan@1.8.11':
     dependencies:
-      '@types/node': 25.9.1
+      '@types/node': 25.9.2
 
   '@types/chai@5.2.3':
     dependencies:
@@ -6513,11 +6500,11 @@ snapshots:
 
   '@types/connect@3.4.38':
     dependencies:
-      '@types/node': 25.9.1
+      '@types/node': 25.9.2
 
   '@types/cors@2.8.19':
     dependencies:
-      '@types/node': 25.9.1
+      '@types/node': 25.9.2
 
   '@types/deep-eql@4.0.2': {}
 
@@ -6525,29 +6512,29 @@ snapshots:
 
   '@types/ioredis@4.28.10':
     dependencies:
-      '@types/node': 25.9.1
+      '@types/node': 25.9.2
 
   '@types/json-schema@7.0.15': {}
 
   '@types/memcached@2.2.10':
     dependencies:
-      '@types/node': 25.9.1
+      '@types/node': 25.9.2
 
   '@types/mysql@2.15.27':
     dependencies:
-      '@types/node': 25.9.1
-
-  '@types/node@25.9.1':
-    dependencies:
-      undici-types: 7.24.6
+      '@types/node': 25.9.2
 
   '@types/node@25.9.2':
     dependencies:
       undici-types: 7.24.6
 
+  '@types/node@25.9.3':
+    dependencies:
+      undici-types: 7.24.6
+
   '@types/oracledb@6.5.2':
     dependencies:
-      '@types/node': 25.9.1
+      '@types/node': 25.9.2
 
   '@types/pg-pool@2.0.7':
     dependencies:
@@ -6555,7 +6542,7 @@ snapshots:
 
   '@types/pg@8.15.6':
     dependencies:
-      '@types/node': 25.9.1
+      '@types/node': 25.9.2
       pg-protocol: 1.14.0
       pg-types: 2.2.0
 
@@ -6563,17 +6550,17 @@ snapshots:
 
   '@types/set-cookie-parser@2.4.10':
     dependencies:
-      '@types/node': 25.9.2
+      '@types/node': 25.9.3
 
   '@types/statuses@2.0.6': {}
 
   '@types/tedious@4.0.14':
     dependencies:
-      '@types/node': 25.9.1
+      '@types/node': 25.9.2
 
   '@types/ws@8.18.1':
     dependencies:
-      '@types/node': 25.9.1
+      '@types/node': 25.9.2
 
   '@types/zen-observable@0.8.3': {}
 
@@ -6589,7 +6576,7 @@ snapshots:
       obug: 2.1.2
       std-env: 4.1.0
       tinyrainbow: 3.1.0
-      vitest: 4.1.8(@opentelemetry/api@1.9.1)(@types/node@25.9.1)(@vitest/coverage-v8@4.1.8)(msw@2.14.6(@types/node@25.9.1)(typescript@6.0.3))(vite@8.0.13(@types/node@25.9.1)(jiti@2.7.0)(yaml@2.9.0))
+      vitest: 4.1.8(@opentelemetry/api@1.9.1)(@types/node@25.9.3)(@vitest/coverage-v8@4.1.8)(msw@2.14.6(@types/node@25.9.3)(typescript@6.0.3))(vite@8.0.13(@types/node@25.9.3)(jiti@2.7.0)(yaml@2.9.0))
 
   '@vitest/expect@4.1.8':
     dependencies:
@@ -6600,14 +6587,14 @@ snapshots:
       chai: 6.2.2
       tinyrainbow: 3.1.0
 
-  '@vitest/mocker@4.1.8(msw@2.14.6(@types/node@25.9.1)(typescript@6.0.3))(vite@8.0.13(@types/node@25.9.1)(jiti@2.7.0)(yaml@2.9.0))':
+  '@vitest/mocker@4.1.8(msw@2.14.6(@types/node@25.9.3)(typescript@6.0.3))(vite@8.0.13(@types/node@25.9.3)(jiti@2.7.0)(yaml@2.9.0))':
     dependencies:
       '@vitest/spy': 4.1.8
       estree-walker: 3.0.3
       magic-string: 0.30.21
     optionalDependencies:
-      msw: 2.14.6(@types/node@25.9.1)(typescript@6.0.3)
-      vite: 8.0.13(@types/node@25.9.1)(jiti@2.7.0)(yaml@2.9.0)
+      msw: 2.14.6(@types/node@25.9.3)(typescript@6.0.3)
+      vite: 8.0.13(@types/node@25.9.3)(jiti@2.7.0)(yaml@2.9.0)
 
   '@vitest/pretty-format@4.1.8':
     dependencies:
@@ -6781,7 +6768,7 @@ snapshots:
   bullmq@5.78.0:
     dependencies:
       cron-parser: 4.9.0
-      ioredis: 5.10.1
+      ioredis: 5.11.1
       msgpackr: 2.0.2
       node-abort-controller: 3.1.1
       semver: 7.8.0
@@ -6820,8 +6807,6 @@ snapshots:
       wrap-ansi: 7.0.0
 
   cluster-key-slot@1.1.1: {}
-
-  cluster-key-slot@1.1.2: {}
 
   color-convert@2.0.1:
     dependencies:
@@ -6954,7 +6939,7 @@ snapshots:
 
   destroyable-server@1.1.1:
     dependencies:
-      '@types/node': 25.9.1
+      '@types/node': 25.9.2
 
   detect-libc@2.1.2: {}
 
@@ -6962,7 +6947,7 @@ snapshots:
 
   dot-prop@10.1.0:
     dependencies:
-      type-fest: 5.6.0
+      type-fest: 5.7.0
 
   dot-prop@6.0.1:
     dependencies:
@@ -7485,21 +7470,7 @@ snapshots:
 
   inherits@2.0.4: {}
 
-  ioredis@5.10.1:
-    dependencies:
-      '@ioredis/commands': 1.5.1
-      cluster-key-slot: 1.1.2
-      debug: 4.4.3
-      denque: 2.1.0
-      lodash.defaults: 4.2.0
-      lodash.isarguments: 3.1.0
-      redis-errors: 1.2.0
-      redis-parser: 3.0.0
-      standard-as-callback: 2.1.0
-    transitivePeerDependencies:
-      - supports-color
-
-  ioredis@5.11.0:
+  ioredis@5.11.1:
     dependencies:
       '@ioredis/commands': 1.10.0
       cluster-key-slot: 1.1.1
@@ -7606,7 +7577,7 @@ snapshots:
 
   layered-loader@14.4.0:
     dependencies:
-      ioredis: 5.11.0
+      ioredis: 5.11.1
       toad-cache: 3.7.1
     transitivePeerDependencies:
       - supports-color
@@ -7673,10 +7644,6 @@ snapshots:
       lightningcss-win32-x64-msvc: 1.32.0
 
   lodash.camelcase@4.3.0: {}
-
-  lodash.defaults@4.2.0: {}
-
-  lodash.isarguments@3.1.0: {}
 
   lodash@4.18.1: {}
 
@@ -7757,7 +7724,7 @@ snapshots:
       '@peculiar/asn1-x509-attr': 2.6.1
       '@peculiar/x509': 1.14.3
       '@types/cors': 2.8.19
-      '@types/node': 25.9.1
+      '@types/node': 25.9.2
       async-mutex: 0.5.0
       base64-arraybuffer: 1.0.2
       cacheable-lookup: 6.1.0
@@ -7814,9 +7781,9 @@ snapshots:
     optionalDependencies:
       msgpackr-extract: 3.0.4
 
-  msw@2.14.6(@types/node@25.9.1)(typescript@6.0.3):
+  msw@2.14.6(@types/node@25.9.3)(typescript@6.0.3):
     dependencies:
-      '@inquirer/confirm': 6.1.1(@types/node@25.9.1)
+      '@inquirer/confirm': 6.1.1(@types/node@25.9.3)
       '@mswjs/interceptors': 0.41.9
       '@open-draft/deferred-promise': 3.0.0
       '@types/statuses': 2.0.6
@@ -8092,7 +8059,7 @@ snapshots:
       '@protobufjs/path': 1.1.2
       '@protobufjs/pool': 1.1.0
       '@protobufjs/utf8': 1.1.1
-      '@types/node': 25.9.1
+      '@types/node': 25.9.2
       long: 5.3.2
 
   proxy-addr@2.0.7:
@@ -8132,7 +8099,7 @@ snapshots:
 
   read-tls-client-hello@2.0.0:
     dependencies:
-      '@types/node': 25.9.1
+      '@types/node': 25.9.2
 
   readable-stream@2.3.8:
     dependencies:
@@ -8154,11 +8121,11 @@ snapshots:
     dependencies:
       redis-errors: 1.2.0
 
-  redis-semaphore@5.7.0(ioredis@5.11.0):
+  redis-semaphore@5.7.0(ioredis@5.11.1):
     dependencies:
       debug: 4.4.3
     optionalDependencies:
-      ioredis: 5.11.0
+      ioredis: 5.11.1
     transitivePeerDependencies:
       - supports-color
 
@@ -8439,7 +8406,7 @@ snapshots:
     dependencies:
       tldts-core: 7.4.2
 
-  tmp@0.2.5: {}
+  tmp@0.2.7: {}
 
   to-regex-range@5.0.1:
     dependencies:
@@ -8460,6 +8427,8 @@ snapshots:
   tr46@0.0.3: {}
 
   ts-deepmerge@7.0.3: {}
+
+  ts-deepmerge@8.0.0: {}
 
   tslib@1.14.1: {}
 
@@ -8517,7 +8486,7 @@ snapshots:
 
   vary@1.1.2: {}
 
-  vite@8.0.13(@types/node@25.9.1)(jiti@2.7.0)(yaml@2.9.0):
+  vite@8.0.13(@types/node@25.9.3)(jiti@2.7.0)(yaml@2.9.0):
     dependencies:
       lightningcss: 1.32.0
       picomatch: 4.0.4
@@ -8525,15 +8494,15 @@ snapshots:
       rolldown: 1.0.1
       tinyglobby: 0.2.17
     optionalDependencies:
-      '@types/node': 25.9.1
+      '@types/node': 25.9.3
       fsevents: 2.3.3
       jiti: 2.7.0
       yaml: 2.9.0
 
-  vitest@4.1.8(@opentelemetry/api@1.9.1)(@types/node@25.9.1)(@vitest/coverage-v8@4.1.8)(msw@2.14.6(@types/node@25.9.1)(typescript@6.0.3))(vite@8.0.13(@types/node@25.9.1)(jiti@2.7.0)(yaml@2.9.0)):
+  vitest@4.1.8(@opentelemetry/api@1.9.1)(@types/node@25.9.3)(@vitest/coverage-v8@4.1.8)(msw@2.14.6(@types/node@25.9.3)(typescript@6.0.3))(vite@8.0.13(@types/node@25.9.3)(jiti@2.7.0)(yaml@2.9.0)):
     dependencies:
       '@vitest/expect': 4.1.8
-      '@vitest/mocker': 4.1.8(msw@2.14.6(@types/node@25.9.1)(typescript@6.0.3))(vite@8.0.13(@types/node@25.9.1)(jiti@2.7.0)(yaml@2.9.0))
+      '@vitest/mocker': 4.1.8(msw@2.14.6(@types/node@25.9.3)(typescript@6.0.3))(vite@8.0.13(@types/node@25.9.3)(jiti@2.7.0)(yaml@2.9.0))
       '@vitest/pretty-format': 4.1.8
       '@vitest/runner': 4.1.8
       '@vitest/snapshot': 4.1.8
@@ -8550,11 +8519,11 @@ snapshots:
       tinyexec: 1.2.4
       tinyglobby: 0.2.17
       tinyrainbow: 3.1.0
-      vite: 8.0.13(@types/node@25.9.1)(jiti@2.7.0)(yaml@2.9.0)
+      vite: 8.0.13(@types/node@25.9.3)(jiti@2.7.0)(yaml@2.9.0)
       why-is-node-running: 2.3.0
     optionalDependencies:
       '@opentelemetry/api': 1.9.1
-      '@types/node': 25.9.1
+      '@types/node': 25.9.3
       '@vitest/coverage-v8': 4.1.8(vitest@4.1.8)
     transitivePeerDependencies:
       - msw

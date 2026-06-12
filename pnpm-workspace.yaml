@@ -1,8 +1,10 @@
 packages:
   - packages/*
+overrides:
+  ioredis: 5.11.1
 allowBuilds:
+  msgpackr-extract: false
   msw: false
   protobufjs: false
 minimumReleaseAgeExclude:
-  - '@message-queue-toolkit/sns@25.0.1'
-  - '@lokalise/opentelemetry-fastify-bootstrap@3.0.0'
+  - '@message-queue-toolkit/schemas@7.2.0'
