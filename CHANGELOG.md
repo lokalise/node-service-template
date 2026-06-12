@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.13.0] - 2026-05-27
+
+- Drop `drizzle-zod` dependency and switch to the built-in `drizzle-orm/zod`, eliminating a separate package from the dependency tree
+
 ## [1.12.1] - 2026-05-26
 
 - Bump `@lokalise/opentelemetry-fastify-bootstrap` from `^2.2.0` to `^3.0.0`; v3 is a peer-dependency-only major (it now requires `@fastify/otel 0.18.1`, `@opentelemetry/auto-instrumentations-node ^0.76.0`, `@opentelemetry/sdk-node`/`exporter-trace-otlp-grpc ^0.218.0`, `@opentelemetry/sdk-trace-base ^2.7.1` — all already pinned here), with no public API changes to `initOpenTelemetry`/`gracefulOtelShutdown`
