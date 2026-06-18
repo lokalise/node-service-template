@@ -205,8 +205,8 @@ importers:
         specifier: ^2.7.1
         version: 2.7.1(@opentelemetry/api@1.9.1)
       '@readme/openapi-parser':
-        specifier: ^6.1.2
-        version: 6.1.2(openapi-types@12.1.3)
+        specifier: ^6.1.3
+        version: 6.1.3(openapi-types@12.1.3)
       '@types/node':
         specifier: ^25.9.3
         version: 25.9.3
@@ -1877,8 +1877,8 @@ packages:
     peerDependencies:
       ajv: 4.11.8 - 8
 
-  '@readme/openapi-parser@6.1.2':
-    resolution: {integrity: sha512-+VwBPsXujri5t9+hsqa54CDjSeiL3b01SUmBJNXqjZeUeVS6EDZWiw7/6FIYm1murBd0JbyXaZMq3uhrdz2fIA==}
+  '@readme/openapi-parser@6.1.3':
+    resolution: {integrity: sha512-eRhSdlKSR5Pva81s8T5e209Fv8dJBUvaWZ7IvNRaLQL5kJkbyo9ucnm498kO0UKMx+meu3PYFkOOoPSkywt3NA==}
     engines: {node: '>=20'}
     peerDependencies:
       openapi-types: '>=7'
@@ -6299,7 +6299,7 @@ snapshots:
       leven: 3.1.0
       picocolors: 1.1.1
 
-  '@readme/openapi-parser@6.1.2(openapi-types@12.1.3)':
+  '@readme/openapi-parser@6.1.3(openapi-types@12.1.3)':
     dependencies:
       '@apidevtools/json-schema-ref-parser': 14.2.1(@types/json-schema@7.0.15)
       '@readme/better-ajv-errors': 2.4.0(ajv@8.20.0)
