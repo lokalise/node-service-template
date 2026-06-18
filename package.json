@@ -80,7 +80,7 @@
         "fastify-graceful-shutdown": "^5.0.0",
         "fastify-metrics": "^13.2.0",
         "fastify-no-icon": "^7.0.0",
-        "fastify-plugin": "^5.1.0",
+        "fastify-plugin": "^6.0.0",
         "fastify-type-provider-zod": "^6.1.0",
         "ioredis": "^5.11.1",
         "layered-loader": "^14.4.0",
