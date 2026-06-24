@@ -4,6 +4,9 @@ updates:
     directory: '/'
     schedule:
       interval: 'monthly'
+      # Open PRs inside the automerge window (see ci.yml) so they are not skipped.
+      time: '10:00'
+      timezone: 'Europe/Berlin'
     open-pull-requests-limit: 10
     cooldown:
       default-days: 7
@@ -14,6 +17,9 @@ updates:
       - '/packages/*'
     schedule:
       interval: 'weekly'
+      # Open PRs inside the automerge window (see ci.yml) so they are not skipped.
+      time: '10:00'
+      timezone: 'Europe/Berlin'
     open-pull-requests-limit: 10
     cooldown:
       default-days: 7
