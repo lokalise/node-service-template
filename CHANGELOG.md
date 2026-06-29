@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.14.0] - 2026-06-29
+
+- Add an app-scoped `AbortController` to the cradle (`src/infrastructure/CommonModule.ts`) and abort it from the `gracefulShutdown` handler in `src/app.ts` so any consumer wired to `appAbortController.signal` can short-circuit in-flight work on SIGTERM/SIGINT
+- Expose that signal via `lifecycle.signal` in `scripts/utils/cliCommandWrapper.ts`; the wrapper now also registers its own `gracefulShutdown` handler that awaits the command's completion before resolving, so the plugin no longer calls `app.close()` while a CLI command is still mid-iteration (commands can poll `lifecycle.signal.aborted` and/or pass the signal directly to AbortSignal-aware APIs like `node:timers/promises`, `undici`/`fetch`, or the ES client)
+- Add `scripts/dummy/lifecycle-loop.ts` — a long-running fixture used by the new integration test below
+- Add `scripts/utils/cliCommandWrapper.integration.spec.ts` — spawns the lifecycle-loop fixture as a child process under `NODE_ENV=production` so `fastify-graceful-shutdown` is registered, sends SIGTERM, and asserts the abort propagated through `lifecycle.signal`, the loop exited cleanly, and the process returned exit code 0
+
 ## [1.13.0] - 2026-05-27
 
 - Drop `drizzle-zod` dependency and switch to the built-in `drizzle-orm/zod`, eliminating a separate package from the dependency tree
