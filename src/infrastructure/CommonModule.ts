@@ -94,6 +94,8 @@ export class CommonModule extends AbstractModule<unknown, ExternalDependencies> 
       }),
       logger: asSingletonFunction(() => externalDependencies.logger, { public: true }),
 
+      appAbortController: asSingletonFunction(() => new AbortController(), { public: true }),
+
       scheduler: asSingletonFunction(
         () => {
           return externalDependencies.app?.scheduler ?? new ToadScheduler()

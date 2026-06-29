@@ -47,10 +47,19 @@ const getArgs = (argsSchema: z.Schema) => {
   return values
 }
 
+export type CliCommandLifecycle = {
+  signal: AbortSignal
+}
+
 export type CliCommand<
   ArgsSchema extends z.Schema | undefined,
   Args = ArgsSchema extends z.Schema ? z.infer<ArgsSchema> : undefined,
-> = (dependencies: Dependencies, requestContext: RequestContext, args: Args) => Promise<void> | void
+> = (
+  dependencies: Dependencies,
+  requestContext: RequestContext,
+  args: Args,
+  lifecycle: CliCommandLifecycle,
+) => Promise<void> | void
 
 export const cliCommandWrapper = async <ArgsSchema extends z.Schema | undefined>(
   cliCommandName: string,
@@ -81,6 +90,27 @@ export const cliCommandWrapper = async <ArgsSchema extends z.Schema | undefined>
     }),
   }
 
+  // The app-scoped abort signal is aborted by app.ts's gracefulShutdown handler
+  // (only registered in non-dev). Commands can observe `lifecycle.signal.aborted`
+  // and/or pass `lifecycle.signal` to any AbortSignal-aware API.
+  //
+  // The handler below must still await `commandDone` — abort is a notification,
+  // not synchronization, so without this the plugin would call `app.close()`
+  // while the command is still unwinding.
+  const lifecycle: CliCommandLifecycle = {
+    signal: app.diContainer.cradle.appAbortController.signal,
+  }
+  let resolveCommandDone!: () => void
+  const commandDone = new Promise<void>((resolve) => {
+    resolveCommandDone = resolve
+  })
+  if (typeof app.gracefulShutdown === 'function') {
+    app.gracefulShutdown(async (signal) => {
+      reqContext.logger.warn({ signal }, 'Shutdown signal received, stopping after current step')
+      await commandDone
+    })
+  }
+
   let args = undefined as ArgsSchema extends z.Schema ? z.infer<ArgsSchema> : undefined
   if (argsSchema) {
     const parseResult = argsSchema.safeParse(getArgs(argsSchema))
@@ -100,7 +130,7 @@ export const cliCommandWrapper = async <ArgsSchema extends z.Schema | undefined>
 
   let isSuccess = true
   try {
-    await command(app.diContainer.cradle, reqContext, args)
+    await command(app.diContainer.cradle, reqContext, args, lifecycle)
   } catch (err) {
     isSuccess = false
     reqContext.logger.error(
@@ -109,6 +139,8 @@ export const cliCommandWrapper = async <ArgsSchema extends z.Schema | undefined>
       },
       'Error running command',
     )
+  } finally {
+    resolveCommandDone()
   }
 
   await app.close()

@@ -333,10 +333,15 @@ export async function getApp(
     // Register routes
     diContext.registerRoutes(app)
 
-    // Graceful shutdown hook
+    // Graceful shutdown hook — abort the app-scoped controller so any consumer
+    // wired to `appAbortController.signal` (CLI loops, long-running I/O, …) can
+    // short-circuit in-flight work.
     if (!nodeEnv.isDevelopment) {
-      app.gracefulShutdown(async (_signal) => {
-        app.log.info('Starting graceful shutdown')
+      app.gracefulShutdown(async (signal) => {
+        diContainer.cradle.appAbortController.abort(
+          new Error(`Shutdown signal received: ${signal}`),
+        )
+        app.log.info({ signal }, 'Starting graceful shutdown')
         await gracefulOtelShutdown()
       })
     }
