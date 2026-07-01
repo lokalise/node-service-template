@@ -3,6 +3,12 @@ packages:
 overrides:
   ioredis: 5.11.1
 allowBuilds:
+  '@datadog/native-appsec': false
+  '@datadog/native-iast-taint-tracking': false
+  '@datadog/native-metrics': false
+  '@datadog/pprof': false
+  dd-trace: false
+  esbuild: false
   msgpackr-extract: false
   msw: false
   protobufjs: false

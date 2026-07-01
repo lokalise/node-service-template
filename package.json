@@ -1,10 +1,18 @@
 {
     "name": "node-service-template",
-    "version": "1.14.0",
-    "engines": {
-        "node": ">=24.16.0"
+    "version": "1.15.0",
+    "devEngines": {
+        "runtime": {
+            "name": "node",
+            "version": ">=24.16.0",
+            "onFail": "error"
+        },
+        "packageManager": {
+            "name": "pnpm",
+            "version": "11.9.0",
+            "onFail": "error"
+        }
     },
-    "packageManager": "pnpm@11.8.0",
     "type": "module",
     "scripts": {
         "build": "pnpm --filter @node-service-template/api-contracts run build && tsc -p tsconfig.build.json",
