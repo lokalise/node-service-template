@@ -11,11 +11,19 @@ import type { Dependencies } from '../../src/infrastructure/CommonModule.ts'
 const unwrapSchemaIfNeeded = (schema: z.Schema) =>
   schema instanceof z.ZodOptional || schema instanceof z.ZodNullable ? schema.unwrap() : schema
 
+const resolveInputObjectSchema = (schema: z.Schema): z.ZodObject | undefined => {
+  if (schema instanceof z.ZodObject) return schema
+  // schemas with transforms/pipes define their CLI flags on the input side of the pipe
+  if (schema instanceof z.ZodPipe) return resolveInputObjectSchema(schema.in as z.Schema)
+  return undefined
+}
+
 const deriveParseArgsOptions = (schema: z.Schema): ParseArgsOptionsConfig | undefined => {
-  if (!(schema instanceof z.ZodObject)) return undefined
+  const objectSchema = resolveInputObjectSchema(schema)
+  if (!objectSchema) return undefined
 
   const options: ParseArgsOptionsConfig = {}
-  for (const [key, fieldSchema] of Object.entries(schema.shape as Record<string, z.Schema>)) {
+  for (const [key, fieldSchema] of Object.entries(objectSchema.shape as Record<string, z.Schema>)) {
     const unwrappedFieldSchema = unwrapSchemaIfNeeded(fieldSchema)
 
     const isMultiple = unwrappedFieldSchema instanceof z.ZodArray
