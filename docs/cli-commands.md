@@ -1,35 +1,83 @@
 # CLI commands
 
-CLI commands are self-executable scripts that run a piece of application logic with the full DI container available, outside of the HTTP server. They live in [scripts/cmd](../scripts/cmd) and are built on top of [cliCommandWrapper](../scripts/utils/cliCommandWrapper.ts).
+CLI commands are self-executable scripts that run a piece of application logic with the full DI container available, outside of the HTTP server — one-off maintenance tasks, backfills, queue inspection, debugging helpers. They live in [scripts/cmd](../scripts/cmd) and are built on top of [cliCommandWrapper](../scripts/utils/cliCommandWrapper.ts).
 
-## Anatomy of a command
+## Quick start
+
+A command is a file with three parts: an arguments schema, a handler, and the wrapper call. As a worked example, a command that re-sends welcome emails to a list of users, with an optional dry-run mode:
 
 ```ts
+// scripts/cmd/resendWelcomeEmail.ts
 import type { RequestContext } from '@lokalise/fastify-extras'
 import z from 'zod/v4'
 import type { Dependencies } from '../../src/infrastructure/CommonModule.ts'
 import { cliCommandWrapper } from '../utils/cliCommandWrapper.ts'
 
 const ARGUMENTS_SCHEMA = z.object({
-  queue: z.enum(['active', 'failed', 'delayed', 'completed', 'waiting', 'prioritized']),
+  userId: z.array(z.guid()).min(1), // repeatable flag
+  dryRun: z.boolean().optional(),
 })
 type Arguments = z.infer<typeof ARGUMENTS_SCHEMA>
 
 const command = async (deps: Dependencies, reqContext: RequestContext, args: Arguments) => {
-  // application logic; `deps` is the DI cradle, `reqContext.logger` is scoped to this invocation
+  for (const userId of args.userId) {
+    if (args.dryRun) {
+      reqContext.logger.info({ userId }, 'dry run - would resend welcome email')
+      continue
+    }
+    await deps.userService.resendWelcomeEmail(userId)
+  }
 }
 
-void cliCommandWrapper('getUserImportJobsCommand', command, ARGUMENTS_SCHEMA)
+void cliCommandWrapper('resendWelcomeEmailCommand', command, ARGUMENTS_SCHEMA)
 ```
 
-The wrapper:
+Register it in the `scripts` section of `package.json`, following the `cmd:` prefix convention:
 
-- boots the app with the HTTP-facing and background features disabled (healthchecks, monitoring, periodic jobs, message queue consumers, enqueued job workers) and job queues enabled, so commands can schedule jobs;
-- creates a per-invocation `RequestContext` with a child logger tagged with the command name and a fresh `x-request-id`;
-- parses and validates CLI arguments against the provided zod schema (see below); on validation failure it logs `Invalid arguments` with the zod issues and exits with code `1`;
-- runs the command, logs any thrown error as `Error running command`, closes the app, and exits with code `0` on success or `1` on failure.
+```json
+"scripts": {
+  "cmd:resendWelcomeEmail": "node --env-file-if-exists=.env scripts/cmd/resendWelcomeEmail.ts"
+}
+```
 
-Register the command in the `scripts` section of `package.json` and run it with `node --run {npmScriptName} -- {arguments}`.
+Run it with `node --run {npmScriptName} -- {arguments}`:
+
+```shell
+node --run cmd:resendWelcomeEmail -- --userId=0198a3d2-... --userId=0198a3d5-... --dryRun
+```
+
+The flags above parse into:
+
+```ts
+{ userId: ['0198a3d2-...', '0198a3d5-...'], dryRun: true }
+```
+
+If validation fails — say, a `--userId` is not a valid GUID or the flag is missing entirely — the wrapper logs an `Invalid arguments` entry containing the zod issues and exits with code `1` without running the handler:
+
+```shell
+node --run cmd:resendWelcomeEmail -- --dryRun
+# logs: Invalid arguments … "path":["userId"],"message":"Invalid input: expected array, received undefined"
+# exit code: 1
+```
+
+See [getUserImportJobs.ts](../scripts/cmd/getUserImportJobs.ts) for a real command in this repository.
+
+## What the wrapper does
+
+- Boots the app with the HTTP-facing and background features disabled (healthchecks, monitoring, periodic jobs, message queue consumers, enqueued job workers) and job queues enabled, so commands can schedule jobs. If the app fails to boot, it logs `Failed to start {commandName}` and exits with code `1`.
+- Creates a per-invocation `RequestContext` with a child logger tagged with the command name and a fresh `x-request-id`, so every log line of a run is correlated.
+- Parses and validates CLI arguments against the provided zod schema (see below).
+- Runs the command handler with `(dependencies, requestContext, args, lifecycle)` — `dependencies` is the DI cradle, exactly what route handlers and consumers receive.
+- Logs any thrown error as `Error running command`, closes the app, and exits with the appropriate code.
+
+Exit codes:
+
+| Code | Meaning                                                       |
+| ---- | ------------------------------------------------------------- |
+| `0`  | Command completed without throwing                            |
+| `1`  | App failed to boot, arguments were invalid, or handler threw  |
+
+The arguments schema is optional — commands that take no arguments can call `cliCommandWrapper(name, command)` and receive `args: undefined`.
 
 ## Argument schemas: what is supported
 
@@ -37,18 +85,23 @@ Register the command in the `scripts` section of `package.json` and run it with 
 
 Supported field types on the flag-defining object:
 
-| Schema field                              | CLI behavior                                                       |
-| ----------------------------------------- | ------------------------------------------------------------------ |
-| `z.string()`, `z.enum([...])`, `z.guid()`, … | string flag: `--key=value`                                        |
-| `z.boolean()`                             | boolean flag: `--flag` (present → `true`)                          |
-| `z.array(<element>)`                      | repeatable flag: `--id=a --id=b` → `['a', 'b']`                    |
-| `.optional()` / `.nullable()` wrappers    | unwrapped transparently, both on fields and on array elements      |
+| Schema field                                 | CLI behavior                                                  | Example                          |
+| -------------------------------------------- | ------------------------------------------------------------- | -------------------------------- |
+| `z.string()`, `z.enum([...])`, `z.guid()`, … | string flag                                                    | `--queue=active`                 |
+| `z.boolean()`                                | boolean flag (present → `true`)                                | `--dryRun`                       |
+| `z.array(<element>)`                         | repeatable flag                                                | `--id=a --id=b` → `['a', 'b']`   |
+| `.optional()` / `.nullable()` wrappers       | unwrapped transparently, both on fields and on array elements  | omitting the flag → `undefined`  |
 
 Notes:
 
 - Unknown flags are ignored (`parseArgs` runs with `strict: false`) and stripped by the object schema, so a typo in a flag name surfaces as a "missing required field" validation error rather than an unknown-flag error.
 - Anything after a bare `--` token in the final `process.argv` is treated as positionals and ignored — make sure your script runner does not forward the `--` separator itself.
-- Coercion beyond booleans is not performed by the parser: every value arrives as a string. Use a transform (below) or `z.coerce.*` on the schema if you need numbers.
+- Coercion beyond booleans is not performed by the parser: every value arrives as a string. Use `z.coerce.number()` (or a transform, below) if you need numbers:
+
+  ```ts
+  z.object({ batchSize: z.coerce.number().int().positive().default(100) })
+  // --batchSize=250 → { batchSize: 250 }
+  ```
 
 ### Transforms and pipes
 
@@ -68,9 +121,20 @@ const ARGUMENTS_SCHEMA = z
     }
     return { projectId, scope: scopeResult.data }
   })
+
+// --projectId=<guid> --itemId=<guid> --itemId=<guid>
+//   → { projectId: '<guid>', scope: { itemIds: ['<guid>', '<guid>'] } }
 ```
 
-Issues added via `ctx.addIssue` (including ones re-raised from a nested `safeParse` against a shared domain schema) flow through the wrapper's regular `Invalid arguments` handling.
+Issues added via `ctx.addIssue` (including ones re-raised from a nested `safeParse` against a shared domain schema, as above) flow through the wrapper's regular `Invalid arguments` handling.
+
+A plain `.pipe(...)` also works when no reshaping is needed, e.g. to bolt a stricter output schema onto loosely-typed flags:
+
+```ts
+z.object({ count: z.string() })
+  .transform(({ count }) => ({ count: Number(count) }))
+  .pipe(z.object({ count: z.number().int() }))
+```
 
 Not supported:
 
