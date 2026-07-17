@@ -1,6 +1,6 @@
 services:
   postgres:
-    image: postgres:17.3
+    image: postgres:18.4
     # see https://www.postgresql.org/docs/current/non-durability.html
     command: '-c full_page_writes=off -c fsync=off -c synchronous_commit=off'
     ports:
@@ -18,7 +18,7 @@ services:
       - ./scripts/db/init-dbs.sh:/docker-entrypoint-initdb.d/init-dbs.sh
 
   redis:
-    image: redis:6.2.14-alpine
+    image: redis:7.4.5-alpine
     command: redis-server --requirepass sOmE_sEcUrE_pAsS
     ports:
       - ${DOCKER_REDIS_PORT:-6379}:6379

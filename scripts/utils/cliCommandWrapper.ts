@@ -1,7 +1,12 @@
 import { randomUUIDv7 } from 'node:crypto'
 import { type ParseArgsOptionsConfig, parseArgs } from 'node:util'
 import type { RequestContext } from '@lokalise/fastify-extras'
-import { isError, stringValueSerializer } from '@lokalise/node-core'
+import {
+  globalLogger,
+  isError,
+  resolveGlobalErrorLogObject,
+  stringValueSerializer,
+} from '@lokalise/node-core'
 import { ENABLE_ALL } from 'opinionated-machine'
 import pino from 'pino'
 import z from 'zod/v4'
@@ -50,24 +55,39 @@ const getArgs = (argsSchema: z.Schema) => {
   return values
 }
 
+export type CliCommandLifecycle = {
+  signal: AbortSignal
+}
+
 export type CliCommand<
   ArgsSchema extends z.Schema | undefined,
   Args = ArgsSchema extends z.Schema ? z.infer<ArgsSchema> : undefined,
-> = (dependencies: Dependencies, requestContext: RequestContext, args: Args) => Promise<void> | void
+> = (
+  dependencies: Dependencies,
+  requestContext: RequestContext,
+  args: Args,
+  lifecycle: CliCommandLifecycle,
+) => Promise<void> | void
 
 export const cliCommandWrapper = async <ArgsSchema extends z.Schema | undefined>(
   cliCommandName: string,
   command: CliCommand<ArgsSchema>,
   argsSchema?: ArgsSchema,
 ): Promise<void> => {
-  const app = await getApp({
-    healthchecksEnabled: false,
-    monitoringEnabled: false,
-    periodicJobsEnabled: false,
-    messageQueueConsumersEnabled: false,
-    enqueuedJobWorkersEnabled: false,
-    jobQueuesEnabled: ENABLE_ALL,
-  })
+  let app: Awaited<ReturnType<typeof getApp>>
+  try {
+    app = await getApp({
+      healthchecksEnabled: false,
+      monitoringEnabled: false,
+      periodicJobsEnabled: false,
+      messageQueueConsumersEnabled: false,
+      enqueuedJobWorkersEnabled: false,
+      jobQueuesEnabled: ENABLE_ALL,
+    })
+  } catch (err) {
+    globalLogger.error(resolveGlobalErrorLogObject(err), `Failed to start ${cliCommandName}`)
+    return process.exit(1)
+  }
 
   const requestId = randomUUIDv7()
   const reqContext: RequestContext = {
@@ -76,6 +96,27 @@ export const cliCommandWrapper = async <ArgsSchema extends z.Schema | undefined>
       origin: cliCommandName,
       'x-request-id': requestId,
     }),
+  }
+
+  // The app-scoped abort signal is aborted by app.ts's gracefulShutdown handler
+  // (only registered in non-dev). Commands can observe `lifecycle.signal.aborted`
+  // and/or pass `lifecycle.signal` to any AbortSignal-aware API.
+  //
+  // The handler below must still await `commandDone` — abort is a notification,
+  // not synchronization, so without this the plugin would call `app.close()`
+  // while the command is still unwinding.
+  const lifecycle: CliCommandLifecycle = {
+    signal: app.diContainer.cradle.appAbortController.signal,
+  }
+  let resolveCommandDone!: () => void
+  const commandDone = new Promise<void>((resolve) => {
+    resolveCommandDone = resolve
+  })
+  if (typeof app.gracefulShutdown === 'function') {
+    app.gracefulShutdown(async (signal) => {
+      reqContext.logger.warn({ signal }, 'Shutdown signal received, stopping after current step')
+      await commandDone
+    })
   }
 
   let args = undefined as ArgsSchema extends z.Schema ? z.infer<ArgsSchema> : undefined
@@ -97,7 +138,7 @@ export const cliCommandWrapper = async <ArgsSchema extends z.Schema | undefined>
 
   let isSuccess = true
   try {
-    await command(app.diContainer.cradle, reqContext, args)
+    await command(app.diContainer.cradle, reqContext, args, lifecycle)
   } catch (err) {
     isSuccess = false
     reqContext.logger.error(
@@ -106,6 +147,8 @@ export const cliCommandWrapper = async <ArgsSchema extends z.Schema | undefined>
       },
       'Error running command',
     )
+  } finally {
+    resolveCommandDone()
   }
 
   await app.close()

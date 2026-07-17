@@ -1,9 +1,22 @@
 # Changelog
 
-## [1.14.0] - 2026-07-17
+## [1.16.0] - 2026-07-17
 
 - Support zod schemas with `.transform()`/`.pipe()` in `scripts/utils/cliCommandWrapper.ts`: `deriveParseArgsOptions` now resolves the flag-defining `ZodObject` through the input side of a `ZodPipe` (new `resolveInputObjectSchema` helper), so a CLI script can declare flat flags and transform them into a nested, schema-validated args object in a single `argsSchema` — command handlers receive the transformed output while `parseArgs` options (including repeatable/`multiple` flags) are still derived from the flat input shape
 - Add spec coverage for transformed and piped args schemas in `scripts/utils/cliCommandWrapper.spec.ts`
+
+## [1.15.0] - 2026-07-01
+
+- Replace the `engines` + `packageManager` fields in `package.json` with a `devEngines` block that pins both the `runtime` (`node >=24.16.0`) and `packageManager` (`pnpm 11.9.0`) with `onFail: "error"`, so a mismatched Node or pnpm version now hard-fails locally instead of warning
+- Bump pnpm from `11.8.0` to `11.9.0` (the lockfile now tracks the `@pnpm/exe` / `pnpm` package-manager dependencies)
+- Mark the `@datadog/*` native packages (`native-appsec`, `native-iast-taint-tracking`, `native-metrics`, `pprof`), `dd-trace`, and `esbuild` as `allowBuilds: false` in `pnpm-workspace.yaml` to keep their install-time build scripts from running
+
+## [1.14.0] - 2026-06-29
+
+- Add an app-scoped `AbortController` to the cradle (`src/infrastructure/CommonModule.ts`) and abort it from the `gracefulShutdown` handler in `src/app.ts` so any consumer wired to `appAbortController.signal` can short-circuit in-flight work on SIGTERM/SIGINT
+- Expose that signal via `lifecycle.signal` in `scripts/utils/cliCommandWrapper.ts`; the wrapper now also registers its own `gracefulShutdown` handler that awaits the command's completion before resolving, so the plugin no longer calls `app.close()` while a CLI command is still mid-iteration (commands can poll `lifecycle.signal.aborted` and/or pass the signal directly to AbortSignal-aware APIs like `node:timers/promises`, `undici`/`fetch`, or the ES client)
+- Add `scripts/dummy/lifecycle-loop.ts` — a long-running fixture used by the new integration test below
+- Add `scripts/utils/cliCommandWrapper.integration.spec.ts` — spawns the lifecycle-loop fixture as a child process under `NODE_ENV=production` so `fastify-graceful-shutdown` is registered, sends SIGTERM, and asserts the abort propagated through `lifecycle.signal`, the loop exited cleanly, and the process returned exit code 0
 
 ## [1.13.0] - 2026-05-27
 
