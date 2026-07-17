@@ -236,9 +236,9 @@ If any variable is not documented you will see a list of undocumented ones:
 
 ## CLI Commands
 
-To create a new CLI command, create a new file in the [scripts/cmd](./scripts/cmd) directory. The file should be self-executable. The process should create a CLI context using `cliContextUtils.ts` and destroy it before exiting.
+To create a new CLI command, create a new file in the [scripts/cmd](./scripts/cmd) directory. The file should be self-executable and wrap its logic with [cliCommandWrapper](./scripts/utils/cliCommandWrapper.ts), which boots the app, parses and validates arguments, and handles logging, graceful shutdown, and exit codes.
 
-To use arguments in your command, ZOD schema and generic type should be provided in `createCliContext()`. Arguments will be parsed and validated using the provided schema.
+To use arguments in your command, provide a zod schema to `cliCommandWrapper()`. CLI flags are derived from the schema itself — string, boolean, repeatable (array) and optional flags are supported, and the schema may end in `.transform()`/`.pipe()` to reshape flat flags into a nested args object. See [docs/cli-commands.md](./docs/cli-commands.md) for the full description of what is supported.
 
 Create a new command in the `scripts` section of `package.json`:
 
