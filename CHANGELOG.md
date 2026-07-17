@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.16.0] - 2026-07-17
+
+- Support zod schemas with `.transform()`/`.pipe()` in `scripts/utils/cliCommandWrapper.ts`: `deriveParseArgsOptions` now resolves the flag-defining `ZodObject` through the input side of a `ZodPipe` (new `resolveInputObjectSchema` helper), so a CLI script can declare flat flags and transform them into a nested, schema-validated args object in a single `argsSchema` — command handlers receive the transformed output while `parseArgs` options (including repeatable/`multiple` flags) are still derived from the flat input shape
+- Add spec coverage for transformed and piped args schemas in `scripts/utils/cliCommandWrapper.spec.ts`
+
 ## [1.15.0] - 2026-07-01
 
 - Replace the `engines` + `packageManager` fields in `package.json` with a `devEngines` block that pins both the `runtime` (`node >=24.16.0`) and `packageManager` (`pnpm 11.9.0`) with `onFail: "error"`, so a mismatched Node or pnpm version now hard-fails locally instead of warning

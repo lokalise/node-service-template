@@ -80,6 +80,38 @@ describe('cliCommandWrapper', () => {
     expect(exitSpy).toHaveBeenCalledWith(0)
   })
 
+  it.each([
+    {
+      inputArgs: ['--id=abc', '--id=def', '--scope=FIRST'],
+      schema: z
+        .object({ id: z.array(z.string()), scope: z.string() })
+        .transform(({ id, scope }) => ({ ids: id, isFirst: scope === 'FIRST' })),
+      expected: { ids: ['abc', 'def'], isFirst: true },
+    },
+    {
+      inputArgs: ['--count=5'],
+      schema: z
+        .object({ count: z.string() })
+        .transform(({ count }) => ({ count: Number(count) }))
+        .pipe(z.object({ count: z.number().int() })),
+      expected: { count: 5 },
+    },
+  ])('should derive flags from the input side of transformed schemas', async ({
+    inputArgs,
+    schema,
+    expected,
+  }) => {
+    process.argv = ['node', 'script.ts', ...inputArgs]
+    await cliCommandWrapper(
+      'command',
+      (_dependencies, _requestContext, args) => {
+        expect(args).toEqual(expected)
+      },
+      schema,
+    )
+    expect(exitSpy).toHaveBeenCalledWith(0)
+  })
+
   it('should fail if arguments are not valid', async () => {
     process.argv = ['node', 'script.ts', '--key=value']
     await cliCommandWrapper('command', () => undefined, z.object({ key: z.number() }))
