@@ -25,6 +25,7 @@ describe('UserEventConsumer', () => {
     beforeEach(async () => {
       app = await getApp({
         messageQueueConsumersEnabled: [UserEventConsumer.QUEUE_NAME],
+        monitoringEnabled: true,
       })
       diContainer = app.diContainer
       consumer = diContainer.cradle.userEventConsumer
