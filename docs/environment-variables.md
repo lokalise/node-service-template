@@ -145,36 +145,6 @@
   Description: Scheduler initial connection timeout in milliseconds  
   Min value: `0`
 
-## Amqp
-
-- `AMQP_HOSTNAME` (required)  
-  Type: `string`  
-  Description: AMQP broker hostname
-
-- `AMQP_PORT` (required)  
-  Type: `integer`  
-  Description: AMQP broker port  
-  Min value: `1`  
-  Max value: `65535`
-
-- `AMQP_USERNAME` (required)  
-  Type: `string`  
-  Description: AMQP broker username
-
-- `AMQP_PASSWORD` (required)  
-  Type: `string`  
-  Description: AMQP broker password
-
-- `AMQP_VHOST` (optional)  
-  Type: `string`  
-  Description: AMQP broker virtual host  
-  Default: ``
-
-- `AMQP_USE_TLS` (optional)  
-  Type: `boolean`  
-  Description: Whether to use TLS/SSL for AMQP connection  
-  Default: `true`
-
 ## Aws
 
 - `AWS_REGION` (required)  
