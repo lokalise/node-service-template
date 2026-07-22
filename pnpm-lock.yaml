@@ -279,9 +279,6 @@ importers:
       '@lokalise/zod-extras':
         specifier: ^3.0.2
         version: 3.0.2
-      '@message-queue-toolkit/amqp':
-        specifier: ^24.1.0
-        version: 24.1.0(@message-queue-toolkit/core@26.1.0(zod@4.4.3))(@message-queue-toolkit/schemas@7.2.0(zod@4.4.3))(amqplib@2.0.1)(zod@4.4.3)
       '@message-queue-toolkit/core':
         specifier: ^26.1.0
         version: 26.1.0(zod@4.4.3)
@@ -312,9 +309,6 @@ importers:
       '@scalar/fastify-api-reference':
         specifier: ^1.59.3
         version: 1.59.3
-      amqplib:
-        specifier: ^2.0.1
-        version: 2.0.1
       awilix:
         specifier: ^13.0.3
         version: 13.0.3
@@ -1253,15 +1247,6 @@ packages:
   '@lukeed/ms@2.0.2':
     resolution: {integrity: sha512-9I2Zn6+NJLfaGoz9jN3lpwDgAYvfGeNYdbAIjJOqzs4Tpc+VU3Jqq4IofSUBKajiDS8k9fZIg18/z13mpk1bsA==}
     engines: {node: '>=8'}
-
-  '@message-queue-toolkit/amqp@24.1.0':
-    resolution: {integrity: sha512-S6bQotTefi28bMlWvH78JHf6gPHv7FQDTHsvJ1JQRoa/9lzNlbwFjIGLeWCW1VKQwpGY3UrWqzcaFPDOKvXknA==}
-    engines: {node: '>=18'}
-    peerDependencies:
-      '@message-queue-toolkit/core': '>=25.0.0'
-      '@message-queue-toolkit/schemas': '>=7.0.0'
-      amqplib: ^2.0.1
-      zod: '>=3.25.76 <5.0.0'
 
   '@message-queue-toolkit/core@26.1.0':
     resolution: {integrity: sha512-YmJdN6pDXc6uA2B5aIHF5EGm31gYuf9/kO/8qTGfron94V6FoV51K+x/c2Q6RCVuFTU5CBiVVucdAtg1tmlaZQ==}
@@ -2560,10 +2545,6 @@ packages:
 
   ajv@8.20.0:
     resolution: {integrity: sha512-Thbli+OlOj+iMPYFBVBfJ3OmCAnaSyNn4M1vz9T6Gka5Jt9ba/HIR56joy65tY6kx/FCF5VXNB819Y7/GUrBGA==}
-
-  amqplib@2.0.1:
-    resolution: {integrity: sha512-a3P2MgfCf9nzVis12VxWEn0dS6hcqve7dlEAhXDtIWR27BlhtMkILOc+H9aeHjDi6i6r94dYKc2Kx2OFe3avvg==}
-    engines: {node: '>=18'}
 
   ansi-regex@5.0.1:
     resolution: {integrity: sha512-quJQXlTSUGL2LH9SUXo8VwsY4soanhgo6LNSm84E1LBcE8s3O0wpdiRzyR9z/ZZJMlMWv37qOOb9pdJlMUEKFQ==}
@@ -5560,14 +5541,6 @@ snapshots:
 
   '@lukeed/ms@2.0.2': {}
 
-  '@message-queue-toolkit/amqp@24.1.0(@message-queue-toolkit/core@26.1.0(zod@4.4.3))(@message-queue-toolkit/schemas@7.2.0(zod@4.4.3))(amqplib@2.0.1)(zod@4.4.3)':
-    dependencies:
-      '@lokalise/node-core': 14.8.1(zod@4.4.3)
-      '@message-queue-toolkit/core': 26.1.0(zod@4.4.3)
-      '@message-queue-toolkit/schemas': 7.2.0(zod@4.4.3)
-      amqplib: 2.0.1
-      zod: 4.4.3
-
   '@message-queue-toolkit/core@26.1.0(zod@4.4.3)':
     dependencies:
       '@lokalise/node-core': 14.8.1(zod@4.4.3)
@@ -7054,8 +7027,6 @@ snapshots:
       fast-uri: 3.1.2
       json-schema-traverse: 1.0.0
       require-from-string: 2.0.2
-
-  amqplib@2.0.1: {}
 
   ansi-regex@5.0.1: {}
 

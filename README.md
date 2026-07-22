@@ -112,7 +112,7 @@ are relevant for the technological stack of your organization, and replace `@lok
    docker compose up -d
    ```
 
-   This starts PostgreSQL, Redis, RabbitMQ, and [fauxqs](https://github.com/kibertoad/fauxqs) (local SQS/SNS emulator).
+   This starts PostgreSQL, Redis, and [fauxqs](https://github.com/kibertoad/fauxqs) (local SQS/SNS emulator).
 
    - Database is initialized via [scripts/db/init-dbs.sh](./scripts/db/init-dbs.sh).
    - SQS/SNS queues, topics, and subscriptions are initialized via [scripts/fauxqs-init.json](./scripts/fauxqs-init.json).

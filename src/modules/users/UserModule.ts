@@ -14,7 +14,6 @@ import {
   type MandatoryNameAndRegistrationPair,
   type PublicDependencies,
 } from 'opinionated-machine'
-import { PermissionConsumer } from './consumers/PermissionConsumer.ts'
 import { UserEventConsumer } from './consumers/UserEventConsumer.ts'
 import { UserController } from './controllers/UserController.ts'
 import { USER_IMPORT_JOB_PAYLOAD, UserImportJob } from './job-queue-processors/UserImportJob.ts'
@@ -22,7 +21,6 @@ import { DeleteOldUsersJob } from './periodic-jobs/DeleteOldUsersJob.ts'
 import { ProcessLogFilesJob } from './periodic-jobs/ProcessLogFilesJob.ts'
 import { SendEmailsJob } from './periodic-jobs/SendEmailsJob.ts'
 import { UserRepository } from './repositories/UserRepository.ts'
-import { PermissionsService } from './services/PermissionsService.ts'
 import { UserService } from './services/UserService.ts'
 import { UserLoader } from './UserLoader.ts'
 
@@ -43,12 +41,6 @@ export class UserModule extends AbstractModule {
       userService: asServiceClass(UserService),
 
       userLoader: asSingletonClass(UserLoader),
-
-      permissionsService: asServiceClass(PermissionsService),
-      permissionConsumer: asMessageQueueHandlerClass(PermissionConsumer, {
-        diOptions,
-        queueName: PermissionConsumer.QUEUE_NAME,
-      }),
 
       userEventConsumer: asMessageQueueHandlerClass(UserEventConsumer, {
         diOptions,

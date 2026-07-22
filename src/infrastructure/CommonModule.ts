@@ -13,17 +13,8 @@ import {
   HealthcheckResultsStore,
 } from '@lokalise/healthcheck-utils'
 import type { CommonLogger, ErrorReporter } from '@lokalise/node-core'
-import {
-  type AmqpAwareEventDefinition,
-  AmqpConnectionManager,
-  AmqpConsumerErrorResolver,
-  type AmqpTopicPublisherManager,
-  type CommonAmqpTopicPublisher,
-} from '@message-queue-toolkit/amqp'
-import { EventRegistry } from '@message-queue-toolkit/core'
 import { SnsConsumerErrorResolver } from '@message-queue-toolkit/sns'
-import type { Connection } from 'amqplib'
-import { Lifetime, type NameAndRegistrationPair, type Resolver } from 'awilix'
+import type { NameAndRegistrationPair, Resolver } from 'awilix'
 import { drizzle, type PostgresJsDatabase } from 'drizzle-orm/postgres-js'
 import { Redis } from 'ioredis'
 import {
@@ -33,26 +24,21 @@ import {
   type DependencyInjectionOptions,
   type InferModuleDependencies,
   type InferPublicModuleDependencies,
-  isAnyMessageQueueConsumerEnabled,
   isPeriodicJobEnabled,
   resolveJobQueuesEnabled,
 } from 'opinionated-machine'
 import { ToadScheduler } from 'toad-scheduler'
-import type { z } from 'zod/v4'
 import type { AppInstance } from '../app.ts'
 import { FakeStoreApiClient } from '../integrations/FakeStoreApiClient.ts'
-import { PermissionsMessages } from '../modules/users/consumers/permissionsMessageSchemas.ts'
 import { type UsersModuleDependencies, userBullmqQueues } from '../modules/users/UserModule.ts'
 import { type Config, getConfig, nodeEnv, SERVICE_NAME } from './config.ts'
 import { FakeAmplitude } from './fakes/FakeAmplitude.ts'
 import { DbHealthcheck, RedisHealthcheck } from './healthchecks/healthchecks.ts'
 import { MessageProcessingMetricsManager } from './metrics/MessageProcessingMetricsManager.ts'
-import { PublisherManagerAdapter } from './PublisherManagerAdapter.ts'
 
 export type ExternalDependencies = {
   app?: AppInstance
   logger: CommonLogger
-  amqpConnection?: Connection
 }
 export type DependencyOverrides = Partial<DiConfig>
 export type Dependencies = CommonDependencies & UsersModuleDependencies
@@ -62,18 +48,6 @@ declare module '@fastify/awilix' {
   interface Cradle extends Dependencies {}
   interface RequestCradle extends Dependencies {}
 }
-
-const amqpSupportedMessages = [
-  ...Object.values(PermissionsMessages),
-] as const satisfies AmqpAwareEventDefinition[]
-export type AmqpSupportedMessages = typeof amqpSupportedMessages
-
-export type MessagesPublishPayloadsType = z.infer<AmqpSupportedMessages[number]['publisherSchema']>
-
-export type PublisherManager = AmqpTopicPublisherManager<
-  CommonAmqpTopicPublisher<MessagesPublishPayloadsType>,
-  AmqpSupportedMessages
->
 
 const bullmqSupportedQueues = [
   ...userBullmqQueues,
@@ -228,28 +202,6 @@ export class CommonModule extends AbstractModule<unknown, ExternalDependencies> 
         },
       ),
 
-      amqpConnectionManager: asSingletonFunction(
-        ({ config }: { config: CommonDependencies['config'] }): AmqpConnectionManager => {
-          return new AmqpConnectionManager(config.amqp, externalDependencies.logger)
-        },
-        {
-          public: true,
-          lifetime: Lifetime.SINGLETON,
-          asyncInit: 'init',
-          asyncDispose: 'close',
-          asyncInitPriority: 1,
-          asyncDisposePriority: 1,
-          enabled: isAnyMessageQueueConsumerEnabled(diOptions),
-        },
-      ),
-
-      consumerErrorResolver: asSingletonFunction(
-        () => {
-          return new AmqpConsumerErrorResolver()
-        },
-        { public: true },
-      ),
-
       sqsClient: asSingletonFunction(
         ({ config }: { config: Config }) => {
           return new SQSClient({
@@ -304,15 +256,6 @@ export class CommonModule extends AbstractModule<unknown, ExternalDependencies> 
         },
         { public: true },
       ),
-
-      eventRegistry: asSingletonFunction(
-        () => {
-          return new EventRegistry(amqpSupportedMessages)
-        },
-        { public: true },
-      ),
-
-      publisherManager: asSingletonClass(PublisherManagerAdapter, { public: true }),
 
       config: asSingletonFunction(() => getConfig(), { public: true }),
 

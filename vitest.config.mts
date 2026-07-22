@@ -28,6 +28,7 @@ export default defineConfig({
         'src/app.ts',
         'src/**/*.spec.ts',
         'src/**/*.test.ts',
+        'src/**/*.d.ts',
       ],
       reporter: ['text'],
       thresholds: {
