@@ -5,7 +5,7 @@
         "runtime": {
             "name": "node",
             "version": ">=24.16.0",
-            "onFail": "warn"
+            "onFail": "error"
         },
         "packageManager": {
             "name": "pnpm",
