@@ -1,0 +1,21 @@
+name: PR hygiene
+on:
+  pull_request:
+    types: [opened, edited, synchronize, labeled, unlabeled]
+
+permissions:
+  contents: read
+  pull-requests: write
+  issues: write
+
+concurrency:
+  group: pr-hygiene-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  hygiene:
+    uses: lokalise/github-actions/.github/workflows/pr-hygiene.yml@stable
+    with:
+      ai-assistance-tracking: true
+    secrets:
+      github-token: ${{ secrets.GITHUB_TOKEN }}
