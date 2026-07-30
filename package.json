@@ -78,7 +78,7 @@
         "@opentelemetry/instrumentation": "^0.218.0",
         "@scalar/fastify-api-reference": "^1.59.3",
         "amqplib": "^2.0.1",
-        "awilix": "^13.0.3",
+        "awilix": "^13.0.5",
         "awilix-manager": "^7.0.0",
         "bullmq": "^5.78.0",
         "drizzle-kit": "1.0.0-rc.4-273829f",
