@@ -126,9 +126,9 @@
         "@biomejs/cli-linux-arm64": "^2.4.16",
         "@biomejs/cli-linux-x64": "^2.4.16",
         "@biomejs/cli-win32-x64": "^2.4.16",
-        "@esbuild/darwin-arm64": "^0.28.0",
-        "@esbuild/linux-arm64": "^0.28.0",
-        "@esbuild/linux-x64": "^0.28.0",
-        "@esbuild/win32-x64": "^0.28.0"
+        "@esbuild/darwin-arm64": "^0.28.1",
+        "@esbuild/linux-arm64": "^0.28.1",
+        "@esbuild/linux-x64": "^0.28.1",
+        "@esbuild/win32-x64": "^0.28.1"
     }
 }
