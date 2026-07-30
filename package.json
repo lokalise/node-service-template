@@ -117,7 +117,7 @@
         "fast-jwt": "^6.2.4",
         "fauxqs": "^2.7.0",
         "mockttp": "^4.4.2",
-        "typescript": "7.0.1-rc",
+        "typescript": "7.0.2",
         "vitest": "^4.1.8",
         "yaml": "^2.9.0"
     },
