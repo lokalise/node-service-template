@@ -242,7 +242,7 @@ importers:
         version: 0.18.1(@opentelemetry/api@1.9.1)
       '@fastify/schedule':
         specifier: ^6.0.0
-        version: 6.0.0(toad-scheduler@4.0.1)
+        version: 6.0.0(toad-scheduler@4.1.0)
       '@fastify/swagger':
         specifier: ^9.7.0
         version: 9.7.0
@@ -251,22 +251,22 @@ importers:
         version: 6.13.0(zod@4.4.3)
       '@lokalise/aws-config':
         specifier: ^9.0.0
-        version: 9.0.0(2874e9c7465608db4eb8e1b2d2feecbc)
+        version: 9.0.0(49029e796f3539e3c0eed97938bfb6e2)
       '@lokalise/backend-http-client':
         specifier: ^11.2.0
         version: 11.2.0(@lokalise/api-contracts@6.13.0(zod@4.4.3))(@lokalise/node-core@14.8.1(zod@4.4.3))(zod@4.4.3)
       '@lokalise/background-jobs-common':
         specifier: ^14.4.1
-        version: 14.4.1(bullmq@5.78.0)(ioredis@5.11.1)(pino@10.3.1)(toad-scheduler@4.0.1)(zod@4.4.3)
+        version: 14.4.1(bullmq@5.78.0)(ioredis@5.11.1)(pino@10.3.1)(toad-scheduler@4.1.0)(zod@4.4.3)
       '@lokalise/fastify-api-contracts':
         specifier: ^5.4.0
         version: 5.4.0(@lokalise/api-contracts@6.13.0(zod@4.4.3))(@lokalise/node-core@14.8.1(zod@4.4.3))(fastify@5.8.5)(zod@4.4.3)
       '@lokalise/fastify-extras':
         specifier: ^31.0.0
-        version: 31.0.0(@fastify/jwt@10.1.0)(@lokalise/api-contracts@6.13.0(zod@4.4.3))(@lokalise/background-jobs-common@14.4.1(bullmq@5.78.0)(ioredis@5.11.1)(pino@10.3.1)(toad-scheduler@4.0.1)(zod@4.4.3))(@lokalise/node-core@14.8.1(zod@4.4.3))(@opentelemetry/api@1.9.1)(bullmq@5.78.0)(dd-trace@5.103.0(@openfeature/server-sdk@1.21.0(@openfeature/core@1.10.0)))(fastify-type-provider-zod@6.1.0(@fastify/swagger@9.7.0)(fastify@5.8.5)(openapi-types@12.1.3)(zod@4.4.3))(fastify@5.8.5)(ioredis@5.11.1)(pino@10.3.1)(zod@4.4.3)
+        version: 31.0.0(@fastify/jwt@10.1.0)(@lokalise/api-contracts@6.13.0(zod@4.4.3))(@lokalise/background-jobs-common@14.4.1(bullmq@5.78.0)(ioredis@5.11.1)(pino@10.3.1)(toad-scheduler@4.1.0)(zod@4.4.3))(@lokalise/node-core@14.8.1(zod@4.4.3))(@opentelemetry/api@1.9.1)(bullmq@5.78.0)(dd-trace@5.103.0(@openfeature/server-sdk@1.21.0(@openfeature/core@1.10.0)))(fastify-type-provider-zod@6.1.0(@fastify/swagger@9.7.0)(fastify@5.8.5)(openapi-types@12.1.3)(zod@4.4.3))(fastify@5.8.5)(ioredis@5.11.1)(pino@10.3.1)(zod@4.4.3)
       '@lokalise/healthcheck-utils':
         specifier: ^6.0.0
-        version: 6.0.0(@lokalise/background-jobs-common@14.4.1(bullmq@5.78.0)(ioredis@5.11.1)(pino@10.3.1)(toad-scheduler@4.0.1)(zod@4.4.3))(ioredis@5.11.1)(prom-client@15.1.3)(toad-scheduler@4.0.1)(zod@4.4.3)
+        version: 6.0.0(@lokalise/background-jobs-common@14.4.1(bullmq@5.78.0)(ioredis@5.11.1)(pino@10.3.1)(toad-scheduler@4.1.0)(zod@4.4.3))(ioredis@5.11.1)(prom-client@15.1.3)(toad-scheduler@4.1.0)(zod@4.4.3)
       '@lokalise/node-core':
         specifier: ^14.8.1
         version: 14.8.1(zod@4.4.3)
@@ -376,8 +376,8 @@ importers:
         specifier: ^5.7.0
         version: 5.7.0(ioredis@5.11.1)
       toad-scheduler:
-        specifier: ^4.0.1
-        version: 4.0.1
+        specifier: ^4.1.0
+        version: 4.1.0
       undici:
         specifier: ^8.4.1
         version: 8.4.1
@@ -4352,8 +4352,8 @@ packages:
     resolution: {integrity: sha512-m1TdR/rvT7kgGJZhspNtXdsdYk0fddFpJJFlG5s+UkPFo6lkLoZ3YLOaovPYjq1R75NP5JfeTlSHaOsE09peCg==}
     engines: {node: '>=20'}
 
-  toad-scheduler@4.0.1:
-    resolution: {integrity: sha512-utMUvxJmzqmuQzkqFyJdspuDvoVsO5SgQUvEtyZcrVvSwHLOttD+m6SjJZ2u6LoKw5k7zh4vihqjvENbHLfdNA==}
+  toad-scheduler@4.1.0:
+    resolution: {integrity: sha512-2HF37I09Tc4SW+nF1nkSLd3tDaZzsNrCzMn6p+Hzg3io9Rqkc8JQ3KK26Q6AUtBqEg9coleau3bRj8873FHjGA==}
 
   toidentifier@1.0.1:
     resolution: {integrity: sha512-o5sSPKEkg/DIQNmH43V0/uerLrpzVedkUh8tGNvaeXpfpuwjKenlSox/2O/BTlZUtEe+JG7s5YhEz608PlAHRA==}
@@ -5277,10 +5277,10 @@ snapshots:
       '@fastify/forwarded': 3.0.1
       ipaddr.js: 2.4.0
 
-  '@fastify/schedule@6.0.0(toad-scheduler@4.0.1)':
+  '@fastify/schedule@6.0.0(toad-scheduler@4.1.0)':
     dependencies:
       fastify-plugin: 5.1.0
-      toad-scheduler: 4.0.1
+      toad-scheduler: 4.1.0
 
   '@fastify/sse@0.4.0(fastify@5.8.5)':
     dependencies:
@@ -5416,12 +5416,12 @@ snapshots:
     dependencies:
       zod: 4.4.3
 
-  '@lokalise/aws-config@9.0.0(2874e9c7465608db4eb8e1b2d2feecbc)':
+  '@lokalise/aws-config@9.0.0(49029e796f3539e3c0eed97938bfb6e2)':
     dependencies:
       '@aws-sdk/client-sns': 3.1093.0
       '@aws-sdk/client-sqs': 3.1093.0
       '@aws-sdk/credential-providers': 3.1093.0
-      '@lokalise/fastify-extras': 31.0.0(@fastify/jwt@10.1.0)(@lokalise/api-contracts@6.13.0(zod@4.4.3))(@lokalise/background-jobs-common@14.4.1(bullmq@5.78.0)(ioredis@5.11.1)(pino@10.3.1)(toad-scheduler@4.0.1)(zod@4.4.3))(@lokalise/node-core@14.8.1(zod@4.4.3))(@opentelemetry/api@1.9.1)(bullmq@5.78.0)(dd-trace@5.103.0(@openfeature/server-sdk@1.21.0(@openfeature/core@1.10.0)))(fastify-type-provider-zod@6.1.0(@fastify/swagger@9.7.0)(fastify@5.8.5)(openapi-types@12.1.3)(zod@4.4.3))(fastify@5.8.5)(ioredis@5.11.1)(pino@10.3.1)(zod@4.4.3)
+      '@lokalise/fastify-extras': 31.0.0(@fastify/jwt@10.1.0)(@lokalise/api-contracts@6.13.0(zod@4.4.3))(@lokalise/background-jobs-common@14.4.1(bullmq@5.78.0)(ioredis@5.11.1)(pino@10.3.1)(toad-scheduler@4.1.0)(zod@4.4.3))(@lokalise/node-core@14.8.1(zod@4.4.3))(@opentelemetry/api@1.9.1)(bullmq@5.78.0)(dd-trace@5.103.0(@openfeature/server-sdk@1.21.0(@openfeature/core@1.10.0)))(fastify-type-provider-zod@6.1.0(@fastify/swagger@9.7.0)(fastify@5.8.5)(openapi-types@12.1.3)(zod@4.4.3))(fastify@5.8.5)(ioredis@5.11.1)(pino@10.3.1)(zod@4.4.3)
       '@lokalise/node-core': 14.8.1(zod@4.4.3)
       '@lokalise/universal-ts-utils': 4.10.0
       '@message-queue-toolkit/core': 26.1.1(zod@4.4.3)
@@ -5438,7 +5438,7 @@ snapshots:
       undici: 8.4.1
       zod: 4.4.3
 
-  '@lokalise/background-jobs-common@14.4.1(bullmq@5.78.0)(ioredis@5.11.1)(pino@10.3.1)(toad-scheduler@4.0.1)(zod@4.4.3)':
+  '@lokalise/background-jobs-common@14.4.1(bullmq@5.78.0)(ioredis@5.11.1)(pino@10.3.1)(toad-scheduler@4.1.0)(zod@4.4.3)':
     dependencies:
       '@lokalise/id-utils': 3.0.1
       '@lokalise/node-core': 14.8.1(zod@4.4.3)
@@ -5446,7 +5446,7 @@ snapshots:
       ioredis: 5.11.1
       pino: 10.3.1
       redis-semaphore: 5.7.0(ioredis@5.11.1)
-      toad-scheduler: 4.0.1
+      toad-scheduler: 4.1.0
       ts-deepmerge: 8.0.0
       zod: 4.4.3
     transitivePeerDependencies:
@@ -5467,13 +5467,13 @@ snapshots:
       light-my-request: 6.6.0
       zod: 4.4.3
 
-  '@lokalise/fastify-extras@31.0.0(@fastify/jwt@10.1.0)(@lokalise/api-contracts@6.13.0(zod@4.4.3))(@lokalise/background-jobs-common@14.4.1(bullmq@5.78.0)(ioredis@5.11.1)(pino@10.3.1)(toad-scheduler@4.0.1)(zod@4.4.3))(@lokalise/node-core@14.8.1(zod@4.4.3))(@opentelemetry/api@1.9.1)(bullmq@5.78.0)(dd-trace@5.103.0(@openfeature/server-sdk@1.21.0(@openfeature/core@1.10.0)))(fastify-type-provider-zod@6.1.0(@fastify/swagger@9.7.0)(fastify@5.8.5)(openapi-types@12.1.3)(zod@4.4.3))(fastify@5.8.5)(ioredis@5.11.1)(pino@10.3.1)(zod@4.4.3)':
+  '@lokalise/fastify-extras@31.0.0(@fastify/jwt@10.1.0)(@lokalise/api-contracts@6.13.0(zod@4.4.3))(@lokalise/background-jobs-common@14.4.1(bullmq@5.78.0)(ioredis@5.11.1)(pino@10.3.1)(toad-scheduler@4.1.0)(zod@4.4.3))(@lokalise/node-core@14.8.1(zod@4.4.3))(@opentelemetry/api@1.9.1)(bullmq@5.78.0)(dd-trace@5.103.0(@openfeature/server-sdk@1.21.0(@openfeature/core@1.10.0)))(fastify-type-provider-zod@6.1.0(@fastify/swagger@9.7.0)(fastify@5.8.5)(openapi-types@12.1.3)(zod@4.4.3))(fastify@5.8.5)(ioredis@5.11.1)(pino@10.3.1)(zod@4.4.3)':
     dependencies:
       '@amplitude/analytics-node': 1.5.58
       '@bugsnag/js': 8.9.0
       '@fastify/jwt': 10.1.0
       '@lokalise/api-contracts': 6.13.0(zod@4.4.3)
-      '@lokalise/background-jobs-common': 14.4.1(bullmq@5.78.0)(ioredis@5.11.1)(pino@10.3.1)(toad-scheduler@4.0.1)(zod@4.4.3)
+      '@lokalise/background-jobs-common': 14.4.1(bullmq@5.78.0)(ioredis@5.11.1)(pino@10.3.1)(toad-scheduler@4.1.0)(zod@4.4.3)
       '@lokalise/error-utils': 3.0.0(@lokalise/node-core@14.8.1(zod@4.4.3))
       '@lokalise/node-core': 14.8.1(zod@4.4.3)
       '@opentelemetry/api': 1.9.1
@@ -5495,16 +5495,16 @@ snapshots:
       - encoding
       - supports-color
 
-  '@lokalise/healthcheck-utils@6.0.0(@lokalise/background-jobs-common@14.4.1(bullmq@5.78.0)(ioredis@5.11.1)(pino@10.3.1)(toad-scheduler@4.0.1)(zod@4.4.3))(ioredis@5.11.1)(prom-client@15.1.3)(toad-scheduler@4.0.1)(zod@4.4.3)':
+  '@lokalise/healthcheck-utils@6.0.0(@lokalise/background-jobs-common@14.4.1(bullmq@5.78.0)(ioredis@5.11.1)(pino@10.3.1)(toad-scheduler@4.1.0)(zod@4.4.3))(ioredis@5.11.1)(prom-client@15.1.3)(toad-scheduler@4.1.0)(zod@4.4.3)':
     dependencies:
-      '@lokalise/background-jobs-common': 14.4.1(bullmq@5.78.0)(ioredis@5.11.1)(pino@10.3.1)(toad-scheduler@4.0.1)(zod@4.4.3)
+      '@lokalise/background-jobs-common': 14.4.1(bullmq@5.78.0)(ioredis@5.11.1)(pino@10.3.1)(toad-scheduler@4.1.0)(zod@4.4.3)
       '@lokalise/node-core': 14.8.1(zod@4.4.3)
       '@supercharge/promise-pool': 3.3.0
       ioredis: 5.11.1
       prom-client: 15.1.3
       redis-semaphore: 5.7.0(ioredis@5.11.1)
       toad-cache: 3.7.1
-      toad-scheduler: 4.0.1
+      toad-scheduler: 4.1.0
     transitivePeerDependencies:
       - supports-color
       - zod
@@ -8783,7 +8783,7 @@ snapshots:
 
   toad-cache@3.7.4: {}
 
-  toad-scheduler@4.0.1:
+  toad-scheduler@4.1.0:
     dependencies:
       croner: 10.0.1
 
