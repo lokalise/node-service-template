@@ -25,7 +25,7 @@
     },
     "devDependencies": {
         "@lokalise/api-contracts": "^6.13.0",
-        "@lokalise/tsconfig": "^4.0.0",
+        "@lokalise/tsconfig": "^5.0.0",
         "@lokalise/zod-extras": "^3.0.2",
         "typescript": "7.0.1-rc",
         "zod": "^4.4.3"
