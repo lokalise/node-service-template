@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.16.1] - 2026-07-31
+
+- Fix `scripts/utils/cliCommandWrapper.ts`: `unwrapSchemaIfNeeded` now also unwraps `ZodDefault` (recursively), so a boolean CLI flag declared as `z.boolean().default(false)` is registered as a boolean flag by `parseArgs` instead of a string option — previously `--flag` declared with a default was silently ignored. Only `ZodOptional`/`ZodNullable` were unwrapped before
+- Add spec coverage for `z.boolean().default(false)` (present → `true`, absent → `false`) in `scripts/utils/cliCommandWrapper.spec.ts`
+
 ## [1.16.0] - 2026-07-17
 
 - Support zod schemas with `.transform()`/`.pipe()` in `scripts/utils/cliCommandWrapper.ts`: `deriveParseArgsOptions` now resolves the flag-defining `ZodObject` through the input side of a `ZodPipe` (new `resolveInputObjectSchema` helper), so a CLI script can declare flat flags and transform them into a nested, schema-validated args object in a single `argsSchema` — command handlers receive the transformed output while `parseArgs` options (including repeatable/`multiple` flags) are still derived from the flat input shape

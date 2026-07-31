@@ -13,8 +13,12 @@ import z from 'zod/v4'
 import { getApp } from '../../src/app.ts'
 import type { Dependencies } from '../../src/infrastructure/CommonModule.ts'
 
-const unwrapSchemaIfNeeded = (schema: z.Schema) =>
-  schema instanceof z.ZodOptional || schema instanceof z.ZodNullable ? schema.unwrap() : schema
+const unwrapSchemaIfNeeded = (schema: z.Schema): z.Schema =>
+  schema instanceof z.ZodOptional ||
+  schema instanceof z.ZodNullable ||
+  schema instanceof z.ZodDefault
+    ? unwrapSchemaIfNeeded(schema.unwrap() as z.Schema)
+    : schema
 
 const resolveInputObjectSchema = (schema: z.Schema): z.ZodObject | undefined => {
   if (schema instanceof z.ZodObject) return schema

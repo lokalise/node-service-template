@@ -62,6 +62,16 @@ describe('cliCommandWrapper', () => {
       expected: { flag: true },
     },
     {
+      inputArgs: ['--flag'],
+      schema: z.object({ flag: z.boolean().default(false) }),
+      expected: { flag: true },
+    },
+    {
+      inputArgs: [],
+      schema: z.object({ flag: z.boolean().default(false) }),
+      expected: { flag: false },
+    },
+    {
       inputArgs: ['--id=abc', '--id=def'],
       schema: z.object({ id: z.array(z.string()).optional() }),
       expected: { id: ['abc', 'def'] },
