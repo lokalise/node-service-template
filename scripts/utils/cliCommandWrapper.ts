@@ -17,7 +17,7 @@ const unwrapSchemaIfNeeded = (schema: z.Schema): z.Schema =>
   schema instanceof z.ZodOptional ||
   schema instanceof z.ZodNullable ||
   schema instanceof z.ZodDefault
-    ? unwrapSchemaIfNeeded(schema.unwrap())
+    ? unwrapSchemaIfNeeded(schema.unwrap() as z.Schema)
     : schema
 
 const resolveInputObjectSchema = (schema: z.Schema): z.ZodObject | undefined => {
