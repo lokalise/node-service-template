@@ -1,6 +1,6 @@
 {
     "name": "node-service-template",
-    "version": "1.16.0",
+    "version": "1.16.1",
     "devEngines": {
         "runtime": {
             "name": "node",
