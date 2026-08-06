@@ -91,7 +91,7 @@
         "fastify-plugin": "^6.0.0",
         "fastify-type-provider-zod": "^7.0.0",
         "ioredis": "^5.11.1",
-        "layered-loader": "^14.4.1",
+        "layered-loader": "^14.5.3",
         "opinionated-machine": "^6.20.1",
         "pino": "^10.3.1",
         "pino-pretty": "^13.1.3",
