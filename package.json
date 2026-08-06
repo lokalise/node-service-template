@@ -80,7 +80,7 @@
         "amqplib": "^2.0.1",
         "awilix": "^13.0.5",
         "awilix-manager": "^7.0.0",
-        "bullmq": "^5.78.0",
+        "bullmq": "^5.81.3",
         "drizzle-kit": "1.0.0-rc.4",
         "drizzle-orm": "1.0.0-rc.4",
         "envase": "^1.5.0",
