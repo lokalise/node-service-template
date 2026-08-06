@@ -379,8 +379,8 @@ importers:
         specifier: ^4.1.0
         version: 4.1.0
       undici:
-        specifier: ^8.4.1
-        version: 8.4.1
+        specifier: ^8.9.0
+        version: 8.9.0
       zod:
         specifier: ^4.4.3
         version: 4.4.3
@@ -542,6 +542,9 @@ packages:
   '@aws-sdk/core@3.977.2':
     resolution: {integrity: sha512-8sT/M5vDcagx5/iM0Bfx7f6i3mfVOQkA34+GTMwp0lIWZb6ma+bjkzDS/r9yqU2yTPBqqMBFPT3+d9kUuuNDJA==}
     engines: {node: '>=20.0.0'}
+    deprecated: |-
+      Deprecated due to Document number parsing bug in JSON, see
+        https://github.com/aws/aws-sdk-js-v3/issues/8246. Newer version available.
 
   '@aws-sdk/crc64-nvme@3.972.10':
     resolution: {integrity: sha512-QsyJJlx+bSgApcd6kkloZ+nHg2nWJTwUA39/KiDcNRYjz9UOReQcNJRlJBImK+eF9EWl2LG5SW7LaVFuYUE8HQ==}
@@ -1329,12 +1332,12 @@ packages:
     resolution: {integrity: sha512-VVPPgHyQ6ShqnrmDWuxjmUIsO9gWyOZFmuOfLd9LfBGQJwZfy0gvv9pbHSJuoFNIYC7ZDX9aoFwowjcdSC4E8w==}
     engines: {node: '>=18'}
 
-  '@napi-rs/wasm-runtime@1.2.0':
-    resolution: {integrity: sha512-kDoONqMa+VnZ4vvvu/ZUurpJ4gkZU57e7g69qpNgWhYcZFPUHZM2CEMKm+cG6ufDVALbjMvfmMjFVqaK7uEMnA==}
+  '@napi-rs/wasm-runtime@1.2.2':
+    resolution: {integrity: sha512-JfB4kuJQjaoHuCTseIINHtHWeJnvgEcxjwA5t/Y00ZgaOO1Crz3fjT/p8kT28zA/Caz7oiUMn3d6H2yOVCVwuw==}
     engines: {node: ^20.19.0 || ^22.13.0 || >=23.5.0}
     peerDependencies:
-      '@emnapi/core': ^2.0.0-alpha.3
-      '@emnapi/runtime': ^2.0.0-alpha.3
+      '@emnapi/core': ^1.7.1 || ^2.0.0-alpha.3
+      '@emnapi/runtime': ^1.7.1 || ^2.0.0-alpha.3
 
   '@nodelib/fs.scandir@2.1.5':
     resolution: {integrity: sha512-vq24Bq3ym5HEQm2NKCr3yXDwjc7vTsEThRDnkp2DK9p1uqLR+DHurm/NOTo0KG7HYHU7eppKZj3MyqYuMBf62g==}
@@ -2800,6 +2803,7 @@ packages:
   cron-parser@4.9.0:
     resolution: {integrity: sha512-p0SaNjrHOnQeR8/VnfGbmg9te2kfyYSQ7Sc/j/6DtPL3JQvKxmjO9TSjNFpujqV3vEYYBvNNvXSxzyksBWAx1Q==}
     engines: {node: '>=12.0.0'}
+    deprecated: v4 is no longer maintained, upgrade to v5
 
   croner@10.0.1:
     resolution: {integrity: sha512-ixNtAJndqh173VQ4KodSdJEI6nuioBWI0V1ITNKhZZsO0pEMoDxz539T4FTTbSZ/xIOSuDnzxLVRqBVSvPNE2g==}
@@ -3440,6 +3444,10 @@ packages:
     resolution: {integrity: sha512-jTd2FfOgOWOdgjkHuk/1Ms8VKFXkPs15ymYBETw1sAOrO/dY3XeGVRWir9qBbw7pXr0T2eTFwfCZ+N02HmiNGA==}
     engines: {node: '>=18'}
 
+  import-in-the-middle@3.3.3:
+    resolution: {integrity: sha512-AiohS3H80sXO6owEltjGX+glb7qXaDhBoJb9XcQVH4UI207xu/bDLUcadVKp7Qe576reg9yr/PXZjV5qx8gfbA==}
+    engines: {node: '>=18'}
+
   inherits@2.0.4:
     resolution: {integrity: sha512-k/vGaX4/Yla3WzyMCvTQOXYeIHvqOKtnqBduzTHpzpQZzAskKMhZ2K+EnBiSM9zGSoIFeMpXKxa4dYeZIQqewQ==}
 
@@ -3544,8 +3552,8 @@ packages:
     resolution: {integrity: sha512-ePWsvanv0DWuDRsW8dnt+R4jQ31SCRCQ7hhNcPXZPsoBZiemuZNYGf7adZdqX2D86j6rvKp3RpCxVTSb8WQlOw==}
     hasBin: true
 
-  js-yaml@4.3.0:
-    resolution: {integrity: sha512-1td788aAnnZ5qs7V2QIRl1owjtYpbKt749Y3xauqQgwIIGF/xXWz1wMTEBx5O3LK3lXLVuqXPdPxj2BoFHaW9Q==}
+  js-yaml@4.3.1:
+    resolution: {integrity: sha512-CY6crGq313MX8GkwvB7tzgp99vjQxY1++5y10/BKN/GUfHqWaOGQMNZkBvqSzsZKWk/ijwHlWzzkLulsGHhjWQ==}
     hasBin: true
 
   jsbi@4.3.2:
@@ -3783,8 +3791,8 @@ packages:
     resolution: {integrity: sha512-dkEJPVvun4FryqBmZ5KhDo0K9iDXAwn08tMLDinNdRBNPcYEDiWYysLcc6k3mjTMlbP9KyylvRpd4wFtwrT9rw==}
     engines: {node: ^20.17.0 || >=22.9.0}
 
-  nanoid@3.3.16:
-    resolution: {integrity: sha512-bzlKTyNJ7+LdGIIwy8ijFpIqEQIvafahV7eYykJ8Cvh42EdJeODoJ6gUJXpQJvej1BddH8OqTXZNE/KfbWAu8Q==}
+  nanoid@3.3.17:
+    resolution: {integrity: sha512-xQLf0A3HOMlgHq0n247/LRuAOYmB7dXJ/DvAxGvsSBij45XtBSmQycu+F8ODbHwns/XyFZagyL1+J0Offw1E0g==}
     engines: {node: ^10 || ^12 || ^13.7 || ^14 || >=15.0.1}
     hasBin: true
 
@@ -3980,8 +3988,8 @@ packages:
     resolution: {integrity: sha512-r34yH/GlQpKZbU1BvFFqOjhISRo1MNx1tWYsYvmj6KIRHSPMT2+yHOEb1SG6NMvRoHRF0a07kCOox/9yakl1vg==}
     hasBin: true
 
-  postcss@8.5.24:
-    resolution: {integrity: sha512-8RyVklq0owXUTa4xlpzu4l9AaVKIdQvAcOHZWaMh98HgySsUtxRVf/chRe3dsSLqb6i40BzGRzEUddRaI+9TSw==}
+  postcss@8.5.25:
+    resolution: {integrity: sha512-DTPx3RWSSnWyzLxQnlH0rJP+EW5ekl16ZU4/psbIhA0e53kJfdgaN5vKM+xP7yJtXVu+nfdVFmlgFDEKAe4Pyw==}
     engines: {node: ^10 || ^12 || >=14}
 
   postgres-array@2.0.0:
@@ -4355,11 +4363,11 @@ packages:
     resolution: {integrity: sha512-yau8yJdTt989Mm0Bd/236QnzEiPf2xLLTqUZRUJOo/3CB078LSwzei343DgtJVmfJKJE3TMINY1u42SQsP6mXw==}
     engines: {node: '>=14.0.0'}
 
-  tldts-core@7.4.9:
-    resolution: {integrity: sha512-DxKfPBI52p2msTEu7MPhdpdDTBhhVQg1a/8PjQckeyAvO13eMYElX545grIp6nnTGIMZlRvFZPvFhvI/WIz2Vg==}
+  tldts-core@7.4.10:
+    resolution: {integrity: sha512-KnQjp53ZekKgm/r3l+u8kJGGzYgrWdP8+Mql7a4vijh2WE0IrZWspQj/TpTxDho/YxO+AnOZnIjQcCD+q6iJsw==}
 
-  tldts@7.4.9:
-    resolution: {integrity: sha512-3kZ8wQQ/k5DrChD4X4FVvr2D7E5uoRgAqkPyLpSCGUvqOvqu+JEdr3mwMUaVWb+vMHZaKhF5fp2PBigKsui7hA==}
+  tldts@7.4.10:
+    resolution: {integrity: sha512-GgouD1B+sWwvkaEq8vXC15DjQitxbvs12oIXELpconwm+Tg3zfcEv4jgzq3vtKverDXsg3VI8aRgNL2Nra0Iog==}
     hasBin: true
 
   tmp@0.2.7:
@@ -4441,8 +4449,8 @@ packages:
   undici-types@8.3.0:
     resolution: {integrity: sha512-j375ScV60dom+YkPFIfTLcOiPxkN/buHz5GobjLhixFuANaNs3C9l4GmrWqejgXWJ7BbJcFYpTEUkS1Ge8bpZQ==}
 
-  undici@8.4.1:
-    resolution: {integrity: sha512-RNHlB4fxZK0IrkhBsxhlbx7s8kFWwr7rzzOqj5nvZugw3ig3RsB7KW3zVlV0eu8POl+rx5d1hmL7rRg0z1owow==}
+  undici@8.9.0:
+    resolution: {integrity: sha512-aWZpUj7XoGonMClx4gdDRfgBjqeA+F473aDmROQQbM9n6PRfK/u1q/a0X4wMTgcHfT8H6fpbt98PFuDUwFg2YA==}
     engines: {node: '>=22.19.0'}
 
   unfetch@4.2.0:
@@ -5124,7 +5132,7 @@ snapshots:
 
   '@datadog/wasm-js-rewriter@5.0.1':
     dependencies:
-      js-yaml: 4.3.0
+      js-yaml: 4.3.1
       lru-cache: 7.18.3
       module-details-from-path: 1.0.4
       node-gyp-build: 4.8.4
@@ -5461,7 +5469,7 @@ snapshots:
       '@lokalise/api-contracts': 6.13.0(zod@4.4.3)
       '@lokalise/node-core': 14.8.1(zod@4.4.3)
       parse-sse: 0.1.0
-      undici: 8.4.1
+      undici: 8.9.0
       zod: 4.4.3
 
   '@lokalise/background-jobs-common@14.4.2(bullmq@5.78.0)(ioredis@5.11.1)(pino@10.3.1)(toad-scheduler@4.1.0)(zod@4.4.3)':
@@ -5657,7 +5665,7 @@ snapshots:
       outvariant: 1.4.3
       strict-event-emitter: 0.5.1
 
-  '@napi-rs/wasm-runtime@1.2.0(@emnapi/core@1.10.0)(@emnapi/runtime@1.10.0)':
+  '@napi-rs/wasm-runtime@1.2.2(@emnapi/core@1.10.0)(@emnapi/runtime@1.10.0)':
     dependencies:
       '@emnapi/core': 1.10.0
       '@emnapi/runtime': 1.10.0
@@ -6467,7 +6475,7 @@ snapshots:
     dependencies:
       '@emnapi/core': 1.10.0
       '@emnapi/runtime': 1.10.0
-      '@napi-rs/wasm-runtime': 1.2.0(@emnapi/core@1.10.0)(@emnapi/runtime@1.10.0)
+      '@napi-rs/wasm-runtime': 1.2.2(@emnapi/core@1.10.0)(@emnapi/runtime@1.10.0)
     optional: true
 
   '@oxc-parser/binding-win32-arm64-msvc@0.129.0':
@@ -6706,7 +6714,7 @@ snapshots:
     dependencies:
       '@emnapi/core': 1.10.0
       '@emnapi/runtime': 1.10.0
-      '@napi-rs/wasm-runtime': 1.2.0(@emnapi/core@1.10.0)(@emnapi/runtime@1.10.0)
+      '@napi-rs/wasm-runtime': 1.2.2(@emnapi/core@1.10.0)(@emnapi/runtime@1.10.0)
     optional: true
 
   '@rolldown/binding-win32-arm64-msvc@1.0.1':
@@ -7331,7 +7339,7 @@ snapshots:
   dd-trace@5.103.0(@openfeature/server-sdk@1.21.0(@openfeature/core@1.10.0)):
     dependencies:
       dc-polyfill: 0.1.11
-      import-in-the-middle: 3.3.2
+      import-in-the-middle: 3.3.3
     optionalDependencies:
       '@datadog/libdatadog': 0.9.3
       '@datadog/native-appsec': 11.0.1
@@ -7890,6 +7898,12 @@ snapshots:
       es-module-lexer: 2.3.1
       module-details-from-path: 1.0.4
 
+  import-in-the-middle@3.3.3:
+    dependencies:
+      cjs-module-lexer: 2.2.0
+      es-module-lexer: 2.3.1
+      module-details-from-path: 1.0.4
+
   inherits@2.0.4: {}
 
   ioredis@5.11.1:
@@ -7971,7 +7985,7 @@ snapshots:
     dependencies:
       argparse: 2.0.1
 
-  js-yaml@4.3.0:
+  js-yaml@4.3.1:
     dependencies:
       argparse: 2.0.1
     optional: true
@@ -8235,7 +8249,7 @@ snapshots:
 
   mute-stream@3.0.0: {}
 
-  nanoid@3.3.16: {}
+  nanoid@3.3.17: {}
 
   nanoid@5.1.11: {}
 
@@ -8440,9 +8454,9 @@ snapshots:
       sonic-boom: 4.2.1
       thread-stream: 4.2.0
 
-  postcss@8.5.24:
+  postcss@8.5.25:
     dependencies:
-      nanoid: 3.3.16
+      nanoid: 3.3.17
       picocolors: 1.1.1
       source-map-js: 1.2.1
 
@@ -8821,11 +8835,11 @@ snapshots:
 
   tinyrainbow@3.1.1: {}
 
-  tldts-core@7.4.9: {}
+  tldts-core@7.4.10: {}
 
-  tldts@7.4.9:
+  tldts@7.4.10:
     dependencies:
-      tldts-core: 7.4.9
+      tldts-core: 7.4.10
 
   tmp@0.2.7: {}
 
@@ -8845,7 +8859,7 @@ snapshots:
 
   tough-cookie@6.0.2:
     dependencies:
-      tldts: 7.4.9
+      tldts: 7.4.10
 
   tr46@0.0.3: {}
 
@@ -8910,7 +8924,7 @@ snapshots:
 
   undici-types@8.3.0: {}
 
-  undici@8.4.1: {}
+  undici@8.9.0: {}
 
   unfetch@4.2.0: {}
 
@@ -8938,7 +8952,7 @@ snapshots:
     dependencies:
       lightningcss: 1.33.0
       picomatch: 4.0.5
-      postcss: 8.5.24
+      postcss: 8.5.25
       rolldown: 1.0.1
       tinyglobby: 0.2.17
     optionalDependencies:
