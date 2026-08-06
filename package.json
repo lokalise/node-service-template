@@ -99,7 +99,7 @@
         "prom-client": "^15.1.3",
         "redis-semaphore": "^5.7.0",
         "toad-scheduler": "^4.1.0",
-        "undici": "^8.4.1",
+        "undici": "^8.9.0",
         "zod": "^4.4.3"
     },
     "devDependencies": {
