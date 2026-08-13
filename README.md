@@ -25,6 +25,7 @@ Mechanisms:
 - [Dependency injection](./docs/dependency-injection.md) (using [awilix](https://github.com/jeffijoe/awilix));
 - [Scheduling](./docs/scheduling.md) (using [toad-scheduler](https://github.com/kibertoad/toad-scheduler)
   and [redis-semaphore](https://github.com/swarthy/redis-semaphore));
+- Documented [deployment contract](./docs/deployment.md) (probes, graceful shutdown, migrations, replica behaviour);
 - Type-safe message queue handling, using [message-queue-toolkit](https://github.com/kibertoad/message-queue-toolkit) framework;
 - Type-safe [dependency mocking](./src/app.mock.spec.ts) for tests;
 
@@ -229,6 +230,16 @@ If any variable is not documented you will see a list of undocumented ones:
 ❌ Missing documentation for the following environment variables:
 - VARIABLE_NAME
 ```
+
+## Deployment
+
+The service is deployed as a container image built from the [Dockerfile](./Dockerfile) in the repository root.
+[docs/deployment.md](./docs/deployment.md) documents the runtime contract that the image exposes: ports, liveness and
+readiness endpoints, startup and shutdown behaviour, how to run database migrations from the released image, and what
+changes when you run more than one replica.
+
+The template intentionally ships no manifests, charts or deployment pipelines, since those are specific to the platform
+you deploy on.
 
 ## Troubleshooting
 
