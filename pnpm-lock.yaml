@@ -398,8 +398,8 @@ importers:
         specifier: ^5.0.0
         version: 5.0.0
       '@lokalise/universal-testing-utils':
-        specifier: ^3.8.0
-        version: 3.8.0(@lokalise/api-contracts@6.13.0(zod@4.4.3))(mockttp@4.4.2)(msw@2.14.6(@types/node@26.1.2)(typescript@7.0.2))(zod@4.4.3)
+        specifier: ^4.0.0
+        version: 4.0.0(@lokalise/api-contracts@6.13.0(zod@4.4.3))(mockttp@4.4.2)(msw@2.14.6(@types/node@26.1.2)(typescript@7.0.2))(zod@4.4.3)
       '@opentelemetry/sdk-trace-base':
         specifier: ^2.10.0
         version: 2.10.0(@opentelemetry/api@1.9.1)
@@ -1232,8 +1232,8 @@ packages:
   '@lokalise/tsconfig@5.0.0':
     resolution: {integrity: sha512-nAE106uzG1+6ldEdmbFVIwkFTszkOFIxzCPaZhwqoChcXizvcCPuPGTE+PrlPiE6GhfAzlspLvmVwvzdaNimdw==}
 
-  '@lokalise/universal-testing-utils@3.8.0':
-    resolution: {integrity: sha512-BarJ+RgW12GNhMyOM3zvaITilNe4pHSHW/GGr15zvuxM8+5hOAMXShouvvunkoxjkg/5SiVBPc95a5oeVMH/Ww==}
+  '@lokalise/universal-testing-utils@4.0.0':
+    resolution: {integrity: sha512-5x1xDZqfWsPUECIkg1CGWVpBRtjIQoAVB/s+MCtKMlAhWxmJ6cHElf7KE5np7nolaQXymMkDbGJGMJUHkOXYwg==}
     peerDependencies:
       '@lokalise/api-contracts': '>=6.13.0'
       mockttp: '>=4.2.1'
@@ -5561,7 +5561,7 @@ snapshots:
 
   '@lokalise/tsconfig@5.0.0': {}
 
-  '@lokalise/universal-testing-utils@3.8.0(@lokalise/api-contracts@6.13.0(zod@4.4.3))(mockttp@4.4.2)(msw@2.14.6(@types/node@26.1.2)(typescript@7.0.2))(zod@4.4.3)':
+  '@lokalise/universal-testing-utils@4.0.0(@lokalise/api-contracts@6.13.0(zod@4.4.3))(mockttp@4.4.2)(msw@2.14.6(@types/node@26.1.2)(typescript@7.0.2))(zod@4.4.3)':
     dependencies:
       '@lokalise/api-contracts': 6.13.0(zod@4.4.3)
       mockttp: 4.4.2
