@@ -60,7 +60,7 @@ jobs:
       pull-requests: write
       contents: write
     steps:
-      - uses: fastify/github-action-merge-dependabot@v3
+      - uses: fastify/github-action-merge-dependabot@v3.14.0
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           # Only auto-merge during business hours: Mon-Fri, 10:00-16:59 Berlin time.
