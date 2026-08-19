@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.16.2] - 2026-08-19
+
+- Fix the Scalar API reference at `/documentation/` rendering a blank page in the browser: the `jwtTokenPlugin` `skipList` in `src/app.ts` exempted the non-existent path `/documentation/js/scalar.ts` instead of the actual served asset `/documentation/js/scalar.js`, so the UI's JS bundle was gated behind JWT auth and returned `401`, leaving the Scalar SPA unable to mount
+
 ## [1.16.1] - 2026-07-31
 
 - Fix `scripts/utils/cliCommandWrapper.ts`: `unwrapSchemaIfNeeded` now also unwraps `ZodDefault` (recursively), so a boolean CLI flag declared as `z.boolean().default(false)` is registered as a boolean flag by `parseArgs` instead of a string option — previously `--flag` declared with a default was silently ignored. Only `ZodOptional`/`ZodNullable` were unwrapped before
