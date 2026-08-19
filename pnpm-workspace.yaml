@@ -12,6 +12,7 @@ allowBuilds:
   msgpackr-extract: false
   msw: false
   protobufjs: false
+  tls-impersonate: false
 minimumReleaseAgeExclude:
   - '@message-queue-toolkit/schemas@7.2.0'
   - '@typescript/typescript-aix-ppc64@7.0.1-rc'
