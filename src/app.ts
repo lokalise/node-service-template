@@ -186,13 +186,26 @@ export async function getApp(
     },
   })
 
+  // Scalar's reference page bootstraps through an inline <script>, which the
+  // global Helmet CSP (script-src 'self') blocks in production.
+  // Registering Scalar in an encapsulated scope with its own Helmet.
+  await app.register(async (documentation) => {
+    await documentation.register(fastifyHelmet, {
+      contentSecurityPolicy: {
+        directives: {
+          'script-src': ["'self'", "'unsafe-inline'"],
+          'worker-src': ["'self'", 'blob:'],
+        },
+      },
+    })
+    await documentation.register(scalarFastifyApiReference, {
+      routePrefix: '/documentation',
+    })
+  })
+
   // Since DI config relies on having app-scoped OTel instance to be set by the plugin, we instantiate it earlier than we run the DI initialization.
   await app.register(openTelemetryTransactionManagerPlugin, {
     isEnabled: config.vendors.opentelemetry.isEnabled,
-  })
-
-  await app.register(scalarFastifyApiReference, {
-    routePrefix: '/documentation',
   })
 
   await app.register(fastifyAwilixPlugin, {
@@ -217,7 +230,7 @@ export async function getApp(
       '/documentation',
       '/documentation/',
       '/documentation/openapi.json',
-      '/documentation/js/scalar.ts',
+      '/documentation/js/scalar.js',
       '/',
       '/health',
       '/live',

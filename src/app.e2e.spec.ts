@@ -106,6 +106,21 @@ describe('app', () => {
         valid: true,
       })
     })
+
+    it('Serves docs with a CSP that allows the Scalar inline bootstrap script', async () => {
+      const response = await app.inject().get('/documentation/').end()
+
+      const csp = response.headers['content-security-policy']
+      expect(csp).toBeDefined()
+      expect(csp).toContain("script-src 'self' 'unsafe-inline'")
+    })
+
+    it('Does not leak the relaxed docs CSP to non-documentation routes', async () => {
+      const response = await app.inject().get('/').end()
+
+      const csp = response.headers['content-security-policy']
+      expect(csp ?? '').not.toContain("script-src 'self' 'unsafe-inline'")
+    })
   })
 
   describe('config overrides in tests', () => {
