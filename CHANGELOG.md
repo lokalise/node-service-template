@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.16.3] - 2026-08-19
+
+- Fix the Scalar API reference at `/documentation/` still rendering a blank page in deployed environments: Helmet's default CSP (`script-src 'self'`, no `'unsafe-inline'`) blocked Scalar's inline bootstrap `<script>`, so the JS bundle loaded but never initialized. Register Scalar in an encapsulated Fastify scope with its own Helmet that relaxes `script-src`/`worker-src` only for the `/documentation` routes, keeping the strict CSP on every other route
+
 ## [1.16.2] - 2026-08-19
 
 - Fix the Scalar API reference at `/documentation/` rendering a blank page in the browser: the `jwtTokenPlugin` `skipList` in `src/app.ts` exempted the non-existent path `/documentation/js/scalar.ts` instead of the actual served asset `/documentation/js/scalar.js`, so the UI's JS bundle was gated behind JWT auth and returned `401`, leaving the Scalar SPA unable to mount
