@@ -217,7 +217,7 @@ export async function getApp(
       '/documentation',
       '/documentation/',
       '/documentation/openapi.json',
-      '/documentation/js/scalar.ts',
+      '/documentation/js/scalar.js',
       '/',
       '/health',
       '/live',
