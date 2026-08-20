@@ -3,6 +3,7 @@ import {
   getUserContract,
   patchUpdateUserContract,
   postCreateUserContract,
+  postGetUsersByIdsContract,
 } from '@node-service-template/api-contracts'
 import type { RouteOptions } from 'fastify'
 import { AbstractApiController, buildApiRoute } from 'opinionated-machine'
@@ -15,6 +16,7 @@ export class UserController extends AbstractApiController<UserControllerContract
   public static contracts = {
     createUser: postCreateUserContract,
     getUser: getUserContract,
+    getUsersByIds: postGetUsersByIdsContract,
     deleteUser: deleteUserContract,
     updateUser: patchUpdateUserContract,
   } as const
@@ -46,6 +48,15 @@ export class UserController extends AbstractApiController<UserControllerContract
       const user = await this.userService.getUser(reqContext, userId)
 
       return { status: 200, body: { data: user } }
+    }),
+
+    getUsersByIds: buildApiRoute(UserController.contracts.getUsersByIds, async (req) => {
+      const { userIds } = req.body
+      const { reqContext } = req
+
+      const users = await this.userService.getUsers(reqContext, userIds)
+
+      return { status: 200, body: { data: users } }
     }),
 
     deleteUser: buildApiRoute(UserController.contracts.deleteUser, async (req) => {

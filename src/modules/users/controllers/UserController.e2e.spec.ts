@@ -111,6 +111,45 @@ describe('UserController', () => {
     })
   })
 
+  describe(describeApiContract(UserController.contracts.getUsersByIds), () => {
+    it('batch-resolves users by their IDs', async () => {
+      const token = generateTestJwt({ userId: 1 })
+      const user1 = await userRepository.createUser(NEW_USER_FIXTURE)
+      const user2 = await userRepository.createUser({
+        name: 'second',
+        email: 'second@test.com',
+      })
+
+      const response = await injectByApiContract(app, UserController.contracts.getUsersByIds, {
+        headers: {
+          authorization: `Bearer ${token}`,
+        },
+        body: {
+          userIds: [user1.id, user2.id],
+        },
+      })
+
+      expect(response.statusCode).toBe(200)
+      const ids = response.json().data.map((user: { id: string }) => user.id)
+      expect(ids).toEqual(expect.arrayContaining([user1.id, user2.id]))
+    })
+
+    it('rejects an empty list of IDs', async () => {
+      const token = generateTestJwt({ userId: 1 })
+
+      const response = await injectByApiContract(app, UserController.contracts.getUsersByIds, {
+        headers: {
+          authorization: `Bearer ${token}`,
+        },
+        body: {
+          userIds: [],
+        },
+      })
+
+      expect(response.statusCode).toBe(400)
+    })
+  })
+
   describe(describeApiContract(UserController.contracts.deleteUser), () => {
     it('resets cache after deletion', async () => {
       const token = generateTestJwt({ userId: '1' })
