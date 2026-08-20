@@ -1,17 +1,17 @@
-import { buildFastifyRoute } from '@lokalise/fastify-api-contracts'
 import {
   deleteUserContract,
   getUserContract,
   patchUpdateUserContract,
   postCreateUserContract,
 } from '@node-service-template/api-contracts'
-import { AbstractController, type BuildRoutesReturnType } from 'opinionated-machine'
+import type { RouteOptions } from 'fastify'
+import { AbstractApiController, buildApiRoute } from 'opinionated-machine'
 import type { UserService } from '../services/UserService.ts'
 import type { UsersInjectableDependencies } from '../UserModule.ts'
 
 type UserControllerContractsType = typeof UserController.contracts
 
-export class UserController extends AbstractController<UserControllerContractsType> {
+export class UserController extends AbstractApiController<UserControllerContractsType> {
   public static contracts = {
     createUser: postCreateUserContract,
     getUser: getUserContract,
@@ -26,57 +26,45 @@ export class UserController extends AbstractController<UserControllerContractsTy
     this.userService = dependencies.userService
   }
 
-  private createUser = buildFastifyRoute(postCreateUserContract, async (req, reply) => {
-    const { name, email, age } = req.body
-    const { userService } = req.diScope.cradle
+  public readonly routes: Record<keyof UserControllerContractsType, RouteOptions> = {
+    createUser: buildApiRoute(UserController.contracts.createUser, async (req) => {
+      const { name, email, age } = req.body
 
-    const createdUser = await userService.createUser({
-      name,
-      email,
-      age,
-    })
+      const createdUser = await this.userService.createUser({
+        name,
+        email,
+        age,
+      })
 
-    return reply.status(201).send({
-      data: createdUser,
-    })
-  })
+      return { status: 201, body: { data: createdUser } }
+    }),
 
-  private getUser = buildFastifyRoute(getUserContract, async (req, reply) => {
-    const { userId } = req.params
-    const { reqContext } = req
+    getUser: buildApiRoute(UserController.contracts.getUser, async (req) => {
+      const { userId } = req.params
+      const { reqContext } = req
 
-    const user = await this.userService.getUser(reqContext, userId)
+      const user = await this.userService.getUser(reqContext, userId)
 
-    return reply.send({
-      data: user,
-    })
-  })
+      return { status: 200, body: { data: user } }
+    }),
 
-  private deleteUser = buildFastifyRoute(deleteUserContract, async (req, reply) => {
-    const { userId } = req.params
-    const { reqContext } = req
+    deleteUser: buildApiRoute(UserController.contracts.deleteUser, async (req) => {
+      const { userId } = req.params
+      const { reqContext } = req
 
-    await this.userService.deleteUser(reqContext, userId)
+      await this.userService.deleteUser(reqContext, userId)
 
-    return reply.status(204).send()
-  })
+      return { status: 204, body: null }
+    }),
 
-  private updateUser = buildFastifyRoute(patchUpdateUserContract, async (req, reply) => {
-    const { userId } = req.params
-    const updatedUser = req.body
-    const { reqContext } = req
+    updateUser: buildApiRoute(UserController.contracts.updateUser, async (req) => {
+      const { userId } = req.params
+      const updatedUser = req.body
+      const { reqContext } = req
 
-    await this.userService.updateUser(reqContext, userId, updatedUser)
+      await this.userService.updateUser(reqContext, userId, updatedUser)
 
-    return reply.status(204).send()
-  })
-
-  buildRoutes(): BuildRoutesReturnType<UserControllerContractsType> {
-    return {
-      createUser: this.createUser,
-      getUser: this.getUser,
-      deleteUser: this.deleteUser,
-      updateUser: this.updateUser,
-    }
+      return { status: 204, body: null }
+    }),
   }
 }

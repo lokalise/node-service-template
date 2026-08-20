@@ -1,7 +1,7 @@
 import type { ModuleAwareQueueConfiguration } from '@lokalise/background-jobs-common'
 import {
   AbstractModule,
-  asControllerClass,
+  asApiControllerClass,
   asEnqueuedJobWorkerClass,
   asMessageQueueHandlerClass,
   asPeriodicJobClass,
@@ -79,7 +79,7 @@ export class UserModule extends AbstractModule {
 
   override resolveControllers(): MandatoryNameAndRegistrationPair<unknown> {
     return {
-      userController: asControllerClass(UserController),
+      userController: asApiControllerClass(UserController),
     }
   }
 }

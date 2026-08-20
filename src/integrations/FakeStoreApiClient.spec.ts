@@ -1,11 +1,11 @@
-import { MockttpHelper } from '@lokalise/universal-testing-utils'
+import { ApiContractMockttpHelper } from '@lokalise/universal-testing-utils'
 import { getLocal } from 'mockttp'
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it } from 'vitest'
 import { type TestContext, testContextFactory } from '../../test/TestContext.ts'
 import { GET_PRODUCT_CONTRACT } from './FakeStoreApiClient.ts'
 
 const mockServer = getLocal()
-const mockttpHelper = new MockttpHelper(mockServer)
+const mockttpHelper = new ApiContractMockttpHelper(mockServer)
 
 describe('FakeStoreApiClient', () => {
   let testContext: TestContext
@@ -29,9 +29,10 @@ describe('FakeStoreApiClient', () => {
   describe('getProduct', () => {
     it('Returns product', async () => {
       const testProduct = { id: 1, name: 'dummy' }
-      await mockttpHelper.mockValidResponse(GET_PRODUCT_CONTRACT, {
+      await mockttpHelper.mockResponse(GET_PRODUCT_CONTRACT, {
         pathParams: { productId: 1 },
-        responseBody: testProduct,
+        responseStatus: 200,
+        responseJson: testProduct,
       })
       const { fakeStoreApiClient } = testContext.diContainer.cradle
 
