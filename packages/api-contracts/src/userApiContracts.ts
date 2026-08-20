@@ -1,5 +1,4 @@
-import { buildRestContract } from '@lokalise/api-contracts'
-import z from 'zod/v4'
+import { defineApiContract, noBodyResponse } from '@lokalise/api-contracts'
 import {
   AUTH_HEADERS,
   CREATE_USER_BODY_SCHEMA,
@@ -11,40 +10,47 @@ import {
   UPDATE_USER_PARAMS_SCHEMA,
 } from './userSchemas.ts'
 
-export const postCreateUserContract = buildRestContract({
+export const postCreateUserContract = defineApiContract({
   method: 'post',
-  successResponseBodySchema: CREATE_USER_RESPONSE_BODY_SCHEMA,
+  summary: 'Create user',
   requestHeaderSchema: AUTH_HEADERS,
   requestBodySchema: CREATE_USER_BODY_SCHEMA,
   pathResolver: () => '/users',
-  description: 'Create user',
+  responsesByStatusCode: {
+    201: CREATE_USER_RESPONSE_BODY_SCHEMA,
+  },
 })
 
-export const getUserContract = buildRestContract({
+export const getUserContract = defineApiContract({
   method: 'get',
-  successResponseBodySchema: GET_USER_SCHEMA_RESPONSE_SCHEMA,
+  summary: 'Get user',
   requestPathParamsSchema: GET_USER_PARAMS_SCHEMA,
   requestHeaderSchema: AUTH_HEADERS,
   pathResolver: (params) => `/users/${params.userId}`,
-  description: 'Get user',
+  responsesByStatusCode: {
+    200: GET_USER_SCHEMA_RESPONSE_SCHEMA,
+  },
 })
 
-export const deleteUserContract = buildRestContract({
+export const deleteUserContract = defineApiContract({
   method: 'delete',
-  successResponseBodySchema: z.undefined(),
+  summary: 'Delete user',
   requestPathParamsSchema: DELETE_USER_PARAMS_SCHEMA,
   requestHeaderSchema: AUTH_HEADERS,
   pathResolver: (params) => `/users/${params.userId}`,
-  description: 'Delete user',
+  responsesByStatusCode: {
+    204: noBodyResponse(),
+  },
 })
 
-export const patchUpdateUserContract = buildRestContract({
+export const patchUpdateUserContract = defineApiContract({
   method: 'patch',
-  successResponseBodySchema: z.undefined(),
-  isEmptyResponseExpected: true,
+  summary: 'Update user',
   requestBodySchema: UPDATE_USER_BODY_SCHEMA,
   requestPathParamsSchema: UPDATE_USER_PARAMS_SCHEMA,
   requestHeaderSchema: AUTH_HEADERS,
   pathResolver: (params) => `/users/${params.userId}`,
-  description: 'Update user',
+  responsesByStatusCode: {
+    204: noBodyResponse(),
+  },
 })
