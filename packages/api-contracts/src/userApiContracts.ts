@@ -6,6 +6,8 @@ import {
   DELETE_USER_PARAMS_SCHEMA,
   GET_USER_PARAMS_SCHEMA,
   GET_USER_SCHEMA_RESPONSE_SCHEMA,
+  GET_USERS_BY_IDS_BODY_SCHEMA,
+  GET_USERS_BY_IDS_RESPONSE_SCHEMA,
   UPDATE_USER_BODY_SCHEMA,
   UPDATE_USER_PARAMS_SCHEMA,
 } from './userSchemas.ts'
@@ -13,6 +15,7 @@ import {
 export const postCreateUserContract = defineApiContract({
   method: 'post',
   summary: 'Create user',
+  visibility: 'public',
   requestHeaderSchema: AUTH_HEADERS,
   requestBodySchema: CREATE_USER_BODY_SCHEMA,
   pathResolver: () => '/users',
@@ -24,6 +27,7 @@ export const postCreateUserContract = defineApiContract({
 export const getUserContract = defineApiContract({
   method: 'get',
   summary: 'Get user',
+  // default visibility is 'public'
   requestPathParamsSchema: GET_USER_PARAMS_SCHEMA,
   requestHeaderSchema: AUTH_HEADERS,
   pathResolver: (params) => `/users/${params.userId}`,
@@ -40,6 +44,24 @@ export const deleteUserContract = defineApiContract({
   pathResolver: (params) => `/users/${params.userId}`,
   responsesByStatusCode: {
     204: noBodyResponse(),
+  },
+})
+
+/**
+ * Internal-only endpoint for service-to-service batch user lookups.
+ *
+ * Marked `visibility: 'internal'` so it is excluded from the public API surface
+ * (public OpenAPI spec / gateway) while still being served by the app.
+ */
+export const postGetUsersByIdsContract = defineApiContract({
+  method: 'post',
+  summary: 'Batch-resolve users by their IDs (internal service-to-service lookup)',
+  visibility: 'internal',
+  requestHeaderSchema: AUTH_HEADERS,
+  requestBodySchema: GET_USERS_BY_IDS_BODY_SCHEMA,
+  pathResolver: () => '/internal/users/get-by-ids',
+  responsesByStatusCode: {
+    200: GET_USERS_BY_IDS_RESPONSE_SCHEMA,
   },
 })
 
