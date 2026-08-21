@@ -1,5 +1,5 @@
-import { describeContract } from '@lokalise/api-contracts'
-import { injectByContract } from '@lokalise/fastify-api-contracts'
+import { describeApiContract } from '@lokalise/api-contracts'
+import { injectByApiContract } from '@lokalise/fastify-api-contracts'
 import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest'
 import { cleanTables, DB_MODEL } from '../../../../test/DbCleaner.ts'
 import { generateTestJwt, getTestConfigurationOverrides } from '../../../../test/jwtUtils.ts'
@@ -25,10 +25,10 @@ describe('UserController', () => {
     await app.close()
   })
 
-  describe(describeContract(UserController.contracts.createUser), () => {
+  describe(describeApiContract(UserController.contracts.createUser), () => {
     it('validates email format', async () => {
       const token = generateTestJwt({ userId: 1 })
-      const response = await injectByContract(app, UserController.contracts.createUser, {
+      const response = await injectByApiContract(app, UserController.contracts.createUser, {
         headers: {
           authorization: `Bearer ${token}`,
         },
@@ -61,7 +61,7 @@ describe('UserController', () => {
 
     it('creates user with correct payload', async () => {
       const token = generateTestJwt({ userId: 1 })
-      const response = await injectByContract(app, UserController.contracts.createUser, {
+      const response = await injectByApiContract(app, UserController.contracts.createUser, {
         headers: {
           authorization: `Bearer ${token}`,
         },
@@ -80,13 +80,13 @@ describe('UserController', () => {
     })
   })
 
-  describe(describeContract(UserController.contracts.getUser), () => {
+  describe(describeApiContract(UserController.contracts.getUser), () => {
     it('returns user when requested twice', async () => {
       const token = generateTestJwt({ userId: '1' })
       const newUser = await userRepository.createUser(NEW_USER_FIXTURE)
       const { id } = newUser
 
-      const response1 = await injectByContract(app, UserController.contracts.getUser, {
+      const response1 = await injectByApiContract(app, UserController.contracts.getUser, {
         headers: {
           authorization: `Bearer ${token}`,
         },
@@ -95,7 +95,7 @@ describe('UserController', () => {
         },
       })
 
-      const response2 = await injectByContract(app, UserController.contracts.getUser, {
+      const response2 = await injectByApiContract(app, UserController.contracts.getUser, {
         headers: {
           authorization: `Bearer ${token}`,
         },
@@ -111,7 +111,46 @@ describe('UserController', () => {
     })
   })
 
-  describe(describeContract(UserController.contracts.deleteUser), () => {
+  describe(describeApiContract(UserController.contracts.getUsersByIds), () => {
+    it('batch-resolves users by their IDs', async () => {
+      const token = generateTestJwt({ userId: 1 })
+      const user1 = await userRepository.createUser(NEW_USER_FIXTURE)
+      const user2 = await userRepository.createUser({
+        name: 'second',
+        email: 'second@test.com',
+      })
+
+      const response = await injectByApiContract(app, UserController.contracts.getUsersByIds, {
+        headers: {
+          authorization: `Bearer ${token}`,
+        },
+        body: {
+          userIds: [user1.id, user2.id],
+        },
+      })
+
+      expect(response.statusCode).toBe(200)
+      const ids = response.json().data.map((user: { id: string }) => user.id)
+      expect(ids).toEqual(expect.arrayContaining([user1.id, user2.id]))
+    })
+
+    it('rejects an empty list of IDs', async () => {
+      const token = generateTestJwt({ userId: 1 })
+
+      const response = await injectByApiContract(app, UserController.contracts.getUsersByIds, {
+        headers: {
+          authorization: `Bearer ${token}`,
+        },
+        body: {
+          userIds: [],
+        },
+      })
+
+      expect(response.statusCode).toBe(400)
+    })
+  })
+
+  describe(describeApiContract(UserController.contracts.deleteUser), () => {
     it('resets cache after deletion', async () => {
       const token = generateTestJwt({ userId: '1' })
       const newUser = await userRepository.createUser(NEW_USER_FIXTURE)
@@ -119,7 +158,7 @@ describe('UserController', () => {
 
       const retrievedUser = await userRepository.getUser(id)
 
-      await injectByContract(app, UserController.contracts.deleteUser, {
+      await injectByApiContract(app, UserController.contracts.deleteUser, {
         headers: {
           authorization: `Bearer ${token}`,
         },
@@ -135,13 +174,13 @@ describe('UserController', () => {
     })
   })
 
-  describe(describeContract(UserController.contracts.updateUser), () => {
+  describe(describeApiContract(UserController.contracts.updateUser), () => {
     it('resets cache after update', async () => {
       const token = generateTestJwt({ userId: 1 })
       const newUser = await userRepository.createUser(NEW_USER_FIXTURE)
       const { id } = newUser
 
-      const updateResponse = await injectByContract(app, UserController.contracts.updateUser, {
+      const updateResponse = await injectByApiContract(app, UserController.contracts.updateUser, {
         body: {
           name: 'updated',
         },

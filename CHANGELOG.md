@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.17.0] - 2026-08-21
+
+- Migrate all API contracts from the deprecated `buildRestContract` builder to `defineApiContract` (`@lokalise/api-contracts@8`), replacing `successResponseBodySchema`/`isEmptyResponseExpected` with `responsesByStatusCode` (using `noBodyResponse()` for `204`s) and adding the now-mandatory `summary` and `visibility` fields to every contract
+- Migrate the contract consumers to the `ApiContract`-based API accordingly: `UserController` now extends `AbstractApiController` and builds routes with `buildApiRoute` (handlers return `{ status, body }`) registered via `asApiControllerClass`; `FakeStoreApiClient` uses `sendByApiContract`; and the specs use `injectByApiContract`/`describeApiContract` and `ApiContractMockttpHelper`
+- Add an internal-only, service-to-service batch lookup endpoint `POST /internal/users/get-by-ids` (`postGetUsersByIdsContract`, `visibility: 'internal'`) that resolves multiple users by their IDs in a single call, reusing `UserService.getUsers`; excluded from the generated OpenAPI docs while still served by the app
+- Adopt the visibility-mandatory contract stack: `@lokalise/api-contracts@^8.0.0` (root and the `@node-service-template/api-contracts` workspace package), `@lokalise/fastify-api-contracts@^7.0.0`, `opinionated-machine@^9.0.0`, `@lokalise/backend-http-client@^12.0.1` and `@lokalise/universal-testing-utils@^4.1.1`; exclude `@lokalise/*`, `@message-queue-toolkit/*` and `opinionated-machine` from the pnpm `minimumReleaseAge` quarantine so freshly released Lokalise packages install immediately, and pin the pnpm `devEngines` version exactly (`11.9.0` instead of `>=11.9.0`)
+- Fix the Scalar API reference at `/documentation/` in local development: the encapsulated Helmet scope now disables CSP entirely when `nodeEnv.isDevelopment` (the `'self'`-based relaxed CSP still blocked the dev setup), keeping the relaxed-but-strict CSP for deployed environments
+
 ## [1.16.3] - 2026-08-19
 
 - Fix the Scalar API reference at `/documentation/` still rendering a blank page in deployed environments: Helmet's default CSP (`script-src 'self'`, no `'unsafe-inline'`) blocked Scalar's inline bootstrap `<script>`, so the JS bundle loaded but never initialized. Register Scalar in an encapsulated Fastify scope with its own Helmet that relaxes `script-src`/`worker-src` only for the `/documentation` routes, keeping the strict CSP on every other route

@@ -1,5 +1,5 @@
-import { buildRestContract } from '@lokalise/api-contracts'
-import { buildClient, sendByContract } from '@lokalise/backend-http-client'
+import { defineApiContract } from '@lokalise/api-contracts'
+import { buildClient, sendByApiContract } from '@lokalise/backend-http-client'
 import type { Client } from 'undici'
 import z from 'zod/v4'
 import type { CommonDependencies } from '../infrastructure/CommonModule.ts'
@@ -14,15 +14,15 @@ const GET_PRODUCT_PATH_PARAMS_SCHEMA = z.object({
   productId: z.number(),
 })
 
-export const GET_PRODUCT_CONTRACT = buildRestContract({
+export const GET_PRODUCT_CONTRACT = defineApiContract({
   method: 'get',
-  successResponseBodySchema: GET_PRODUCT_RESPONSE_SCHEMA,
+  summary: 'Fake API',
+  visibility: 'public',
   requestPathParamsSchema: GET_PRODUCT_PATH_PARAMS_SCHEMA,
-  description: 'Fake API',
-  responseSchemasByStatusCode: {
+  pathResolver: (pathParams) => `/products/${pathParams.productId}`,
+  responsesByStatusCode: {
     200: GET_PRODUCT_RESPONSE_SCHEMA,
   },
-  pathResolver: (pathParams) => `/products/${pathParams.productId}`,
 })
 
 export class FakeStoreApiClient {
@@ -33,17 +33,14 @@ export class FakeStoreApiClient {
   }
 
   async getProduct(productId: number) {
-    const response = await sendByContract(
-      this.client,
-      GET_PRODUCT_CONTRACT,
-      {
-        pathParams: { productId },
-      },
-      {
-        requestLabel: 'GET product from FakeStoreAPI',
-        retryConfig: commonRetryConfig,
-      },
-    )
+    const response = await sendByApiContract(this.client, GET_PRODUCT_CONTRACT, {
+      pathParams: { productId },
+      retry: commonRetryConfig,
+    })
+
+    if (response.error) {
+      throw response.error
+    }
 
     return response.result.body
   }

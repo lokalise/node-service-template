@@ -37,3 +37,7 @@ minimumReleaseAgeExclude:
   - '@typescript/typescript-win32-x64@7.0.1-rc'
   - layered-loader@14.4.1
   - typescript@7.0.1-rc
+  - "@lokalise/*"
+  - "@message-queue-toolkit/*"
+  - "opinionated-machine"
+  - "@opinionated-machine/*"

@@ -39,6 +39,14 @@ export const GET_USER_SCHEMA_RESPONSE_SCHEMA = z.object({
   data: USER_SCHEMA,
 })
 
+export const GET_USERS_BY_IDS_BODY_SCHEMA = z.object({
+  userIds: z.array(z.string()).min(1),
+})
+
+export const GET_USERS_BY_IDS_RESPONSE_SCHEMA = z.object({
+  data: z.array(USER_SCHEMA),
+})
+
 export type USER_SCHEMA_TYPE = z.infer<typeof USER_SCHEMA>
 
 export const AUTH_HEADERS = z.object({

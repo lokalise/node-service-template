@@ -188,16 +188,22 @@ export async function getApp(
 
   // Scalar's reference page bootstraps through an inline <script>, which the
   // global Helmet CSP (script-src 'self') blocks in production.
-  // Registering Scalar in an encapsulated scope with its own Helmet.
+  // Registering Scalar in an encapsulated scope with its own Helmet that
+  // relaxes the CSP only for /documentation.
   await app.register(async (documentation) => {
-    await documentation.register(fastifyHelmet, {
-      contentSecurityPolicy: {
-        directives: {
-          'script-src': ["'self'", "'unsafe-inline'"],
-          'worker-src': ["'self'", 'blob:'],
-        },
-      },
-    })
+    await documentation.register(
+      fastifyHelmet,
+      nodeEnv.isDevelopment
+        ? { contentSecurityPolicy: false }
+        : {
+            contentSecurityPolicy: {
+              directives: {
+                'script-src': ["'self'", "'unsafe-inline'"],
+                'worker-src': ["'self'", 'blob:'],
+              },
+            },
+          },
+    )
     await documentation.register(scalarFastifyApiReference, {
       routePrefix: '/documentation',
     })
