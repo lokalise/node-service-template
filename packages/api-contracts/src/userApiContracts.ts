@@ -27,7 +27,7 @@ export const postCreateUserContract = defineApiContract({
 export const getUserContract = defineApiContract({
   method: 'get',
   summary: 'Get user',
-  // default visibility is 'public'
+  visibility: 'public',
   requestPathParamsSchema: GET_USER_PARAMS_SCHEMA,
   requestHeaderSchema: AUTH_HEADERS,
   pathResolver: (params) => `/users/${params.userId}`,
@@ -39,7 +39,21 @@ export const getUserContract = defineApiContract({
 export const deleteUserContract = defineApiContract({
   method: 'delete',
   summary: 'Delete user',
+  visibility: 'public',
   requestPathParamsSchema: DELETE_USER_PARAMS_SCHEMA,
+  requestHeaderSchema: AUTH_HEADERS,
+  pathResolver: (params) => `/users/${params.userId}`,
+  responsesByStatusCode: {
+    204: noBodyResponse(),
+  },
+})
+
+export const patchUpdateUserContract = defineApiContract({
+  method: 'patch',
+  summary: 'Update user',
+  visibility: 'public',
+  requestBodySchema: UPDATE_USER_BODY_SCHEMA,
+  requestPathParamsSchema: UPDATE_USER_PARAMS_SCHEMA,
   requestHeaderSchema: AUTH_HEADERS,
   pathResolver: (params) => `/users/${params.userId}`,
   responsesByStatusCode: {
@@ -62,17 +76,5 @@ export const postGetUsersByIdsContract = defineApiContract({
   pathResolver: () => '/internal/users/get-by-ids',
   responsesByStatusCode: {
     200: GET_USERS_BY_IDS_RESPONSE_SCHEMA,
-  },
-})
-
-export const patchUpdateUserContract = defineApiContract({
-  method: 'patch',
-  summary: 'Update user',
-  requestBodySchema: UPDATE_USER_BODY_SCHEMA,
-  requestPathParamsSchema: UPDATE_USER_PARAMS_SCHEMA,
-  requestHeaderSchema: AUTH_HEADERS,
-  pathResolver: (params) => `/users/${params.userId}`,
-  responsesByStatusCode: {
-    204: noBodyResponse(),
   },
 })

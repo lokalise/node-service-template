@@ -17,6 +17,7 @@ const GET_PRODUCT_PATH_PARAMS_SCHEMA = z.object({
 export const GET_PRODUCT_CONTRACT = defineApiContract({
   method: 'get',
   summary: 'Fake API',
+  visibility: 'public',
   requestPathParamsSchema: GET_PRODUCT_PATH_PARAMS_SCHEMA,
   pathResolver: (pathParams) => `/products/${pathParams.productId}`,
   responsesByStatusCode: {
