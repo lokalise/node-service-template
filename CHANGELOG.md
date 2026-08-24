@@ -6,6 +6,7 @@
 - Stop using corepack to provide pnpm in the image: the base stage now installs pnpm directly from npm at a version pinned by the `PNPM_VERSION` build arg (kept in sync with `package.json#devEngines.packageManager`), so the image ships exactly one explicit pnpm version and no longer depends on corepack, which is no longer bundled with Node
 - Bump pnpm from `11.22.0` to `11.23.0` (`devEngines.packageManager` plus the `@pnpm/exe` / `pnpm` package-manager dependencies in the lockfile)
 - Update the pnpm install instructions in [README.md](README.md) to install pnpm directly instead of enabling Corepack, and point at `devEngines.packageManager` instead of the long-removed `packageManager` field
+- CI: widen the Node matrix entry `24.17` to `24.x` and declare a workflow-level `permissions: contents: read` default, so the `build` job no longer inherits the repository/organization `GITHUB_TOKEN` defaults (the `automerge` job keeps its own `pull-requests: write` / `contents: write` block)
 
 ## [1.17.0] - 2026-08-21
 
