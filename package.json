@@ -1,6 +1,6 @@
 {
     "name": "node-service-template",
-    "version": "1.17.0",
+    "version": "1.18.0",
     "devEngines": {
         "runtime": {
             "name": "node",
@@ -9,7 +9,7 @@
         },
         "packageManager": {
             "name": "pnpm",
-            "version": "11.22.0",
+            "version": "11.23.0",
             "onFail": "error"
         }
     },

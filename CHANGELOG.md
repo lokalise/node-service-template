@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.18.0] - 2026-08-24
+
+- Bump the Docker base image from `node:24.17.0-trixie-slim` to `node:26.7.0-trixie-slim` (Node 26 is already covered by the CI matrix; `devEngines.runtime` stays at `node >=24.16.0` so Node 24 remains supported for local development)
+- Stop using corepack to provide pnpm in the image: the base stage now installs pnpm directly from npm at a version pinned by the `PNPM_VERSION` build arg (kept in sync with `package.json#devEngines.packageManager`), so the image ships exactly one explicit pnpm version and no longer depends on corepack, which is no longer bundled with Node
+- Bump pnpm from `11.22.0` to `11.23.0` (`devEngines.packageManager` plus the `@pnpm/exe` / `pnpm` package-manager dependencies in the lockfile)
+- Update the pnpm install instructions in [README.md](README.md) to install pnpm directly instead of enabling Corepack, and point at `devEngines.packageManager` instead of the long-removed `packageManager` field
+
 ## [1.17.0] - 2026-08-21
 
 - Migrate all API contracts from the deprecated `buildRestContract` builder to `defineApiContract` (`@lokalise/api-contracts@8`), replacing `successResponseBodySchema`/`isEmptyResponseExpected` with `responsesByStatusCode` (using `noBodyResponse()` for `204`s) and adding the now-mandatory `summary` and `visibility` fields to every contract
