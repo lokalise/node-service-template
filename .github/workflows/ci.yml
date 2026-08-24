@@ -3,13 +3,18 @@ name: ci
 on:
   pull_request:
 
+# Least-privilege default for every job: `build` only needs to read the repo.
+# `automerge` opts into the write scopes it needs in its own `permissions` block.
+permissions:
+  contents: read
+
 jobs:
   build:
     runs-on: ubuntu-latest
 
     strategy:
       matrix:
-        node-version: [24.17, 26.x]
+        node-version: [24.x, 26.x]
 
     steps:
       - uses: actions/checkout@v7

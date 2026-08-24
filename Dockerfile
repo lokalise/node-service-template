@@ -1,7 +1,7 @@
 # syntax=docker/dockerfile:1
 
 # ---- Base Node ----
-FROM node:24.17.0-trixie-slim AS base
+FROM node:26.7.0-trixie-slim AS base
 
 RUN set -ex && \
     apt-get update && \
@@ -9,9 +9,13 @@ RUN set -ex && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-# Enable pnpm via corepack so the version pinned in package.json#packageManager
-# is used consistently across local, CI, and Docker builds.
-RUN corepack enable
+# pnpm is installed directly from npm rather than via corepack (which is no
+# longer bundled with Node 26), so the image ships one explicit, pinned pnpm
+# version. Keep in sync with package.json#devEngines.packageManager.
+ARG PNPM_VERSION=11.23.0
+RUN set -ex && \
+    npm install -g pnpm@${PNPM_VERSION} && \
+    npm cache clean --force
 
 # /pnpm hosts the pnpm store via a BuildKit cache mount in the deps stages
 # below; create it as node-owned so non-root installs can write to it.
