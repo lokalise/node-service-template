@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.19.0] - 2026-08-24
+
+- Update every direct dependency to its latest release, including the major bumps `bullmq` 5 → 6, `ioredis` 5 → 6 (the pnpm `overrides` pin moves from `5.11.1` to `6.0.0` in lockstep), `layered-loader` 14 → 16, `@lokalise/background-jobs-common` 14 → 15, `@lokalise/opentelemetry-fastify-bootstrap` 3 → 4, `@fastify/schedule` 6 → 7, `@message-queue-toolkit/core`/`sns`/`sqs` 26 → 27, `@message-queue-toolkit/amqp` 24 → 25, `@message-queue-toolkit/metrics` 4 → 5 and `@message-queue-toolkit/schemas` 7 → 8. No source changes were needed: the app type-checks and builds against all of them unmodified
+- Also bump the minor/patch-level dependencies: `@aws-sdk/*` to `3.1116.0`, `fastify` to `5.12.1`, `@lokalise/fastify-extras` to `31.4.0`, `@lokalise/node-core` to `14.9.1`, `@lokalise/healthcheck-utils` to `6.0.1`, `@scalar/fastify-api-reference` to `1.66.1`, `@fastify/auth` to `5.1.0`, `@fastify/awilix` to `8.2.1`, `@fastify/helmet` to `13.1.1`, `@fastify/jwt` to `10.2.2`, `undici` to `8.10.0`, `@opentelemetry/auto-instrumentations-node` to `0.79.0`, `@opentelemetry/exporter-trace-otlp-grpc` to `0.221.0`, and on the dev side `@biomejs/biome` (plus the `@biomejs/cli-*` optional deps) to `2.5.10`, `vitest`/`@vitest/coverage-v8` to `4.1.11`, `@types/node` to `26.2.0`, `fast-jwt` to `6.3.2`, `fauxqs` to `2.9.2`, `mockttp` to `4.6.1` and the `@esbuild/*` optional deps to `0.28.2`
+- Refresh transitive dependencies as well: the lockfile was regenerated from scratch rather than patched in place, so every indirect dependency resolves to the newest version its range allows and the tree contains no duplicated packages left over from an incremental update
+- Reformat the table-driven test case in [scripts/utils/cliCommandWrapper.spec.ts](scripts/utils/cliCommandWrapper.spec.ts) as required by Biome 2.5.10, which now breaks the `describe.each(...)(title, fn)` call arguments onto their own lines instead of hugging the trailing arrow function
+
 ## [1.18.0] - 2026-08-24
 
 - Bump the Docker base image from `node:24.17.0-trixie-slim` to `node:26.7.0-trixie-slim` (Node 26 is already covered by the CI matrix; `devEngines.runtime` stays at `node >=24.16.0` so Node 24 remains supported for local development)

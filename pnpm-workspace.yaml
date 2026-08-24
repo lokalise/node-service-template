@@ -1,7 +1,7 @@
 packages:
   - packages/*
 overrides:
-  ioredis: 5.11.1
+  ioredis: 6.0.0
 allowBuilds:
   '@datadog/native-appsec': false
   '@datadog/native-iast-taint-tracking': false
