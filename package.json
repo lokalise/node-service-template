@@ -60,7 +60,7 @@
         "@lokalise/backend-http-client": "^12.0.1",
         "@lokalise/background-jobs-common": "^15.2.0",
         "@lokalise/fastify-api-contracts": "^7.0.0",
-        "@lokalise/fastify-extras": "^31.4.0",
+        "@lokalise/fastify-extras": "^31.5.0",
         "@lokalise/healthcheck-utils": "^6.0.1",
         "@lokalise/node-core": "^14.9.1",
         "@lokalise/opentelemetry-fastify-bootstrap": "^4.1.0",
