@@ -106,21 +106,20 @@ describe('cliCommandWrapper', () => {
         .pipe(z.object({ count: z.number().int() })),
       expected: { count: 5 },
     },
-  ])('should derive flags from the input side of transformed schemas', async ({
-    inputArgs,
-    schema,
-    expected,
-  }) => {
-    process.argv = ['node', 'script.ts', ...inputArgs]
-    await cliCommandWrapper(
-      'command',
-      (_dependencies, _requestContext, args) => {
-        expect(args).toEqual(expected)
-      },
-      schema,
-    )
-    expect(exitSpy).toHaveBeenCalledWith(0)
-  })
+  ])(
+    'should derive flags from the input side of transformed schemas',
+    async ({ inputArgs, schema, expected }) => {
+      process.argv = ['node', 'script.ts', ...inputArgs]
+      await cliCommandWrapper(
+        'command',
+        (_dependencies, _requestContext, args) => {
+          expect(args).toEqual(expected)
+        },
+        schema,
+      )
+      expect(exitSpy).toHaveBeenCalledWith(0)
+    },
+  )
 
   it('should fail if arguments are not valid', async () => {
     process.argv = ['node', 'script.ts', '--key=value']
