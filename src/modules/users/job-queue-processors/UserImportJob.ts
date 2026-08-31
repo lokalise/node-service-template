@@ -8,11 +8,13 @@ import { AbstractEnqueuedJobProcessor } from '../../../infrastructure/jobs/Abstr
 import type { UserService } from '../services/UserService.ts'
 import type { UsersInjectableDependencies } from '../UserModule.ts'
 
-export const USER_IMPORT_JOB_PAYLOAD = BASE_JOB_PAYLOAD_SCHEMA.extend({
-  name: z.string(),
-  age: z.number(),
-  email: z.string(),
-})
+export const USER_IMPORT_JOB_PAYLOAD = z.compile(
+  BASE_JOB_PAYLOAD_SCHEMA.extend({
+    name: z.string(),
+    age: z.number(),
+    email: z.string(),
+  }),
+)
 type UserImportJobPayload = z.infer<typeof USER_IMPORT_JOB_PAYLOAD>
 
 export class UserImportJob extends AbstractEnqueuedJobProcessor<'UserImportJob'> {

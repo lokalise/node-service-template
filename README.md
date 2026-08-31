@@ -87,7 +87,7 @@ are relevant for the technological stack of your organization, and replace `@lok
 2. Install [pnpm](https://pnpm.io/installation) (this project uses pnpm as its package manager — the exact version is pinned in the `devEngines.packageManager` field of [package.json](package.json), and a mismatch hard-fails). Corepack is deliberately not used; install pnpm directly:
 
    ```shell
-   npm install -g pnpm@11.23.0
+   npm install -g pnpm@11.25.0
    ```
 
 3. Install all project dependencies:
@@ -159,6 +159,24 @@ To initialize your test database and/or apply your latest schema changes.
 ### OpenAPI specification
 
 You can access OpenAPI specification of your application, while it is running, by opening [/documentation](http://localhost:3000/documentation)
+
+### Schema validation
+
+Validation uses [zod](https://zod.dev) 4.5. Schemas that are parsed at runtime (API contracts, message
+payloads, job payloads, database row schemas) are wrapped in `z.compile()`, which returns a clone
+backed by an ahead-of-time compiled parser. Valid input takes the compiled path; invalid input falls
+back to the regular parser, so error reporting and generated JSON Schema are unchanged.
+
+Two rules when adding schemas:
+
+- Compile the final schema. `.extend()`, `.omit()`, `.refine()` and friends applied to a compiled
+  schema return an uncompiled one.
+- Skip `z.compile()` for schemas parsed once per process (environment config, CLI arguments). The
+  compilation step costs more than the single parse saves.
+
+The alternative is the global `import 'zod/compile'` side-effect import, which compiles every schema
+constructed afterwards on first parse. This template uses explicit calls instead, so compilation does
+not depend on module evaluation order and behaves the same under vitest as it does in `src/server.ts`.
 
 ### OpenTelemetry instrumentation
 

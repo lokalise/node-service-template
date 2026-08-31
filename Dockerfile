@@ -12,7 +12,7 @@ RUN set -ex && \
 # pnpm is installed directly from npm rather than via corepack (which is no
 # longer bundled with Node 26), so the image ships one explicit, pinned pnpm
 # version. Keep in sync with package.json#devEngines.packageManager.
-ARG PNPM_VERSION=11.23.0
+ARG PNPM_VERSION=11.25.0
 RUN set -ex && \
     npm install -g pnpm@${PNPM_VERSION} && \
     npm cache clean --force

@@ -1,7 +1,7 @@
 import { randomUUIDv7 } from 'node:crypto'
 import { boolean, index, pgSchema, timestamp, uuid, varchar } from 'drizzle-orm/pg-core'
 import { createInsertSchema, createSelectSchema } from 'drizzle-orm/zod'
-import type z from 'zod/v4'
+import z from 'zod/v4'
 
 export const postSchema = pgSchema('post')
 
@@ -23,8 +23,8 @@ export const post = postSchema.table(
   },
 )
 
-const selectPostSchema = createSelectSchema(post)
+const selectPostSchema = z.compile(createSelectSchema(post))
 export type Post = z.infer<typeof selectPostSchema>
 
-const insertPostSchema = createInsertSchema(post)
+const insertPostSchema = z.compile(createInsertSchema(post))
 export type NewPost = z.infer<typeof insertPostSchema>

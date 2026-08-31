@@ -35,22 +35,24 @@ export const profile = userSchema.table(
   }),
 )
 
-// zod types stay identical
-export const selectUserSchema = createSelectSchema(user)
+// zod types stay identical; z.compile() swaps in the AOT-compiled parser without changing them
+export const selectUserSchema = z.compile(createSelectSchema(user))
 export type User = z.infer<typeof selectUserSchema>
 
-export const insertUserSchema = createInsertSchema(user)
+export const insertUserSchema = z.compile(createInsertSchema(user))
 export type NewUser = z.infer<typeof insertUserSchema>
 
-export const updateUserSchema = createInsertSchema(user, {
-  age: z.number().optional(),
-  email: z.string().optional(),
-  name: z.string().optional(),
-}).omit({ id: true })
+export const updateUserSchema = z.compile(
+  createInsertSchema(user, {
+    age: z.number().optional(),
+    email: z.string().optional(),
+    name: z.string().optional(),
+  }).omit({ id: true }),
+)
 export type UpdatedUser = z.infer<typeof updateUserSchema>
 
-export const selectProfileSchema = createSelectSchema(profile)
+export const selectProfileSchema = z.compile(createSelectSchema(profile))
 export type Profile = z.infer<typeof selectProfileSchema>
 
-export const insertProfileSchema = createInsertSchema(profile)
+export const insertProfileSchema = z.compile(createInsertSchema(profile))
 export type NewProfile = z.infer<typeof insertProfileSchema>
