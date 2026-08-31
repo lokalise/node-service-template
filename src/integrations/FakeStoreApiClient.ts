@@ -5,14 +5,18 @@ import z from 'zod/v4'
 import type { CommonDependencies } from '../infrastructure/CommonModule.ts'
 import { commonRetryConfig } from './commonRetryConfig.ts'
 
-const GET_PRODUCT_RESPONSE_SCHEMA = z.object({
-  id: z.number(),
-  name: z.string(),
-})
+const GET_PRODUCT_RESPONSE_SCHEMA = z.compile(
+  z.object({
+    id: z.number(),
+    name: z.string(),
+  }),
+)
 
-const GET_PRODUCT_PATH_PARAMS_SCHEMA = z.object({
-  productId: z.number(),
-})
+const GET_PRODUCT_PATH_PARAMS_SCHEMA = z.compile(
+  z.object({
+    productId: z.number(),
+  }),
+)
 
 export const GET_PRODUCT_CONTRACT = defineApiContract({
   method: 'get',
