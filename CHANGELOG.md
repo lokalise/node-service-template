@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.21.0] - 2026-09-02
+
+- Model errors with [`@lokalise/errors`](https://www.npmjs.com/package/@lokalise/errors) `2.0.0` instead of the `@lokalise/node-core` error classes. `UserService.getUser` now throws `UserNotFoundError` from [src/modules/users/errors/UserNotFoundError.ts](src/modules/users/errors/UserNotFoundError.ts), a `PublicError` bound to the `USER_NOT_FOUND` definition, so the response carries `code: 'USER_NOT_FOUND'` (plus the deprecated `errorCode` alias) and typed `details: { id }` in place of node-core's generic `ENTITY_NOT_FOUND`
+- Declare public error definitions in the `@node-service-template/api-contracts` workspace package ([packages/api-contracts/src/userErrors.ts](packages/api-contracts/src/userErrors.ts)) and reference them from `getUserContract` via `mergeErrorSchemasByStatusCode()`, so the `404` payload is part of the contract and of the generated OpenAPI spec. `@lokalise/errors` becomes a peer dependency of the contracts package
+- Add an `Error handling` section to [README.md](README.md) describing the layout, plus unit tests for the resolvers and an e2e test for the `404` response
+
 ## [1.20.0] - 2026-08-31
 
 - Migrate to zod 4.5 (`4.4.3` → `4.5.4`, root and the `@node-service-template/api-contracts` workspace package, whose `zod` peer range moves to `^4.5.4`) and put every runtime-parsed schema on the new ahead-of-time compiler via `z.compile()`: the API contract schemas in [packages/api-contracts/src/userSchemas.ts](packages/api-contracts/src/userSchemas.ts), the AMQP/SNS message schemas, the `UserImportJob` payload, the `FakeStoreApiClient` request/response schemas and the drizzle-derived row schemas in [src/db/schema](src/db/schema). `z.compile()` is typed as `<T>(schema: T) => T` and the returned clone keeps its `_zod.parent` link, so inference, `instanceof` checks and registry metadata written by `.describe()` all survive: the generated `openApiSpec.yaml` is byte-identical before and after the change

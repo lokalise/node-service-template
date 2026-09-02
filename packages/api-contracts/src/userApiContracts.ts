@@ -1,4 +1,6 @@
 import { defineApiContract, noBodyResponse } from '@lokalise/api-contracts'
+import { mergeErrorSchemasByStatusCode } from '@lokalise/errors'
+import { USER_NOT_FOUND_ERROR_DEFINITION } from './userErrors.ts'
 import {
   AUTH_HEADERS,
   CREATE_USER_BODY_SCHEMA,
@@ -33,6 +35,7 @@ export const getUserContract = defineApiContract({
   pathResolver: (params) => `/users/${params.userId}`,
   responsesByStatusCode: {
     200: GET_USER_SCHEMA_RESPONSE_SCHEMA,
+    ...mergeErrorSchemasByStatusCode([USER_NOT_FOUND_ERROR_DEFINITION]),
   },
 })
 

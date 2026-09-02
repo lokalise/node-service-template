@@ -1,5 +1,4 @@
 import type { RequestContext } from '@lokalise/fastify-extras'
-import { EntityNotFoundError } from '@lokalise/node-core'
 import type {
   CREATE_USER_BODY_SCHEMA,
   UPDATE_USER_BODY_SCHEMA,
@@ -8,6 +7,7 @@ import type {
 import type { Loader } from 'layered-loader'
 import type z from 'zod/v4'
 import type { User } from '../../../db/schema/user.ts'
+import { UserNotFoundError } from '../errors/UserNotFoundError.ts'
 import type { UserRepository } from '../repositories/UserRepository.ts'
 import type { UsersInjectableDependencies } from '../UserModule.ts'
 
@@ -39,7 +39,7 @@ export class UserService {
       this.userLoader.getInMemoryOnly(userId.toString()) ?? (await this.userLoader.get(userId))
 
     if (!getUserResult) {
-      throw new EntityNotFoundError({ message: 'User not found', details: { id: userId } })
+      throw new UserNotFoundError(userId)
     }
 
     requestContext.logger.debug({ userId }, 'Resolved user')
