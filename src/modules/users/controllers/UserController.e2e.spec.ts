@@ -39,6 +39,7 @@ describe('UserController', () => {
       expect(response.statusCode).toBe(400)
       expect(response.json()).toMatchInlineSnapshot(`
         {
+          "code": "VALIDATION_ERROR",
           "details": {
             "error": [
               {
@@ -54,7 +55,6 @@ describe('UserController', () => {
               },
             ],
           },
-          "code": "VALIDATION_ERROR",
           "errorCode": "VALIDATION_ERROR",
           "message": "Invalid params",
         }
