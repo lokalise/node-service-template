@@ -54,6 +54,7 @@ describe('UserController', () => {
               },
             ],
           },
+          "code": "VALIDATION_ERROR",
           "errorCode": "VALIDATION_ERROR",
           "message": "Invalid params",
         }
