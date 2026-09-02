@@ -178,6 +178,22 @@ The alternative is the global `import 'zod/compile'` side-effect import, which c
 constructed afterwards on first parse. This template uses explicit calls instead, so compilation does
 not depend on module evaluation order and behaves the same under vitest as it does in `src/server.ts`.
 
+### Error handling
+
+Errors are modelled with [`@lokalise/errors`](https://www.npmjs.com/package/@lokalise/errors).
+Client-facing errors are `PublicError` subclasses, internal ones `InternalError` subclasses. Every class
+carries a literal `code`, and public errors add an `ErrorType` that determines the HTTP status.
+
+- Public error definitions (`definePublicError()`) live in the
+  [api-contracts package](./packages/api-contracts/src/userErrors.ts), next to the contracts that
+  reference them via `mergeErrorSchemasByStatusCode()`. The error payload is therefore part of the
+  contract and generated OpenAPI spec, and clients can parse it with the same schema.
+- The owning module binds each definition to a class, e.g.
+  [UserNotFoundError.ts](./src/modules/users/errors/UserNotFoundError.ts), and throws it from its
+  services. Match errors with the static `isInstance()` guard, not `instanceof`.
+- The [global error handler](./src/infrastructure/errors/errorHandler.ts) turns a `PublicError` into
+  `error.httpStatusCode` plus `error.toPayload()`, and reports and logs anything mapped to a 5xx.
+
 ### OpenTelemetry instrumentation
 
 There is an OpenTelemetry integration included, using the gRPC exporter. See [environment variable configuration]() for the details on configuring it.

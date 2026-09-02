@@ -1,3 +1,4 @@
+import { randomUUID } from 'node:crypto'
 import { describeApiContract } from '@lokalise/api-contracts'
 import { injectByApiContract } from '@lokalise/fastify-api-contracts'
 import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest'
@@ -38,6 +39,7 @@ describe('UserController', () => {
       expect(response.statusCode).toBe(400)
       expect(response.json()).toMatchInlineSnapshot(`
         {
+          "code": "VALIDATION_ERROR",
           "details": {
             "error": [
               {
@@ -108,6 +110,28 @@ describe('UserController', () => {
       expect(response2.statusCode).toBe(200)
       expect(response1.json().data).toMatchObject(NEW_USER_FIXTURE)
       expect(response2.json().data).toMatchObject(NEW_USER_FIXTURE)
+    })
+
+    it('returns 404 with the contract error payload for an unknown user', async () => {
+      const token = generateTestJwt({ userId: '1' })
+      const unknownUserId = randomUUID()
+
+      const response = await injectByApiContract(app, UserController.contracts.getUser, {
+        headers: {
+          authorization: `Bearer ${token}`,
+        },
+        pathParams: {
+          userId: unknownUserId,
+        },
+      })
+
+      expect(response.statusCode).toBe(404)
+      expect(response.json()).toEqual({
+        message: 'User not found',
+        code: 'USER_NOT_FOUND',
+        errorCode: 'USER_NOT_FOUND',
+        details: { id: unknownUserId },
+      })
     })
   })
 

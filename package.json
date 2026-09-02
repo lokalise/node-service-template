@@ -1,6 +1,6 @@
 {
     "name": "node-service-template",
-    "version": "1.20.0",
+    "version": "1.21.0",
     "devEngines": {
         "runtime": {
             "name": "node",
@@ -59,8 +59,9 @@
         "@lokalise/aws-config": "^9.0.0",
         "@lokalise/backend-http-client": "^12.2.0",
         "@lokalise/background-jobs-common": "^15.2.0",
+        "@lokalise/errors": "^2.0.0",
         "@lokalise/fastify-api-contracts": "^7.0.1",
-        "@lokalise/fastify-extras": "^31.6.0",
+        "@lokalise/fastify-extras": "^32.0.0",
         "@lokalise/healthcheck-utils": "^6.1.0",
         "@lokalise/node-core": "^14.9.1",
         "@lokalise/opentelemetry-fastify-bootstrap": "^4.1.1",
