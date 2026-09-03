@@ -2,6 +2,13 @@ packages:
   - packages/*
 overrides:
   ioredis: 6.0.0
+  # prom-client was renamed to @prometheus-io/client when it became a Prometheus subproject.
+  # @message-queue-toolkit/metrics still declares the old name as a peer dependency, so we
+  # alias it to the official client to keep a single registry and a single copy in the tree.
+  prom-client: npm:@prometheus-io/client@^0.16.1
+peerDependencyRules:
+  allowedVersions:
+    prom-client: '*'
 allowBuilds:
   '@datadog/native-appsec': false
   '@datadog/native-iast-taint-tracking': false
@@ -16,3 +23,5 @@ allowBuilds:
 minimumReleaseAgeExclude:
   - "@lokalise/errors"
   - "@lokalise/fastify-extras"
+  - "@lokalise/healthcheck-utils"
+  - fastify-metrics@14.1.0
