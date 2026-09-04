@@ -2,6 +2,9 @@
 
 This document aims to provide a checklist for determining whether service is mature enough for general availability.
 
+For the runtime contract that this template already implements (healthcheck endpoints, graceful shutdown behaviour,
+configuration, migrations), see [deployment.md](./deployment.md).
+
 ## Checklist
 
 Legend: `M` - Mandatory, `R` - Recommended
