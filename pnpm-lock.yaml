@@ -383,8 +383,8 @@ importers:
         specifier: ^4.1.0
         version: 4.1.0
       undici:
-        specifier: ^8.10.0
-        version: 8.10.0
+        specifier: ^8.10.1
+        version: 8.10.1
       zod:
         specifier: ^4.5.4
         version: 4.5.4
@@ -4405,8 +4405,8 @@ packages:
     resolution: {integrity: sha512-LIY910g9TI13YS95lrMFrs8Rm/u/irgHeTWoKCoteeJ04CUJ92eEfj0rVn+7VKMPBpUPiUoBKfhNyLI23EE/KA==}
     engines: {node: '>=18.17'}
 
-  undici@8.10.0:
-    resolution: {integrity: sha512-HvltHd7avK13QIw/oLe4qoOLyoVSoafqJ2jYOrtMRBkbYT31eiBQ8O0ehRKZiEZCMEyLFQNIADpgCWC5fALvYQ==}
+  undici@8.10.1:
+    resolution: {integrity: sha512-YQ3WlbqjYMmNpdvDH64jAgLjxuAR9+649calDWhbshYaeQGO2bR4nI94ORJmwI3J9YhoKQnpyGOK+0zlWS5N5Q==}
     engines: {node: '>=22.19.0'}
 
   unfetch@4.2.0:
@@ -5339,7 +5339,7 @@ snapshots:
       '@lokalise/api-contracts': 8.0.0(zod@4.5.4)
       '@lokalise/node-core': 14.9.1(zod@4.5.4)
       parse-sse: 0.1.0
-      undici: 8.10.0
+      undici: 8.10.1
       zod: 4.5.4
 
   '@lokalise/background-jobs-common@15.2.0(bullmq@6.3.2(ioredis@6.0.0(supports-color@7.2.0)))(ioredis@6.0.0(supports-color@7.2.0))(pino@10.3.1)(supports-color@7.2.0)(toad-scheduler@4.1.0)(zod@4.5.4)':
@@ -8738,7 +8738,7 @@ snapshots:
 
   undici@6.28.0: {}
 
-  undici@8.10.0: {}
+  undici@8.10.1: {}
 
   unfetch@4.2.0: {}
 
