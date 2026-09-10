@@ -74,7 +74,7 @@
         "@message-queue-toolkit/sns": "^27.0.0",
         "@message-queue-toolkit/sqs": "^27.0.0",
         "@node-service-template/api-contracts": "workspace:*",
-        "@opentelemetry/auto-instrumentations-node": "0.79.0",
+        "@opentelemetry/auto-instrumentations-node": "0.80.0",
         "@opentelemetry/exporter-trace-otlp-grpc": "0.222.0",
         "@opentelemetry/instrumentation": "^0.222.0",
         "@prometheus-io/client": "^0.16.1",
