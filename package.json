@@ -111,7 +111,7 @@
         "@lokalise/universal-testing-utils": "^4.1.1",
         "@opentelemetry/sdk-trace-base": "^2.10.0",
         "@readme/openapi-parser": "^8.0.1",
-        "@types/node": "^26.4.0",
+        "@types/node": "^26.4.1",
         "@vitest/coverage-v8": "^4.1.11",
         "cpy-cli": "^7.0.0",
         "cross-env": "^10.1.0",
