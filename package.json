@@ -76,7 +76,7 @@
         "@node-service-template/api-contracts": "workspace:*",
         "@opentelemetry/auto-instrumentations-node": "0.79.0",
         "@opentelemetry/exporter-trace-otlp-grpc": "0.221.0",
-        "@opentelemetry/instrumentation": "^0.221.0",
+        "@opentelemetry/instrumentation": "^0.222.0",
         "@prometheus-io/client": "^0.16.1",
         "@scalar/fastify-api-reference": "^1.67.0",
         "amqplib": "^2.0.1",
