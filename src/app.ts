@@ -160,7 +160,7 @@ export async function getApp(
         },
       }
   await app.register(apiDocumentationPlugin, {
-    exposeInternalDocumentation: !nodeEnv.isProduction,
+    exposeInternalDocumentation: appConfig.appEnv !== 'production',
     transform: createJsonSchemaTransform({
       zodToJsonConfig: {
         target: 'draft-2020-12',
