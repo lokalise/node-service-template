@@ -61,7 +61,7 @@
         "@lokalise/background-jobs-common": "^16.0.0",
         "@lokalise/errors": "^2.0.0",
         "@lokalise/fastify-api-contracts": "^7.0.1",
-        "@lokalise/fastify-extras": "^33.0.0",
+        "@lokalise/fastify-extras": "^34.0.1",
         "@lokalise/healthcheck-utils": "^7.0.0",
         "@lokalise/node-core": "^14.9.1",
         "@lokalise/opentelemetry-fastify-bootstrap": "^4.1.1",
