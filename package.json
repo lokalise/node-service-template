@@ -1,6 +1,6 @@
 {
     "name": "node-service-template",
-    "version": "1.21.0",
+    "version": "1.22.0",
     "devEngines": {
         "runtime": {
             "name": "node",
@@ -61,7 +61,7 @@
         "@lokalise/background-jobs-common": "^16.0.0",
         "@lokalise/errors": "^2.0.0",
         "@lokalise/fastify-api-contracts": "^7.0.1",
-        "@lokalise/fastify-extras": "^33.0.0",
+        "@lokalise/fastify-extras": "^34.0.1",
         "@lokalise/healthcheck-utils": "^7.0.0",
         "@lokalise/node-core": "^14.9.1",
         "@lokalise/opentelemetry-fastify-bootstrap": "^4.1.1",
@@ -78,7 +78,6 @@
         "@opentelemetry/exporter-trace-otlp-grpc": "0.222.0",
         "@opentelemetry/instrumentation": "^0.222.0",
         "@prometheus-io/client": "^0.16.1",
-        "@scalar/fastify-api-reference": "^1.67.0",
         "amqplib": "^2.0.1",
         "awilix": "^13.0.5",
         "awilix-manager": "^7.0.0",
