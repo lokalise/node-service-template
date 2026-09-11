@@ -78,7 +78,6 @@
         "@opentelemetry/exporter-trace-otlp-grpc": "0.222.0",
         "@opentelemetry/instrumentation": "^0.222.0",
         "@prometheus-io/client": "^0.16.1",
-        "@scalar/fastify-api-reference": "^1.67.0",
         "amqplib": "^2.0.1",
         "awilix": "^13.0.5",
         "awilix-manager": "^7.0.0",

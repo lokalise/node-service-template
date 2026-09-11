@@ -316,9 +316,6 @@ importers:
       '@prometheus-io/client':
         specifier: ^0.16.1
         version: 0.16.1
-      '@scalar/fastify-api-reference':
-        specifier: ^1.67.0
-        version: 1.67.0
       amqplib:
         specifier: ^2.0.1
         version: 2.0.1
