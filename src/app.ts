@@ -4,7 +4,7 @@ import type { ServerZoneType } from '@amplitude/analytics-types'
 import fastifyAuth from '@fastify/auth'
 import { fastifyAwilixPlugin } from '@fastify/awilix'
 import { fastifyCors } from '@fastify/cors'
-import fastifyHelmet from '@fastify/helmet'
+import fastifyHelmet, { type FastifyHelmetOptions } from '@fastify/helmet'
 import type { Secret } from '@fastify/jwt'
 import fastifyJWT from '@fastify/jwt'
 import fastifySchedule from '@fastify/schedule'
@@ -40,7 +40,6 @@ import {
   serializerCompiler,
   validatorCompiler,
 } from 'fastify-type-provider-zod'
-import type { HelmetOptions } from 'helmet'
 import {
   type AbstractModule,
   type DependencyInjectionOptions,
@@ -150,7 +149,7 @@ export async function getApp(
   // relax the CSP only for the documentation routes through the plugin's hooks.
   // `reply.helmet` re-applies Helmet (merged over the global config, preserving
   // its default directives) with the relaxed policy for those routes alone.
-  const documentationHelmetOptions: HelmetOptions = nodeEnv.isDevelopment
+  const documentationHelmetOptions: FastifyHelmetOptions = nodeEnv.isDevelopment
     ? { contentSecurityPolicy: false as const }
     : {
         contentSecurityPolicy: {
