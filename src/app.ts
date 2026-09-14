@@ -4,13 +4,13 @@ import type { ServerZoneType } from '@amplitude/analytics-types'
 import fastifyAuth from '@fastify/auth'
 import { fastifyAwilixPlugin } from '@fastify/awilix'
 import { fastifyCors } from '@fastify/cors'
-import fastifyHelmet from '@fastify/helmet'
+import fastifyHelmet, { type FastifyHelmetOptions } from '@fastify/helmet'
 import type { Secret } from '@fastify/jwt'
 import fastifyJWT from '@fastify/jwt'
 import fastifySchedule from '@fastify/schedule'
-import fastifySwagger from '@fastify/swagger'
 import {
   amplitudePlugin,
+  apiDocumentationPlugin,
   bugsnagErrorReporter,
   bugsnagPlugin,
   commonSyncHealthcheckPlugin,
@@ -30,7 +30,6 @@ import {
   stringValueSerializer,
 } from '@lokalise/node-core'
 import { gracefulOtelShutdown } from '@lokalise/opentelemetry-fastify-bootstrap'
-import scalarFastifyApiReference from '@scalar/fastify-api-reference'
 import { type AwilixContainer, createContainer } from 'awilix'
 import type { FastifyInstance } from 'fastify'
 import fastify from 'fastify'
@@ -143,20 +142,29 @@ export async function getApp(
   await app.register(fastifyNoIcon.default)
 
   await app.register(fastifyAuth)
-  await app.register(fastifySwagger, {
+
+  // apiDocumentationPlugin registers @fastify/swagger and the Scalar reference
+  // together. Scalar's reference page bootstraps through an inline <script>,
+  // which the global Helmet CSP (script-src 'self') blocks in production, so we
+  // relax the CSP only for the documentation routes through the plugin's hooks.
+  // `reply.helmet` re-applies Helmet (merged over the global config, preserving
+  // its default directives) with the relaxed policy for those routes alone.
+  const documentationHelmetOptions: FastifyHelmetOptions = nodeEnv.isDevelopment
+    ? { contentSecurityPolicy: false as const }
+    : {
+        contentSecurityPolicy: {
+          directives: {
+            'script-src': ["'self'", "'unsafe-inline'"],
+            'worker-src': ["'self'", 'blob:'],
+          },
+        },
+      }
+  await app.register(apiDocumentationPlugin, {
+    exposeInternalDocumentation: appConfig.appEnv !== 'production',
     transform: createJsonSchemaTransform({
       zodToJsonConfig: {
         target: 'draft-2020-12',
       },
-      skipList: [
-        '/documentation/',
-        '/documentation/initOAuth',
-        '/documentation/uiConfig',
-        '/documentation/yaml',
-        '/documentation/*',
-        '/documentation/static/*',
-        '*',
-      ],
     }),
     openapi: {
       openapi: '3.1.0',
@@ -184,29 +192,12 @@ export async function getApp(
         },
       },
     },
-  })
-
-  // Scalar's reference page bootstraps through an inline <script>, which the
-  // global Helmet CSP (script-src 'self') blocks in production.
-  // Registering Scalar in an encapsulated scope with its own Helmet that
-  // relaxes the CSP only for /documentation.
-  await app.register(async (documentation) => {
-    await documentation.register(
-      fastifyHelmet,
-      nodeEnv.isDevelopment
-        ? { contentSecurityPolicy: false }
-        : {
-            contentSecurityPolicy: {
-              directives: {
-                'script-src': ["'self'", "'unsafe-inline'"],
-                'worker-src': ["'self'", 'blob:'],
-              },
-            },
-          },
-    )
-    await documentation.register(scalarFastifyApiReference, {
-      routePrefix: '/documentation',
-    })
+    hooks: {
+      onRequest: (_request, reply, done) => {
+        reply.helmet(documentationHelmetOptions)
+        done()
+      },
+    },
   })
 
   // Since DI config relies on having app-scoped OTel instance to be set by the plugin, we instantiate it earlier than we run the DI initialization.
@@ -237,6 +228,13 @@ export async function getApp(
       '/documentation/',
       '/documentation/openapi.json',
       '/documentation/js/scalar.js',
+      // Internal API reference (only registered outside production via
+      // `exposeInternalDocumentation`). In production these routes do not exist,
+      // so the entries are inert there.
+      '/documentation/internal',
+      '/documentation/internal/',
+      '/documentation/internal/openapi.json',
+      '/documentation/internal/js/scalar.js',
       '/',
       '/health',
       '/live',
