@@ -6,11 +6,13 @@ import { cleanTables, DB_MODEL } from '../../../../test/DbCleaner.ts'
 import { generateTestJwt, getTestConfigurationOverrides } from '../../../../test/jwtUtils.ts'
 import type { AppInstance } from '../../../app.ts'
 import { getApp } from '../../../app.ts'
+import { API_SOURCE_HEADER } from '../../../plugins/publicApiSerializationPlugin.ts'
 import type { UserRepository } from '../repositories/UserRepository.ts'
 import type { UserCreateDTO } from '../services/UserService.ts'
 import { UserController } from './UserController.ts'
 
 const NEW_USER_FIXTURE = { name: 'dummy', email: 'email@test.com' } satisfies UserCreateDTO
+const USER_WITH_AGE_FIXTURE = { name: 'dummy', email: 'email@test.com', age: 33 }
 
 describe('UserController', () => {
   let app: AppInstance
@@ -76,6 +78,7 @@ describe('UserController', () => {
           age: null,
           email: 'email@test.com',
           id: expect.any(String),
+          internalMandatoryProp: expect.stringMatching(/^user:/),
           name: 'dummy',
         },
       })
@@ -133,6 +136,64 @@ describe('UserController', () => {
         details: { id: unknownUserId },
       })
     })
+
+    it('returns internal-only fields to internal consumers', async () => {
+      const token = generateTestJwt({ userId: 1 })
+      const { id } = await userRepository.createUser(USER_WITH_AGE_FIXTURE)
+
+      const headers = { authorization: `Bearer ${token}`, [API_SOURCE_HEADER]: 'internal' }
+      const response = await injectByApiContract(app, UserController.contracts.getUser, {
+        headers,
+        pathParams: { userId: id },
+      })
+
+      expect(response.statusCode).toBe(200)
+      expect(response.json().data).toEqual({
+        id,
+        name: 'dummy',
+        email: 'email@test.com',
+        age: 33,
+        internalMandatoryProp: `user:${id}`,
+        internalOptionalProp: 'age:33',
+      })
+    })
+
+    it('strips internal-only fields for public consumers', async () => {
+      const token = generateTestJwt({ userId: 1 })
+      const { id } = await userRepository.createUser(USER_WITH_AGE_FIXTURE)
+
+      const headers = { authorization: `Bearer ${token}`, [API_SOURCE_HEADER]: 'public' }
+      const response = await injectByApiContract(app, UserController.contracts.getUser, {
+        headers,
+        pathParams: { userId: id },
+      })
+
+      expect(response.statusCode).toBe(200)
+      expect(response.json().data).toEqual({
+        id,
+        name: 'dummy',
+        email: 'email@test.com',
+        age: 33,
+      })
+      expect(response.json().data).not.toHaveProperty('internalOptionalProp')
+      // Required internal fields are stripped too: the public variant encodes against its own
+      // schema, so requiredness never gets in the way.
+      expect(response.json().data).not.toHaveProperty('internalMandatoryProp')
+    })
+
+    it('treats requests without the source header as internal (PoC default)', async () => {
+      const token = generateTestJwt({ userId: 1 })
+      const { id } = await userRepository.createUser(USER_WITH_AGE_FIXTURE)
+
+      const response = await injectByApiContract(app, UserController.contracts.getUser, {
+        headers: { authorization: `Bearer ${token}` },
+        pathParams: { userId: id },
+      })
+
+      expect(response.statusCode).toBe(200)
+      expect(response.json().data.age).toBe(33)
+      expect(response.json().data.internalMandatoryProp).toBe(`user:${id}`)
+    })
   })
 
   describe(describeApiContract(UserController.contracts.getUsersByIds), () => {
@@ -171,6 +232,27 @@ describe('UserController', () => {
       })
 
       expect(response.statusCode).toBe(400)
+    })
+
+    it('strips internal-only fields inside arrays for public consumers', async () => {
+      const token = generateTestJwt({ userId: 1 })
+      const { id } = await userRepository.createUser(USER_WITH_AGE_FIXTURE)
+
+      const headers = { authorization: `Bearer ${token}`, [API_SOURCE_HEADER]: 'public' }
+      const response = await injectByApiContract(app, UserController.contracts.getUsersByIds, {
+        headers,
+        body: { userIds: [id] },
+      })
+
+      expect(response.statusCode).toBe(200)
+      expect(response.json().data).toEqual([
+        {
+          id,
+          name: 'dummy',
+          email: 'email@test.com',
+          age: 33,
+        },
+      ])
     })
   })
 
@@ -224,6 +306,33 @@ describe('UserController', () => {
         id,
         name: 'updated',
       })
+    })
+  })
+
+  describe('OpenAPI document', () => {
+    it('hides internal-only user fields', async () => {
+      const response = await app.inject({ method: 'GET', url: '/documentation/openapi.json' })
+
+      expect(response.statusCode).toBe(200)
+      const document = response.json()
+      const userResponseSchema =
+        document.paths['/users/{userId}'].get.responses['200'].content['application/json'].schema
+      expect(Object.keys(userResponseSchema.properties.data.properties)).toEqual([
+        'id',
+        'name',
+        'age',
+        'email',
+      ])
+      // `internalMandatoryProp` is required in the Zod schema; the doc override must also
+      // drop it from the JSON Schema `required` list, or the document would require a field
+      // it never shows.
+      expect(userResponseSchema.properties.data.required).toEqual(['id', 'name', 'email'])
+      // The `visibility` marker itself must not leak into the published document.
+      expect(JSON.stringify(document)).not.toContain('"visibility"')
+      // Request schemas are untouched: the create-user body still documents `age`.
+      const createUserBodySchema =
+        document.paths['/users'].post.requestBody.content['application/json'].schema
+      expect(Object.keys(createUserBodySchema.properties)).toContain('age')
     })
   })
 })
