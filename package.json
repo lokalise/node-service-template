@@ -109,7 +109,7 @@
         "@lokalise/tsconfig": "^5.0.0",
         "@lokalise/universal-testing-utils": "^4.2.0",
         "@opentelemetry/sdk-trace-base": "^2.11.0",
-        "@readme/openapi-parser": "^8.0.2",
+        "@readme/openapi-parser": "^9.0.0",
         "@types/node": "^26.5.1",
         "@vitest/coverage-v8": "^4.1.11",
         "cpy-cli": "^7.0.0",
