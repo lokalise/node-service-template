@@ -80,7 +80,7 @@
         "@prometheus-io/client": "^0.16.1",
         "amqplib": "^2.0.1",
         "awilix": "^13.0.5",
-        "awilix-manager": "^7.0.0",
+        "awilix-manager": "^7.0.1",
         "bullmq": "^6.3.4",
         "drizzle-kit": "1.0.0-rc.5-5935859",
         "drizzle-orm": "1.0.0-rc.5-5935859",
