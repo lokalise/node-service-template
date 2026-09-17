@@ -20,10 +20,10 @@ import { type JSONSchema, safeEncode } from 'zod/v4/core'
  * - `onRoute` (boot time, once per route): derives a "public" Zod schema per response status
  *   code by recursively dropping `x-internal` properties, and precompiles an encoder for it.
  *   Routes whose responses carry no internal fields get no encoder and zero runtime overhead.
- * - `preHandler` (per request): resolves the consumer from the `x-api-source` header into
- *   `req.reqContext.source` and, for public requests on routes that have public encoders,
- *   swaps the serializer for this reply only via `reply.serializer()`. Internal requests go
- *   through the route's normal compiled serializer, untouched.
+ * - `preHandler` (per request): resolves the consumer from the `x-api-source` header and, for
+ *   public requests on routes that have public encoders, swaps the serializer for this reply
+ *   only via `reply.serializer()`. Internal requests go through the route's normal compiled
+ *   serializer, untouched.
  *
  * PoC shortcuts (would change before production):
  * - The source comes from a plain request header, so any caller can claim to be internal.
@@ -40,10 +40,6 @@ export type ApiSource = RouteVisibility
 type PublicEncoder = (payload: unknown) => string
 
 declare module 'fastify' {
-  interface RequestContext {
-    source?: ApiSource
-  }
-
   interface FastifyContextConfig {
     publicEncoders?: Record<string, PublicEncoder>
   }
@@ -181,7 +177,6 @@ function plugin(fastify: FastifyInstance, _opts: unknown, next: (err?: Error) =>
     // PoC: header-driven. Missing header counts as internal so the rest of the template's
     // routes and tests keep their current behavior; production would fail closed instead.
     const source: ApiSource = req.headers[API_SOURCE_HEADER] === 'public' ? 'public' : 'internal'
-    req.reqContext.source = source
 
     const encoders = req.routeOptions.config?.publicEncoders
     if (source === 'public' && encoders) {
