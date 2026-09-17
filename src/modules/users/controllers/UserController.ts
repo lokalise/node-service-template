@@ -7,10 +7,21 @@ import {
 } from '@node-service-template/api-contracts'
 import type { RouteOptions } from 'fastify'
 import { AbstractApiController, buildApiRoute } from 'opinionated-machine'
-import type { UserService } from '../services/UserService.ts'
+import type { User } from '../../../db/schema/user.ts'
+import type { UserDTO, UserService } from '../services/UserService.ts'
 import type { UsersInjectableDependencies } from '../UserModule.ts'
 
 type UserControllerContractsType = typeof UserController.contracts
+
+// PoC: the API DTO carries internal-only fields that do not exist on the DB entity, so the
+// controller maps at the contract boundary. `internalMandatoryProp` is required by the schema
+// (TypeScript enforces it here); `internalOptionalProp` may be absent even for internal
+// consumers.
+const toUserDto = (user: User): UserDTO => ({
+  ...user,
+  internalMandatoryProp: `user:${user.id}`,
+  internalOptionalProp: user.age === null ? undefined : `age:${user.age}`,
+})
 
 export class UserController extends AbstractApiController<UserControllerContractsType> {
   public static contracts = {
@@ -38,7 +49,7 @@ export class UserController extends AbstractApiController<UserControllerContract
         age,
       })
 
-      return { status: 201, body: { data: createdUser } }
+      return { status: 201, body: { data: toUserDto(createdUser) } }
     }),
 
     getUser: buildApiRoute(UserController.contracts.getUser, async (req) => {
@@ -47,7 +58,7 @@ export class UserController extends AbstractApiController<UserControllerContract
 
       const user = await this.userService.getUser(reqContext, userId)
 
-      return { status: 200, body: { data: user } }
+      return { status: 200, body: { data: toUserDto(user) } }
     }),
 
     getUsersByIds: buildApiRoute(UserController.contracts.getUsersByIds, async (req) => {
@@ -56,7 +67,7 @@ export class UserController extends AbstractApiController<UserControllerContract
 
       const users = await this.userService.getUsers(reqContext, userIds)
 
-      return { status: 200, body: { data: users } }
+      return { status: 200, body: { data: users.map(toUserDto) } }
     }),
 
     deleteUser: buildApiRoute(UserController.contracts.deleteUser, async (req) => {

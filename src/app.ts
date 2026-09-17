@@ -59,6 +59,10 @@ import {
 } from './infrastructure/healthchecks/healthchecksWrappers.ts'
 import { ALL_MODULES } from './modules.ts'
 import { jwtTokenPlugin } from './plugins/jwtTokenPlugin.ts'
+import {
+  publicApiSerializationPlugin,
+  stripInternalFieldsFromJsonSchema,
+} from './plugins/publicApiSerializationPlugin.ts'
 
 EventEmitter.defaultMaxListeners = 12
 
@@ -164,6 +168,10 @@ export async function getApp(
     transform: createJsonSchemaTransform({
       zodToJsonConfig: {
         target: 'draft-2020-12',
+        // PoC: hide `x-internal` response fields from the generated OpenAPI document. The
+        // plugin shares this transform between the public and the internal document, so for
+        // now the fields disappear from both; see stripInternalFieldsFromJsonSchema.
+        override: stripInternalFieldsFromJsonSchema,
       },
     }),
     openapi: {
@@ -274,6 +282,10 @@ export async function getApp(
   )
 
   await app.register(requestContextProviderPlugin)
+  // PoC: field-level response visibility (`x-internal` Zod meta). Must be registered before
+  // routes are added so its onRoute hook sees them; reads reqContext, hence after
+  // requestContextProviderPlugin.
+  await app.register(publicApiSerializationPlugin)
   await app.register(unhandledExceptionPlugin, {
     shutdownAfterHandling: false,
     errorObjectResolver: resolveGlobalErrorLogObject,

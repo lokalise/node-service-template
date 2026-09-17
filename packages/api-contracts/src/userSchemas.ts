@@ -10,8 +10,20 @@ export const USER_SCHEMA = z.compile(
   z.object({
     id: z.string(),
     name: z.string(),
-    age: z.optional(z.nullable(z.preprocess(toNumberPreprocessor, z.number()))),
+    // No input preprocessor here: this is a response-only schema and `z.preprocess` is a
+    // unidirectional transform, so `safeEncode` (the response serializer) throws on any
+    // non-null value. Input coercion stays on CREATE_USER_BODY_SCHEMA.
+    age: z.optional(z.nullable(z.number())),
     email: z.email(),
+    // PoC: REQUIRED internal-only field. This is the case the per-reply serializer swap
+    // exists for: each audience encodes against its own complete schema, so the field can
+    // stay required for internal consumers while public responses drop it — a
+    // preSerialization-style payload strip would fail serialization here instead.
+    internalMandatoryProp: z.string().meta({ visibility: 'internal' }),
+    // PoC: optional internal-only field. Returned to internal consumers when present,
+    // stripped from public responses (publicApiSerializationPlugin) and from the OpenAPI
+    // document (stripInternalFieldsFromJsonSchema).
+    internalOptionalProp: z.string().optional().meta({ visibility: 'internal' }),
   }),
 )
 

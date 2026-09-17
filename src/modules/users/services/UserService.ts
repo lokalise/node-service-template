@@ -60,14 +60,14 @@ export class UserService {
     requestContext.logger.info({ userId }, 'Updated user')
   }
 
-  async getUsers(requestContext: RequestContext, userIds: string[]): Promise<UserDTO[]> {
+  async getUsers(requestContext: RequestContext, userIds: string[]): Promise<User[]> {
     const users = await this.userRepository.getUsers(userIds)
 
     requestContext.logger.debug({ userIds }, 'Resolved users')
     return users
   }
 
-  async findUserById(requestContext: RequestContext, id: string): Promise<UserDTO | null> {
+  async findUserById(requestContext: RequestContext, id: string): Promise<User | null> {
     const getUserResult =
       this.userLoader.getInMemoryOnly(id.toString()) ?? (await this.userLoader.get(id))
 
