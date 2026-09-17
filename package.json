@@ -114,7 +114,7 @@
         "@vitest/coverage-v8": "^4.1.11",
         "cpy-cli": "^7.0.0",
         "cross-env": "^10.1.0",
-        "fast-jwt": "^6.3.2",
+        "fast-jwt": "^6.3.3",
         "fauxqs": "^2.12.0",
         "mockttp": "^4.6.2",
         "typescript": "7.0.2",
