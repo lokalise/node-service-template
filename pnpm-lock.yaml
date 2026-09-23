@@ -252,7 +252,7 @@ importers:
         version: 8.0.0(zod@4.5.4)
       '@lokalise/aws-config':
         specifier: ^9.0.0
-        version: 9.0.0(@aws-sdk/client-sns@3.1129.0)(@aws-sdk/client-sqs@3.1129.0)(@aws-sdk/credential-providers@3.1129.0)(@lokalise/fastify-extras@35.0.0(e2330a5892ab86657a738c81395fb7f4))(@lokalise/node-core@14.9.1(zod@4.5.4))(@lokalise/universal-ts-utils@4.11.0)(@message-queue-toolkit/core@27.1.0(zod@4.5.4))(@message-queue-toolkit/sns@27.0.1(@aws-sdk/client-sns@3.1129.0)(@aws-sdk/client-sqs@3.1129.0)(@aws-sdk/client-sts@3.1129.0)(@message-queue-toolkit/core@27.1.0(zod@4.5.4))(@message-queue-toolkit/schemas@8.1.0(zod@4.5.4))(@message-queue-toolkit/sqs@27.0.1(@aws-sdk/client-sqs@3.1129.0)(@message-queue-toolkit/core@27.1.0(zod@4.5.4))(supports-color@7.2.0)(zod@4.5.4))(supports-color@7.2.0)(zod@4.5.4))(@message-queue-toolkit/sqs@27.0.1(@aws-sdk/client-sqs@3.1129.0)(@message-queue-toolkit/core@27.1.0(zod@4.5.4))(supports-color@7.2.0)(zod@4.5.4))(envase@1.5.0)(zod@4.5.4)
+        version: 9.0.0(@aws-sdk/client-sns@3.1129.0)(@aws-sdk/client-sqs@3.1129.0)(@aws-sdk/credential-providers@3.1129.0)(@lokalise/fastify-extras@35.0.1(e2330a5892ab86657a738c81395fb7f4))(@lokalise/node-core@14.9.1(zod@4.5.4))(@lokalise/universal-ts-utils@4.11.0)(@message-queue-toolkit/core@27.1.0(zod@4.5.4))(@message-queue-toolkit/sns@27.0.1(@aws-sdk/client-sns@3.1129.0)(@aws-sdk/client-sqs@3.1129.0)(@aws-sdk/client-sts@3.1129.0)(@message-queue-toolkit/core@27.1.0(zod@4.5.4))(@message-queue-toolkit/schemas@8.1.0(zod@4.5.4))(@message-queue-toolkit/sqs@27.0.1(@aws-sdk/client-sqs@3.1129.0)(@message-queue-toolkit/core@27.1.0(zod@4.5.4))(supports-color@7.2.0)(zod@4.5.4))(supports-color@7.2.0)(zod@4.5.4))(@message-queue-toolkit/sqs@27.0.1(@aws-sdk/client-sqs@3.1129.0)(@message-queue-toolkit/core@27.1.0(zod@4.5.4))(supports-color@7.2.0)(zod@4.5.4))(envase@1.5.0)(zod@4.5.4)
       '@lokalise/backend-http-client':
         specifier: ^12.2.0
         version: 12.2.0(@lokalise/api-contracts@8.0.0(zod@4.5.4))(@lokalise/node-core@14.9.1(zod@4.5.4))(zod@4.5.4)
@@ -266,8 +266,8 @@ importers:
         specifier: ^7.0.1
         version: 7.0.1(@fastify/sse@0.6.0(fastify@5.12.3))(@lokalise/api-contracts@8.0.0(zod@4.5.4))(@lokalise/node-core@14.9.1(zod@4.5.4))(fastify-type-provider-zod@7.0.0(@fastify/swagger@9.8.1(supports-color@7.2.0))(fastify@5.12.3)(openapi-types@12.1.3)(zod@4.5.4))(fastify@5.12.3)(zod@4.5.4)
       '@lokalise/fastify-extras':
-        specifier: ^35.0.0
-        version: 35.0.0(e2330a5892ab86657a738c81395fb7f4)
+        specifier: ^35.0.1
+        version: 35.0.1(e2330a5892ab86657a738c81395fb7f4)
       '@lokalise/healthcheck-utils':
         specifier: ^7.0.0
         version: 7.0.0(@lokalise/background-jobs-common@16.1.0(bullmq@6.3.4(ioredis@6.0.0(supports-color@7.2.0)))(ioredis@6.0.0(supports-color@7.2.0))(pino@10.3.1)(supports-color@7.2.0)(toad-scheduler@4.2.0)(zod@4.5.4))(@prometheus-io/client@0.16.1)(ioredis@6.0.0(supports-color@7.2.0))(supports-color@7.2.0)(toad-scheduler@4.2.0)(zod@4.5.4)
@@ -1160,8 +1160,8 @@ packages:
       '@fastify/sse':
         optional: true
 
-  '@lokalise/fastify-extras@35.0.0':
-    resolution: {integrity: sha512-0jAWlYK7Cz/kKf5ESsmUrx7eg03g+Se99xSJ1V3OlZNwUSyAcKZvUjnsV2fXFNFfNPkXc0Tgb/76xrU9xDMV+w==}
+  '@lokalise/fastify-extras@35.0.1':
+    resolution: {integrity: sha512-8oZYNR9H1JIFc2C0tguyH4TQk3XJpt57xaJByDl+TCRhpmActHSgrUYaLpkSKUW1iK4oK9G9uPj/LlIKluRwcA==}
     engines: {node: '>=24.3.0'}
     peerDependencies:
       '@fastify/jwt': '>=9.1.0'
@@ -5769,12 +5769,12 @@ snapshots:
     dependencies:
       zod: 4.5.4
 
-  '@lokalise/aws-config@9.0.0(@aws-sdk/client-sns@3.1129.0)(@aws-sdk/client-sqs@3.1129.0)(@aws-sdk/credential-providers@3.1129.0)(@lokalise/fastify-extras@35.0.0(e2330a5892ab86657a738c81395fb7f4))(@lokalise/node-core@14.9.1(zod@4.5.4))(@lokalise/universal-ts-utils@4.11.0)(@message-queue-toolkit/core@27.1.0(zod@4.5.4))(@message-queue-toolkit/sns@27.0.1(@aws-sdk/client-sns@3.1129.0)(@aws-sdk/client-sqs@3.1129.0)(@aws-sdk/client-sts@3.1129.0)(@message-queue-toolkit/core@27.1.0(zod@4.5.4))(@message-queue-toolkit/schemas@8.1.0(zod@4.5.4))(@message-queue-toolkit/sqs@27.0.1(@aws-sdk/client-sqs@3.1129.0)(@message-queue-toolkit/core@27.1.0(zod@4.5.4))(supports-color@7.2.0)(zod@4.5.4))(supports-color@7.2.0)(zod@4.5.4))(@message-queue-toolkit/sqs@27.0.1(@aws-sdk/client-sqs@3.1129.0)(@message-queue-toolkit/core@27.1.0(zod@4.5.4))(supports-color@7.2.0)(zod@4.5.4))(envase@1.5.0)(zod@4.5.4)':
+  '@lokalise/aws-config@9.0.0(@aws-sdk/client-sns@3.1129.0)(@aws-sdk/client-sqs@3.1129.0)(@aws-sdk/credential-providers@3.1129.0)(@lokalise/fastify-extras@35.0.1(e2330a5892ab86657a738c81395fb7f4))(@lokalise/node-core@14.9.1(zod@4.5.4))(@lokalise/universal-ts-utils@4.11.0)(@message-queue-toolkit/core@27.1.0(zod@4.5.4))(@message-queue-toolkit/sns@27.0.1(@aws-sdk/client-sns@3.1129.0)(@aws-sdk/client-sqs@3.1129.0)(@aws-sdk/client-sts@3.1129.0)(@message-queue-toolkit/core@27.1.0(zod@4.5.4))(@message-queue-toolkit/schemas@8.1.0(zod@4.5.4))(@message-queue-toolkit/sqs@27.0.1(@aws-sdk/client-sqs@3.1129.0)(@message-queue-toolkit/core@27.1.0(zod@4.5.4))(supports-color@7.2.0)(zod@4.5.4))(supports-color@7.2.0)(zod@4.5.4))(@message-queue-toolkit/sqs@27.0.1(@aws-sdk/client-sqs@3.1129.0)(@message-queue-toolkit/core@27.1.0(zod@4.5.4))(supports-color@7.2.0)(zod@4.5.4))(envase@1.5.0)(zod@4.5.4)':
     dependencies:
       '@aws-sdk/client-sns': 3.1129.0
       '@aws-sdk/client-sqs': 3.1129.0
       '@aws-sdk/credential-providers': 3.1129.0
-      '@lokalise/fastify-extras': 35.0.0(e2330a5892ab86657a738c81395fb7f4)
+      '@lokalise/fastify-extras': 35.0.1(e2330a5892ab86657a738c81395fb7f4)
       '@lokalise/node-core': 14.9.1(zod@4.5.4)
       '@lokalise/universal-ts-utils': 4.11.0
       '@message-queue-toolkit/core': 27.1.0(zod@4.5.4)
@@ -5829,7 +5829,7 @@ snapshots:
     optionalDependencies:
       '@fastify/sse': 0.6.0(fastify@5.12.3)
 
-  '@lokalise/fastify-extras@35.0.0(e2330a5892ab86657a738c81395fb7f4)':
+  '@lokalise/fastify-extras@35.0.1(e2330a5892ab86657a738c81395fb7f4)':
     dependencies:
       '@amplitude/analytics-node': 1.5.71
       '@bugsnag/js': 8.10.0
