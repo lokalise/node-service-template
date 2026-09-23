@@ -9,6 +9,7 @@ export const USER_SCHEMA = z.compile(
     password: z
       .string()
       .meta({ visibility: 'internal' })
+      .optional()
       .describe('Internal-only credential; never exposed on the public API'),
   }),
 )

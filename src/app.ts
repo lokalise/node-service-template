@@ -107,6 +107,13 @@ export async function getApp(
   // route-level visibility at runtime: a public caller (audience header not exactly
   // `internal`) gets a 404 on `internal` routes and internal fields stripped from
   // responses. Registered before the routes it protects.
+  //
+  // SECURITY: the audience is read from the caller-controlled `x-api-audience`
+  // header, which is not tied to the JWT. Anything that can reach this listener
+  // with `x-api-audience: internal` would gain access to internal routes and
+  // fields. The gateway/ingress MUST set or overwrite this header at the trust
+  // boundary so untrusted callers cannot forge it. If your setup cannot guarantee
+  // that, derive the audience from verified authentication data instead.
   await app.register(apiVisibilityPlugin, {
     alwaysPublicPathPrefixes: ['/', '/health', '/live', '/metrics', '/documentation'],
   })
