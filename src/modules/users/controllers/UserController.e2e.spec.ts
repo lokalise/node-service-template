@@ -13,7 +13,7 @@ import { UserController } from './UserController.ts'
 const NEW_USER_FIXTURE = {
   name: 'dummy',
   email: 'email@test.com',
-  password: 'test-password',
+  internalNote: 'internal note',
 } satisfies UserCreateDTO
 
 const withAudience = (token: string, audience: 'public' | 'internal') => ({
@@ -40,7 +40,7 @@ describe('UserController', () => {
       const token = generateTestJwt({ userId: 1 })
       const response = await injectByApiContract(app, UserController.contracts.createUser, {
         headers: withAudience(token, 'public'),
-        body: { name: 'dummy', email: 'test', password: 'test-password' },
+        body: { name: 'dummy', email: 'test', internalNote: 'internal note' },
       })
 
       expect(response.statusCode).toBe(400)
@@ -134,7 +134,7 @@ describe('UserController', () => {
       expect(response1.statusCode).toBe(200)
       expect(response2.statusCode).toBe(200)
       // Public caller: every non-internal field is returned intact, and the
-      // internal `password` field is stripped from the response.
+      // internal `internalNote` field is stripped from the response.
       const expectedPublicUser = {
         id,
         name: NEW_USER_FIXTURE.name,
@@ -145,7 +145,7 @@ describe('UserController', () => {
       expect(response2.json().data).toEqual(expectedPublicUser)
     })
 
-    it('returns the internal `password` field to an internal caller', async () => {
+    it('returns the internal `internalNote` field to an internal caller', async () => {
       const token = generateTestJwt({ userId: '1' })
       const newUser = await userRepository.createUser(NEW_USER_FIXTURE)
 
@@ -162,7 +162,7 @@ describe('UserController', () => {
         name: NEW_USER_FIXTURE.name,
         email: NEW_USER_FIXTURE.email,
         age: null,
-        password: NEW_USER_FIXTURE.password,
+        internalNote: NEW_USER_FIXTURE.internalNote,
       })
     })
 
@@ -194,7 +194,7 @@ describe('UserController', () => {
       const user2 = await userRepository.createUser({
         name: 'second',
         email: 'second@test.com',
-        password: 'test-password',
+        internalNote: 'internal note',
       })
 
       const response = await injectByApiContract(app, UserController.contracts.getUsersByIds, {
@@ -281,7 +281,7 @@ describe('UserController', () => {
         age: null,
         id,
         name: 'updated',
-        password: 'test-password',
+        internalNote: 'internal note',
       })
     })
   })

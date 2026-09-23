@@ -28,7 +28,7 @@ export class UserService {
       name: user.name ?? null,
       age: user.age ?? null,
       email: user.email,
-      password: user.password,
+      internalNote: user.internalNote,
     })
     await this.userLoader.invalidateCacheFor(newUser.id.toString())
     return newUser

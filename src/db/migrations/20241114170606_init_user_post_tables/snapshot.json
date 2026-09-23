@@ -309,7 +309,7 @@
             "default": null,
             "generated": null,
             "identity": null,
-            "name": "password",
+            "name": "internal_note",
             "schema": "user",
             "table": "user",
             "entityType": "columns"

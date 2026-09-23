@@ -18,7 +18,7 @@ class FakeUserService extends UserService {
       age: null,
       email: 'dummy',
       name: 'dummy',
-      password: 'dummy',
+      internalNote: 'dummy',
     })
   }
 }

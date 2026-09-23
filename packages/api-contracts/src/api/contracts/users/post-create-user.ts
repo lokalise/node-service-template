@@ -13,7 +13,7 @@ const CREATE_USER_REQUEST_BODY_SCHEMA = z.compile(
       .optional(z.nullable(z.preprocess(toNumberPreprocessor, z.number())))
       .describe('Age of the user in years, if known'),
     email: z.email().describe('Email address of the user'),
-    password: z.string().describe('Internal-only credential for the user'),
+    internalNote: z.string().describe('Internal-only note about the user'),
   }),
 )
 export type CreateUserRequestBody = z.infer<typeof CREATE_USER_REQUEST_BODY_SCHEMA>
