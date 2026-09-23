@@ -85,6 +85,30 @@ describe('UserController', () => {
         },
       })
     })
+
+    it('returns the structured error body for a public caller on a 500', async () => {
+      const token = generateTestJwt({ userId: 1 })
+      // First create succeeds; the second hits the unique-email constraint -> 500.
+      await injectByApiContract(app, UserController.contracts.createUser, {
+        headers: withAudience(token, 'public'),
+        body: NEW_USER_FIXTURE,
+      })
+      const response = await injectByApiContract(app, UserController.contracts.createUser, {
+        headers: withAudience(token, 'public'),
+        body: NEW_USER_FIXTURE,
+      })
+
+      // Because USER_SCHEMA has an internal field, a public caller gets the
+      // api-visibility per-reply serializer. The contract now declares a `5xx`
+      // response, so the error handler's body is serialized as-is instead of
+      // failing with a ResponseSerializationError.
+      expect(response.statusCode).toBe(500)
+      expect(response.json()).toMatchObject({
+        message: expect.any(String),
+        code: expect.any(String),
+        errorCode: expect.any(String),
+      })
+    })
   })
 
   describe(describeApiContract(UserController.contracts.getUser), () => {

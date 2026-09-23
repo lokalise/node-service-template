@@ -3,7 +3,7 @@ import { toNumberPreprocessor } from '@lokalise/zod-extras'
 import z from 'zod/v4'
 import { USER_SCHEMA } from '../../objects/index.ts'
 import { OpenApiTags } from '../../open-api-tags.ts'
-import { AUTH_HEADERS } from '../common.ts'
+import { AUTH_HEADERS, INTERNAL_SERVER_ERROR_RESPONSE_SCHEMA } from '../common.ts'
 
 // POST /users
 const CREATE_USER_REQUEST_BODY_SCHEMA = z.compile(
@@ -36,5 +36,6 @@ export const postCreateUserContract = defineApiContract({
   pathResolver: () => '/users',
   responsesByStatusCode: {
     201: CREATE_USER_RESPONSE_BODY_SCHEMA,
+    '5xx': INTERNAL_SERVER_ERROR_RESPONSE_SCHEMA,
   },
 })

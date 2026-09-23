@@ -4,7 +4,7 @@ import z from 'zod/v4'
 import { USER_NOT_FOUND_ERROR_DEFINITION } from '../../errors/userErrors.ts'
 import { USER_SCHEMA } from '../../objects/index.ts'
 import { OpenApiTags } from '../../open-api-tags.ts'
-import { AUTH_HEADERS } from '../common.ts'
+import { AUTH_HEADERS, INTERNAL_SERVER_ERROR_RESPONSE_SCHEMA } from '../common.ts'
 
 // GET /users/:userId
 const GET_USER_REQUEST_PARAMS_SCHEMA = z.compile(
@@ -33,5 +33,6 @@ export const getUserContract = defineApiContract({
   responsesByStatusCode: {
     200: GET_USER_RESPONSE_BODY_SCHEMA,
     ...mergeErrorSchemasByStatusCode([USER_NOT_FOUND_ERROR_DEFINITION]),
+    '5xx': INTERNAL_SERVER_ERROR_RESPONSE_SCHEMA,
   },
 })
