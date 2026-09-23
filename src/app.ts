@@ -36,7 +36,11 @@ import type { FastifyInstance } from 'fastify'
 import fastify from 'fastify'
 import fastifyGracefulShutdown from 'fastify-graceful-shutdown'
 import fastifyNoIcon from 'fastify-no-icon'
-import { createJsonSchemaTransform } from 'fastify-type-provider-zod'
+import { OpenApiTags } from '@node-service-template/api-contracts'
+import {
+  createJsonSchemaTransform,
+  createJsonSchemaTransformObject,
+} from 'fastify-type-provider-zod'
 import {
   type AbstractModule,
   type DependencyInjectionOptions,
@@ -168,6 +172,11 @@ export async function getApp(
         target: 'draft-2020-12',
       },
     }),
+    transformObject: createJsonSchemaTransformObject({
+      zodToJsonConfig: {
+        target: 'draft-2020-12',
+      },
+    }),
     openapi: {
       openapi: '3.1.0',
       info: {
@@ -175,6 +184,7 @@ export async function getApp(
         description: 'Sample backend service',
         version: '1.0.0',
       },
+      tags: Object.values(OpenApiTags),
       servers: [
         {
           url:
