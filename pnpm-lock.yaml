@@ -252,7 +252,7 @@ importers:
         version: 8.0.0(zod@4.5.4)
       '@lokalise/aws-config':
         specifier: ^9.0.0
-        version: 9.0.0(61773114b12bc0574a425d8efb2ea71a)
+        version: 9.0.0(@aws-sdk/client-sns@3.1129.0)(@aws-sdk/client-sqs@3.1129.0)(@aws-sdk/credential-providers@3.1129.0)(@lokalise/fastify-extras@35.0.0(e2330a5892ab86657a738c81395fb7f4))(@lokalise/node-core@14.9.1(zod@4.5.4))(@lokalise/universal-ts-utils@4.11.0)(@message-queue-toolkit/core@27.1.0(zod@4.5.4))(@message-queue-toolkit/sns@27.0.1(@aws-sdk/client-sns@3.1129.0)(@aws-sdk/client-sqs@3.1129.0)(@aws-sdk/client-sts@3.1129.0)(@message-queue-toolkit/core@27.1.0(zod@4.5.4))(@message-queue-toolkit/schemas@8.1.0(zod@4.5.4))(@message-queue-toolkit/sqs@27.0.1(@aws-sdk/client-sqs@3.1129.0)(@message-queue-toolkit/core@27.1.0(zod@4.5.4))(supports-color@7.2.0)(zod@4.5.4))(supports-color@7.2.0)(zod@4.5.4))(@message-queue-toolkit/sqs@27.0.1(@aws-sdk/client-sqs@3.1129.0)(@message-queue-toolkit/core@27.1.0(zod@4.5.4))(supports-color@7.2.0)(zod@4.5.4))(envase@1.5.0)(zod@4.5.4)
       '@lokalise/backend-http-client':
         specifier: ^12.2.0
         version: 12.2.0(@lokalise/api-contracts@8.0.0(zod@4.5.4))(@lokalise/node-core@14.9.1(zod@4.5.4))(zod@4.5.4)
@@ -266,8 +266,8 @@ importers:
         specifier: ^7.0.1
         version: 7.0.1(@fastify/sse@0.6.0(fastify@5.12.3))(@lokalise/api-contracts@8.0.0(zod@4.5.4))(@lokalise/node-core@14.9.1(zod@4.5.4))(fastify-type-provider-zod@7.0.0(@fastify/swagger@9.8.1(supports-color@7.2.0))(fastify@5.12.3)(openapi-types@12.1.3)(zod@4.5.4))(fastify@5.12.3)(zod@4.5.4)
       '@lokalise/fastify-extras':
-        specifier: ^34.0.1
-        version: 34.0.1(@fastify/jwt@10.2.2)(@fastify/swagger@9.8.1(supports-color@7.2.0))(@lokalise/api-contracts@8.0.0(zod@4.5.4))(@lokalise/background-jobs-common@16.1.0(bullmq@6.3.4(ioredis@6.0.0(supports-color@7.2.0)))(ioredis@6.0.0(supports-color@7.2.0))(pino@10.3.1)(supports-color@7.2.0)(toad-scheduler@4.2.0)(zod@4.5.4))(@lokalise/errors@2.1.0(zod@4.5.4))(@lokalise/node-core@14.9.1(zod@4.5.4))(@opentelemetry/api@1.9.1)(bullmq@6.3.4(ioredis@6.0.0(supports-color@7.2.0)))(dd-trace@6.13.0)(fastify-type-provider-zod@7.0.0(@fastify/swagger@9.8.1(supports-color@7.2.0))(fastify@5.12.3)(openapi-types@12.1.3)(zod@4.5.4))(fastify@5.12.3)(ioredis@6.0.0(supports-color@7.2.0))(pino@10.3.1)(supports-color@7.2.0)(zod@4.5.4)
+        specifier: ^35.0.0
+        version: 35.0.0(e2330a5892ab86657a738c81395fb7f4)
       '@lokalise/healthcheck-utils':
         specifier: ^7.0.0
         version: 7.0.0(@lokalise/background-jobs-common@16.1.0(bullmq@6.3.4(ioredis@6.0.0(supports-color@7.2.0)))(ioredis@6.0.0(supports-color@7.2.0))(pino@10.3.1)(supports-color@7.2.0)(toad-scheduler@4.2.0)(zod@4.5.4))(@prometheus-io/client@0.16.1)(ioredis@6.0.0(supports-color@7.2.0))(supports-color@7.2.0)(toad-scheduler@4.2.0)(zod@4.5.4)
@@ -323,8 +323,8 @@ importers:
         specifier: ^13.0.5
         version: 13.0.5
       awilix-manager:
-        specifier: ^7.0.1
-        version: 7.0.1(awilix@13.0.5)
+        specifier: ^7.1.0
+        version: 7.1.0(awilix@13.0.5)
       bullmq:
         specifier: ^6.3.4
         version: 6.3.4(ioredis@6.0.0(supports-color@7.2.0))
@@ -362,8 +362,8 @@ importers:
         specifier: ^16.1.1
         version: 16.1.1(ioredis@6.0.0(supports-color@7.2.0))
       opinionated-machine:
-        specifier: ^10.5.0
-        version: 10.5.0(@lokalise/api-contracts@8.0.0(zod@4.5.4))(@lokalise/fastify-api-contracts@7.0.1(@fastify/sse@0.6.0(fastify@5.12.3))(@lokalise/api-contracts@8.0.0(zod@4.5.4))(@lokalise/node-core@14.9.1(zod@4.5.4))(fastify-type-provider-zod@7.0.0(@fastify/swagger@9.8.1(supports-color@7.2.0))(fastify@5.12.3)(openapi-types@12.1.3)(zod@4.5.4))(fastify@5.12.3)(zod@4.5.4))(@lokalise/node-core@14.9.1(zod@4.5.4))(awilix-manager@7.0.1(awilix@13.0.5))(awilix@13.0.5)(fastify-type-provider-zod@7.0.0(@fastify/swagger@9.8.1(supports-color@7.2.0))(fastify@5.12.3)(openapi-types@12.1.3)(zod@4.5.4))(fastify@5.12.3)(zod@4.5.4)
+        specifier: ^12.0.0
+        version: 12.0.0(@lokalise/api-contracts@8.0.0(zod@4.5.4))(@lokalise/fastify-api-contracts@7.0.1(@fastify/sse@0.6.0(fastify@5.12.3))(@lokalise/api-contracts@8.0.0(zod@4.5.4))(@lokalise/node-core@14.9.1(zod@4.5.4))(fastify-type-provider-zod@7.0.0(@fastify/swagger@9.8.1(supports-color@7.2.0))(fastify@5.12.3)(openapi-types@12.1.3)(zod@4.5.4))(fastify@5.12.3)(zod@4.5.4))(@lokalise/node-core@14.9.1(zod@4.5.4))(awilix-manager@7.1.0(awilix@13.0.5))(awilix@13.0.5)(fastify-type-provider-zod@7.0.0(@fastify/swagger@9.8.1(supports-color@7.2.0))(fastify@5.12.3)(openapi-types@12.1.3)(zod@4.5.4))(fastify@5.12.3)(zod@4.5.4)
       pino:
         specifier: ^10.3.1
         version: 10.3.1
@@ -1160,21 +1160,22 @@ packages:
       '@fastify/sse':
         optional: true
 
-  '@lokalise/fastify-extras@34.0.1':
-    resolution: {integrity: sha512-AYq/jn6gZe9gdwSKJImF6SiLfWU2bKhd0sYf+Yk7Bvw9AN/YBEhug/HWPksenTtno/F2GFKPVI1rYKIGk2+dtQ==}
+  '@lokalise/fastify-extras@35.0.0':
+    resolution: {integrity: sha512-0jAWlYK7Cz/kKf5ESsmUrx7eg03g+Se99xSJ1V3OlZNwUSyAcKZvUjnsV2fXFNFfNPkXc0Tgb/76xrU9xDMV+w==}
     engines: {node: '>=24.3.0'}
     peerDependencies:
       '@fastify/jwt': '>=9.1.0'
       '@fastify/swagger': '>=9.5.1'
-      '@lokalise/api-contracts': '>=5.0.0'
+      '@lokalise/api-contracts': '>=8.0.0'
       '@lokalise/background-jobs-common': '>=12.0.0'
       '@lokalise/errors': '>=2.0.0'
+      '@lokalise/fastify-api-contracts': '>=7.0.0'
       '@lokalise/node-core': '>=14.0.0'
       '@opentelemetry/api': '>=1.9.0'
       bullmq: ^5.19.0 || ^6.0.0
       dd-trace: '>=5.0.0'
       fastify: ^5.10.0
-      fastify-type-provider-zod: '>=6.0.0'
+      fastify-type-provider-zod: '>=7.0.0'
       ioredis: 6.0.0
       pino: '>=9.9.0'
       zod: '>=4.1.5'
@@ -2122,12 +2123,6 @@ packages:
     peerDependencies:
       '@opentelemetry/api': ^1.0.0
 
-  '@opentelemetry/resource-detector-aws@2.21.0':
-    resolution: {integrity: sha512-Veavy+khoywR+Hv065SU5jucFTGTiW1KXo39CsJ+8wqdYYz8jiRJPnQ20Kd+X9HbV2+Abb0l5CrJIdxK1ZOqBg==}
-    engines: {node: ^18.19.0 || >=20.6.0}
-    peerDependencies:
-      '@opentelemetry/api': ^1.0.0
-
   '@opentelemetry/resource-detector-aws@2.22.0':
     resolution: {integrity: sha512-3kM+xfsSHs0hShUAx9IFhX5jniaXxJL3CTjbCMNCFS+EY7bswWbukV3au0jfqEgzeNxGxHEy8RLA1TOhAVLpTQ==}
     engines: {node: ^18.19.0 || >=20.6.0}
@@ -2142,12 +2137,6 @@ packages:
 
   '@opentelemetry/resource-detector-azure@0.30.0':
     resolution: {integrity: sha512-fwGDPVGJ6PyRMc5CPdHBfASX5prg3mLhZA0rs+n8ZJK4DjpJw9CvB1FujWl8l0QAsTmvrYBm9Deal3fvfqZBkQ==}
-    engines: {node: ^18.19.0 || >=20.6.0}
-    peerDependencies:
-      '@opentelemetry/api': ^1.0.0
-
-  '@opentelemetry/resource-detector-container@0.8.12':
-    resolution: {integrity: sha512-EJRFfIY26whY0w5RDxMRXlfBDgDS001JYMHuOVuDBBsRrV4MBqoVajR9B0L9Vy728+w/HNVnSQkpJFacFr+klg==}
     engines: {node: ^18.19.0 || >=20.6.0}
     peerDependencies:
       '@opentelemetry/api': ^1.0.0
@@ -2263,6 +2252,9 @@ packages:
     engines: {node: ^18.19.0 || >=20.6.0}
     peerDependencies:
       '@opentelemetry/api': ^1.1.0
+
+  '@opinionated-machine/sse-parser@0.1.0':
+    resolution: {integrity: sha512-DDksOftqoayDqMjTI6TkBhshWy2TRKmXSdn0zGHuApX3jxnMuYSiW2YvZI512t5AegDxXEcEVoZvlIMRA9J34g==}
 
   '@oxc-parser/binding-android-arm-eabi@0.132.0':
     resolution: {integrity: sha512-KrLaPWa5c9Y7LkW+rKkaUE3y7DBDrQtaf7rlsSDfv6KAHUjgzAIRA761Lrrp6//Yd/Rlie/yEOt9YENCoJnOcw==}
@@ -3004,8 +2996,8 @@ packages:
   avvio@9.3.0:
     resolution: {integrity: sha512-g2tQ7LE7oOSqDfwEm3M+ZCMTJc7KiZCdJ4UwyZJb5ckTKyYu50OYmvv0mCFXPuYXoM4zkSt8zM9XQ9KCvxA74A==}
 
-  awilix-manager@7.0.1:
-    resolution: {integrity: sha512-JFZ2OVxNYXOb85V9CvmQDQWMfXZtptVu98A1TvuVHDPdzGvwoQbZm1VgEhgRp7vF0mlFIZT2Id+NsI97fvArGQ==}
+  awilix-manager@7.1.0:
+    resolution: {integrity: sha512-9p5jdTt304lJgmV5Tkk7pVIqIX41aJi6pPiVLSOeGdAvF4lTO6Ktmb84MUbTg0gWdmsy7aUA0TDAZc5Z2uy/wQ==}
     engines: {node: '>=22.13'}
     peerDependencies:
       awilix: '>=9.0.0'
@@ -4287,14 +4279,14 @@ packages:
     resolution: {integrity: sha512-vz9iS7MJ5+Bp1URw8Khvdyw1H/hGvzHWlKQ7eRrQojSCDL1/SrWfrY9QebLw97n2deyRtzHRC3MkQfVNUCo91Q==}
     engines: {node: '>=0.10'}
 
-  opinionated-machine@10.5.0:
-    resolution: {integrity: sha512-5KRSZMyD2mqGv8itx83O9NHtLeJdhTu1STTtW2yUwhqWx3iDI4SGh9Y1lx0lRfXPb1SwdllbA+s/L9IXcfByOw==}
+  opinionated-machine@12.0.0:
+    resolution: {integrity: sha512-UVfK/vhCB+G6PXU8K3tbZWC4RPzd1sYDZQ+IxtcOesXgA1+KRtt4ENIw77Smb7vnkXlpCppfBunBdnFV/nqODQ==}
     peerDependencies:
       '@lokalise/api-contracts': '>=8.0.0'
       '@lokalise/fastify-api-contracts': '>=7.0.0'
       '@lokalise/node-core': '>=14.7.4'
       awilix: '>=13.0.0'
-      awilix-manager: '>=6.0.0'
+      awilix-manager: '>=7.1.0'
       fastify: '>=5.0.0'
       fastify-type-provider-zod: '>=7.0.0'
       zod: '>=4.1.12'
@@ -5561,7 +5553,7 @@ snapshots:
   '@fastify/awilix@8.2.1(awilix@13.0.5)(fastify@5.12.3)':
     dependencies:
       awilix: 13.0.5
-      awilix-manager: 7.0.1(awilix@13.0.5)
+      awilix-manager: 7.1.0(awilix@13.0.5)
       fastify: 5.12.3
       fastify-plugin: 6.0.0
 
@@ -5777,12 +5769,12 @@ snapshots:
     dependencies:
       zod: 4.5.4
 
-  '@lokalise/aws-config@9.0.0(61773114b12bc0574a425d8efb2ea71a)':
+  '@lokalise/aws-config@9.0.0(@aws-sdk/client-sns@3.1129.0)(@aws-sdk/client-sqs@3.1129.0)(@aws-sdk/credential-providers@3.1129.0)(@lokalise/fastify-extras@35.0.0(e2330a5892ab86657a738c81395fb7f4))(@lokalise/node-core@14.9.1(zod@4.5.4))(@lokalise/universal-ts-utils@4.11.0)(@message-queue-toolkit/core@27.1.0(zod@4.5.4))(@message-queue-toolkit/sns@27.0.1(@aws-sdk/client-sns@3.1129.0)(@aws-sdk/client-sqs@3.1129.0)(@aws-sdk/client-sts@3.1129.0)(@message-queue-toolkit/core@27.1.0(zod@4.5.4))(@message-queue-toolkit/schemas@8.1.0(zod@4.5.4))(@message-queue-toolkit/sqs@27.0.1(@aws-sdk/client-sqs@3.1129.0)(@message-queue-toolkit/core@27.1.0(zod@4.5.4))(supports-color@7.2.0)(zod@4.5.4))(supports-color@7.2.0)(zod@4.5.4))(@message-queue-toolkit/sqs@27.0.1(@aws-sdk/client-sqs@3.1129.0)(@message-queue-toolkit/core@27.1.0(zod@4.5.4))(supports-color@7.2.0)(zod@4.5.4))(envase@1.5.0)(zod@4.5.4)':
     dependencies:
       '@aws-sdk/client-sns': 3.1129.0
       '@aws-sdk/client-sqs': 3.1129.0
       '@aws-sdk/credential-providers': 3.1129.0
-      '@lokalise/fastify-extras': 34.0.1(@fastify/jwt@10.2.2)(@fastify/swagger@9.8.1(supports-color@7.2.0))(@lokalise/api-contracts@8.0.0(zod@4.5.4))(@lokalise/background-jobs-common@16.1.0(bullmq@6.3.4(ioredis@6.0.0(supports-color@7.2.0)))(ioredis@6.0.0(supports-color@7.2.0))(pino@10.3.1)(supports-color@7.2.0)(toad-scheduler@4.2.0)(zod@4.5.4))(@lokalise/errors@2.1.0(zod@4.5.4))(@lokalise/node-core@14.9.1(zod@4.5.4))(@opentelemetry/api@1.9.1)(bullmq@6.3.4(ioredis@6.0.0(supports-color@7.2.0)))(dd-trace@6.13.0)(fastify-type-provider-zod@7.0.0(@fastify/swagger@9.8.1(supports-color@7.2.0))(fastify@5.12.3)(openapi-types@12.1.3)(zod@4.5.4))(fastify@5.12.3)(ioredis@6.0.0(supports-color@7.2.0))(pino@10.3.1)(supports-color@7.2.0)(zod@4.5.4)
+      '@lokalise/fastify-extras': 35.0.0(e2330a5892ab86657a738c81395fb7f4)
       '@lokalise/node-core': 14.9.1(zod@4.5.4)
       '@lokalise/universal-ts-utils': 4.11.0
       '@message-queue-toolkit/core': 27.1.0(zod@4.5.4)
@@ -5837,7 +5829,7 @@ snapshots:
     optionalDependencies:
       '@fastify/sse': 0.6.0(fastify@5.12.3)
 
-  '@lokalise/fastify-extras@34.0.1(@fastify/jwt@10.2.2)(@fastify/swagger@9.8.1(supports-color@7.2.0))(@lokalise/api-contracts@8.0.0(zod@4.5.4))(@lokalise/background-jobs-common@16.1.0(bullmq@6.3.4(ioredis@6.0.0(supports-color@7.2.0)))(ioredis@6.0.0(supports-color@7.2.0))(pino@10.3.1)(supports-color@7.2.0)(toad-scheduler@4.2.0)(zod@4.5.4))(@lokalise/errors@2.1.0(zod@4.5.4))(@lokalise/node-core@14.9.1(zod@4.5.4))(@opentelemetry/api@1.9.1)(bullmq@6.3.4(ioredis@6.0.0(supports-color@7.2.0)))(dd-trace@6.13.0)(fastify-type-provider-zod@7.0.0(@fastify/swagger@9.8.1(supports-color@7.2.0))(fastify@5.12.3)(openapi-types@12.1.3)(zod@4.5.4))(fastify@5.12.3)(ioredis@6.0.0(supports-color@7.2.0))(pino@10.3.1)(supports-color@7.2.0)(zod@4.5.4)':
+  '@lokalise/fastify-extras@35.0.0(e2330a5892ab86657a738c81395fb7f4)':
     dependencies:
       '@amplitude/analytics-node': 1.5.71
       '@bugsnag/js': 8.10.0
@@ -5849,6 +5841,7 @@ snapshots:
       '@lokalise/background-jobs-common': 16.1.0(bullmq@6.3.4(ioredis@6.0.0(supports-color@7.2.0)))(ioredis@6.0.0(supports-color@7.2.0))(pino@10.3.1)(supports-color@7.2.0)(toad-scheduler@4.2.0)(zod@4.5.4)
       '@lokalise/error-utils': 4.0.0(@lokalise/node-core@14.9.1(zod@4.5.4))
       '@lokalise/errors': 2.1.0(zod@4.5.4)
+      '@lokalise/fastify-api-contracts': 7.0.1(@fastify/sse@0.6.0(fastify@5.12.3))(@lokalise/api-contracts@8.0.0(zod@4.5.4))(@lokalise/node-core@14.9.1(zod@4.5.4))(fastify-type-provider-zod@7.0.0(@fastify/swagger@9.8.1(supports-color@7.2.0))(fastify@5.12.3)(openapi-types@12.1.3)(zod@4.5.4))(fastify@5.12.3)(zod@4.5.4)
       '@lokalise/node-core': 14.9.1(zod@4.5.4)
       '@opentelemetry/api': 1.9.1
       '@prometheus-io/client': 0.16.1
@@ -6101,9 +6094,9 @@ snapshots:
       '@opentelemetry/instrumentation-undici': 0.31.0(@opentelemetry/api@1.9.1)(supports-color@7.2.0)
       '@opentelemetry/instrumentation-winston': 0.65.0(@opentelemetry/api@1.9.1)(supports-color@7.2.0)
       '@opentelemetry/resource-detector-alibaba-cloud': 0.36.0(@opentelemetry/api@1.9.1)
-      '@opentelemetry/resource-detector-aws': 2.21.0(@opentelemetry/api@1.9.1)
+      '@opentelemetry/resource-detector-aws': 2.22.0(@opentelemetry/api@1.9.1)
       '@opentelemetry/resource-detector-azure': 0.29.0(@opentelemetry/api@1.9.1)
-      '@opentelemetry/resource-detector-container': 0.8.12(@opentelemetry/api@1.9.1)
+      '@opentelemetry/resource-detector-container': 0.8.13(@opentelemetry/api@1.9.1)
       '@opentelemetry/resource-detector-gcp': 0.56.0(@opentelemetry/api@1.9.1)(supports-color@7.2.0)
       '@opentelemetry/resources': 2.11.0(@opentelemetry/api@1.9.1)
       '@opentelemetry/sdk-node': 0.221.0(@opentelemetry/api@1.9.1)(supports-color@7.2.0)
@@ -7178,13 +7171,6 @@ snapshots:
       '@opentelemetry/core': 2.11.0(@opentelemetry/api@1.9.1)
       '@opentelemetry/resources': 2.11.0(@opentelemetry/api@1.9.1)
 
-  '@opentelemetry/resource-detector-aws@2.21.0(@opentelemetry/api@1.9.1)':
-    dependencies:
-      '@opentelemetry/api': 1.9.1
-      '@opentelemetry/core': 2.11.0(@opentelemetry/api@1.9.1)
-      '@opentelemetry/resources': 2.11.0(@opentelemetry/api@1.9.1)
-      '@opentelemetry/semantic-conventions': 1.43.0
-
   '@opentelemetry/resource-detector-aws@2.22.0(@opentelemetry/api@1.9.1)':
     dependencies:
       '@opentelemetry/api': 1.9.1
@@ -7205,12 +7191,6 @@ snapshots:
       '@opentelemetry/core': 2.11.0(@opentelemetry/api@1.9.1)
       '@opentelemetry/resources': 2.11.0(@opentelemetry/api@1.9.1)
       '@opentelemetry/semantic-conventions': 1.43.0
-
-  '@opentelemetry/resource-detector-container@0.8.12(@opentelemetry/api@1.9.1)':
-    dependencies:
-      '@opentelemetry/api': 1.9.1
-      '@opentelemetry/core': 2.11.0(@opentelemetry/api@1.9.1)
-      '@opentelemetry/resources': 2.11.0(@opentelemetry/api@1.9.1)
 
   '@opentelemetry/resource-detector-container@0.8.13(@opentelemetry/api@1.9.1)':
     dependencies:
@@ -7392,6 +7372,8 @@ snapshots:
     dependencies:
       '@opentelemetry/api': 1.9.1
       '@opentelemetry/core': 2.11.0(@opentelemetry/api@1.9.1)
+
+  '@opinionated-machine/sse-parser@0.1.0': {}
 
   '@oxc-parser/binding-android-arm-eabi@0.132.0':
     optional: true
@@ -8058,7 +8040,7 @@ snapshots:
       '@fastify/error': 4.2.0
       fastq: 1.20.3
 
-  awilix-manager@7.0.1(awilix@13.0.5):
+  awilix-manager@7.1.0(awilix@13.0.5):
     dependencies:
       awilix: 13.0.5
 
@@ -9238,14 +9220,15 @@ snapshots:
 
   opentracing@0.14.7: {}
 
-  opinionated-machine@10.5.0(@lokalise/api-contracts@8.0.0(zod@4.5.4))(@lokalise/fastify-api-contracts@7.0.1(@fastify/sse@0.6.0(fastify@5.12.3))(@lokalise/api-contracts@8.0.0(zod@4.5.4))(@lokalise/node-core@14.9.1(zod@4.5.4))(fastify-type-provider-zod@7.0.0(@fastify/swagger@9.8.1(supports-color@7.2.0))(fastify@5.12.3)(openapi-types@12.1.3)(zod@4.5.4))(fastify@5.12.3)(zod@4.5.4))(@lokalise/node-core@14.9.1(zod@4.5.4))(awilix-manager@7.0.1(awilix@13.0.5))(awilix@13.0.5)(fastify-type-provider-zod@7.0.0(@fastify/swagger@9.8.1(supports-color@7.2.0))(fastify@5.12.3)(openapi-types@12.1.3)(zod@4.5.4))(fastify@5.12.3)(zod@4.5.4):
+  opinionated-machine@12.0.0(@lokalise/api-contracts@8.0.0(zod@4.5.4))(@lokalise/fastify-api-contracts@7.0.1(@fastify/sse@0.6.0(fastify@5.12.3))(@lokalise/api-contracts@8.0.0(zod@4.5.4))(@lokalise/node-core@14.9.1(zod@4.5.4))(fastify-type-provider-zod@7.0.0(@fastify/swagger@9.8.1(supports-color@7.2.0))(fastify@5.12.3)(openapi-types@12.1.3)(zod@4.5.4))(fastify@5.12.3)(zod@4.5.4))(@lokalise/node-core@14.9.1(zod@4.5.4))(awilix-manager@7.1.0(awilix@13.0.5))(awilix@13.0.5)(fastify-type-provider-zod@7.0.0(@fastify/swagger@9.8.1(supports-color@7.2.0))(fastify@5.12.3)(openapi-types@12.1.3)(zod@4.5.4))(fastify@5.12.3)(zod@4.5.4):
     dependencies:
       '@fastify/sse': 0.6.0(fastify@5.12.3)
       '@lokalise/api-contracts': 8.0.0(zod@4.5.4)
       '@lokalise/fastify-api-contracts': 7.0.1(@fastify/sse@0.6.0(fastify@5.12.3))(@lokalise/api-contracts@8.0.0(zod@4.5.4))(@lokalise/node-core@14.9.1(zod@4.5.4))(fastify-type-provider-zod@7.0.0(@fastify/swagger@9.8.1(supports-color@7.2.0))(fastify@5.12.3)(openapi-types@12.1.3)(zod@4.5.4))(fastify@5.12.3)(zod@4.5.4)
       '@lokalise/node-core': 14.9.1(zod@4.5.4)
+      '@opinionated-machine/sse-parser': 0.1.0
       awilix: 13.0.5
-      awilix-manager: 7.0.1(awilix@13.0.5)
+      awilix-manager: 7.1.0(awilix@13.0.5)
       fast-querystring: 1.1.2
       fastify: 5.12.3
       fastify-plugin: 6.0.0
