@@ -237,7 +237,7 @@ export class CommonModule extends AbstractModule<unknown, ExternalDependencies> 
           lifetime: Lifetime.SINGLETON,
           asyncInit: 'init',
           asyncDispose: 'close',
-          asyncInitPriority: 1,
+          asyncInitPriority: 0,
           asyncDisposePriority: 1,
           enabled: isAnyMessageQueueConsumerEnabled(diOptions),
         },
