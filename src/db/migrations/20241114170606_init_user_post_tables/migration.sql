@@ -27,6 +27,7 @@ CREATE TABLE IF NOT EXISTS "user"."user" (
 	"age" integer,
 	"email" varchar NOT NULL,
 	"name" varchar NOT NULL,
+	"password" varchar NOT NULL,
 	CONSTRAINT "user_email_unique" UNIQUE("email")
 );
 --> statement-breakpoint

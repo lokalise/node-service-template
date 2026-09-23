@@ -12,6 +12,7 @@ export const USER_SCHEMA = z.compile(
     name: z.string(),
     age: z.optional(z.nullable(z.preprocess(toNumberPreprocessor, z.number()))),
     email: z.email(),
+    password: z.string().meta({ visibility: 'internal' }),
   }),
 )
 
@@ -20,6 +21,7 @@ export const CREATE_USER_BODY_SCHEMA = z.compile(
     name: z.string(),
     age: z.optional(z.nullable(z.preprocess(toNumberPreprocessor, z.number()))),
     email: z.email(),
+    password: z.string(),
   }),
 )
 

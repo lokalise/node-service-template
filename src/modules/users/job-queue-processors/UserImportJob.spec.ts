@@ -36,6 +36,7 @@ describe('UserImportJob', () => {
       name: 'name',
       age: 33,
       email: 'test@email.lt',
+      password: 'test-password',
     }
 
     const jobId = await bullmqQueueManager.schedule('UserImportJob', {

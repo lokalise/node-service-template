@@ -11,6 +11,7 @@ import fastifySchedule from '@fastify/schedule'
 import {
   amplitudePlugin,
   apiDocumentationPlugin,
+  apiVisibilityPlugin,
   bugsnagErrorReporter,
   bugsnagPlugin,
   commonSyncHealthcheckPlugin,
@@ -35,11 +36,7 @@ import type { FastifyInstance } from 'fastify'
 import fastify from 'fastify'
 import fastifyGracefulShutdown from 'fastify-graceful-shutdown'
 import fastifyNoIcon from 'fastify-no-icon'
-import {
-  createJsonSchemaTransform,
-  serializerCompiler,
-  validatorCompiler,
-} from 'fastify-type-provider-zod'
+import { createJsonSchemaTransform } from 'fastify-type-provider-zod'
 import {
   type AbstractModule,
   type DependencyInjectionOptions,
@@ -102,8 +99,13 @@ export async function getApp(
       injectionMode: 'PROXY',
     })
 
-  app.setValidatorCompiler(validatorCompiler)
-  app.setSerializerCompiler(serializerCompiler)
+  // Registers the Zod validator/serializer compilers and enforces field-level and
+  // route-level visibility at runtime: a public caller (audience header not exactly
+  // `internal`) gets a 404 on `internal` routes and internal fields stripped from
+  // responses. Registered before the routes it protects.
+  await app.register(apiVisibilityPlugin, {
+    alwaysPublicPathPrefixes: ['/', '/health', '/live', '/metrics', '/documentation'],
+  })
 
   // In production this should ideally be handled outside of application, e. g.
   // on nginx or kubernetes level, but for local development it is convenient

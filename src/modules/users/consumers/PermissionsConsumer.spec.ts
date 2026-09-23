@@ -29,6 +29,7 @@ async function createUsers(drizzle: PostgresJsDatabase, userIdsToCreate: string[
         id: userId,
         name: userId.toString(),
         email: `test${userId}@email.lt`,
+        password: 'test-password',
       }
     }),
   )
