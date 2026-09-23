@@ -3,7 +3,7 @@
 ## [1.23.0] - 2026-09-23
 
 - Bump [`@lokalise/fastify-extras`](https://www.npmjs.com/package/@lokalise/fastify-extras) from `^34.0.1` to `^35.0.0` and register `apiVisibilityPlugin` in [src/app.ts](src/app.ts): a public caller (audience read from a gateway-stamped header, fail-closed) gets internal-only response fields stripped and a `404` on `internal` routes. Adds a demo `password` field to `USER_SCHEMA` marked `.meta({ visibility: 'internal' })`, so it is served internally but never leaks on the public API
-- Refactor `@node-service-template/api-contracts` to one folder per module and one file per contract (method-prefixed, e.g. [post-create-user.ts](packages/api-contracts/src/api/contracts/users/post-create-user.ts)); request/response/params schemas stay private and only the inferred `…RequestBody` / `…ResponseBody` / `…RequestParams` types are exported, mirroring the Autopilot api-schemas convention
+- Refactor `@node-service-template/api-contracts` to one folder per module and one file per contract (method-prefixed, e.g. [post-create-user.ts](packages/api-contracts/src/api/contracts/users/post-create-user.ts)); request/response/params schemas stay private and only the inferred `…RequestBody` / `…ResponseBody` / `…RequestParams` types are exported.
 - Document the public API surface: `.describe()` on every schema property, `summary` + `description` + `tags` on every contract, a shared `OpenApiTags` catalog, and `z.globalRegistry.add(USER_SCHEMA, { id: 'User' })` so the user renders as a named `#/components/schemas/User`. Wire `createJsonSchemaTransformObject` and `openapi.tags` into `apiDocumentationPlugin` so components and tag descriptions reach the generated spec
 
 ## [1.22.0] - 2026-09-11
