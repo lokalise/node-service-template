@@ -1,8 +1,6 @@
 {
     "id": "4a8f3238-87cc-4b5f-ad9c-5071375bb015",
-    "prevIds": [
-        "00000000-0000-0000-0000-000000000000"
-    ],
+    "prevIds": ["00000000-0000-0000-0000-000000000000"],
     "version": "8",
     "dialect": "postgres",
     "ddl": [
@@ -21,9 +19,7 @@
             "entityType": "tables"
         },
         {
-            "columns": [
-                "id"
-            ],
+            "columns": ["id"],
             "nameExplicit": false,
             "name": "post_pkey",
             "schema": "post",
@@ -149,9 +145,7 @@
             "entityType": "tables"
         },
         {
-            "columns": [
-                "id"
-            ],
+            "columns": ["id"],
             "nameExplicit": false,
             "name": "profile_pkey",
             "schema": "user",
@@ -225,9 +219,7 @@
         },
         {
             "nameExplicit": false,
-            "columns": [
-                "email"
-            ],
+            "columns": ["email"],
             "nullsNotDistinct": false,
             "name": "profile_email_unique",
             "schema": "user",
@@ -236,9 +228,7 @@
         },
         {
             "nameExplicit": false,
-            "columns": [
-                "user_id"
-            ],
+            "columns": ["user_id"],
             "nullsNotDistinct": false,
             "name": "profile_user_id_unique",
             "schema": "user",
@@ -252,9 +242,7 @@
             "entityType": "tables"
         },
         {
-            "columns": [
-                "id"
-            ],
+            "columns": ["id"],
             "nameExplicit": false,
             "name": "user_pkey",
             "schema": "user",
@@ -328,9 +316,7 @@
         },
         {
             "nameExplicit": false,
-            "columns": [
-                "email"
-            ],
+            "columns": ["email"],
             "nullsNotDistinct": false,
             "name": "user_email_unique",
             "schema": "user",

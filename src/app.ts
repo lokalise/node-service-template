@@ -31,12 +31,12 @@ import {
   stringValueSerializer,
 } from '@lokalise/node-core'
 import { gracefulOtelShutdown } from '@lokalise/opentelemetry-fastify-bootstrap'
+import { OpenApiTags } from '@node-service-template/api-contracts'
 import { type AwilixContainer, createContainer } from 'awilix'
 import type { FastifyInstance } from 'fastify'
 import fastify from 'fastify'
 import fastifyGracefulShutdown from 'fastify-graceful-shutdown'
 import fastifyNoIcon from 'fastify-no-icon'
-import { OpenApiTags } from '@node-service-template/api-contracts'
 import {
   createJsonSchemaTransform,
   createJsonSchemaTransformObject,
