@@ -10,7 +10,16 @@ import type { UserRepository } from '../repositories/UserRepository.ts'
 import type { UserCreateDTO } from '../services/UserService.ts'
 import { UserController } from './UserController.ts'
 
-const NEW_USER_FIXTURE = { name: 'dummy', email: 'email@test.com' } satisfies UserCreateDTO
+const NEW_USER_FIXTURE = {
+  name: 'dummy',
+  email: 'email@test.com',
+  password: 'test-password',
+} satisfies UserCreateDTO
+
+const withAudience = (token: string, audience: 'public' | 'internal') => ({
+  authorization: `Bearer ${token}`,
+  'x-api-audience': audience,
+})
 
 describe('UserController', () => {
   let app: AppInstance
@@ -30,10 +39,8 @@ describe('UserController', () => {
     it('validates email format', async () => {
       const token = generateTestJwt({ userId: 1 })
       const response = await injectByApiContract(app, UserController.contracts.createUser, {
-        headers: {
-          authorization: `Bearer ${token}`,
-        },
-        body: { name: 'dummy', email: 'test' },
+        headers: withAudience(token, 'public'),
+        body: { name: 'dummy', email: 'test', password: 'test-password' },
       })
 
       expect(response.statusCode).toBe(400)
@@ -64,9 +71,7 @@ describe('UserController', () => {
     it('creates user with correct payload', async () => {
       const token = generateTestJwt({ userId: 1 })
       const response = await injectByApiContract(app, UserController.contracts.createUser, {
-        headers: {
-          authorization: `Bearer ${token}`,
-        },
+        headers: withAudience(token, 'public'),
         body: NEW_USER_FIXTURE,
       })
 
@@ -89,18 +94,14 @@ describe('UserController', () => {
       const { id } = newUser
 
       const response1 = await injectByApiContract(app, UserController.contracts.getUser, {
-        headers: {
-          authorization: `Bearer ${token}`,
-        },
+        headers: withAudience(token, 'public'),
         pathParams: {
           userId: id,
         },
       })
 
       const response2 = await injectByApiContract(app, UserController.contracts.getUser, {
-        headers: {
-          authorization: `Bearer ${token}`,
-        },
+        headers: withAudience(token, 'public'),
         pathParams: {
           userId: id,
         },
@@ -108,8 +109,9 @@ describe('UserController', () => {
 
       expect(response1.statusCode).toBe(200)
       expect(response2.statusCode).toBe(200)
-      expect(response1.json().data).toMatchObject(NEW_USER_FIXTURE)
-      expect(response2.json().data).toMatchObject(NEW_USER_FIXTURE)
+      // Public caller: the internal `password` field is stripped from the response.
+      expect(response1.json().data.password).toBeUndefined()
+      expect(response2.json().data.password).toBeUndefined()
     })
 
     it('returns 404 with the contract error payload for an unknown user', async () => {
@@ -117,9 +119,7 @@ describe('UserController', () => {
       const unknownUserId = randomUUID()
 
       const response = await injectByApiContract(app, UserController.contracts.getUser, {
-        headers: {
-          authorization: `Bearer ${token}`,
-        },
+        headers: withAudience(token, 'public'),
         pathParams: {
           userId: unknownUserId,
         },
@@ -142,13 +142,17 @@ describe('UserController', () => {
       const user2 = await userRepository.createUser({
         name: 'second',
         email: 'second@test.com',
+        password: 'test-password',
       })
 
-      const response = await injectByApiContract(app, UserController.contracts.getUsersByIds, {
+      const response = await app.inject({
+        method: 'POST',
+        url: '/internal/users/get-by-ids',
         headers: {
           authorization: `Bearer ${token}`,
+          'x-api-audience': 'internal',
         },
-        body: {
+        payload: {
           userIds: [user1.id, user2.id],
         },
       })
@@ -161,16 +165,32 @@ describe('UserController', () => {
     it('rejects an empty list of IDs', async () => {
       const token = generateTestJwt({ userId: 1 })
 
-      const response = await injectByApiContract(app, UserController.contracts.getUsersByIds, {
+      const response = await app.inject({
+        method: 'POST',
+        url: '/internal/users/get-by-ids',
         headers: {
           authorization: `Bearer ${token}`,
+          'x-api-audience': 'internal',
         },
-        body: {
+        payload: {
           userIds: [],
         },
       })
 
       expect(response.statusCode).toBe(400)
+    })
+
+    it('gates a public caller (no internal audience) with a 404', async () => {
+      const token = generateTestJwt({ userId: 1 })
+
+      const response = await injectByApiContract(app, UserController.contracts.getUsersByIds, {
+        headers: withAudience(token, 'public'),
+        body: {
+          userIds: [],
+        },
+      })
+
+      expect(response.statusCode).toBe(404)
     })
   })
 
@@ -183,9 +203,7 @@ describe('UserController', () => {
       const retrievedUser = await userRepository.getUser(id)
 
       await injectByApiContract(app, UserController.contracts.deleteUser, {
-        headers: {
-          authorization: `Bearer ${token}`,
-        },
+        headers: withAudience(token, 'public'),
         pathParams: {
           userId: id,
         },
@@ -211,9 +229,7 @@ describe('UserController', () => {
         pathParams: {
           userId: id,
         },
-        headers: {
-          authorization: `Bearer ${token}`,
-        },
+        headers: withAudience(token, 'public'),
       })
 
       const retrievedUser2 = await userRepository.getUser(id)
@@ -223,6 +239,7 @@ describe('UserController', () => {
         age: null,
         id,
         name: 'updated',
+        password: 'test-password',
       })
     })
   })
