@@ -374,8 +374,8 @@ importers:
         specifier: ^3.4.9
         version: 3.4.9
       redis-semaphore:
-        specifier: ^5.7.0
-        version: 5.7.0(ioredis@6.0.0(supports-color@7.2.0))(supports-color@7.2.0)
+        specifier: ^5.8.0
+        version: 5.8.0(ioredis@6.0.0(supports-color@7.2.0))(supports-color@7.2.0)
       toad-scheduler:
         specifier: ^4.2.0
         version: 4.2.0
@@ -4498,8 +4498,8 @@ packages:
     resolution: {integrity: sha512-1qny3OExCf0UvUV/5wpYKf2YwPcOqXzkwKKSmKHiE6ZMQs5heeE/c8eXK+PNllPvmjgAbfnsbpkGZWy8cBpn9w==}
     engines: {node: '>=4'}
 
-  redis-semaphore@5.7.0:
-    resolution: {integrity: sha512-2xjl8eYVVTKX8O8C/H70iWEGx8BSOOzI5P1tQgXEO8A8dR2/BPgU7QctCfcXOHsQ7/IIkebv1ulEdo2iC2SwvA==}
+  redis-semaphore@5.8.0:
+    resolution: {integrity: sha512-I8Y6MexOHOOO1iHQfAgRELH5RExgRX6igevq0qLtLqKHLhycXwoJCaYZE1unLx4fTJXBACkcDkfNoLCsSB9pqg==}
     engines: {node: '>= 14.17.0'}
     peerDependencies:
       ioredis: 6.0.0
@@ -5809,7 +5809,7 @@ snapshots:
       bullmq: 6.3.4(ioredis@6.0.0(supports-color@7.2.0))
       ioredis: 6.0.0(supports-color@7.2.0)
       pino: 10.3.1
-      redis-semaphore: 5.7.0(ioredis@6.0.0(supports-color@7.2.0))(supports-color@7.2.0)
+      redis-semaphore: 5.8.0(ioredis@6.0.0(supports-color@7.2.0))(supports-color@7.2.0)
       toad-scheduler: 4.2.0
       ts-deepmerge: 8.0.0
       zod: 4.5.4
@@ -5880,7 +5880,7 @@ snapshots:
       '@prometheus-io/client': 0.16.1
       '@supercharge/promise-pool': 3.3.0
       ioredis: 6.0.0(supports-color@7.2.0)
-      redis-semaphore: 5.7.0(ioredis@6.0.0(supports-color@7.2.0))(supports-color@7.2.0)
+      redis-semaphore: 5.8.0(ioredis@6.0.0(supports-color@7.2.0))(supports-color@7.2.0)
       toad-cache: 3.7.4
       toad-scheduler: 4.2.0
     transitivePeerDependencies:
@@ -9492,7 +9492,7 @@ snapshots:
 
   redis-errors@1.2.0: {}
 
-  redis-semaphore@5.7.0(ioredis@6.0.0(supports-color@7.2.0))(supports-color@7.2.0):
+  redis-semaphore@5.8.0(ioredis@6.0.0(supports-color@7.2.0))(supports-color@7.2.0):
     dependencies:
       debug: 4.4.3(supports-color@7.2.0)
     optionalDependencies:
