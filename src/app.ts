@@ -11,6 +11,7 @@ import fastifySchedule from '@fastify/schedule'
 import {
   amplitudePlugin,
   apiDocumentationPlugin,
+  apiVisibilityPlugin,
   bugsnagErrorReporter,
   bugsnagPlugin,
   commonSyncHealthcheckPlugin,
@@ -30,6 +31,7 @@ import {
   stringValueSerializer,
 } from '@lokalise/node-core'
 import { gracefulOtelShutdown } from '@lokalise/opentelemetry-fastify-bootstrap'
+import { OpenApiTags } from '@node-service-template/api-contracts'
 import { type AwilixContainer, createContainer } from 'awilix'
 import type { FastifyInstance } from 'fastify'
 import fastify from 'fastify'
@@ -37,8 +39,7 @@ import fastifyGracefulShutdown from 'fastify-graceful-shutdown'
 import fastifyNoIcon from 'fastify-no-icon'
 import {
   createJsonSchemaTransform,
-  serializerCompiler,
-  validatorCompiler,
+  createJsonSchemaTransformObject,
 } from 'fastify-type-provider-zod'
 import {
   type AbstractModule,
@@ -102,8 +103,20 @@ export async function getApp(
       injectionMode: 'PROXY',
     })
 
-  app.setValidatorCompiler(validatorCompiler)
-  app.setSerializerCompiler(serializerCompiler)
+  // Registers the Zod validator/serializer compilers and enforces field-level and
+  // route-level visibility at runtime: a public caller (audience header not exactly
+  // `internal`) gets a 404 on `internal` routes and internal fields stripped from
+  // responses. Registered before the routes it protects.
+  //
+  // SECURITY: the audience is read from the caller-controlled `x-api-audience`
+  // header, which is not tied to the JWT. Anything that can reach this listener
+  // with `x-api-audience: internal` would gain access to internal routes and
+  // fields. The gateway/ingress MUST set or overwrite this header at the trust
+  // boundary so untrusted callers cannot forge it. If your setup cannot guarantee
+  // that, derive the audience from verified authentication data instead.
+  await app.register(apiVisibilityPlugin, {
+    alwaysPublicPathPrefixes: ['/', '/health', '/live', '/metrics', '/documentation'],
+  })
 
   // In production this should ideally be handled outside of application, e. g.
   // on nginx or kubernetes level, but for local development it is convenient
@@ -166,6 +179,11 @@ export async function getApp(
         target: 'draft-2020-12',
       },
     }),
+    transformObject: createJsonSchemaTransformObject({
+      zodToJsonConfig: {
+        target: 'draft-2020-12',
+      },
+    }),
     openapi: {
       openapi: '3.1.0',
       info: {
@@ -173,6 +191,7 @@ export async function getApp(
         description: 'Sample backend service',
         version: '1.0.0',
       },
+      tags: Object.values(OpenApiTags),
       servers: [
         {
           url:

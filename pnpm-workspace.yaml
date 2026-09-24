@@ -21,7 +21,8 @@ allowBuilds:
   protobufjs: false
   tls-impersonate: false
 minimumReleaseAgeExclude:
-  - "@lokalise/errors"
-  - "@lokalise/fastify-extras"
-  - "@lokalise/healthcheck-utils"
-  - fastify-metrics@14.1.0
+  - "@lokalise/*"
+  - "@message-queue-toolkit/*"
+  - "opinionated-machine"
+  - "@opinionated-machine/*"
+  - awilix-manager@7.1.0

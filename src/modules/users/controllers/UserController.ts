@@ -30,12 +30,13 @@ export class UserController extends AbstractApiController<UserControllerContract
 
   public readonly routes: Record<keyof UserControllerContractsType, RouteOptions> = {
     createUser: buildApiRoute(UserController.contracts.createUser, async (req) => {
-      const { name, email, age } = req.body
+      const { name, email, age, internalNote } = req.body
 
       const createdUser = await this.userService.createUser({
         name,
         email,
         age,
+        internalNote,
       })
 
       return { status: 201, body: { data: createdUser } }

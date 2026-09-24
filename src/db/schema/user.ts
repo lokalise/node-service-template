@@ -12,6 +12,7 @@ export const user = userSchema.table(
     age: integer('age'),
     email: varchar('email').notNull(),
     name: varchar('name').notNull(),
+    internalNote: varchar('internal_note').notNull(),
   },
   (t) => ({
     // indexes/uniques still fine without FKs
@@ -47,6 +48,7 @@ export const updateUserSchema = z.compile(
     age: z.number().optional(),
     email: z.string().optional(),
     name: z.string().optional(),
+    internalNote: z.string().optional(),
   }).omit({ id: true }),
 )
 export type UpdatedUser = z.infer<typeof updateUserSchema>

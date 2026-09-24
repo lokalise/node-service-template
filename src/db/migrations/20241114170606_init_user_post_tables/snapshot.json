@@ -302,6 +302,19 @@
             "entityType": "columns"
         },
         {
+            "type": "varchar",
+            "typeSchema": null,
+            "notNull": true,
+            "dimensions": 0,
+            "default": null,
+            "generated": null,
+            "identity": null,
+            "name": "internal_note",
+            "schema": "user",
+            "table": "user",
+            "entityType": "columns"
+        },
+        {
             "nameExplicit": false,
             "columns": ["email"],
             "nullsNotDistinct": false,

@@ -1,19 +1,18 @@
 import type { RequestContext } from '@lokalise/fastify-extras'
 import type {
-  CREATE_USER_BODY_SCHEMA,
-  UPDATE_USER_BODY_SCHEMA,
-  USER_SCHEMA_TYPE,
+  CreateUserRequestBody,
+  UpdateUserRequestBody,
+  User as UserApiObject,
 } from '@node-service-template/api-contracts'
 import type { Loader } from 'layered-loader'
-import type z from 'zod/v4'
 import type { User } from '../../../db/schema/user.ts'
 import { UserNotFoundError } from '../errors/UserNotFoundError.ts'
 import type { UserRepository } from '../repositories/UserRepository.ts'
 import type { UsersInjectableDependencies } from '../UserModule.ts'
 
-export type UserDTO = USER_SCHEMA_TYPE
-export type UserCreateDTO = z.infer<typeof CREATE_USER_BODY_SCHEMA>
-export type UserUpdateDTO = z.infer<typeof UPDATE_USER_BODY_SCHEMA>
+export type UserDTO = UserApiObject
+export type UserCreateDTO = CreateUserRequestBody
+export type UserUpdateDTO = UpdateUserRequestBody
 
 export class UserService {
   private readonly userRepository: UserRepository
@@ -29,6 +28,7 @@ export class UserService {
       name: user.name ?? null,
       age: user.age ?? null,
       email: user.email,
+      internalNote: user.internalNote,
     })
     await this.userLoader.invalidateCacheFor(newUser.id.toString())
     return newUser

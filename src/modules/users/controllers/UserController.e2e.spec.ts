@@ -10,7 +10,16 @@ import type { UserRepository } from '../repositories/UserRepository.ts'
 import type { UserCreateDTO } from '../services/UserService.ts'
 import { UserController } from './UserController.ts'
 
-const NEW_USER_FIXTURE = { name: 'dummy', email: 'email@test.com' } satisfies UserCreateDTO
+const NEW_USER_FIXTURE = {
+  name: 'dummy',
+  email: 'email@test.com',
+  internalNote: 'internal note',
+} satisfies UserCreateDTO
+
+const withAudience = (token: string, audience: 'public' | 'internal') => ({
+  authorization: `Bearer ${token}`,
+  'x-api-audience': audience,
+})
 
 describe('UserController', () => {
   let app: AppInstance
@@ -30,10 +39,8 @@ describe('UserController', () => {
     it('validates email format', async () => {
       const token = generateTestJwt({ userId: 1 })
       const response = await injectByApiContract(app, UserController.contracts.createUser, {
-        headers: {
-          authorization: `Bearer ${token}`,
-        },
-        body: { name: 'dummy', email: 'test' },
+        headers: withAudience(token, 'public'),
+        body: { name: 'dummy', email: 'test', internalNote: 'internal note' },
       })
 
       expect(response.statusCode).toBe(400)
@@ -64,9 +71,7 @@ describe('UserController', () => {
     it('creates user with correct payload', async () => {
       const token = generateTestJwt({ userId: 1 })
       const response = await injectByApiContract(app, UserController.contracts.createUser, {
-        headers: {
-          authorization: `Bearer ${token}`,
-        },
+        headers: withAudience(token, 'public'),
         body: NEW_USER_FIXTURE,
       })
 
@@ -80,6 +85,30 @@ describe('UserController', () => {
         },
       })
     })
+
+    it('returns the structured error body for a public caller on a 500', async () => {
+      const token = generateTestJwt({ userId: 1 })
+      // First create succeeds; the second hits the unique-email constraint -> 500.
+      await injectByApiContract(app, UserController.contracts.createUser, {
+        headers: withAudience(token, 'public'),
+        body: NEW_USER_FIXTURE,
+      })
+      const response = await injectByApiContract(app, UserController.contracts.createUser, {
+        headers: withAudience(token, 'public'),
+        body: NEW_USER_FIXTURE,
+      })
+
+      // Because USER_SCHEMA has an internal field, a public caller gets the
+      // api-visibility per-reply serializer. The contract now declares a `5xx`
+      // response, so the error handler's body is serialized as-is instead of
+      // failing with a ResponseSerializationError.
+      expect(response.statusCode).toBe(500)
+      expect(response.json()).toMatchObject({
+        message: expect.any(String),
+        code: expect.any(String),
+        errorCode: expect.any(String),
+      })
+    })
   })
 
   describe(describeApiContract(UserController.contracts.getUser), () => {
@@ -89,18 +118,14 @@ describe('UserController', () => {
       const { id } = newUser
 
       const response1 = await injectByApiContract(app, UserController.contracts.getUser, {
-        headers: {
-          authorization: `Bearer ${token}`,
-        },
+        headers: withAudience(token, 'public'),
         pathParams: {
           userId: id,
         },
       })
 
       const response2 = await injectByApiContract(app, UserController.contracts.getUser, {
-        headers: {
-          authorization: `Bearer ${token}`,
-        },
+        headers: withAudience(token, 'public'),
         pathParams: {
           userId: id,
         },
@@ -108,8 +133,37 @@ describe('UserController', () => {
 
       expect(response1.statusCode).toBe(200)
       expect(response2.statusCode).toBe(200)
-      expect(response1.json().data).toMatchObject(NEW_USER_FIXTURE)
-      expect(response2.json().data).toMatchObject(NEW_USER_FIXTURE)
+      // Public caller: every non-internal field is returned intact, and the
+      // internal `internalNote` field is stripped from the response.
+      const expectedPublicUser = {
+        id,
+        name: NEW_USER_FIXTURE.name,
+        email: NEW_USER_FIXTURE.email,
+        age: null,
+      }
+      expect(response1.json().data).toEqual(expectedPublicUser)
+      expect(response2.json().data).toEqual(expectedPublicUser)
+    })
+
+    it('returns the internal `internalNote` field to an internal caller', async () => {
+      const token = generateTestJwt({ userId: '1' })
+      const newUser = await userRepository.createUser(NEW_USER_FIXTURE)
+
+      const response = await injectByApiContract(app, UserController.contracts.getUser, {
+        headers: withAudience(token, 'internal'),
+        pathParams: {
+          userId: newUser.id,
+        },
+      })
+
+      expect(response.statusCode).toBe(200)
+      expect(response.json().data).toEqual({
+        id: newUser.id,
+        name: NEW_USER_FIXTURE.name,
+        email: NEW_USER_FIXTURE.email,
+        age: null,
+        internalNote: NEW_USER_FIXTURE.internalNote,
+      })
     })
 
     it('returns 404 with the contract error payload for an unknown user', async () => {
@@ -117,9 +171,7 @@ describe('UserController', () => {
       const unknownUserId = randomUUID()
 
       const response = await injectByApiContract(app, UserController.contracts.getUser, {
-        headers: {
-          authorization: `Bearer ${token}`,
-        },
+        headers: withAudience(token, 'public'),
         pathParams: {
           userId: unknownUserId,
         },
@@ -142,12 +194,11 @@ describe('UserController', () => {
       const user2 = await userRepository.createUser({
         name: 'second',
         email: 'second@test.com',
+        internalNote: 'internal note',
       })
 
       const response = await injectByApiContract(app, UserController.contracts.getUsersByIds, {
-        headers: {
-          authorization: `Bearer ${token}`,
-        },
+        headers: withAudience(token, 'internal'),
         body: {
           userIds: [user1.id, user2.id],
         },
@@ -162,15 +213,26 @@ describe('UserController', () => {
       const token = generateTestJwt({ userId: 1 })
 
       const response = await injectByApiContract(app, UserController.contracts.getUsersByIds, {
-        headers: {
-          authorization: `Bearer ${token}`,
-        },
+        headers: withAudience(token, 'internal'),
         body: {
           userIds: [],
         },
       })
 
       expect(response.statusCode).toBe(400)
+    })
+
+    it('gates a public caller (no internal audience) with a 404', async () => {
+      const token = generateTestJwt({ userId: 1 })
+
+      const response = await injectByApiContract(app, UserController.contracts.getUsersByIds, {
+        headers: withAudience(token, 'public'),
+        body: {
+          userIds: [],
+        },
+      })
+
+      expect(response.statusCode).toBe(404)
     })
   })
 
@@ -183,9 +245,7 @@ describe('UserController', () => {
       const retrievedUser = await userRepository.getUser(id)
 
       await injectByApiContract(app, UserController.contracts.deleteUser, {
-        headers: {
-          authorization: `Bearer ${token}`,
-        },
+        headers: withAudience(token, 'public'),
         pathParams: {
           userId: id,
         },
@@ -211,9 +271,7 @@ describe('UserController', () => {
         pathParams: {
           userId: id,
         },
-        headers: {
-          authorization: `Bearer ${token}`,
-        },
+        headers: withAudience(token, 'public'),
       })
 
       const retrievedUser2 = await userRepository.getUser(id)
@@ -223,6 +281,7 @@ describe('UserController', () => {
         age: null,
         id,
         name: 'updated',
+        internalNote: 'internal note',
       })
     })
   })

@@ -13,6 +13,7 @@ export const USER_IMPORT_JOB_PAYLOAD = z.compile(
     name: z.string(),
     age: z.number(),
     email: z.string(),
+    internalNote: z.string(),
   }),
 )
 type UserImportJobPayload = z.infer<typeof USER_IMPORT_JOB_PAYLOAD>
