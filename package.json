@@ -64,7 +64,7 @@
         "@lokalise/fastify-extras": "^34.0.1",
         "@lokalise/healthcheck-utils": "^7.0.0",
         "@lokalise/node-core": "^14.9.1",
-        "@lokalise/opentelemetry-fastify-bootstrap": "^4.1.1",
+        "@lokalise/opentelemetry-fastify-bootstrap": "^4.1.2",
         "@lokalise/universal-ts-utils": "^4.11.0",
         "@lokalise/zod-extras": "^3.0.2",
         "@message-queue-toolkit/amqp": "^25.0.1",
