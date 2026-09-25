@@ -57,7 +57,7 @@ import {
   dbHealthCheck,
   redisHealthCheck,
 } from './infrastructure/healthchecks/healthchecksWrappers.ts'
-import { shutdownOtelWithTimeout } from './infrastructure/otelShutdown.ts'
+import { getOtelShutdownTimeoutMs, shutdownOtelWithTimeout } from './infrastructure/otelShutdown.ts'
 import { ALL_MODULES } from './modules.ts'
 import { jwtTokenPlugin } from './plugins/jwtTokenPlugin.ts'
 
@@ -141,7 +141,8 @@ export async function getApp(
 
     // Runs after Fastify drains and awilix disposes the container, so their spans still get exported.
     // onClose hooks run in reverse order of registration, so this must be added before awilix.
-    app.addHook('onClose', () => shutdownOtelWithTimeout(app.log))
+    const otelShutdownTimeoutMs = getOtelShutdownTimeoutMs(appConfig.gracefulShutdownTimeoutMs)
+    app.addHook('onClose', () => shutdownOtelWithTimeout(app.log, otelShutdownTimeoutMs))
   }
 
   await app.register(fastifyNoIcon.default)

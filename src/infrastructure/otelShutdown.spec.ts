@@ -1,6 +1,6 @@
 import type { CommonLogger } from '@lokalise/node-core'
 import { describe, expect, it, vi } from 'vitest'
-import { shutdownOtelWithTimeout } from './otelShutdown.ts'
+import { getOtelShutdownTimeoutMs, shutdownOtelWithTimeout } from './otelShutdown.ts'
 
 function createLogger() {
   return { warn: vi.fn() } as unknown as CommonLogger & { warn: ReturnType<typeof vi.fn> }
@@ -27,5 +27,19 @@ describe('shutdownOtelWithTimeout', () => {
       { timeoutMs: 10 },
       '[OTEL] SDK shutdown timed out, spans still buffered are lost',
     )
+  })
+})
+
+describe('getOtelShutdownTimeoutMs', () => {
+  it('caps the wait at half the graceful shutdown budget', () => {
+    expect(getOtelShutdownTimeoutMs(6000)).toBe(3000)
+  })
+
+  it('keeps the default wait for a large budget', () => {
+    expect(getOtelShutdownTimeoutMs(30000)).toBe(5000)
+  })
+
+  it('treats a budget of 0 as the plugin default of 10s', () => {
+    expect(getOtelShutdownTimeoutMs(0)).toBe(5000)
   })
 })
