@@ -20,7 +20,7 @@ export async function shutdownOtelWithTimeout(
   try {
     const result = await Promise.race([
       shutdown(),
-      setTimeout(timeoutMs, timedOut, { signal: timer.signal, ref: false }),
+      setTimeout(timeoutMs, timedOut, { signal: timer.signal }),
     ])
     if (result === timedOut) {
       logger.warn({ timeoutMs }, '[OTEL] SDK shutdown timed out, spans still buffered are lost')

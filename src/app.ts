@@ -139,10 +139,8 @@ export async function getApp(
       timeout: appConfig.gracefulShutdownTimeoutMs,
     })
 
-    // OpenTelemetry is shut down on close rather than in the graceful shutdown handler: handlers
-    // run before Fastify drains, so spans from in-flight requests would be dropped, and a hung SDK
-    // shutdown would keep the DI container from ever being disposed. onClose hooks run in reverse
-    // order of registration, so this one has to be added before the awilix plugin to run after it.
+    // Runs after Fastify drains and awilix disposes the container, so their spans still get exported.
+    // onClose hooks run in reverse order of registration, so this must be added before awilix.
     app.addHook('onClose', () => shutdownOtelWithTimeout(app.log))
   }
 
