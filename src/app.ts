@@ -29,7 +29,6 @@ import {
   resolveLogger,
   stringValueSerializer,
 } from '@lokalise/node-core'
-import { gracefulOtelShutdown } from '@lokalise/opentelemetry-fastify-bootstrap'
 import scalarFastifyApiReference from '@scalar/fastify-api-reference'
 import { type AwilixContainer, createContainer } from 'awilix'
 import type { FastifyInstance } from 'fastify'
@@ -58,6 +57,7 @@ import {
   dbHealthCheck,
   redisHealthCheck,
 } from './infrastructure/healthchecks/healthchecksWrappers.ts'
+import { shutdownOtelWithTimeout } from './infrastructure/otelShutdown.ts'
 import { ALL_MODULES } from './modules.ts'
 import { jwtTokenPlugin } from './plugins/jwtTokenPlugin.ts'
 
@@ -138,6 +138,12 @@ export async function getApp(
       resetHandlersOnInit: true,
       timeout: appConfig.gracefulShutdownTimeoutMs,
     })
+
+    // OpenTelemetry is shut down on close rather than in the graceful shutdown handler: handlers
+    // run before Fastify drains, so spans from in-flight requests would be dropped, and a hung SDK
+    // shutdown would keep the DI container from ever being disposed. onClose hooks run in reverse
+    // order of registration, so this one has to be added before the awilix plugin to run after it.
+    app.addHook('onClose', () => shutdownOtelWithTimeout(app.log))
   }
 
   await app.register(fastifyNoIcon.default)
@@ -356,12 +362,11 @@ export async function getApp(
     // wired to `appAbortController.signal` (CLI loops, long-running I/O, …) can
     // short-circuit in-flight work.
     if (!nodeEnv.isDevelopment) {
-      app.gracefulShutdown(async (signal) => {
+      app.gracefulShutdown((signal) => {
         diContainer.cradle.appAbortController.abort(
           new Error(`Shutdown signal received: ${signal}`),
         )
         app.log.info({ signal }, 'Starting graceful shutdown')
-        await gracefulOtelShutdown()
       })
     }
   })
