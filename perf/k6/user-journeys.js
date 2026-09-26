@@ -6,12 +6,12 @@
  *   node --run perf:run -- -e JOURNEYS=get-user
  *   node --run perf:k6 -- -e VUS=10 -e DURATION=120s
  *
- * The runner passes BASE_URL and AUTH_TOKEN. The script refuses to start against anything but
- * a loopback host.
+ * The runner passes BASE_URL, AUTH_TOKEN and USER_IDS_FILE. The script refuses to start
+ * against anything but a loopback host.
  *
- * `setup()` creates a pool of users through the API for the read journeys to draw from, and
- * `teardown()` deletes them again, so a stack kept up with `--keep` does not accumulate them.
- * Its requests are tagged `journey:setup` and count towards no journey's numbers.
+ * The read journeys draw from a pool of users the runner creates through the API before k6
+ * starts and deletes after it ends (`SEED_USERS=`), outside the window the resource report
+ * measures. USER_IDS_FILE names the JSON list of their ids, relative to this script.
  */
 import { check, fail, sleep } from 'k6'
 import http from 'k6/http'
@@ -23,7 +23,9 @@ import {
   resolveBaseUrl,
   resolveJourneys,
   resolveLoad,
+  resolvePositiveInteger,
   resolveTestType,
+  resolveUserIds,
 } from './lib/config.js'
 import { markdownReport } from './lib/report.js'
 
@@ -31,8 +33,12 @@ const BASE_URL = resolveBaseUrl(__ENV)
 const TEST_TYPE = resolveTestType(__ENV)
 const SELECTED_JOURNEYS = resolveJourneys(__ENV)
 const LOAD = resolveLoad(__ENV, TEST_TYPE)
-const SEED_USERS = Number(__ENV.SEED_USERS || 100)
-const BATCH_SIZE = Number(__ENV.BATCH_SIZE || 10)
+const BATCH_SIZE = resolvePositiveInteger(__ENV, 'BATCH_SIZE', 10)
+// `open` only works in the init context, so the ids are read here rather than in `setup()`.
+const USER_IDS = resolveUserIds(
+  SELECTED_JOURNEYS,
+  __ENV.USER_IDS_FILE ? JSON.parse(open(__ENV.USER_IDS_FILE)) : undefined,
+)
 const THINK_TIME_S = Number(__ENV.THINK_TIME || 0.1)
 const AUTH_TOKEN = __ENV.AUTH_TOKEN
 
@@ -40,8 +46,6 @@ export const options = {
   scenarios: buildScenarios(TEST_TYPE, SELECTED_JOURNEYS, LOAD),
   thresholds: buildThresholds(TEST_TYPE, SELECTED_JOURNEYS),
   summaryTrendStats: ['avg', 'min', 'med', 'max', 'p(90)', 'p(95)', 'p(99)', 'count'],
-  setupTimeout: '120s',
-  teardownTimeout: '120s',
 }
 
 const headers = (extra = {}) => ({
@@ -65,7 +69,6 @@ const params = (journey, name, extraHeaders) => ({
 const pick = (items) => items[Math.floor(Math.random() * items.length)]
 
 // Per VU, so it only disambiguates within one; the timestamp and the random part do the rest.
-// Not `__ITER`, which k6 does not define in `setup()`.
 let seq = 0
 
 function newUserBody(prefix) {
@@ -83,31 +86,7 @@ export function setup() {
   if (!AUTH_TOKEN) {
     fail('AUTH_TOKEN is not set. Run through the runner: node --run perf:k6')
   }
-
-  const health = http.get(`${BASE_URL}/health`, { tags: { journey: 'setup', name: 'health' } })
-  if (health.status !== 200) {
-    fail(`the service is not answering at ${BASE_URL}/health: ${health.status}. Is the stack up?`)
-  }
-
-  const userIds = []
-  for (let offset = 0; offset < SEED_USERS; offset += 20) {
-    const count = Math.min(20, SEED_USERS - offset)
-    const responses = http.batch(
-      Array.from({ length: count }, () => [
-        'POST',
-        `${BASE_URL}/users`,
-        newUserBody('seed'),
-        params('setup', 'POST /users', JSON_BODY),
-      ]),
-    )
-    for (const res of responses) {
-      if (res.status !== 201) {
-        fail(`seeding a user failed: ${res.status} ${String(res.body).slice(0, 300)}`)
-      }
-      userIds.push(res.json('data.id'))
-    }
-  }
-  return { userIds }
+  return { userIds: USER_IDS }
 }
 
 export function getUserJourney(data) {
@@ -171,21 +150,6 @@ export function allJourneys(data) {
   const journeys = { getUserJourney, getUsersByIdsJourney, userLifecycleJourney }
   for (const journey of SELECTED_JOURNEYS) {
     journeys[JOURNEYS[journey]](data)
-  }
-}
-
-export function teardown(data) {
-  for (let offset = 0; offset < data.userIds.length; offset += 20) {
-    http.batch(
-      data.userIds
-        .slice(offset, offset + 20)
-        .map((userId) => [
-          'DELETE',
-          `${BASE_URL}/users/${userId}`,
-          null,
-          params('setup', 'DELETE /users/:userId'),
-        ]),
-    )
   }
 }
 

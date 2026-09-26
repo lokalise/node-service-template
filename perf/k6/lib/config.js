@@ -81,20 +81,49 @@ export function resolveJourneys(env) {
   return selected
 }
 
+/** A positive integer from `env[name]`, `fallback` when unset. */
+export function resolvePositiveInteger(env, name, fallback) {
+  const raw = env[name]
+  const value = raw === undefined || raw === '' ? fallback : Number(raw)
+  if (!Number.isInteger(value) || value < 1) {
+    throw new Error(`${name} must be a positive integer, got: ${raw}`)
+  }
+  return value
+}
+
+/** The journeys that pick from the seeded users. */
+const READ_JOURNEYS = ['get-user', 'get-users-by-ids']
+
+/**
+ * The seeded ids, checked up front: a read journey with none to pick from would request
+ * `/users/undefined` on every iteration and fail as if the service had regressed.
+ */
+export function resolveUserIds(journeys, userIds) {
+  const ids = Array.isArray(userIds) ? userIds.filter((id) => typeof id === 'string') : []
+  if (ids.length === 0 && journeys.some((journey) => READ_JOURNEYS.includes(journey))) {
+    throw new Error(
+      'no seeded users to read: USER_IDS_FILE is unset or empty. Run through the runner: node --run perf:k6',
+    )
+  }
+  return ids
+}
+
 /** VUs and hold duration for the run: the profile's, unless VUS or DURATION override them. */
 export function resolveLoad(env, testType) {
   const profile = PROFILES[testType]
-  const vus = Number(env.VUS || profile.vus)
-  if (!Number.isInteger(vus) || vus < 1) {
-    throw new Error(`VUS must be a positive integer, got: ${env.VUS}`)
-  }
+  const vus = resolvePositiveInteger(env, 'VUS', profile.vus)
   return { vus, duration: env.DURATION || profile.duration }
 }
 
 /**
  * A smoke run is one iteration running every selected journey once, in order. Every other
- * profile gives each journey its own ramping scenario, so each one's numbers stand alone and
- * a profile can be cut to one route with `span_name`.
+ * profile gives each journey its own ramping scenario, so each has its own row and threshold
+ * and a profile can be cut to one route with `span_name`.
+ *
+ * The scenarios run at the same time against one service and one database: `load.vus` is
+ * per journey, the total is that times the number of journeys, and each journey's latencies
+ * include the contention from the others. Select one journey with `JOURNEYS=` to measure it
+ * alone.
  */
 export function buildScenarios(testType, journeys, load) {
   if (testType === 'smoke') {

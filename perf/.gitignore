@@ -3,5 +3,7 @@
 .logs/
 k6/k6-report.md
 k6/k6-summary.json
+# The ids of the users the runner seeds for a run, deleted when it ends.
+k6/seed-users.json
 # The key pair the runner generates to sign the load test's JWT.
 .auth/

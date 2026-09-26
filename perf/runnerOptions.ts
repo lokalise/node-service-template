@@ -4,7 +4,7 @@
  */
 import { parseRunnerArgs, type RunnerArgs, retargetPorts } from '@lokalise/load-testing-utils'
 
-const COMMANDS = ['run', 'up', 'k6', 'down'] as const
+const COMMANDS = ['run', 'up', 'k6', 'down', 'analyze'] as const
 
 const FLAGS = {
   keep: false,
@@ -19,7 +19,10 @@ const FLAGS = {
 export type Options = RunnerArgs<(typeof COMMANDS)[number], keyof typeof FLAGS>
 
 export const HELP = `
-Usage: node perf/runPerfStack.ts <up|run|k6|down> [flags] [-- k6 args]
+Usage: node perf/runPerfStack.ts <up|run|k6|down|analyze> [flags] [-- k6 args]
+
+  analyze            start Pyroscope if it is not running and read the last profile with
+                     pyroscope-analyze; the arguments after it go to pyroscope-analyze
 
   --keep             leave the stack up afterwards, for a second run against warm caches
   --profiling        start Pyroscope and profile the service during the run
@@ -29,10 +32,12 @@ Usage: node perf/runPerfStack.ts <up|run|k6|down> [flags] [-- k6 args]
   --no-service       do not start the service; the run uses whatever answers on the service port
   --purge-profiles   with 'down', delete the Pyroscope volume too
   --k6=local|docker  force one k6 instead of picking whichever is available;
-                     docker also makes the stack listen on 0.0.0.0, not loopback
+                     docker also makes the service (not the probe) listen on 0.0.0.0,
+                     which exposes it to your network for as long as the stack is up
   --help             this
 
 Anything else is handed to 'k6 run', e.g. -e JOURNEYS=get-user -e VUS=20.
+-e SEED_USERS=N is read by the runner too, which seeds that many users before k6 starts.
 `
 
 export const parseOptions = (argv: string[]): Options =>
@@ -58,4 +63,25 @@ export function retargetPerfEnv(
   env: NodeJS.ProcessEnv,
 ): Record<string, string> {
   return retargetPorts(values, PORT_VARIABLES, env)
+}
+
+export const DEFAULT_SEED_USERS = 100
+
+/**
+ * The `-e SEED_USERS=N` among the k6 arguments, which the runner reads because it seeds the
+ * users itself: outside the measured window, so the report covers the journeys alone.
+ */
+export function resolveSeedUsers(passthrough: string[]): number {
+  let raw: string | undefined
+  passthrough.forEach((arg, index) => {
+    const value =
+      arg === '-e' || arg === '--env' ? passthrough[index + 1] : arg.replace(/^--env=/, '')
+    if (value?.startsWith('SEED_USERS=')) raw = value.slice('SEED_USERS='.length)
+  })
+  if (raw === undefined) return DEFAULT_SEED_USERS
+  const count = Number(raw)
+  if (!Number.isInteger(count) || count < 1) {
+    throw new Error(`SEED_USERS must be a positive integer, got: ${raw}`)
+  }
+  return count
 }

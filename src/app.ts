@@ -31,6 +31,7 @@ import {
   stringValueSerializer,
 } from '@lokalise/node-core'
 import { gracefulOtelShutdown } from '@lokalise/opentelemetry-fastify-bootstrap'
+import { isProfilingRunning } from '@lokalise/pyroscope-profiling'
 import { pyroscopeProfilingPlugin } from '@lokalise/pyroscope-profiling/fastify'
 import { OpenApiTags } from '@node-service-template/api-contracts'
 import { type AwilixContainer, createContainer } from 'awilix'
@@ -79,6 +80,12 @@ export type ConfigOverrides = DependencyInjectionOptions & {
   healthchecksEnabled?: boolean
   monitoringEnabled?: boolean
 } & NestedPartial<Config>
+
+/**
+ * Also in development while profiling: without a signal handler SIGTERM kills the process
+ * before `onClose`, and the profiling plugin flushes the last profile window only there.
+ */
+const isGracefulShutdownNeeded = () => !nodeEnv.isDevelopment || isProfilingRunning()
 
 // do not delete // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: This is intentional. Don't remove.
 export async function getApp(
@@ -146,7 +153,7 @@ export async function getApp(
       : {},
   )
 
-  if (!nodeEnv.isDevelopment) {
+  if (isGracefulShutdownNeeded()) {
     await app.register(fastifyGracefulShutdown, {
       resetHandlersOnInit: true,
       timeout: appConfig.gracefulShutdownTimeoutMs,

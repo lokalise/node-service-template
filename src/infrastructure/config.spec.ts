@@ -161,10 +161,7 @@ describe('config', () => {
 
   describe('getProfilingConfig', () => {
     test('is disabled by default and files profiles under the service name', () => {
-      const env = buildEnv({ PYROSCOPE_ENABLED: undefined, PYROSCOPE_APPLICATION_NAME: undefined })
-      const config = parseEnv(env, envSchema)
-
-      expect(getProfilingConfig(config)).toMatchObject({
+      expect(getProfilingConfig({ NODE_ENV: 'development' })).toMatchObject({
         isEnabled: false,
         appName: 'node-service-template',
         serverAddress: 'http://localhost:4040',
@@ -172,24 +169,29 @@ describe('config', () => {
     })
 
     test('is enabled outside of tests when PYROSCOPE_ENABLED is true', () => {
-      const env = buildEnv({
-        NODE_ENV: 'development',
-        PYROSCOPE_ENABLED: 'true',
-        PYROSCOPE_SERVER_ADDRESS: 'http://localhost:4041',
-      })
-      const config = parseEnv(env, envSchema)
-
-      expect(getProfilingConfig(config)).toMatchObject({
-        isEnabled: true,
-        serverAddress: 'http://localhost:4041',
-      })
+      expect(
+        getProfilingConfig({
+          NODE_ENV: 'development',
+          PYROSCOPE_ENABLED: 'true',
+          PYROSCOPE_SERVER_ADDRESS: 'http://localhost:4041',
+        }),
+      ).toMatchObject({ isEnabled: true, serverAddress: 'http://localhost:4041' })
     })
 
     test('stays disabled under NODE_ENV=test whatever PYROSCOPE_ENABLED says', () => {
-      const env = buildEnv({ NODE_ENV: 'test', PYROSCOPE_ENABLED: 'true' })
-      const config = parseEnv(env, envSchema)
+      expect(getProfilingConfig({ NODE_ENV: 'test', PYROSCOPE_ENABLED: 'true' }).isEnabled).toBe(
+        false,
+      )
+    })
 
-      expect(getProfilingConfig(config).isEnabled).toBe(false)
+    test('treats blank values as unset instead of failing', () => {
+      expect(
+        getProfilingConfig({
+          NODE_ENV: 'development',
+          PYROSCOPE_ENABLED: '',
+          PYROSCOPE_SERVER_ADDRESS: '',
+        }),
+      ).toMatchObject({ isEnabled: false, serverAddress: 'http://localhost:4040' })
     })
   })
 })

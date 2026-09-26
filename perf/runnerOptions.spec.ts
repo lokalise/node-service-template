@@ -1,5 +1,10 @@
 import { describe, expect, it } from 'vitest'
-import { parseOptions, retargetPerfEnv } from './runnerOptions.ts'
+import {
+  DEFAULT_SEED_USERS,
+  parseOptions,
+  resolveSeedUsers,
+  retargetPerfEnv,
+} from './runnerOptions.ts'
 
 describe('parseOptions', () => {
   it('defaults to run with every step on and nothing kept', () => {
@@ -70,5 +75,23 @@ describe('retargetPerfEnv', () => {
       REDIS_PORT: '7000',
       PYROSCOPE_SERVER_ADDRESS: 'http://localhost:4999',
     })
+  })
+})
+
+describe('resolveSeedUsers', () => {
+  it('reads SEED_USERS from the k6 arguments in any -e form', () => {
+    expect(resolveSeedUsers([])).toBe(DEFAULT_SEED_USERS)
+    expect(resolveSeedUsers(['-e', 'JOURNEYS=get-user'])).toBe(DEFAULT_SEED_USERS)
+    expect(resolveSeedUsers(['-e', 'SEED_USERS=20'])).toBe(20)
+    expect(resolveSeedUsers(['--env', 'SEED_USERS=30'])).toBe(30)
+    expect(resolveSeedUsers(['--env=SEED_USERS=40'])).toBe(40)
+  })
+
+  it('refuses anything but a positive integer', () => {
+    for (const bad of ['0', 'abc', '1e2x', '-5']) {
+      expect(() => resolveSeedUsers(['-e', `SEED_USERS=${bad}`])).toThrow(
+        /SEED_USERS must be a positive integer/,
+      )
+    }
   })
 })

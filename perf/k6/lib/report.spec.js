@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { markdownReport } from './report.js'
+import { loadDescription, markdownReport } from './report.js'
 
 const summary = {
   metrics: {
@@ -23,6 +23,17 @@ const summary = {
   },
 }
 
+describe('loadDescription', () => {
+  it('names the total only when several journeys run at once', () => {
+    const load = { vus: 5, duration: '60s' }
+
+    expect(loadDescription(load, ['get-user'])).toBe('5 VUs, 60s hold')
+    expect(loadDescription(load, ['get-user', 'get-users-by-ids', 'user-lifecycle'])).toBe(
+      '5 VUs per journey, 15 in total, 60s hold',
+    )
+  })
+})
+
 describe('markdownReport', () => {
   it('renders one row per journey with its budget and outcome', () => {
     const report = markdownReport(summary, {
@@ -33,7 +44,7 @@ describe('markdownReport', () => {
       budgets: { 'get-user': 50, 'user-lifecycle': 100 },
     })
 
-    expect(report).toContain('- Test type: average-load (5 VUs, 60s hold)')
+    expect(report).toContain('- Test type: average-load (5 VUs per journey, 10 in total, 60s hold)')
     expect(report).toContain('- Checks passed: 100.00%')
     expect(report).toContain(
       '| get-user | 1200 | 0.00% | 2.5 ms | 6.3 ms | 9.1 ms | 30.0 ms | 50 ms | pass |',

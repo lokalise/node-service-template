@@ -16,7 +16,7 @@ export async function startServer() {
   // too. A plugin cannot run earlier than the app it is registered on, which is why the one
   // in app.ts is registered with `start: false`. A no-op unless PYROSCOPE_ENABLED is true.
   await startProfiling(
-    getProfilingConfig(config),
+    getProfilingConfig(),
     {
       appEnv: config.app.appEnv,
       appVersion: config.app.appVersion,

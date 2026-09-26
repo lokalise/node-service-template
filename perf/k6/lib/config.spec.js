@@ -5,7 +5,9 @@ import {
   resolveBaseUrl,
   resolveJourneys,
   resolveLoad,
+  resolvePositiveInteger,
   resolveTestType,
+  resolveUserIds,
 } from './config.js'
 
 describe('k6 config', () => {
@@ -55,6 +57,31 @@ describe('k6 config', () => {
         duration: '30s',
       })
       expect(() => resolveLoad({ VUS: '0' }, 'stress')).toThrow(/VUS/)
+    })
+  })
+
+  describe('resolvePositiveInteger', () => {
+    it('falls back when unset and refuses anything but a positive integer', () => {
+      expect(resolvePositiveInteger({}, 'BATCH_SIZE', 10)).toBe(10)
+      expect(resolvePositiveInteger({ BATCH_SIZE: '' }, 'BATCH_SIZE', 10)).toBe(10)
+      expect(resolvePositiveInteger({ BATCH_SIZE: '25' }, 'BATCH_SIZE', 10)).toBe(25)
+      for (const bad of ['0', '-1', 'abc', '1.5', '1e2x']) {
+        expect(() => resolvePositiveInteger({ BATCH_SIZE: bad }, 'BATCH_SIZE', 10)).toThrow(
+          /BATCH_SIZE must be a positive integer/,
+        )
+      }
+    })
+  })
+
+  describe('resolveUserIds', () => {
+    it('refuses a read journey with no seeded users to pick from', () => {
+      expect(() => resolveUserIds(['get-user'], undefined)).toThrow(/no seeded users/)
+      expect(() => resolveUserIds(['get-users-by-ids'], [])).toThrow(/no seeded users/)
+    })
+
+    it('lets the write journey run without seeded users', () => {
+      expect(resolveUserIds(['user-lifecycle'], undefined)).toEqual([])
+      expect(resolveUserIds(['get-user'], ['a', 'b'])).toEqual(['a', 'b'])
     })
   })
 

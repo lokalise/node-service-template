@@ -48,12 +48,19 @@ export function journeyRows(data, journeys, budgets) {
   })
 }
 
+/** The scenarios run concurrently, one per journey, so the total is VUs times journeys. */
+export function loadDescription(load, journeys) {
+  const total = load.vus * journeys.length
+  const perJourney = journeys.length > 1 ? ` per journey, ${total} in total` : ''
+  return `${load.vus} VUs${perJourney}, ${load.duration} hold`
+}
+
 export function markdownReport(data, { baseUrl, testType, load, journeys, budgets }) {
   const lines = [
     '# k6 report',
     '',
     `- Target: ${baseUrl}`,
-    `- Test type: ${testType}${testType === 'smoke' ? '' : ` (${load.vus} VUs, ${load.duration} hold)`}`,
+    `- Test type: ${testType}${testType === 'smoke' ? '' : ` (${loadDescription(load, journeys)})`}`,
     `- Journeys: ${journeys.join(', ')}`,
     `- Checks passed: ${formatPercent(data.metrics.checks?.values?.rate)}`,
     '',

@@ -14,7 +14,8 @@
             "!packages",
             // Load-test output and the key pair the runner generates, all gitignored
             "!perf/.auth",
-            "!perf/k6/k6-summary.json"
+            "!perf/k6/k6-summary.json",
+            "!perf/k6/seed-users.json"
         ]
     },
     "linter": {
@@ -23,14 +24,9 @@
     },
     "overrides": [
         {
-            // The load-test runner and probe are CLIs: the terminal is their only output.
-            "includes": ["perf/**"],
-            "linter": { "rules": { "suspicious": { "noConsole": "off" } } }
-        },
-        {
             // Globals the k6 runtime provides to a test script.
             "includes": ["perf/k6/**"],
-            "javascript": { "globals": ["__ENV"] }
+            "javascript": { "globals": ["__ENV", "open"] }
         }
     ]
 }

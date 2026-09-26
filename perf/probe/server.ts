@@ -21,8 +21,10 @@
  */
 import { createDbProbeServer, readPostgresStats } from '@lokalise/load-testing-utils/db-probe'
 import postgres from 'postgres'
+import { consoleLog } from '../../scripts/utils/loggingUtils.ts'
 
 const PORT = Number(process.env.PERF_PROBE_PORT ?? '3323')
+// Loopback unless told otherwise: /db-stats?statements=all serves every statement's SQL text.
 const HOST = process.env.PERF_PROBE_BIND_ADDRESS ?? '127.0.0.1'
 const POSTGRES_URL = process.env.PERF_PROBE_POSTGRES_URL ?? process.env.DATABASE_URL
 
@@ -39,7 +41,7 @@ const server = createDbProbeServer({
 })
 
 server.listen(PORT, HOST, () => {
-  console.log(`[probe] listening on http://localhost:${PORT}`)
+  consoleLog(`[probe] listening on http://localhost:${PORT}`)
 })
 
 for (const signal of ['SIGINT', 'SIGTERM'] as const) {

@@ -65,9 +65,15 @@ Budgets are per request, held only under load (a smoke run checks failures only,
 requests include every cold cache and connection). They live in
 [`k6/lib/config.js`](k6/lib/config.js) as `P95_BUDGETS_MS`.
 
-Before the journeys start, `setup()` creates 100 users through the API (`SEED_USERS=`) for the read
-journeys to draw from, and `teardown()` deletes them again. Those requests are tagged
-`journey:setup` and count towards no journey's numbers.
+Before k6 starts, the runner creates 100 users through the API (`SEED_USERS=`) for the read journeys
+to draw from, and deletes them again after k6 ends. Both happen outside the two resource scrapes,
+so the report's statement counts and CPU cover the journeys alone, and k6 hands the ids to the
+script through `USER_IDS_FILE`.
+
+The journeys' scenarios run at the same time against one service and one database: `VUS` is per
+journey, so the default average-load run with all three journeys drives 15 VUs, and each journey's
+latencies include the contention from the other two. The report says so. Select one journey with
+`JOURNEYS=` to measure it on its own.
 
 ## Running it
 
@@ -82,8 +88,10 @@ node --run perf:run -- -e VUS=10 -e DURATION=2m -e THINK_TIME=0
 ```
 
 [`runPerfStack.ts`](runPerfStack.ts) starts the containers, builds the API contracts, runs the
-migrations, starts the database probe and the service, waits for every `/health`, runs k6 between
-two resource scrapes, appends what the run cost to the report, and stops everything again.
+migrations, starts the database probe and the service, waits for every `/health`, seeds the users,
+runs k6 between two resource scrapes, deletes the users, appends what the run cost to the report,
+and stops everything again. On the way down it waits for the service to exit, so a profiled run's
+last profile window reaches Pyroscope before the container goes.
 
 Anything the runner does not recognise goes to `k6 run`, so `-e NAME=value` reaches the script's
 `__ENV`. The variables the script reads:
@@ -95,7 +103,7 @@ Anything the runner does not recognise goes to `k6 run`, so `-e NAME=value` reac
 | `VUS` | per profile | VUs per journey. Each journey ramps to it over 10s, holds, and ramps down over 10s |
 | `DURATION` | per profile | The hold between the two ramps |
 | `THINK_TIME` | `0.1` | Seconds each VU sleeps between iterations. `0` for maximum pressure |
-| `SEED_USERS` | `100` | Users `setup()` creates for the read journeys |
+| `SEED_USERS` | `100` | Users the runner creates for the read journeys before k6 starts (read by the runner from the same `-e`) |
 | `BATCH_SIZE` | `10` | Ids per `get-users-by-ids` request |
 
 The runner's own flags, recognised wherever they appear (including after the `--` that `node --run`
@@ -107,9 +115,9 @@ needs before forwarded arguments):
 | `--profiling` | Start Pyroscope and profile the service during the run |
 | `--no-docker` | Leave the containers alone, up and down |
 | `--no-migrate` | Skip the migrations |
-| `--no-probe`, `--no-service` | Do not start that process; the run uses whatever answers on its port |
+| `--no-probe`, `--no-service` | Do not start that process; the run uses whatever answers on its port. Against a `--keep` stack the run joins it: it leaves the stack's containers and record alone, and `perf:down` still takes the stack down |
 | `--purge-profiles` | With `down`, delete the Pyroscope volume too |
-| `--k6=local`, `--k6=docker` | Force one k6 instead of picking whichever is available. With Docker k6 the service and the probe listen on `0.0.0.0` instead of loopback, so a stack brought up with `perf:up` needs `-- --k6=docker` before a `perf:k6:docker` against it |
+| `--k6=local`, `--k6=docker` | Force one k6 instead of picking whichever is available. With Docker k6 the service listens on `0.0.0.0` instead of loopback, which exposes it to your network while the stack is up; the probe, which serves every statement's SQL text, stays on loopback. A stack brought up for a local k6 records that, and `perf:k6:docker` against it refuses and says to bring it up with `-- --k6=docker` |
 
 ### Holding the stack open
 
@@ -134,7 +142,9 @@ Output from each spawned process is prefixed per process in your terminal and ke
 `perf/.logs/<name>.log`. `perf/.logs/service.log` is where a 5xx explains itself: k6 reports that a
 request failed, never why. The service runs with `LOG_LEVEL=warn`, so the log holds errors rather
 than a line per request; override it from the shell (`LOG_LEVEL=info node --run perf:up`) when you
-need more.
+need more. `LOG_LEVEL` is the only perf.env value a shell export overrides: a `DATABASE_URL` or
+`REDIS_*` exported for the dev loop must not point the migrations and the load test's writes
+elsewhere. Ports move with the `PERF_*_PORT` variables.
 
 ## Profiling a run
 
@@ -148,8 +158,10 @@ service starts its own profiler ([`src/serverInternal.ts`](../src/serverInternal
 [`perf.env`](perf.env) already points it at the container and shortens the flush interval to 15
 seconds, so a one-minute run produces several data points rather than one.
 
-`perf:analyze` is `pyroscope-analyze --service node-service-template --url http://localhost:4041`,
-and takes more options after `--`:
+`perf:analyze` runs `pyroscope-analyze --service node-service-template` against the Pyroscope on
+`PERF_PYROSCOPE_PORT` (4041 by default). When a profiled run without `--keep` already took the
+container down, it starts it again first (the profiles are on a volume) and leaves it running;
+`perf:down` removes it. It takes more options after `--`:
 
 ```shell
 # Where the wall-clock time went over the last 15 minutes (the default range)
@@ -215,7 +227,8 @@ The profiler is part of the service, not of this stack. Any environment can turn
 PYROSCOPE_ENABLED=true PYROSCOPE_SERVER_ADDRESS=http://localhost:4040 node --run start:dev
 ```
 
-See [the environment variables](../docs/environment-variables.md#vendors-pyroscope) for shipping
+The `PYROSCOPE_*` variables are read by `@lokalise/pyroscope-profiling` itself, not by the
+service's config schema; see [.env.default](../.env.default) and the library's README for shipping
 to a shared Pyroscope or Grafana Cloud Profiles.
 
 ## What a run reports
@@ -259,11 +272,12 @@ Every file here:
 | [`runPerfStack.ts`](runPerfStack.ts) | The runner: lifecycle, env, ports |
 | [`runnerOptions.ts`](runnerOptions.ts) | Its flag parsing and port retargeting, split out so it is testable |
 | [`auth.ts`](auth.ts) | The key pair and the JWT the run authenticates with |
+| [`seed.ts`](seed.ts) | Creates and deletes the users the read journeys draw from |
 | [`perf.env`](perf.env) | The service's configuration for a run |
 | [`docker-compose.perf.yml`](docker-compose.perf.yml) | The containers |
 | [`postgres-init.sh`](postgres-init.sh) | Creates `pg_stat_statements` |
 | [`probe/server.ts`](probe/server.ts) | The database probe |
-| [`k6/user-journeys.js`](k6/user-journeys.js) | The k6 script: setup, journeys, teardown, summary |
+| [`k6/user-journeys.js`](k6/user-journeys.js) | The k6 script: journeys and summary |
 | [`k6/lib/config.js`](k6/lib/config.js) | Load profiles, journey selection, scenarios, thresholds, budgets |
 | [`k6/lib/report.js`](k6/lib/report.js) | The markdown report |
 
@@ -271,8 +285,9 @@ Every file here:
 
 [`perf.env`](perf.env) is the service's configuration for a run. The runner hands it to every
 process it spawns rather than using `--env-file`, because `drizzle-kit` builds its config by calling
-the service's `getConfig()`. A variable already exported in your shell wins over the file, as with
-`node --env-file`. Your own `.env` is never read.
+the service's `getConfig()`. The file wins over your shell, except for `LOG_LEVEL` and the
+`PERF_*_PORT` variables, so nothing exported for the dev loop can point a run at another database.
+Your own `.env` is never read.
 
 ### Authentication
 
@@ -327,9 +342,10 @@ When you build a service from this template, the parts to change are:
   [`k6/lib/config.js`](k6/lib/config.js). Tag every request with its `journey`, since the thresholds
   and the report are built from that tag. Model journeys on what a real client does in sequence,
   not on one endpoint in a loop.
-- **Data.** Seeding through the API in `setup()` is simplest and keeps the script honest about what
-  a client can do. When a journey needs thousands of rows, seed them from a script the runner calls
-  before k6 starts instead, writing through the service's own repositories.
+- **Data.** [`seed.ts`](seed.ts) seeds through the API, which is simplest and keeps the data honest
+  about what a client can do; the runner calls it before the first resource scrape, so seeding never
+  shows up in the report. When a journey needs thousands of rows, write them through the service's
+  own repositories from the same place instead.
 - **Datastores.** Add containers to [`docker-compose.perf.yml`](docker-compose.perf.yml) on a
   non-default loopback port, add the address to [`perf.env`](perf.env), and add the port and its
   `PERF_*` variable to `PORT_VARIABLES` in [`runnerOptions.ts`](runnerOptions.ts). For another

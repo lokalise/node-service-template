@@ -1,5 +1,5 @@
 import { type AwsConfig, getEnvaseAwsConfig } from '@lokalise/aws-config'
-import type { ProfilingConfig } from '@lokalise/pyroscope-profiling'
+import { type ProfilingConfig, resolveProfilingConfigFromEnv } from '@lokalise/pyroscope-profiling'
 import { createConfig, detectNodeEnv, envvar, type InferEnv } from 'envase'
 import { z } from 'zod'
 
@@ -264,45 +264,6 @@ const envSchema = {
         z.string().optional().describe('Application process type identifier for Bugsnag'),
       ),
     },
-    // Continuous profiling with Grafana Pyroscope. Sampling rates are not here on purpose:
-    // the Pyroscope SDK reads `PYROSCOPE_FLUSH_INTERVAL_MS`, `PYROSCOPE_WALL_*` and
-    // `PYROSCOPE_HEAP_*` itself, and anything passed through code would outrank them.
-    pyroscope: {
-      isEnabled: envvar(
-        'PYROSCOPE_ENABLED',
-        z
-          .stringbool()
-          .default(false)
-          .describe('Whether to enable continuous profiling with Pyroscope (never on in tests)'),
-      ),
-      appName: envvar(
-        'PYROSCOPE_APPLICATION_NAME',
-        z.string().default(SERVICE_NAME).describe('Name the profiles are filed under in Pyroscope'),
-      ),
-      serverAddress: envvar(
-        'PYROSCOPE_SERVER_ADDRESS',
-        z.url().default('http://localhost:4040').describe('Pyroscope ingest endpoint'),
-      ),
-      authToken: envvar(
-        'PYROSCOPE_AUTH_TOKEN',
-        z.string().optional().describe('Pyroscope bearer token, takes precedence over basic auth'),
-      ),
-      basicAuthUser: envvar(
-        'PYROSCOPE_BASIC_AUTH_USER',
-        z
-          .string()
-          .optional()
-          .describe('Pyroscope basic auth user (numeric stack id for Grafana Cloud Profiles)'),
-      ),
-      basicAuthPassword: envvar(
-        'PYROSCOPE_BASIC_AUTH_PASSWORD',
-        z.string().optional().describe('Pyroscope basic auth password'),
-      ),
-      tenantId: envvar(
-        'PYROSCOPE_TENANT_ID',
-        z.string().optional().describe('X-Scope-OrgID for a multi-tenant Pyroscope'),
-      ),
-    },
     amplitude: {
       isEnabled: envvar(
         'AMPLITUDE_ENABLED',
@@ -361,15 +322,13 @@ export function getConfig(): Config {
 }
 
 /**
- * Profiler settings for `startProfiling`. Never enabled under `NODE_ENV=test`, whatever
- * the environment says: a `.env` shared with the dev loop would otherwise load the native
- * profiler into every vitest worker and arm a flush timer that keeps the worker alive.
+ * Profiler settings for `startProfiling`, read from `PYROSCOPE_*` by the library itself so
+ * its rules (off unless `PYROSCOPE_ENABLED=true`, never under `NODE_ENV=test`, blank values
+ * treated as unset) have one source of truth. Deliberately not part of the envase schema:
+ * a misconfigured profiler must not stop the service from starting.
  */
-export function getProfilingConfig(config: Pick<Config, 'app' | 'vendors'>): ProfilingConfig {
-  return {
-    ...config.vendors.pyroscope,
-    isEnabled: config.vendors.pyroscope.isEnabled && config.app.nodeEnv !== 'test',
-  }
+export function getProfilingConfig(env: NodeJS.ProcessEnv = process.env): ProfilingConfig {
+  return resolveProfilingConfigFromEnv({ appName: SERVICE_NAME, env })
 }
 
 export type IntervalJobConfig = {

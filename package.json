@@ -48,7 +48,7 @@
         "perf:k6:docker": "node perf/runPerfStack.ts k6 --k6=docker",
         "perf:down": "node perf/runPerfStack.ts down",
         "perf:probe": "node perf/probe/server.ts",
-        "perf:analyze": "pyroscope-analyze --service node-service-template --url http://localhost:4041"
+        "perf:analyze": "node perf/runPerfStack.ts analyze"
     },
     "dependencies": {
         "@aws-sdk/client-sns": "^3.1134.0",
