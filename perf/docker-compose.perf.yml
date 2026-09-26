@@ -1,0 +1,107 @@
+# Backing services for a local load-test run, deliberately separate from the root
+# `docker-compose.yml`: its ports are the ones `pnpm test` and the dev loop already hold, and
+# a load run must not evict them or share a database with the test suite.
+#
+#   docker compose -f perf/docker-compose.perf.yml -p node-service-template-perf up -d --wait
+#
+# `node --run perf:run` does this for you. Every port is overridable and published on
+# loopback only: the service under test is a host process.
+services:
+  postgres:
+    image: ${PERF_POSTGRES_IMAGE:-postgres:18.4}
+    ports:
+      - '127.0.0.1:${PERF_POSTGRES_PORT:-5452}:5432'
+    # tmpfs, not a volume: the dataset is recreated on every run, so durability buys nothing
+    # and fsync costs measurable latency in exactly the writes a journey is timing.
+    tmpfs:
+      - /var/lib/postgresql
+    volumes:
+      - ./postgres-init.sh:/docker-entrypoint-initdb.d/900-perf-db-init.sh:ro
+    environment:
+      POSTGRES_USER: serviceuser
+      POSTGRES_PASSWORD: pass
+      POSTGRES_DB: service_db_perf
+      PGDATA: /var/lib/postgresql/data/pgdata
+    command:
+      - postgres
+      - '-c'
+      - 'max_connections=300'
+      - '-c'
+      - 'full_page_writes=off'
+      - '-c'
+      - 'fsync=off'
+      - '-c'
+      - 'synchronous_commit=off'
+      # What lets a run say how many statements a journey cost. The extension itself is
+      # created by postgres-init.sh; preloading is the half that needs a restart.
+      - '-c'
+      - 'shared_preload_libraries=pg_stat_statements'
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U "$$POSTGRES_USER" -d "$$POSTGRES_DB"']
+      interval: 2s
+      timeout: 5s
+      retries: 30
+
+  redis:
+    image: ${PERF_REDIS_IMAGE:-redis:7.4.5-alpine}
+    command: redis-server --requirepass sOmE_sEcUrE_pAsS
+    ports:
+      - '127.0.0.1:${PERF_REDIS_PORT:-6380}:6379'
+    # The image declares /data as a volume, so without this every run would leave an
+    # anonymous volume behind. Nothing here outlives a run.
+    tmpfs:
+      - /data
+    healthcheck:
+      test: ['CMD-SHELL', 'redis-cli -a sOmE_sEcUrE_pAsS ping | grep PONG']
+      interval: 2s
+      timeout: 5s
+      retries: 15
+
+  rabbitmq:
+    image: ${PERF_RABBITMQ_IMAGE:-rabbitmq:3.13.7-alpine}
+    ports:
+      - '127.0.0.1:${PERF_RABBITMQ_PORT:-5673}:5672'
+    tmpfs:
+      - /var/lib/rabbitmq
+    healthcheck:
+      test: ['CMD-SHELL', 'rabbitmq-diagnostics check_port_connectivity || exit 1']
+      interval: 5s
+      timeout: 10s
+      retries: 15
+      start_period: 15s
+
+  # SNS and SQS. The service publishes and consumes user events, and a publish to an
+  # endpoint nothing answers is a retry loop inside the request the run is timing.
+  fauxqs:
+    image: ${PERF_FAUXQS_IMAGE:-kibertoad/fauxqs:2.12.0}
+    ports:
+      - '127.0.0.1:${PERF_FAUXQS_PORT:-4568}:4566'
+    environment:
+      FAUXQS_DEFAULT_REGION: eu-central-1
+      FAUXQS_INIT: /app/init.json
+    volumes:
+      - ../scripts/fauxqs-init.json:/app/init.json:ro
+
+  # Continuous profiling for the run, off unless it was asked for:
+  # `docker compose --profile profiling up`, which is what `node --run perf:run -- --profiling`
+  # does.
+  #
+  # The profiles outlive the container, on a named volume the teardown spares: two runs of
+  # the same shape are the only way to show that a change moved what the flame graph says.
+  # `node --run perf:down -- --purge-profiles` is the deliberate way to drop them.
+  #
+  # No healthcheck: the image is distroless, with no shell and no wget or curl, and /ready
+  # only turns 200 about a minute after start. Gating `up --wait` on it would add a minute
+  # to every profiled run.
+  pyroscope:
+    image: ${PERF_PYROSCOPE_IMAGE:-grafana/pyroscope:2.3.1}
+    profiles:
+      - profiling
+    ports:
+      - '127.0.0.1:${PERF_PYROSCOPE_PORT:-4041}:4040'
+    volumes:
+      - pyroscope-data:/data
+
+volumes:
+  # Named, and therefore spared by the `down` the runner performs.
+  pyroscope-data:

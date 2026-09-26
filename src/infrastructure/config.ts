@@ -1,4 +1,5 @@
 import { type AwsConfig, getEnvaseAwsConfig } from '@lokalise/aws-config'
+import { type ProfilingConfig, resolveProfilingConfigFromEnv } from '@lokalise/pyroscope-profiling'
 import { createConfig, detectNodeEnv, envvar, type InferEnv } from 'envase'
 import { z } from 'zod'
 
@@ -318,6 +319,16 @@ export function getConfig(): Config {
     config = createConfig(process.env, { schema: envSchema, computed: computedSchema })
   }
   return config
+}
+
+/**
+ * Profiler settings for `startProfiling`, read from `PYROSCOPE_*` by the library itself so
+ * its rules (off unless `PYROSCOPE_ENABLED=true`, never under `NODE_ENV=test`, blank values
+ * treated as unset) have one source of truth. Deliberately not part of the envase schema:
+ * a misconfigured profiler must not stop the service from starting.
+ */
+export function getProfilingConfig(env: NodeJS.ProcessEnv = process.env): ProfilingConfig {
+  return resolveProfilingConfigFromEnv({ appName: SERVICE_NAME, env })
 }
 
 export type IntervalJobConfig = {

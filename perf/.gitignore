@@ -1,0 +1,9 @@
+# Per-run output. The logs are where a 5xx explains itself and the reports are rewritten by
+# every run, so none of it survives a run in a useful state.
+.logs/
+k6/k6-report.md
+k6/k6-summary.json
+# The ids of the users the runner seeds for a run, deleted when it ends.
+k6/seed-users.json
+# The key pair the runner generates to sign the load test's JWT.
+.auth/

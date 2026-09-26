@@ -1,6 +1,6 @@
 import { parseEnv } from 'envase'
 import { describe, expect, test } from 'vitest'
-import envSchema, { decodeJwtConfig } from './config.ts'
+import envSchema, { decodeJwtConfig, getProfilingConfig } from './config.ts'
 
 describe('config', () => {
   describe('decodeJwtConfig', () => {
@@ -156,6 +156,42 @@ describe('config', () => {
           ]
         `)
       })
+    })
+  })
+
+  describe('getProfilingConfig', () => {
+    test('is disabled by default and files profiles under the service name', () => {
+      expect(getProfilingConfig({ NODE_ENV: 'development' })).toMatchObject({
+        isEnabled: false,
+        appName: 'node-service-template',
+        serverAddress: 'http://localhost:4040',
+      })
+    })
+
+    test('is enabled outside of tests when PYROSCOPE_ENABLED is true', () => {
+      expect(
+        getProfilingConfig({
+          NODE_ENV: 'development',
+          PYROSCOPE_ENABLED: 'true',
+          PYROSCOPE_SERVER_ADDRESS: 'http://localhost:4041',
+        }),
+      ).toMatchObject({ isEnabled: true, serverAddress: 'http://localhost:4041' })
+    })
+
+    test('stays disabled under NODE_ENV=test whatever PYROSCOPE_ENABLED says', () => {
+      expect(getProfilingConfig({ NODE_ENV: 'test', PYROSCOPE_ENABLED: 'true' }).isEnabled).toBe(
+        false,
+      )
+    })
+
+    test('treats blank values as unset instead of failing', () => {
+      expect(
+        getProfilingConfig({
+          NODE_ENV: 'development',
+          PYROSCOPE_ENABLED: '',
+          PYROSCOPE_SERVER_ADDRESS: '',
+        }),
+      ).toMatchObject({ isEnabled: false, serverAddress: 'http://localhost:4040' })
     })
   })
 })
