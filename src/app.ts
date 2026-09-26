@@ -31,6 +31,7 @@ import {
   stringValueSerializer,
 } from '@lokalise/node-core'
 import { gracefulOtelShutdown } from '@lokalise/opentelemetry-fastify-bootstrap'
+import { pyroscopeProfilingPlugin } from '@lokalise/pyroscope-profiling/fastify'
 import { OpenApiTags } from '@node-service-template/api-contracts'
 import { type AwilixContainer, createContainer } from 'awilix'
 import type { FastifyInstance } from 'fastify'
@@ -153,6 +154,12 @@ export async function getApp(
   }
 
   await app.register(fastifyNoIcon.default)
+
+  // Labels the profile samples taken during each request with its route (`span_name`), so a
+  // flame graph can be cut to one endpoint, and flushes the last profile window on close.
+  // `serverInternal.ts` starts the profiler before this app exists, so the plugin does not
+  // start it again; it registers its hooks only when that start left the profiler running.
+  await app.register(pyroscopeProfilingPlugin, { start: false })
 
   await app.register(fastifyAuth)
 

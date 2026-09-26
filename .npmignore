@@ -8,3 +8,4 @@ coverage/
 lib/
 pnpm-lock.yaml
 tsconfig.json
+perf/

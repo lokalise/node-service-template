@@ -272,6 +272,40 @@
   Type: `string`  
   Description: Application process type identifier for Bugsnag
 
+## Vendors Pyroscope
+
+- `PYROSCOPE_ENABLED` (optional)  
+  Type: `boolean`  
+  Description: Whether to enable continuous profiling with Pyroscope (never on in tests)  
+  Default: `false`
+
+- `PYROSCOPE_APPLICATION_NAME` (optional)  
+  Type: `string`  
+  Description: Name the profiles are filed under in Pyroscope  
+  Default: `node-service-template`
+
+- `PYROSCOPE_SERVER_ADDRESS` (optional)  
+  Type: `string`  
+  Description: Pyroscope ingest endpoint  
+  Format: `uri`  
+  Default: `http://localhost:4040`
+
+- `PYROSCOPE_AUTH_TOKEN` (optional)  
+  Type: `string`  
+  Description: Pyroscope bearer token, takes precedence over basic auth
+
+- `PYROSCOPE_BASIC_AUTH_USER` (optional)  
+  Type: `string`  
+  Description: Pyroscope basic auth user (numeric stack id for Grafana Cloud Profiles)
+
+- `PYROSCOPE_BASIC_AUTH_PASSWORD` (optional)  
+  Type: `string`  
+  Description: Pyroscope basic auth password
+
+- `PYROSCOPE_TENANT_ID` (optional)  
+  Type: `string`  
+  Description: X-Scope-OrgID for a multi-tenant Pyroscope
+
 ## Vendors Amplitude
 
 - `AMPLITUDE_ENABLED` (optional)  

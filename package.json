@@ -1,6 +1,6 @@
 {
     "name": "node-service-template",
-    "version": "1.23.0",
+    "version": "1.24.0",
     "devEngines": {
         "runtime": {
             "name": "node",
@@ -40,7 +40,15 @@
         "docs:validate": "envase validate ./src/infrastructure/config.ts ./docs/environment-variables.md",
         "prepublishOnly": "node --run build",
         "jwt:generate": "node --env-file-if-exists=.env scripts/generateJwt.ts",
-        "cmd:getUserImportJobs": "node --env-file-if-exists=.env scripts/cmd/getUserImportJobs.ts"
+        "cmd:getUserImportJobs": "node --env-file-if-exists=.env scripts/cmd/getUserImportJobs.ts",
+        "perf:up": "node perf/runPerfStack.ts up",
+        "perf:run": "node perf/runPerfStack.ts run",
+        "perf:run:smoke": "node perf/runPerfStack.ts run -e TEST_TYPE=smoke",
+        "perf:k6": "node perf/runPerfStack.ts k6",
+        "perf:k6:docker": "node perf/runPerfStack.ts k6 --k6=docker",
+        "perf:down": "node perf/runPerfStack.ts down",
+        "perf:probe": "node perf/probe/server.ts",
+        "perf:analyze": "pyroscope-analyze --service node-service-template --url http://localhost:4041"
     },
     "dependencies": {
         "@aws-sdk/client-sns": "^3.1134.0",
@@ -65,6 +73,7 @@
         "@lokalise/healthcheck-utils": "^7.0.0",
         "@lokalise/node-core": "^14.9.1",
         "@lokalise/opentelemetry-fastify-bootstrap": "^4.1.2",
+        "@lokalise/pyroscope-profiling": "^1.1.1",
         "@lokalise/universal-ts-utils": "^4.11.0",
         "@lokalise/zod-extras": "^3.0.2",
         "@message-queue-toolkit/amqp": "^25.0.1",
@@ -106,6 +115,7 @@
         "@amplitude/analytics-types": "^2.11.1",
         "@biomejs/biome": "2.5.14",
         "@lokalise/biome-config": "^3.1.1",
+        "@lokalise/load-testing-utils": "^2.0.0",
         "@lokalise/tsconfig": "^5.0.0",
         "@lokalise/universal-testing-utils": "^4.2.0",
         "@opentelemetry/sdk-trace-base": "^2.11.0",

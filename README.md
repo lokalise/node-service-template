@@ -200,6 +200,21 @@ There is an OpenTelemetry integration included, using the gRPC exporter. See [en
 
 It should work out-of-the-box for all incoming HTTP requests, as long as correct exporter URL is configured.
 
+### Profiling and local load testing
+
+Continuous CPU, wall-clock and heap profiling with [Grafana Pyroscope](https://grafana.com/docs/pyroscope/latest/) is wired in through [`@lokalise/pyroscope-profiling`](https://www.npmjs.com/package/@lokalise/pyroscope-profiling): the profiler starts in [serverInternal.ts](./src/serverInternal.ts) and `pyroscopeProfilingPlugin` labels every request's samples with its route. It is off unless `PYROSCOPE_ENABLED=true`, and never on under `NODE_ENV=test`.
+
+[`perf/`](./perf) holds a local load-test stack built on it: the service as a host process, its datastores in containers, [k6](https://grafana.com/docs/k6/latest/) driving it, a database probe counting what each run cost in statements, and Pyroscope profiling it on request.
+
+```shell
+node --run perf:run:smoke                  # up, one pass per journey, down
+node --run perf:run -- --profiling --keep  # up, 60s of load, profiled, left up
+node --run perf:analyze                    # where the time went
+node --run perf:down
+```
+
+See [perf/README.md](./perf/README.md) for the full guide.
+
 ### Create jwt for dev usage
 
 You have multiple options to ease your development:
