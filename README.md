@@ -167,7 +167,7 @@ To initialize your test database and/or apply your latest schema changes.
 
 All supported variables, with their defaults, are documented in [docs/environment-variables.md](./docs/environment-variables.md), generated from the config schema.
 
-Leave out optional variables (or comment them out) instead of writing `KEY=`. An empty value is still a value: it overrides the schema default and fails validation for things like URLs and enums.
+`getConfig()` enables envase's `emptyStringAsUndefined`, so an empty value (`KEY=`) counts as unset: the schema default applies, optional variables stay `undefined` and required ones fail validation. It also lets a PR environment clear a default set in the deployment config by setting the variable to an empty value.
 
 ### OpenAPI specification
 

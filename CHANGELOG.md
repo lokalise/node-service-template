@@ -4,7 +4,8 @@
 
 - Split `.env.default` into `.env.test` and `.env.example`. `.env.default` was used as the test config (via `copy:config` into `.env`) and as the starting point for local setup, and it wasn't a real default for either: a variable missing from `.env` never fell back to it, and production never read it
 - Tests load only [.env.test](.env.test), which lists every variable the suite needs. [test/envSetupHook.ts](test/envSetupHook.ts) no longer reads `.env` or patches `DATABASE_URL`/`AWS_ENDPOINT` in code. A local `.env` with real API keys can no longer make tests call real services, and local runs match CI. `test:migrate` also runs with `.env.test`, and `test:ci` no longer runs `copy:config`. The Docker healthcheck test now layers `.env.docker-test` over `.env.test` instead of the local-setup example
-- [.env.example](.env.example) is the starting point for a local `.env` (`node --run copy:config` now copies it). Drop the empty `KEY=` entries: optional variables are commented out, and the unused `OPEN_TELEMETRY_*` entries are removed. An empty value overrode the schema default and could fail validation
+- [.env.example](.env.example) is the starting point for a local `.env` (`node --run copy:config` now copies it). Optional secrets stay as empty `KEY=` placeholders, and the unused `OPEN_TELEMETRY_*` entries are removed
+- Bump [`envase`](https://www.npmjs.com/package/envase) from `^1.5.0` to `^2.0.0` and enable `emptyStringAsUndefined` in `getConfig()`: an empty envvar counts as unset, so the schema default applies instead of an empty string (or a validation error for URLs, enums and numbers). 2.0.0 is excluded from `minimumReleaseAge` in [pnpm-workspace.yaml](pnpm-workspace.yaml) because it was published the same day
 - See [Environment files](README.md#environment-files) and the [migration guide](docs/migrating-to-env-test.md) for other services
 
 ## [1.24.0] - 2026-09-26

@@ -316,7 +316,11 @@ let config: Config | null = null
 
 export function getConfig(): Config {
   if (!config) {
-    config = createConfig(process.env, { schema: envSchema, computed: computedSchema })
+    config = createConfig(process.env, {
+      schema: envSchema,
+      computed: computedSchema,
+      emptyStringAsUndefined: true,
+    })
   }
   return config
 }

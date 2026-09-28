@@ -26,3 +26,4 @@ minimumReleaseAgeExclude:
   - "opinionated-machine"
   - "@opinionated-machine/*"
   - awilix-manager@7.1.0
+  - envase@2.0.0
