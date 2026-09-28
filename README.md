@@ -160,10 +160,10 @@ To initialize your test database and/or apply your latest schema changes.
 
 | File | Committed | Read by | Purpose |
 | --- | --- | --- | --- |
-| `.env.test` | yes | tests ([test/envSetupHook.ts](./test/envSetupHook.ts)), `test:migrate` | Every variable the test suite runs with. Nothing else is loaded, so a local `.env` never leaks into a test run. |
+| `.env.test` | yes | tests ([test/envSetupHook.ts](./test/envSetupHook.ts)), `test:migrate`, Docker healthcheck | Every variable the test suite runs with. Nothing else is loaded, so a local `.env` never leaks into a test run. |
 | `.env.example` | yes | `node --run copy:config` | Starting point for your local `.env`. Not loaded by anything at runtime. |
 | `.env` | no | `start:dev`, scripts | Your personal local config. |
-| `.env.docker-test` | yes | [scripts/docker-healthcheck-test.sh](./scripts/docker-healthcheck-test.sh) | Overrides on top of `.env.example` for the container healthcheck. |
+| `.env.docker-test` | yes | [scripts/docker-healthcheck-test.sh](./scripts/docker-healthcheck-test.sh) | Overrides on top of `.env.test` for the container healthcheck. |
 
 All supported variables, with their defaults, are documented in [docs/environment-variables.md](./docs/environment-variables.md), generated from the config schema.
 
