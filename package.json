@@ -1,6 +1,6 @@
 {
     "name": "node-service-template",
-    "version": "1.24.0",
+    "version": "1.25.0",
     "devEngines": {
         "runtime": {
             "name": "node",
@@ -18,11 +18,11 @@
         "build": "pnpm --filter @node-service-template/api-contracts run build && tsc -p tsconfig.build.json",
         "build:service": "tsc -p tsconfig.build.json",
         "build:contracts": "pnpm --filter @node-service-template/api-contracts run build",
-        "copy:config": "cpy --rename=.env ./.env.default ./",
+        "copy:config": "cpy --rename=.env ./.env.example ./",
         "test": "vitest",
-        "test:migrate": "cross-env NODE_ENV=test DATABASE_URL=postgres://serviceuser:pass@localhost:5432/service_db_test pnpm exec drizzle-kit migrate --config=./src/db/drizzle.config.ts",
+        "test:migrate": "node --env-file=.env.test ./node_modules/drizzle-kit/bin.cjs migrate --config=./src/db/drizzle.config.ts",
         "test:coverage": "node --run test -- --coverage",
-        "test:ci": "node --run copy:config && node --run test:migrate && node --run test:coverage",
+        "test:ci": "node --run test:migrate && node --run test:coverage",
         "lint": "biome check . && tsc && pnpm --filter \"./packages/*\" run lint && pnpm run docs:validate",
         "lint:fix": "biome check --write . && pnpm --filter \"./packages/*\" run lint:fix",
         "start:dev": "node --run build:contracts && node --env-file=.env src/server.ts",
@@ -93,7 +93,7 @@
         "bullmq": "^6.3.6",
         "drizzle-kit": "1.0.0-rc.5-5935859",
         "drizzle-orm": "1.0.0-rc.5-5935859",
-        "envase": "^1.5.0",
+        "envase": "^2.0.0",
         "fastify": "^5.12.5",
         "fastify-graceful-shutdown": "^5.0.0",
         "fastify-metrics": "^14.1.0",

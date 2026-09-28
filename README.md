@@ -100,7 +100,7 @@ are relevant for the technological stack of your organization, and replace `@lok
    > publishable API contracts live under [`packages/api-contracts`](packages/api-contracts).
    > The service consumes the contracts via `@node-service-template/api-contracts` (`workspace:*`).
 
-4. Copy the `.env.default` file to a new `.env` file. You can do this with the following npm script:
+4. Copy the `.env.example` file to a new `.env` file. You can do this with the following npm script:
 
    ```shell
    node --run copy:config
@@ -155,6 +155,19 @@ node --run test:migrate
 ```
 
 To initialize your test database and/or apply your latest schema changes.
+
+### Environment files
+
+| File | Committed | Read by | Purpose |
+| --- | --- | --- | --- |
+| `.env.test` | yes | tests ([test/envSetupHook.ts](./test/envSetupHook.ts)), `test:migrate`, Docker healthcheck | Every variable the test suite runs with. Nothing else is loaded, so a local `.env` never leaks into a test run. |
+| `.env.example` | yes | `node --run copy:config` | Starting point for your local `.env`. Not loaded by anything at runtime. |
+| `.env` | no | `start:dev`, scripts | Your personal local config. |
+| `.env.docker-test` | yes | [scripts/docker-healthcheck-test.sh](./scripts/docker-healthcheck-test.sh) | Overrides on top of `.env.test` for the container healthcheck. |
+
+All supported variables, with their defaults, are documented in [docs/environment-variables.md](./docs/environment-variables.md), generated from the config schema.
+
+`getConfig()` enables envase's `emptyStringAsUndefined`, so an empty value (`KEY=`) counts as unset: the schema default applies, optional variables stay `undefined` and required ones fail validation.
 
 ### OpenAPI specification
 

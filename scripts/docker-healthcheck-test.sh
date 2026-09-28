@@ -36,10 +36,10 @@ NETWORK_NAME="${COMPOSE_PROJECT}_default"
 
 echo "==> Starting application container..."
 # Docker --env-file cannot parse multiline values; strip the multiline
-# JWT_PUBLIC_KEY block from .env.default (docker-test override supplies a
+# JWT_PUBLIC_KEY block from .env.test (docker-test override supplies a
 # single-line version).
 FILTERED_ENV=$(mktemp)
-awk 'BEGIN{s=0} /^JWT_PUBLIC_KEY=/{s=1} s && /-----END/{s=0;next} s==0' .env.default \
+awk 'BEGIN{s=0} /^JWT_PUBLIC_KEY=/{s=1} s && /-----END/{s=0;next} s==0' .env.test \
   | sed 's/^\([A-Za-z_][A-Za-z_0-9]*=\)"\(.*\)"$/\1\2/' > "$FILTERED_ENV"
 
 docker run -d \

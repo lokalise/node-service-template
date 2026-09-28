@@ -228,7 +228,7 @@ PYROSCOPE_ENABLED=true PYROSCOPE_SERVER_ADDRESS=http://localhost:4040 node --run
 ```
 
 The `PYROSCOPE_*` variables are read by `@lokalise/pyroscope-profiling` itself, not by the
-service's config schema; see [.env.default](../.env.default) and the library's README for shipping
+service's config schema; see [.env.example](../.env.example) and the library's README for shipping
 to a shared Pyroscope or Grafana Cloud Profiles.
 
 ## What a run reports
