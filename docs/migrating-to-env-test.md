@@ -30,15 +30,12 @@ How to move a service from the `.env.default` + `copy:config` setup to the one i
 2. **Load only `.env.test` in the vitest setup file**:
 
    ```ts
-   import { readFileSync } from 'node:fs'
-   import { parseEnv } from 'node:util'
-
-   // Unlike process.loadEnvFile, this overrides variables already set in the shell, so an exported
-   // DATABASE_URL can never point the test cleaners at a non-test database.
-   Object.assign(process.env, parseEnv(readFileSync('./.env.test', 'utf8')))
+   process.loadEnvFile('./.env.test')
    ```
 
-   Remove the `process.env.X = ...` overrides that are now in `.env.test`.
+   Remove the `process.env.X = ...` overrides that are now in `.env.test`. `loadEnvFile` doesn't
+   override variables already set in the shell, so an exported `DATABASE_URL` still wins. Don't
+   export test-sensitive variables (DB URLs, API keys) globally.
 
 3. **Rename `.env.default` to `.env.example`** (`git mv`, so history is kept):
    - Remove empty `KEY=` entries. Comment out optional ones you want to keep for discoverability
@@ -64,9 +61,12 @@ How to move a service from the `.env.default` + `copy:config` setup to the one i
    - Keep `copy:config` in CI only for steps that really run against the dev config (for example
      `db:apply-migrations`).
 
-5. **Update the remaining references** to `.env.default`: README, Dockerfiles and healthcheck
+5. **Base container/healthcheck test env on `.env.test`**, not on the example file, with any
+   Docker-specific overrides (compose hostnames, `NODE_ENV=production`) layered on top.
+
+6. **Update the remaining references** to `.env.default`: README, Dockerfiles and healthcheck
    scripts, `.dockerignore`, CI workflows, agent/Claude instructions. Check with
    `git grep -n 'env.default'`.
 
-6. **Verify** by moving your local `.env` away and running the test suite:
+7. **Verify** by moving your local `.env` away and running the test suite:
    `mv .env .env.bak && node --run test:ci; mv .env.bak .env`
