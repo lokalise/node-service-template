@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.26.0] - 2026-10-14
+
+- Split `.env.default` into `.env.test` and `.env.example`. `.env.default` was used as the test config (via `copy:config` into `.env`) and as the starting point for local setup, and it wasn't a real default for either: a variable missing from `.env` never fell back to it, and production never read it
+- Tests load only [.env.test](.env.test), which lists every variable the suite needs. [test/envSetupHook.ts](test/envSetupHook.ts) no longer reads `.env` or patches `DATABASE_URL`/`AWS_ENDPOINT` in code, and `.env.test` wins over variables already exported in the shell. A local `.env` with real API keys can no longer make tests call real services, and local runs match CI. `test:migrate` also runs with `.env.test`, and `test:ci` no longer runs `copy:config`
+- [.env.example](.env.example) is the starting point for a local `.env` (`node --run copy:config` now copies it). Drop the empty `KEY=` entries: optional variables are commented out, and the unused `OPEN_TELEMETRY_*` entries are removed. An empty value overrode the schema default and could fail validation
+- See [Environment files](README.md#environment-files) and the [migration guide](docs/migrating-to-env-test.md) for other services
+
 ## [1.25.0] - 2026-10-14
 
 - Update the Lokalise libraries to their latest majors: `@lokalise/api-contracts` 8 → 9 (root and the `@node-service-template/api-contracts` workspace package), `@lokalise/aws-config` 9 → 10, `@lokalise/backend-http-client` 12 → 13, `@lokalise/fastify-api-contracts` 7 → 8, `@lokalise/fastify-extras` 35 → 36 and, on the dev side, `@lokalise/universal-testing-utils` 4 → 5. No source changes were needed: the app type-checks and builds against all of them unmodified

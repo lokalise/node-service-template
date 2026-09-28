@@ -1,3 +1,6 @@
-process.loadEnvFile('./.env')
-process.env.DATABASE_URL = 'postgresql://serviceuser:pass@localhost:5432/service_db_test'
-process.env.AWS_ENDPOINT = 'http://localhost:4567'
+import { readFileSync } from 'node:fs'
+import { parseEnv } from 'node:util'
+
+// Unlike process.loadEnvFile, this overrides variables already set in the shell, so an exported
+// DATABASE_URL can never point the test cleaners at a non-test database.
+Object.assign(process.env, parseEnv(readFileSync('./.env.test', 'utf8')))
