@@ -25,7 +25,7 @@ describe('cliCommandWrapper — SIGTERM abort propagation (integration)', () => 
     // NODE_ENV=production triggers `fastify-graceful-shutdown` registration in
     // src/app.ts. Without it, SIGTERM would force-kill the process instead of
     // routing through our handler.
-    const child = spawn('node', ['--env-file-if-exists=.env', LOOP_SCRIPT], {
+    const child = spawn('node', [LOOP_SCRIPT], {
       cwd: REPO_ROOT,
       env: { ...process.env, NODE_ENV: 'production' },
       stdio: ['ignore', 'pipe', 'pipe'],
