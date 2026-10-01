@@ -51,10 +51,10 @@
         "perf:analyze": "node perf/runPerfStack.ts analyze"
     },
     "dependencies": {
-        "@aws-sdk/client-sns": "^3.1134.0",
-        "@aws-sdk/client-sqs": "^3.1134.0",
-        "@aws-sdk/client-sts": "^3.1134.0",
-        "@aws-sdk/credential-providers": "^3.1134.0",
+        "@aws-sdk/client-sns": "^3.1139.0",
+        "@aws-sdk/client-sqs": "^3.1139.0",
+        "@aws-sdk/client-sts": "^3.1139.0",
+        "@aws-sdk/credential-providers": "^3.1139.0",
         "@fastify/auth": "^5.1.1",
         "@fastify/awilix": "^8.3.0",
         "@fastify/cors": "^11.3.0",
