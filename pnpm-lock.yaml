@@ -269,8 +269,8 @@ importers:
         specifier: ^35.0.1
         version: 35.0.1(c841711ec64b1a4eda8f03fa625fd7fa)
       '@lokalise/healthcheck-utils':
-        specifier: ^7.0.0
-        version: 7.0.0(@lokalise/background-jobs-common@17.0.1(bullmq@6.3.6(ioredis@6.0.0(supports-color@7.2.0)))(ioredis@6.0.0(supports-color@7.2.0))(pino@10.3.1)(supports-color@7.2.0)(toad-scheduler@4.2.0)(zod@4.5.4))(@prometheus-io/client@0.16.1)(ioredis@6.0.0(supports-color@7.2.0))(supports-color@7.2.0)(toad-scheduler@4.2.0)(zod@4.5.4)
+        specifier: ^8.0.0
+        version: 8.0.0(@lokalise/background-jobs-common@17.0.1(bullmq@6.3.6(ioredis@6.0.0(supports-color@7.2.0)))(ioredis@6.0.0(supports-color@7.2.0))(pino@10.3.1)(supports-color@7.2.0)(toad-scheduler@4.2.0)(zod@4.5.4))(@prometheus-io/client@0.16.1)(ioredis@6.0.0(supports-color@7.2.0))(supports-color@7.2.0)(toad-scheduler@4.2.0)(zod@4.5.4)
       '@lokalise/node-core':
         specifier: ^14.9.1
         version: 14.9.1(zod@4.5.4)
@@ -1190,8 +1190,8 @@ packages:
       pino: '>=9.9.0'
       zod: '>=4.1.5'
 
-  '@lokalise/healthcheck-utils@7.0.0':
-    resolution: {integrity: sha512-ono/dW4qDSyV6jN+kUsJ9G5LG9IdPtWTxSLyCYnW/XMMY/EPmHMvwtWN+ORcLktCLgawoP+wd1DWpo6pzrvHtA==}
+  '@lokalise/healthcheck-utils@8.0.0':
+    resolution: {integrity: sha512-FWEYzTfI4EnR/2/sYdsvSxZ+ayGe6sbdOMUdobPaatCk0QU0QiCZlN1Ari4i7s7ingtWwb/HBjEa+IXrfgFqSA==}
     peerDependencies:
       '@lokalise/background-jobs-common': '>=12.0.0'
       '@prometheus-io/client': ^0.16.1
@@ -5487,7 +5487,7 @@ snapshots:
       - encoding
       - supports-color
 
-  '@lokalise/healthcheck-utils@7.0.0(@lokalise/background-jobs-common@17.0.1(bullmq@6.3.6(ioredis@6.0.0(supports-color@7.2.0)))(ioredis@6.0.0(supports-color@7.2.0))(pino@10.3.1)(supports-color@7.2.0)(toad-scheduler@4.2.0)(zod@4.5.4))(@prometheus-io/client@0.16.1)(ioredis@6.0.0(supports-color@7.2.0))(supports-color@7.2.0)(toad-scheduler@4.2.0)(zod@4.5.4)':
+  '@lokalise/healthcheck-utils@8.0.0(@lokalise/background-jobs-common@17.0.1(bullmq@6.3.6(ioredis@6.0.0(supports-color@7.2.0)))(ioredis@6.0.0(supports-color@7.2.0))(pino@10.3.1)(supports-color@7.2.0)(toad-scheduler@4.2.0)(zod@4.5.4))(@prometheus-io/client@0.16.1)(ioredis@6.0.0(supports-color@7.2.0))(supports-color@7.2.0)(toad-scheduler@4.2.0)(zod@4.5.4)':
     dependencies:
       '@lokalise/background-jobs-common': 17.0.1(bullmq@6.3.6(ioredis@6.0.0(supports-color@7.2.0)))(ioredis@6.0.0(supports-color@7.2.0))(pino@10.3.1)(supports-color@7.2.0)(toad-scheduler@4.2.0)(zod@4.5.4)
       '@lokalise/node-core': 14.9.1(zod@4.5.4)
