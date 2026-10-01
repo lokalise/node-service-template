@@ -77,7 +77,7 @@
         "@lokalise/universal-ts-utils": "^4.11.0",
         "@lokalise/zod-extras": "^3.0.2",
         "@message-queue-toolkit/amqp": "^25.0.1",
-        "@message-queue-toolkit/core": "^27.1.0",
+        "@message-queue-toolkit/core": "^27.2.0",
         "@message-queue-toolkit/metrics": "^6.0.0",
         "@message-queue-toolkit/schemas": "^8.1.0",
         "@message-queue-toolkit/sns": "^27.0.1",
