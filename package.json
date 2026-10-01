@@ -109,7 +109,7 @@
         "redis-semaphore": "^5.8.0",
         "toad-scheduler": "^4.2.0",
         "undici": "^8.11.0",
-        "zod": "^4.5.4"
+        "zod": "^4.6.5"
     },
     "devDependencies": {
         "@amplitude/analytics-types": "^2.11.1",
