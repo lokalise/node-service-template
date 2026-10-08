@@ -108,7 +108,7 @@
         "postgres": "^3.4.9",
         "redis-semaphore": "^5.8.0",
         "toad-scheduler": "^4.2.0",
-        "undici": "^8.11.0",
+        "undici": "^8.11.2",
         "zod": "^4.5.4"
     },
     "devDependencies": {
