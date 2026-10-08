@@ -288,7 +288,7 @@ importers:
         version: 3.0.2
       '@message-queue-toolkit/amqp':
         specifier: ^25.0.1
-        version: 25.0.1(@message-queue-toolkit/core@27.2.0(zod@4.5.4))(@message-queue-toolkit/schemas@8.1.0(zod@4.5.4))(amqplib@2.0.1)(zod@4.5.4)
+        version: 25.0.1(@message-queue-toolkit/core@27.2.0(zod@4.5.4))(@message-queue-toolkit/schemas@8.1.0(zod@4.5.4))(amqplib@2.2.0)(zod@4.5.4)
       '@message-queue-toolkit/core':
         specifier: ^27.2.0
         version: 27.2.0(zod@4.5.4)
@@ -320,8 +320,8 @@ importers:
         specifier: ^0.16.1
         version: 0.16.1
       amqplib:
-        specifier: ^2.0.1
-        version: 2.0.1
+        specifier: ^2.2.0
+        version: 2.2.0
       awilix:
         specifier: ^13.0.5
         version: 13.0.5
@@ -2556,8 +2556,8 @@ packages:
   ajv@8.20.0:
     resolution: {integrity: sha512-Thbli+OlOj+iMPYFBVBfJ3OmCAnaSyNn4M1vz9T6Gka5Jt9ba/HIR56joy65tY6kx/FCF5VXNB819Y7/GUrBGA==}
 
-  amqplib@2.0.1:
-    resolution: {integrity: sha512-a3P2MgfCf9nzVis12VxWEn0dS6hcqve7dlEAhXDtIWR27BlhtMkILOc+H9aeHjDi6i6r94dYKc2Kx2OFe3avvg==}
+  amqplib@2.2.0:
+    resolution: {integrity: sha512-VifzN9aHs/Q3zTruVHXh2yCisQyXexBN91CQ2E5iSyUKyNjH6ilYhJGte5AXZH/Bj1PaH7SwPhyuSf6Msd2udw==}
     engines: {node: '>=18'}
 
   ansi-regex@5.0.1:
@@ -5573,12 +5573,12 @@ snapshots:
 
   '@lukeed/ms@2.0.2': {}
 
-  '@message-queue-toolkit/amqp@25.0.1(@message-queue-toolkit/core@27.2.0(zod@4.5.4))(@message-queue-toolkit/schemas@8.1.0(zod@4.5.4))(amqplib@2.0.1)(zod@4.5.4)':
+  '@message-queue-toolkit/amqp@25.0.1(@message-queue-toolkit/core@27.2.0(zod@4.5.4))(@message-queue-toolkit/schemas@8.1.0(zod@4.5.4))(amqplib@2.2.0)(zod@4.5.4)':
     dependencies:
       '@lokalise/node-core': 14.9.1(zod@4.5.4)
       '@message-queue-toolkit/core': 27.2.0(zod@4.5.4)
       '@message-queue-toolkit/schemas': 8.1.0(zod@4.5.4)
-      amqplib: 2.0.1
+      amqplib: 2.2.0
       zod: 4.5.4
 
   '@message-queue-toolkit/core@27.2.0(zod@4.5.4)':
@@ -7010,7 +7010,7 @@ snapshots:
       json-schema-traverse: 1.0.0
       require-from-string: 2.0.2
 
-  amqplib@2.0.1: {}
+  amqplib@2.2.0: {}
 
   ansi-regex@5.0.1: {}
 
