@@ -93,7 +93,7 @@
         "bullmq": "^6.3.6",
         "drizzle-kit": "1.0.0-rc.5-5935859",
         "drizzle-orm": "1.0.0-rc.5-5935859",
-        "envase": "^1.5.0",
+        "envase": "^2.0.0",
         "fastify": "^5.12.5",
         "fastify-graceful-shutdown": "^5.0.0",
         "fastify-metrics": "^14.1.0",
