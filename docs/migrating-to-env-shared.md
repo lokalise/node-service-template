@@ -33,8 +33,8 @@ How to move a service from the `.env.default` + `copy:config` setup to the one i
    that local dev and tests load it and deployed environments never do. Then clean it up:
    - Remove variables the schema doesn't read.
    - Remove variables whose value equals the schema default.
-   - Remove empty `KEY=` placeholders for secrets. List them in a comment instead, as hints for
-     what goes in `.env`.
+   - Comment out empty `KEY=` placeholders for secrets (`# BUGSNAG_KEY=`) where they are, as hints
+     for what goes in `.env`.
    - Nothing real goes here: tests load this file.
 
 2. **Create `.env.test`** with only what tests need to differ from `.env.shared`:
