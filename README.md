@@ -99,11 +99,9 @@ are relevant for the technological stack of your organization, and replace `@lok
    > publishable API contracts live under [`packages/api-contracts`](packages/api-contracts).
    > The service consumes the contracts via `@node-service-template/api-contracts` (`workspace:*`).
 
-4. Copy the `.env.example` file to a new `.env` file. You can do this with the following npm script:
-
-   ```shell
-   node --run copy:config
-   ```
+4. Optionally create a `.env` file for secrets and anything you want to change locally. The start
+   and db scripts load [.env.shared](.env.shared) first and `.env` on top, so the service runs
+   without a `.env`, and `.env` only needs the values you override.
 
 5. Launch all the infrastructural dependencies locally:
 
@@ -159,10 +157,16 @@ To initialize your test database and/or apply your latest schema changes.
 
 | File | Committed | Read by | Purpose |
 | --- | --- | --- | --- |
-| `.env.test` | yes | tests ([test/envSetupHook.ts](./test/envSetupHook.ts)), `test:migrate`, Docker healthcheck | Every variable the test suite runs with. Nothing else is loaded, so a local `.env` never leaks into a test run. |
-| `.env.example` | yes | `node --run copy:config` | Starting point for your local `.env`. Not loaded by anything at runtime. |
-| `.env` | no | `start:dev`, scripts | Your personal local config. |
-| `.env.docker-test` | yes | [scripts/docker-healthcheck-test.sh](./scripts/docker-healthcheck-test.sh) | Overrides on top of `.env.test` for the container healthcheck. |
+| `.env.shared` | yes | start, db and script commands; tests; Docker healthcheck | Values that only make sense on a developer machine (localhost hosts, local credentials). Never read by deployed environments, and no real credentials, since tests read it too. |
+| `.env` | no | start, db and script commands, on top of `.env.shared` | Your secrets and personal overrides. Never read by tests. |
+| `.env.test` | yes | tests ([test/envSetupHook.ts](./test/envSetupHook.ts)), `test:migrate`, Docker healthcheck, on top of `.env.shared` | Test overrides: the test database, in-process fakes, vendors switched off. |
+| `.env.docker-test` | yes | [scripts/docker-healthcheck-test.sh](./scripts/docker-healthcheck-test.sh) | Overrides on top of `.env.shared` and `.env.test` for the container healthcheck. |
+
+A variable that needs a value in every environment gets a schema default in
+[src/infrastructure/config.ts](./src/infrastructure/config.ts), set to the production value. A
+variable that has a sensible local value but must be set explicitly in deployed environments (a
+hostname, a connection URL) has no schema default and goes in `.env.shared`, so a missing value
+stops the service from starting instead of pointing it at `localhost`.
 
 All supported variables, with their defaults, are documented in [docs/environment-variables.md](./docs/environment-variables.md), generated from the config schema.
 
