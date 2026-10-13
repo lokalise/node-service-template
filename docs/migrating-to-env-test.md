@@ -25,6 +25,8 @@ How to move a service from the `.env.default` + `copy:config` setup to the one i
    - Turn off vendors that would call out of the machine (`BUGSNAG_ENABLED=false`,
      `AMPLITUDE_ENABLED=false`, `OTEL_ENABLED=false`, ...).
    - Only fake credentials go here, since the file is committed.
+   - Leave out variables whose value equals the schema default. Keep one only to guard a test,
+     for example a vendor switch that must stay off even if its default changes.
 
 2. **Load only `.env.test` in the vitest setup file**:
 
@@ -47,6 +49,8 @@ How to move a service from the `.env.default` + `copy:config` setup to the one i
 4. **Rename `.env.default` to `.env.example`** (`git mv`, so history is kept):
    - Keep empty `KEY=` entries as placeholders for values developers fill in (secrets).
    - Remove variables the schema doesn't read.
+   - Remove variables whose value equals the schema default. Schema defaults are the production
+     values, so the env files only list what differs locally.
    - Point `copy:config` at the new file:
 
    ```json
