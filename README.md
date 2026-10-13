@@ -53,7 +53,6 @@ Scripts:
 - [Generate](./scripts/generateOpenApi.ts) OpenAPI specification from your route definitions;
 - [Validate](./scripts/validateOpenApi.ts) your OpenAPI specification;
 - [GenerateJwt](./scripts/generateJwt.ts) generate jwt for dev usage.
-- [ValidateEnvDoc](./scripts/validateEnvVarDoc.ts) validate environment variables documentation;
 
 Service template also comes with a curated set of plugins [installed](./src/app.ts):
 
