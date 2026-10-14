@@ -12,15 +12,13 @@
   Description: Deployment environment for the application  
   Supported values: `production` | `staging` | `development`
 
-- `APP_VERSION` (optional)  
+- `APP_VERSION` (required)  
   Type: `string`  
-  Description: Application version exposed via healthcheck endpoint  
-  Default: `VERSION_NOT_SET`
+  Description: Application version exposed via healthcheck endpoint
 
-- `GIT_COMMIT_SHA` (optional)  
+- `GIT_COMMIT_SHA` (required)  
   Type: `string`  
-  Description: Git commit SHA of the deployed version  
-  Default: `COMMIT_SHA_NOT_SET`
+  Description: Git commit SHA of the deployed version
 
 - `APP_PORT` (optional)  
   Type: `integer`  
@@ -29,18 +27,20 @@
   Max value: `65535`  
   Default: `3000`
 
-- `APP_BIND_ADDRESS` (required)  
+- `APP_BIND_ADDRESS` (optional)  
   Type: `string`  
-  Description: HTTP server binding address (e.g., 0.0.0.0 for all interfaces)
+  Description: HTTP server binding address (e.g., 0.0.0.0 for all interfaces)  
+  Default: `0.0.0.0`
 
 - `JWT_PUBLIC_KEY` (required)  
   Type: `string`  
   Description: JWT validation public key (use '||' as newline separator)
 
-- `LOG_LEVEL` (required)  
+- `LOG_LEVEL` (optional)  
   Type: `string`  
   Description: Minimum log level for emitted logs  
-  Supported values: `fatal` | `error` | `warn` | `info` | `debug` | `trace` | `silent`
+  Supported values: `fatal` | `error` | `warn` | `info` | `debug` | `trace` | `silent`  
+  Default: `info`
 
 - `BASE_URL` (optional)  
   Type: `string`  

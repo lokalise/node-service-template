@@ -33,14 +33,11 @@ const envSchema = {
     ),
     appVersion: envvar(
       'APP_VERSION',
-      z
-        .string()
-        .default('VERSION_NOT_SET')
-        .describe('Application version exposed via healthcheck endpoint'),
+      z.string().describe('Application version exposed via healthcheck endpoint'),
     ),
     gitCommitSha: envvar(
       'GIT_COMMIT_SHA',
-      z.string().default('COMMIT_SHA_NOT_SET').describe('Git commit SHA of the deployed version'),
+      z.string().describe('Git commit SHA of the deployed version'),
     ),
     port: envvar(
       'APP_PORT',
@@ -52,7 +49,10 @@ const envSchema = {
     ),
     bindAddress: envvar(
       'APP_BIND_ADDRESS',
-      z.string().describe('HTTP server binding address (e.g., 0.0.0.0 for all interfaces)'),
+      z
+        .string()
+        .default('0.0.0.0')
+        .describe('HTTP server binding address (e.g., 0.0.0.0 for all interfaces)'),
     ),
     jwtPublicKey: envvar(
       'JWT_PUBLIC_KEY',
@@ -65,6 +65,7 @@ const envSchema = {
       'LOG_LEVEL',
       z
         .enum(['fatal', 'error', 'warn', 'info', 'debug', 'trace', 'silent'])
+        .default('info')
         .describe('Minimum log level for emitted logs'),
     ),
     baseUrl: envvar(
