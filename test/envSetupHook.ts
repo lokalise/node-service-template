@@ -1,3 +1,7 @@
-process.loadEnvFile('./.env')
-process.env.DATABASE_URL = 'postgresql://serviceuser:pass@localhost:5432/service_db_test'
-process.env.AWS_ENDPOINT = 'http://localhost:4567'
+import { existsSync } from 'node:fs'
+
+// loadEnvFile doesn't override variables that are already set, so the file loaded first wins
+if (existsSync('./.env.test.local')) {
+  process.loadEnvFile('./.env.test.local')
+}
+process.loadEnvFile('./.env.test')

@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.26.0] - 2026-10-14
+
+- Replace `.env.default` + `copy:config` with one env file per mode, following the [Vite convention](https://vite.dev/guide/env-and-mode#env-files): [.env.development](.env.development) and [.env.test](.env.test), each with an optional, gitignored `.local` file on top (`.env.development.local`, `.env.test.local`). `.env.default` was used as the test config (via `copy:config` into `.env`) and as the starting point for local setup, and it wasn't a real default for either: a variable missing from `.env` never fell back to it, and production never read it. There is no `.env` or `.env.local` anymore, since Vite loads those in every mode, tests included
+- Start, db and script commands load `.env.development` and then `.env.development.local` (`--env-file=.env.development --env-file-if-exists=.env.development.local`), so the service runs without a personal file, and a new variable in `.env.development` reaches everyone on pull
+- Tests load `.env.test.local` (if present) and `.env.test`, and never read the development files. A local file with real API keys can no longer make tests call real services. [test/envSetupHook.ts](test/envSetupHook.ts) no longer patches `DATABASE_URL`/`AWS_ENDPOINT` in code. `test:migrate` loads the same files, the Docker healthcheck test layers `.env.docker-test` over `.env.test` only, and `test:ci` no longer runs `copy:config`
+- `.gitignore` ignores `*.local` instead of only `.env.local`
+- Remove `copy:config` and `cpy-cli`. `db:*` scripts run `drizzle-kit` through `node` with the env files preloaded
+- Entries that repeated a schema default (`APP_PORT`, `OTEL_CONSOLE_SPANS_ENABLED`, `AMPLITUDE_ENABLED`) and entries nothing reads (`OPEN_TELEMETRY_*`, `PASSWORD_SALT`, `AWS_SNS_ENDPOINT`, `AWS_SQS_ENDPOINT`) are removed. Empty secret placeholders are commented out, since secrets go in `.env.development.local`
+- The job schedule variables (`DELETE_OLD_USERS_JOB_PERIOD_IN_SECS`, `PROCESS_LOGS_FILES_JOB_PERIOD_IN_SECS`, `SEND_EMAILS_JOB_CRON`) get schema defaults (`60000`, `6000`, `0 * * * *`) and are removed from both env files
+- `APP_BIND_ADDRESS` defaults to `0.0.0.0` and `LOG_LEVEL` to `info`, and both are removed from the env files. `APP_VERSION` and `GIT_COMMIT_SHA` lose their `VERSION_NOT_SET`/`COMMIT_SHA_NOT_SET` defaults and are now required, so a deployment without them fails to start instead of reporting a placeholder. The [Dockerfile](Dockerfile) sets both from build args, which default to empty, so an image built without `--build-arg APP_VERSION=… --build-arg GIT_COMMIT_SHA=…` won't start. `.env.development` sets both to `local`
+- Enable `emptyStringAsUndefined` in `getConfig()` ([`envase`](https://www.npmjs.com/package/envase) 2): an empty envvar counts as unset, so the schema default applies instead of an empty string (or a validation error for URLs, enums and numbers)
+- See [Environment files](README.md#environment-files) and the [migration guide](docs/migrating-from-env-default.md) for other services
+
 ## [1.25.0] - 2026-10-14
 
 - Update the Lokalise libraries to their latest majors: `@lokalise/api-contracts` 8 → 9 (root and the `@node-service-template/api-contracts` workspace package), `@lokalise/aws-config` 9 → 10, `@lokalise/backend-http-client` 12 → 13, `@lokalise/fastify-api-contracts` 7 → 8, `@lokalise/fastify-extras` 35 → 36 and, on the dev side, `@lokalise/universal-testing-utils` 4 → 5. No source changes were needed: the app type-checks and builds against all of them unmodified

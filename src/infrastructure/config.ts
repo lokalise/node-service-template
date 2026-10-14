@@ -33,14 +33,11 @@ const envSchema = {
     ),
     appVersion: envvar(
       'APP_VERSION',
-      z
-        .string()
-        .default('VERSION_NOT_SET')
-        .describe('Application version exposed via healthcheck endpoint'),
+      z.string().describe('Application version exposed via healthcheck endpoint'),
     ),
     gitCommitSha: envvar(
       'GIT_COMMIT_SHA',
-      z.string().default('COMMIT_SHA_NOT_SET').describe('Git commit SHA of the deployed version'),
+      z.string().describe('Git commit SHA of the deployed version'),
     ),
     port: envvar(
       'APP_PORT',
@@ -52,7 +49,10 @@ const envSchema = {
     ),
     bindAddress: envvar(
       'APP_BIND_ADDRESS',
-      z.string().describe('HTTP server binding address (e.g., 0.0.0.0 for all interfaces)'),
+      z
+        .string()
+        .default('0.0.0.0')
+        .describe('HTTP server binding address (e.g., 0.0.0.0 for all interfaces)'),
     ),
     jwtPublicKey: envvar(
       'JWT_PUBLIC_KEY',
@@ -65,6 +65,7 @@ const envSchema = {
       'LOG_LEVEL',
       z
         .enum(['fatal', 'error', 'warn', 'info', 'debug', 'trace', 'silent'])
+        .default('info')
         .describe('Minimum log level for emitted logs'),
     ),
     baseUrl: envvar(
@@ -206,19 +207,32 @@ const envSchema = {
     deleteOldUsersJob: {
       periodInSeconds: envvar(
         'DELETE_OLD_USERS_JOB_PERIOD_IN_SECS',
-        z.coerce.number().int().gte(0).describe('Period in seconds for deleting old users job'),
+        z.coerce
+          .number()
+          .int()
+          .gte(0)
+          .default(60000)
+          .describe('Period in seconds for deleting old users job'),
       ),
     },
     processLogFilesJob: {
       periodInSeconds: envvar(
         'PROCESS_LOGS_FILES_JOB_PERIOD_IN_SECS',
-        z.coerce.number().int().gte(0).describe('Period in seconds for processing log files job'),
+        z.coerce
+          .number()
+          .int()
+          .gte(0)
+          .default(6000)
+          .describe('Period in seconds for processing log files job'),
       ),
     },
     sendEmailsJob: {
       cronExpression: envvar(
         'SEND_EMAILS_JOB_CRON',
-        z.string().describe('Cron expression for scheduling the send emails job'),
+        z
+          .string()
+          .default('0 * * * *')
+          .describe('Cron expression for scheduling the send emails job'),
       ),
     },
   },
@@ -316,7 +330,11 @@ let config: Config | null = null
 
 export function getConfig(): Config {
   if (!config) {
-    config = createConfig(process.env, { schema: envSchema, computed: computedSchema })
+    config = createConfig(process.env, {
+      schema: envSchema,
+      computed: computedSchema,
+      emptyStringAsUndefined: true,
+    })
   }
   return config
 }

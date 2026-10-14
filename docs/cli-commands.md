@@ -36,7 +36,7 @@ Register it in the `scripts` section of `package.json`, following the `cmd:` pre
 
 ```json
 "scripts": {
-  "cmd:resendWelcomeEmail": "node --env-file-if-exists=.env scripts/cmd/resendWelcomeEmail.ts"
+  "cmd:resendWelcomeEmail": "node --env-file=.env.development --env-file-if-exists=.env.development.local scripts/cmd/resendWelcomeEmail.ts"
 }
 ```
 

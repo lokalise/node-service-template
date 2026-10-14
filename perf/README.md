@@ -228,7 +228,7 @@ PYROSCOPE_ENABLED=true PYROSCOPE_SERVER_ADDRESS=http://localhost:4040 node --run
 ```
 
 The `PYROSCOPE_*` variables are read by `@lokalise/pyroscope-profiling` itself, not by the
-service's config schema; see [.env.default](../.env.default) and the library's README for shipping
+service's config schema; see [.env.development](../.env.development) and the library's README for shipping
 to a shared Pyroscope or Grafana Cloud Profiles.
 
 ## What a run reports
@@ -287,7 +287,7 @@ Every file here:
 process it spawns rather than using `--env-file`, because `drizzle-kit` builds its config by calling
 the service's `getConfig()`. The file wins over your shell, except for `LOG_LEVEL` and the
 `PERF_*_PORT` variables, so nothing exported for the dev loop can point a run at another database.
-Your own `.env` is never read.
+Your `.env.development` and `.env.development.local` are never read.
 
 ### Authentication
 

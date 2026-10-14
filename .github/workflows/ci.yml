@@ -42,7 +42,6 @@ jobs:
 
       - name: Schema preparation
         run: |
-          pnpm run copy:config
           pnpm run db:apply-migrations
 
       - name: Run Tests
