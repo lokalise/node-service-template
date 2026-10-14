@@ -99,9 +99,10 @@ are relevant for the technological stack of your organization, and replace `@lok
    > publishable API contracts live under [`packages/api-contracts`](packages/api-contracts).
    > The service consumes the contracts via `@node-service-template/api-contracts` (`workspace:*`).
 
-4. Optionally create a `.env` file for secrets and anything you want to change locally. The start
-   and db scripts load [.env.shared](.env.shared) first and `.env` on top, so the service runs
-   without a `.env`, and `.env` only needs the values you override.
+4. Optionally create a `.env.development.local` file for secrets and anything you want to change
+   locally. The start and db scripts load [.env.development](.env.development) first and
+   `.env.development.local` on top, so the service runs without it, and it only needs the values
+   you override.
 
 5. Launch all the infrastructural dependencies locally:
 
@@ -155,18 +156,24 @@ To initialize your test database and/or apply your latest schema changes.
 
 ### Environment files
 
+The file names follow the [Vite convention](https://vite.dev/guide/env-and-mode#env-files): one file
+per mode, and a gitignored `.local` file on top of it for your own overrides. The schema defaults in
+[src/infrastructure/config.ts](./src/infrastructure/config.ts) take the place of Vite's generic
+`.env`. There is no `.env` or `.env.local`, because Vite loads those in every mode, tests included.
+
 | File | Committed | Read by | Purpose |
 | --- | --- | --- | --- |
-| `.env.shared` | yes | start, db and script commands; tests; Docker healthcheck | Values that only make sense on a developer machine (localhost hosts, local credentials). Never read by deployed environments, and no real credentials, since tests read it too. |
-| `.env` | no | start, db and script commands, on top of `.env.shared` | Your secrets and personal overrides. Never read by tests. |
-| `.env.test` | yes | tests ([test/envSetupHook.ts](./test/envSetupHook.ts)), `test:migrate`, Docker healthcheck, on top of `.env.shared` | Test overrides: the test database, in-process fakes, vendors switched off. |
-| `.env.docker-test` | yes | [scripts/docker-healthcheck-test.sh](./scripts/docker-healthcheck-test.sh) | Overrides on top of `.env.shared` and `.env.test` for the container healthcheck. |
+| `.env.development` | yes | start, db and script commands | Local development values (localhost hosts, local credentials). Never read by tests or deployed environments. |
+| `.env.development.local` | no | start, db and script commands, on top of `.env.development` | Your secrets and personal overrides for local development. Optional. |
+| `.env.test` | yes | tests ([test/envSetupHook.ts](./test/envSetupHook.ts)), `test:migrate`, Docker healthcheck | Every variable the test suite runs with: test database, in-process fakes, vendors switched off. |
+| `.env.test.local` | no | tests and `test:migrate`, on top of `.env.test` | Your personal overrides for test runs, for example a database on another port. Optional. |
+| `.env.docker-test` | yes | [scripts/docker-healthcheck-test.sh](./scripts/docker-healthcheck-test.sh) | Overrides on top of `.env.test` for the container healthcheck. |
 
-A variable that needs a value in every environment gets a schema default in
-[src/infrastructure/config.ts](./src/infrastructure/config.ts), set to the production value. A
-variable that has a sensible local value but must be set explicitly in deployed environments (a
-hostname, a connection URL) has no schema default and goes in `.env.shared`, so a missing value
-stops the service from starting instead of pointing it at `localhost`.
+A variable that needs a value in every environment gets a schema default, set to the production
+value. A variable that has a sensible local value but must be set explicitly in deployed
+environments (a hostname, a connection URL) has no schema default and goes in `.env.development`
+and `.env.test`, so a missing value stops the service from starting instead of pointing it at
+`localhost`.
 
 All supported variables, with their defaults, are documented in [docs/environment-variables.md](./docs/environment-variables.md), generated from the config schema.
 
@@ -267,7 +274,7 @@ You have multiple options to ease your development:
   {"claim":"value","iat":1676958080}
   ```
 
-- Copy your public key to `JWT_PUBLIC_KEY` in your `.env` file. Make sure to replace occurrences of `||` in your key with new lines
+- Copy your public key to `JWT_PUBLIC_KEY` in your `.env.development.local` file. Make sure to replace occurrences of `||` in your key with new lines
 
 - Restart the application to load the new public key:
 
@@ -309,7 +316,7 @@ Create a new command in the `scripts` section of `package.json`:
 
 ```json
 "scripts": {
-  "cmd:getUserImportJobs:dev": "cross-env NODE_ENV=development tsx --env-file=.env scripts/cmd/getUserImportJobs.ts",
+  "cmd:getUserImportJobs:dev": "node --env-file=.env.development --env-file-if-exists=.env.development.local scripts/cmd/getUserImportJobs.ts",
   "cmd:getUserImportJobs:prod": "node scripts/cmd/getUserImportJobs.js",
 }
 ```

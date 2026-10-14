@@ -8,7 +8,6 @@ on:
       - 'docker-compose.yml'
       - '.env.docker-test'
       - '.env.test'
-      - '.env.shared'
       - 'scripts/docker-healthcheck-test.sh'
       - '.github/workflows/docker-build-test.yml'
 

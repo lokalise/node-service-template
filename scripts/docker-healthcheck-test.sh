@@ -35,28 +35,21 @@ docker compose -p "$COMPOSE_PROJECT" up -d --quiet-pull --wait
 NETWORK_NAME="${COMPOSE_PROJECT}_default"
 
 echo "==> Starting application container..."
-# Same layering as the test suite: .env.shared, then .env.test, then the
-# docker-test overrides (later --env-file wins). Docker --env-file cannot parse
-# multiline values; strip the multiline JWT_PUBLIC_KEY block and the quotes
-# (docker-test override supplies a single-line key).
-filter_env() {
-  awk 'BEGIN{s=0} /^JWT_PUBLIC_KEY=/{s=1} s && /-----END/{s=0;next} s==0' "$1" \
-    | sed 's/^\([A-Za-z_][A-Za-z_0-9]*=\)"\(.*\)"$/\1\2/'
-}
-SHARED_ENV=$(mktemp)
-TEST_ENV=$(mktemp)
-filter_env .env.shared > "$SHARED_ENV"
-filter_env .env.test > "$TEST_ENV"
+# Docker --env-file cannot parse multiline values; strip the multiline
+# JWT_PUBLIC_KEY block from .env.test (docker-test override supplies a
+# single-line version). .env.test.local is skipped so the check matches CI.
+FILTERED_ENV=$(mktemp)
+awk 'BEGIN{s=0} /^JWT_PUBLIC_KEY=/{s=1} s && /-----END/{s=0;next} s==0' .env.test \
+  | sed 's/^\([A-Za-z_][A-Za-z_0-9]*=\)"\(.*\)"$/\1\2/' > "$FILTERED_ENV"
 
 docker run -d \
   --name "$CONTAINER_NAME" \
   --network "$NETWORK_NAME" \
   -p "3000:3000" \
-  --env-file "$SHARED_ENV" \
-  --env-file "$TEST_ENV" \
+  --env-file "$FILTERED_ENV" \
   --env-file .env.docker-test \
   "${IMAGE_NAME}:${IMAGE_TAG}"
-rm -f "$SHARED_ENV" "$TEST_ENV"
+rm -f "$FILTERED_ENV"
 
 # Step 4: Poll healthcheck
 echo "==> Polling healthcheck at ${HEALTH_URL}..."

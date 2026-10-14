@@ -1,3 +1,7 @@
-// loadEnvFile doesn't override variables that are already set, so .env.test wins over .env.shared
+import { existsSync } from 'node:fs'
+
+// loadEnvFile doesn't override variables that are already set, so the file loaded first wins
+if (existsSync('./.env.test.local')) {
+  process.loadEnvFile('./.env.test.local')
+}
 process.loadEnvFile('./.env.test')
-process.loadEnvFile('./.env.shared')
