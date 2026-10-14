@@ -1,5 +1,4 @@
 import type { QueueManager } from '@lokalise/background-jobs-common'
-import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 import { cleanTables, DB_MODEL } from '../../../../test/DbCleaner.ts'
 import { cleanRedis } from '../../../../test/RedisCleaner.ts'
 import { type TestContext, testContextFactory } from '../../../../test/TestContext.ts'

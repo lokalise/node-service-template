@@ -1,6 +1,5 @@
 import { gracefulOtelShutdown, initOpenTelemetry } from '@lokalise/opentelemetry-fastify-bootstrap'
 import { InMemorySpanExporter, SimpleSpanProcessor } from '@opentelemetry/sdk-trace-base'
-import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest'
 
 import { type AppInstance, getApp } from '../app.ts'
 

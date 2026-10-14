@@ -1,5 +1,4 @@
 import { asServiceClass } from 'opinionated-machine'
-import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 import { createRequestContext } from '../test/requestUtils.ts'
 import type { AppInstance } from './app.ts'
 import { getApp } from './app.ts'

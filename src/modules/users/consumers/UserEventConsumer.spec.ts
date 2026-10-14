@@ -1,7 +1,6 @@
 import type { Cradle } from '@fastify/awilix'
 import { TestSnsPublisher } from '@message-queue-toolkit/sns'
 import type { AwilixContainer } from 'awilix'
-import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it } from 'vitest'
 import { startTestFauxqs, stopTestFauxqs } from '../../../../test/FauxqsHelper.ts'
 import type { AppInstance } from '../../../app.ts'
 import { getApp } from '../../../app.ts'

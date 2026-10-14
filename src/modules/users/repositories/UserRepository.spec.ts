@@ -1,7 +1,6 @@
 import { randomUUIDv7 } from 'node:crypto'
 import type { Cradle } from '@fastify/awilix'
 import type { AwilixContainer } from 'awilix'
-import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest'
 
 import { cleanTables, DB_MODEL } from '../../../../test/DbCleaner.ts'
 import { TEST_USER_1 } from '../../../../test/fixtures/testUsers.ts'
