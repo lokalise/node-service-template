@@ -206,19 +206,32 @@ const envSchema = {
     deleteOldUsersJob: {
       periodInSeconds: envvar(
         'DELETE_OLD_USERS_JOB_PERIOD_IN_SECS',
-        z.coerce.number().int().gte(0).describe('Period in seconds for deleting old users job'),
+        z.coerce
+          .number()
+          .int()
+          .gte(0)
+          .default(60000)
+          .describe('Period in seconds for deleting old users job'),
       ),
     },
     processLogFilesJob: {
       periodInSeconds: envvar(
         'PROCESS_LOGS_FILES_JOB_PERIOD_IN_SECS',
-        z.coerce.number().int().gte(0).describe('Period in seconds for processing log files job'),
+        z.coerce
+          .number()
+          .int()
+          .gte(0)
+          .default(6000)
+          .describe('Period in seconds for processing log files job'),
       ),
     },
     sendEmailsJob: {
       cronExpression: envvar(
         'SEND_EMAILS_JOB_CRON',
-        z.string().describe('Cron expression for scheduling the send emails job'),
+        z
+          .string()
+          .default('0 * * * *')
+          .describe('Cron expression for scheduling the send emails job'),
       ),
     },
   },

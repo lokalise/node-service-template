@@ -217,23 +217,26 @@
 
 ## Jobs DeleteOldUsersJob
 
-- `DELETE_OLD_USERS_JOB_PERIOD_IN_SECS` (required)  
+- `DELETE_OLD_USERS_JOB_PERIOD_IN_SECS` (optional)  
   Type: `integer`  
   Description: Period in seconds for deleting old users job  
-  Min value: `0`
+  Min value: `0`  
+  Default: `60000`
 
 ## Jobs ProcessLogFilesJob
 
-- `PROCESS_LOGS_FILES_JOB_PERIOD_IN_SECS` (required)  
+- `PROCESS_LOGS_FILES_JOB_PERIOD_IN_SECS` (optional)  
   Type: `integer`  
   Description: Period in seconds for processing log files job  
-  Min value: `0`
+  Min value: `0`  
+  Default: `6000`
 
 ## Jobs SendEmailsJob
 
-- `SEND_EMAILS_JOB_CRON` (required)  
+- `SEND_EMAILS_JOB_CRON` (optional)  
   Type: `string`  
-  Description: Cron expression for scheduling the send emails job
+  Description: Cron expression for scheduling the send emails job  
+  Default: `0 * * * *`
 
 ## Vendors Opentelemetry
 

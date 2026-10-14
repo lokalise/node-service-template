@@ -8,6 +8,7 @@
 - `.gitignore` ignores `*.local` instead of only `.env.local`
 - Remove `copy:config` and `cpy-cli`. `db:*` scripts run `drizzle-kit` through `node` with the env files preloaded
 - Entries that repeated a schema default (`APP_PORT`, `OTEL_CONSOLE_SPANS_ENABLED`, `AMPLITUDE_ENABLED`) and entries nothing reads (`OPEN_TELEMETRY_*`, `PASSWORD_SALT`, `AWS_SNS_ENDPOINT`, `AWS_SQS_ENDPOINT`) are removed. Empty secret placeholders are commented out, since secrets go in `.env.development.local`
+- The job schedule variables (`DELETE_OLD_USERS_JOB_PERIOD_IN_SECS`, `PROCESS_LOGS_FILES_JOB_PERIOD_IN_SECS`, `SEND_EMAILS_JOB_CRON`) get schema defaults (`60000`, `6000`, `0 * * * *`) and are removed from both env files
 - Bump [`envase`](https://www.npmjs.com/package/envase) from `^1.5.0` to `^2.0.0` and enable `emptyStringAsUndefined` in `getConfig()`: an empty envvar counts as unset, so the schema default applies instead of an empty string (or a validation error for URLs, enums and numbers). 2.0.0 is excluded from `minimumReleaseAge` in [pnpm-workspace.yaml](pnpm-workspace.yaml) because it was published the same day
 - See [Environment files](README.md#environment-files) and the [migration guide](docs/migrating-from-env-default.md) for other services
 
