@@ -1,25 +1,24 @@
 import { parseEnv } from 'envase'
-import { describe, expect, test } from 'vitest'
 import envSchema, { decodeJwtConfig, getProfilingConfig } from './config.ts'
 
 describe('config', () => {
   describe('decodeJwtConfig', () => {
-    test('replaces double pipe characters with newline', () => {
+    it('replaces double pipe characters with newline', () => {
       const jwtPublicKey = 'key1||key2||key3'
       const expected = 'key1\nkey2\nkey3'
       expect(decodeJwtConfig(jwtPublicKey)).toEqual(expected)
     })
 
-    test('returns the same string if there are no double pipe characters', () => {
+    it('returns the same string if there are no double pipe characters', () => {
       const jwtPublicKey = 'key1\nkey2\nkey3'
       expect(decodeJwtConfig(jwtPublicKey)).toEqual(jwtPublicKey)
     })
 
-    test('returns an empty string if input is an empty string', () => {
+    it('returns an empty string if input is an empty string', () => {
       expect(decodeJwtConfig('')).toEqual('')
     })
 
-    test('throws an error if input is not a string', () => {
+    it('throws an error if input is not a string', () => {
       // @ts-expect-error
       expect(() => decodeJwtConfig(null)).toThrow(TypeError)
       // @ts-expect-error
@@ -28,19 +27,19 @@ describe('config', () => {
   })
 
   describe('gracefulShutdownTimeoutMs', () => {
-    test('uses the default when not set', () => {
+    it('uses the default when not set', () => {
       const env = buildEnv({ GRACEFUL_SHUTDOWN_TIMEOUT_MS: undefined })
       const config = parseEnv(env, envSchema)
       expect(config.app.gracefulShutdownTimeoutMs).toBe(10000)
     })
 
-    test('accepts values at or below 30000ms', () => {
+    it('accepts values at or below 30000ms', () => {
       const env = buildEnv({ GRACEFUL_SHUTDOWN_TIMEOUT_MS: '30000' })
       const config = parseEnv(env, envSchema)
       expect(config.app.gracefulShutdownTimeoutMs).toBe(30000)
     })
 
-    test('rejects values above 30000ms', () => {
+    it('rejects values above 30000ms', () => {
       const env = buildEnv({ GRACEFUL_SHUTDOWN_TIMEOUT_MS: '60000' })
       expect(() => parseEnv(env, envSchema)).toThrowErrorMatchingInlineSnapshot(`
         [EnvaseError: Environment variables validation has failed:
@@ -54,7 +53,7 @@ describe('config', () => {
 
   describe('OpenTelemetry config validation', () => {
     describe('_resourceAttributes', () => {
-      test('accepts valid format with service name', () => {
+      it('accepts valid format with service name', () => {
         const env = buildEnv({
           OTEL_RESOURCE_ATTRIBUTES: 'service.name=my-app',
         })
@@ -63,7 +62,7 @@ describe('config', () => {
         expect(config.vendors.opentelemetry._resourceAttributes).toBe('service.name=my-app')
       })
 
-      test('accepts service names with hyphens and underscores', () => {
+      it('accepts service names with hyphens and underscores', () => {
         const env = buildEnv({
           OTEL_RESOURCE_ATTRIBUTES: 'service.name=my-app_name-123',
         })
@@ -74,7 +73,7 @@ describe('config', () => {
         )
       })
 
-      test('rejects format without service.name prefix', () => {
+      it('rejects format without service.name prefix', () => {
         const env = buildEnv({
           OTEL_RESOURCE_ATTRIBUTES: 'name=my-app',
         })
@@ -88,7 +87,7 @@ describe('config', () => {
         `)
       })
 
-      test('rejects format with extra parameters', () => {
+      it('rejects format with extra parameters', () => {
         const env = buildEnv({
           OTEL_RESOURCE_ATTRIBUTES: 'service.name=my-app,env=stage',
         })
@@ -102,7 +101,7 @@ describe('config', () => {
         `)
       })
 
-      test('rejects empty service name', () => {
+      it('rejects empty service name', () => {
         const env = buildEnv({
           OTEL_RESOURCE_ATTRIBUTES: 'service.name=',
         })
@@ -118,7 +117,7 @@ describe('config', () => {
     })
 
     describe('_exporterUrl', () => {
-      test('accepts valid URL', () => {
+      it('accepts valid URL', () => {
         const env = buildEnv({
           OTEL_EXPORTER_URL: 'https://otel-collector.example.com:4318',
         })
@@ -129,7 +128,7 @@ describe('config', () => {
         )
       })
 
-      test('rejects invalid URL format', () => {
+      it('rejects invalid URL format', () => {
         const env = buildEnv({
           OTEL_EXPORTER_URL: 'not-a-url',
         })
@@ -143,7 +142,7 @@ describe('config', () => {
         `)
       })
 
-      test('rejects empty string', () => {
+      it('rejects empty string', () => {
         const env = buildEnv({
           OTEL_EXPORTER_URL: '',
         })
@@ -160,7 +159,7 @@ describe('config', () => {
   })
 
   describe('getProfilingConfig', () => {
-    test('is disabled by default and files profiles under the service name', () => {
+    it('is disabled by default and files profiles under the service name', () => {
       expect(getProfilingConfig({ NODE_ENV: 'development' })).toMatchObject({
         isEnabled: false,
         appName: 'node-service-template',
@@ -168,7 +167,7 @@ describe('config', () => {
       })
     })
 
-    test('is enabled outside of tests when PYROSCOPE_ENABLED is true', () => {
+    it('is enabled outside of tests when PYROSCOPE_ENABLED is true', () => {
       expect(
         getProfilingConfig({
           NODE_ENV: 'development',
@@ -178,13 +177,13 @@ describe('config', () => {
       ).toMatchObject({ isEnabled: true, serverAddress: 'http://localhost:4041' })
     })
 
-    test('stays disabled under NODE_ENV=test whatever PYROSCOPE_ENABLED says', () => {
+    it('stays disabled under NODE_ENV=test whatever PYROSCOPE_ENABLED says', () => {
       expect(getProfilingConfig({ NODE_ENV: 'test', PYROSCOPE_ENABLED: 'true' }).isEnabled).toBe(
         false,
       )
     })
 
-    test('treats blank values as unset instead of failing', () => {
+    it('treats blank values as unset instead of failing', () => {
       expect(
         getProfilingConfig({
           NODE_ENV: 'development',

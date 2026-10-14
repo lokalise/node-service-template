@@ -1,5 +1,4 @@
 import { randomUUID } from 'node:crypto'
-import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 import { cleanRedis } from '../../../../test/RedisCleaner.ts'
 import { type TestContext, testContextFactory } from '../../../../test/TestContext.ts'
 

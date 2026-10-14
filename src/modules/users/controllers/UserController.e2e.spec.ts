@@ -1,7 +1,6 @@
 import { randomUUID } from 'node:crypto'
 import { describeApiContract } from '@lokalise/api-contracts'
 import { injectByApiContract } from '@lokalise/fastify-api-contracts'
-import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest'
 import { cleanTables, DB_MODEL } from '../../../../test/DbCleaner.ts'
 import { generateTestJwt, getTestConfigurationOverrides } from '../../../../test/jwtUtils.ts'
 import type { AppInstance } from '../../../app.ts'
@@ -56,7 +55,7 @@ describe('UserController', () => {
                 "params": {
                   "format": "email",
                   "origin": "string",
-                  "pattern": "/^(?!\\.)(?!.*\\.\\.)([A-Za-z0-9_'+\\-\\.]*)[A-Za-z0-9_+-]@([A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$/",
+                  "pattern": "/^(?:[A-Za-z0-9_'+\\-]+\\.)*[A-Za-z0-9_'+\\-]*[A-Za-z0-9_+-]@(?:[A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$/",
                 },
                 "schemaPath": "#/email/invalid_format",
               },
