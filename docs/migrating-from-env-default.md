@@ -48,9 +48,8 @@ test runs again.
    - Set `NODE_ENV=test`.
    - Apply the overrides your test setup does in code (usually `DATABASE_URL` for the test DB,
      endpoints of in-process fakes).
-   - Switch off vendors that would call out of the machine (`BUGSNAG_ENABLED=false`,
-     `AMPLITUDE_ENABLED=false`, `OTEL_ENABLED=false`, ...), even when the schema already turns
-     them off.
+   - Switch off vendors whose schema default is on and that would call out of the machine
+     (`BUGSNAG_ENABLED=false`, `OTEL_ENABLED=false`, ...).
 
 3. **Ignore `.local` files**: add `*.local` to `.gitignore`.
 
