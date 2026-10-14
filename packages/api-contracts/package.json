@@ -25,11 +25,11 @@
         "zod": "^4.5.4"
     },
     "devDependencies": {
-        "@lokalise/api-contracts": "^8.0.1",
+        "@lokalise/api-contracts": "^8.1.0",
         "@lokalise/errors": "^2.1.0",
         "@lokalise/tsconfig": "^5.0.0",
         "@lokalise/zod-extras": "^3.0.2",
         "typescript": "7.0.2",
-        "zod": "^4.5.4"
+        "zod": "^4.6.7"
     }
 }
