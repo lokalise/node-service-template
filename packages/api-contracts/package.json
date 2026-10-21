@@ -1,35 +1,35 @@
 {
-    "name": "@node-service-template/api-contracts",
-    "version": "0.1.0",
-    "description": "API contracts for node-service-template",
-    "license": "MIT",
-    "type": "module",
-    "files": [
-        "dist"
-    ],
-    "exports": {
-        ".": "./dist/index.js",
-        "./package.json": "./package.json"
-    },
-    "scripts": {
-        "build": "tsc -p tsconfig.build.json",
-        "clean": "rm -rf dist",
-        "lint": "biome check && tsc",
-        "lint:fix": "biome check --write",
-        "prepublishOnly": "pnpm run clean && pnpm run build"
-    },
-    "peerDependencies": {
-        "@lokalise/api-contracts": ">=9.0.0",
-        "@lokalise/errors": "^2.1.0",
-        "@lokalise/zod-extras": "^3.0.2",
-        "zod": "^4.5.4"
-    },
-    "devDependencies": {
-        "@lokalise/api-contracts": "^9.0.1",
-        "@lokalise/errors": "^2.1.0",
-        "@lokalise/tsconfig": "^5.0.0",
-        "@lokalise/zod-extras": "^3.0.2",
-        "typescript": "7.0.2",
-        "zod": "^4.6.7"
-    }
+  "name": "@node-service-template/api-contracts",
+  "version": "0.1.0",
+  "description": "API contracts for node-service-template",
+  "license": "MIT",
+  "type": "module",
+  "files": [
+    "dist"
+  ],
+  "exports": {
+    ".": "./dist/index.js",
+    "./package.json": "./package.json"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "clean": "rm -rf dist",
+    "lint": "biome check && tsc",
+    "lint:fix": "biome check --write",
+    "prepublishOnly": "pnpm run clean && pnpm run build"
+  },
+  "peerDependencies": {
+    "@lokalise/api-contracts": ">=9.0.0",
+    "@lokalise/errors": "^2.1.0",
+    "@lokalise/zod-extras": "^3.0.2",
+    "zod": "^4.5.4"
+  },
+  "devDependencies": {
+    "@lokalise/api-contracts": "^9.0.1",
+    "@lokalise/errors": "^2.1.0",
+    "@lokalise/tsconfig": "^5.0.0",
+    "@lokalise/zod-extras": "^3.0.2",
+    "typescript": "7.0.2",
+    "zod": "^4.6.7"
+  }
 }

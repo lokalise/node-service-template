@@ -1,4 +1,4 @@
 {
-    "extends": "@lokalise/tsconfig/tsc",
-    "include": ["src/**/*"]
+  "extends": "@lokalise/tsconfig/tsc",
+  "include": ["src/**/*"]
 }
