@@ -57,7 +57,7 @@
     "@fastify/auth": "^5.1.2",
     "@fastify/awilix": "^8.3.1",
     "@fastify/cors": "^11.3.1",
-    "@fastify/helmet": "^13.1.2",
+    "@fastify/helmet": "^13.2.0",
     "@fastify/jwt": "^10.2.4",
     "@fastify/otel": "0.21.2",
     "@fastify/schedule": "^7.0.1",
