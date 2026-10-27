@@ -260,8 +260,8 @@ importers:
         specifier: ^17.0.1
         version: 17.0.1(bullmq@6.3.15(ioredis@6.0.0(supports-color@7.2.0)))(ioredis@6.0.0(supports-color@7.2.0))(pino@10.4.0)(supports-color@7.2.0)(toad-scheduler@4.2.0)(zod@4.6.7)
       '@lokalise/config':
-        specifier: ^1.0.0
-        version: 1.0.0(envase@2.1.0)(zod@4.6.7)
+        specifier: ^1.0.1
+        version: 1.0.1(envase@2.1.0)(zod@4.6.7)
       '@lokalise/errors':
         specifier: ^2.1.0
         version: 2.1.0(zod@4.6.7)
@@ -1159,8 +1159,8 @@ packages:
   '@lokalise/biome-config@4.0.0':
     resolution: {integrity: sha512-ShVhPJpEiXcEu+yhusmg6053YP4oHhMa5/Lzm9gPkIElpmGwsnoaclaKPOa9uMZYz2UfynRD3J3PKwts/nl46Q==}
 
-  '@lokalise/config@1.0.0':
-    resolution: {integrity: sha512-pE+PVgXE/NXooWOcVgbiSS0YXFA5aKNxUT/WGiny0+FXZk5w3kEbwnO8h/xfVOiA0d0wpRMgaiHAE7VbSOX6iw==}
+  '@lokalise/config@1.0.1':
+    resolution: {integrity: sha512-24vi23YM9jjBC0yQSDH+ipfP5KceKKrVefjgeeLw5Gcdo7PD+9qHkUnci49uEoWlUGFQC0iFcFyCYeganv1K5A==}
     peerDependencies:
       envase: '>=2.0.0'
       zod: '>=4.2.0'
@@ -5802,7 +5802,7 @@ snapshots:
 
   '@lokalise/biome-config@4.0.0': {}
 
-  '@lokalise/config@1.0.0(envase@2.1.0)(zod@4.6.7)':
+  '@lokalise/config@1.0.1(envase@2.1.0)(zod@4.6.7)':
     dependencies:
       envase: 2.1.0
       zod: 4.6.7

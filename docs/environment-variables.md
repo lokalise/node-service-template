@@ -5,12 +5,12 @@
 - `NODE_ENV` (required)  
   Type: `string`  
   Description: Application execution environment  
-  Supported values: `production` | `development` | `test`
+  Supported values: `production` | `test` | `development`
 
 - `APP_ENV` (required)  
   Type: `string`  
   Description: Deployment environment for the application  
-  Supported values: `production` | `development` | `staging`
+  Supported values: `production` | `staging` | `development`
 
 - `APP_VERSION` (required)  
   Type: `string`  
