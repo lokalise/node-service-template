@@ -5,12 +5,12 @@
 - `NODE_ENV` (required)  
   Type: `string`  
   Description: Application execution environment  
-  Supported values: `production` | `test` | `development`
+  Supported values: `production` | `development` | `test`
 
 - `APP_ENV` (required)  
   Type: `string`  
   Description: Deployment environment for the application  
-  Supported values: `production` | `staging` | `development`
+  Supported values: `production` | `development` | `staging`
 
 - `APP_VERSION` (required)  
   Type: `string`  
@@ -20,21 +20,17 @@
   Type: `string`  
   Description: Git commit SHA of the deployed version
 
+- `APP_BIND_ADDRESS` (optional)  
+  Type: `string`  
+  Description: HTTP server binding address (e.g., 0.0.0.0 for all interfaces)  
+  Default: `0.0.0.0`
+
 - `APP_PORT` (optional)  
   Type: `integer`  
   Description: HTTP server listening port  
   Min value: `1`  
   Max value: `65535`  
   Default: `3000`
-
-- `APP_BIND_ADDRESS` (optional)  
-  Type: `string`  
-  Description: HTTP server binding address (e.g., 0.0.0.0 for all interfaces)  
-  Default: `0.0.0.0`
-
-- `JWT_PUBLIC_KEY` (required)  
-  Type: `string`  
-  Description: JWT validation public key (use '||' as newline separator)
 
 - `LOG_LEVEL` (optional)  
   Type: `string`  
@@ -54,6 +50,10 @@
   Max value: `30000`  
   Default: `10000`
 
+- `JWT_PUBLIC_KEY` (required)  
+  Type: `string`  
+  Description: JWT validation public key (use '||' as newline separator)
+
 ## App Metrics
 
 - `METRICS_ENABLED` (optional)  
@@ -71,30 +71,38 @@
 
 - `REDIS_HOST` (required)  
   Type: `string`  
-  Description: Redis server hostname
+  Description: Redis server hostname  
+  Min length: `1`
 
-- `REDIS_KEY_PREFIX` (required)  
-  Type: `string`  
-  Description: Prefix for all Redis keys
-
-- `REDIS_PORT` (required)  
+- `REDIS_PORT` (optional)  
   Type: `integer`  
   Description: Redis server port  
   Min value: `1`  
-  Max value: `65535`
+  Max value: `65535`  
+  Default: `6379`
 
 - `REDIS_USERNAME` (optional)  
   Type: `string`  
   Description: Redis authentication username
 
-- `REDIS_PASSWORD` (optional)  
+- `REDIS_PASSWORD` (optional, sensitive)  
   Type: `string`  
   Description: Redis authentication password
 
 - `REDIS_USE_TLS` (optional)  
   Type: `boolean`  
-  Description: Whether to use TLS/SSL for Redis connection  
+  Description: Whether to use TLS/SSL for the Redis connection  
   Default: `true`
+
+- `REDIS_DB` (optional)  
+  Type: `integer`  
+  Description: Redis database number (0-15)  
+  Min value: `0`  
+  Max value: `15`
+
+- `REDIS_KEY_PREFIX` (optional)  
+  Type: `string`  
+  Description: Prefix for all Redis keys
 
 - `REDIS_COMMAND_TIMEOUT` (optional)  
   Type: `integer`  
@@ -110,39 +118,47 @@
 
 - `SCHEDULER_REDIS_HOST` (required)  
   Type: `string`  
-  Description: Scheduler Redis server hostname
+  Description: Redis server hostname  
+  Min length: `1`
 
-- `SCHEDULER_REDIS_KEY_PREFIX` (required)  
-  Type: `string`  
-  Description: Prefix for all scheduler Redis keys
-
-- `SCHEDULER_REDIS_PORT` (required)  
+- `SCHEDULER_REDIS_PORT` (optional)  
   Type: `integer`  
-  Description: Scheduler Redis server port  
+  Description: Redis server port  
   Min value: `1`  
-  Max value: `65535`
+  Max value: `65535`  
+  Default: `6379`
 
 - `SCHEDULER_REDIS_USERNAME` (optional)  
   Type: `string`  
-  Description: Scheduler Redis authentication username
+  Description: Redis authentication username
 
-- `SCHEDULER_REDIS_PASSWORD` (optional)  
+- `SCHEDULER_REDIS_PASSWORD` (optional, sensitive)  
   Type: `string`  
-  Description: Scheduler Redis authentication password
+  Description: Redis authentication password
 
 - `SCHEDULER_REDIS_USE_TLS` (optional)  
   Type: `boolean`  
-  Description: Whether to use TLS/SSL for scheduler Redis connection  
+  Description: Whether to use TLS/SSL for the Redis connection  
   Default: `true`
+
+- `SCHEDULER_REDIS_DB` (optional)  
+  Type: `integer`  
+  Description: Redis database number (0-15)  
+  Min value: `0`  
+  Max value: `15`
+
+- `SCHEDULER_REDIS_KEY_PREFIX` (optional)  
+  Type: `string`  
+  Description: Prefix for all Redis keys
 
 - `SCHEDULER_REDIS_COMMAND_TIMEOUT` (optional)  
   Type: `integer`  
-  Description: Scheduler command execution timeout in milliseconds  
+  Description: Command execution timeout in milliseconds  
   Min value: `0`
 
 - `SCHEDULER_REDIS_CONNECT_TIMEOUT` (optional)  
   Type: `integer`  
-  Description: Scheduler initial connection timeout in milliseconds  
+  Description: Initial connection timeout in milliseconds  
   Min value: `0`
 
 ## Amqp

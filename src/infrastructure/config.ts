@@ -1,4 +1,5 @@
 import { type AwsConfig, getEnvaseAwsConfig } from '@lokalise/aws-config'
+import { createAppConfigSchema, createRedisConfigSchema } from '@lokalise/config'
 import { type ProfilingConfig, resolveProfilingConfigFromEnv } from '@lokalise/pyroscope-profiling'
 import { createConfig, detectNodeEnv, envvar, type InferEnv } from 'envase'
 import { z } from 'zod'
@@ -6,8 +7,6 @@ import { z } from 'zod'
 function setZodPortChecks<T extends z.ZodCoercedNumber>(schema: T) {
   return schema.int().min(1).max(65535)
 }
-
-const MAX_GRACEFUL_SHUTDOWN_TIMEOUT_MS = 30_000
 
 export const nodeEnv = detectNodeEnv(process.env)
 
@@ -21,75 +20,13 @@ const awsConfig = getEnvaseAwsConfig({ path: 'aws' })
 
 const envSchema = {
   app: {
-    nodeEnv: envvar(
-      'NODE_ENV',
-      z.enum(['production', 'test', 'development']).describe('Application execution environment'),
-    ),
-    appEnv: envvar(
-      'APP_ENV',
-      z
-        .enum(['production', 'staging', 'development'])
-        .describe('Deployment environment for the application'),
-    ),
-    appVersion: envvar(
-      'APP_VERSION',
-      z.string().describe('Application version exposed via healthcheck endpoint'),
-    ),
-    gitCommitSha: envvar(
-      'GIT_COMMIT_SHA',
-      z.string().describe('Git commit SHA of the deployed version'),
-    ),
-    port: envvar(
-      'APP_PORT',
-      z.coerce
-        .number()
-        .apply(setZodPortChecks)
-        .default(3000)
-        .describe('HTTP server listening port'),
-    ),
-    bindAddress: envvar(
-      'APP_BIND_ADDRESS',
-      z
-        .string()
-        .default('0.0.0.0')
-        .describe('HTTP server binding address (e.g., 0.0.0.0 for all interfaces)'),
-    ),
+    ...createAppConfigSchema(),
     jwtPublicKey: envvar(
       'JWT_PUBLIC_KEY',
       z
         .string()
         .describe("JWT validation public key (use '||' as newline separator)")
         .transform(decodeJwtConfig),
-    ),
-    logLevel: envvar(
-      'LOG_LEVEL',
-      z
-        .enum(['fatal', 'error', 'warn', 'info', 'debug', 'trace', 'silent'])
-        .default('info')
-        .describe('Minimum log level for emitted logs'),
-    ),
-    baseUrl: envvar(
-      'BASE_URL',
-      z
-        .string()
-        .default('')
-        .describe('Public URL where the application is accessible, used in OpenAPI spec'),
-    ),
-    metrics: {
-      isEnabled: envvar(
-        'METRICS_ENABLED',
-        z.stringbool().default(true).describe('Whether to enable Prometheus metrics collection'),
-      ),
-    },
-    gracefulShutdownTimeoutMs: envvar(
-      'GRACEFUL_SHUTDOWN_TIMEOUT_MS',
-      z.coerce
-        .number()
-        .int()
-        .nonnegative()
-        .max(MAX_GRACEFUL_SHUTDOWN_TIMEOUT_MS)
-        .default(10000)
-        .describe('Timeout in milliseconds for graceful shutdown'),
     ),
   },
   db: {
@@ -98,88 +35,8 @@ const envSchema = {
       z.string().describe('PostgreSQL connection URL including credentials and database name'),
     ),
   },
-  redis: {
-    host: envvar('REDIS_HOST', z.string().describe('Redis server hostname')),
-    keyPrefix: envvar('REDIS_KEY_PREFIX', z.string().describe('Prefix for all Redis keys')),
-    port: envvar(
-      'REDIS_PORT',
-      z.coerce.number().apply(setZodPortChecks).describe('Redis server port'),
-    ),
-    username: envvar(
-      'REDIS_USERNAME',
-      z.string().optional().describe('Redis authentication username'),
-    ),
-    password: envvar(
-      'REDIS_PASSWORD',
-      z.string().optional().describe('Redis authentication password'),
-    ),
-    useTls: envvar(
-      'REDIS_USE_TLS',
-      z.stringbool().default(true).describe('Whether to use TLS/SSL for Redis connection'),
-    ),
-    commandTimeout: envvar(
-      'REDIS_COMMAND_TIMEOUT',
-      z.coerce
-        .number()
-        .int()
-        .gte(0)
-        .optional()
-        .describe('Command execution timeout in milliseconds'),
-    ),
-    connectTimeout: envvar(
-      'REDIS_CONNECT_TIMEOUT',
-      z.coerce
-        .number()
-        .int()
-        .gte(0)
-        .optional()
-        .describe('Initial connection timeout in milliseconds'),
-    ),
-  },
-  scheduler: {
-    host: envvar('SCHEDULER_REDIS_HOST', z.string().describe('Scheduler Redis server hostname')),
-    keyPrefix: envvar(
-      'SCHEDULER_REDIS_KEY_PREFIX',
-      z.string().describe('Prefix for all scheduler Redis keys'),
-    ),
-    port: envvar(
-      'SCHEDULER_REDIS_PORT',
-      z.coerce.number().apply(setZodPortChecks).describe('Scheduler Redis server port'),
-    ),
-    username: envvar(
-      'SCHEDULER_REDIS_USERNAME',
-      z.string().optional().describe('Scheduler Redis authentication username'),
-    ),
-    password: envvar(
-      'SCHEDULER_REDIS_PASSWORD',
-      z.string().optional().describe('Scheduler Redis authentication password'),
-    ),
-    useTls: envvar(
-      'SCHEDULER_REDIS_USE_TLS',
-      z
-        .stringbool()
-        .default(true)
-        .describe('Whether to use TLS/SSL for scheduler Redis connection'),
-    ),
-    commandTimeout: envvar(
-      'SCHEDULER_REDIS_COMMAND_TIMEOUT',
-      z.coerce
-        .number()
-        .int()
-        .gte(0)
-        .optional()
-        .describe('Scheduler command execution timeout in milliseconds'),
-    ),
-    connectTimeout: envvar(
-      'SCHEDULER_REDIS_CONNECT_TIMEOUT',
-      z.coerce
-        .number()
-        .int()
-        .gte(0)
-        .optional()
-        .describe('Scheduler initial connection timeout in milliseconds'),
-    ),
-  },
+  redis: createRedisConfigSchema(),
+  scheduler: createRedisConfigSchema({ prefix: 'SCHEDULER' }),
   amqp: {
     hostname: envvar('AMQP_HOSTNAME', z.string().describe('AMQP broker hostname')),
     port: envvar(
