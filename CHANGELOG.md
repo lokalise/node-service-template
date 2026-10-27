@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.27.0] - 2026-10-27
+
+- Build the `app`, `redis` and `scheduler` config sections from [`@lokalise/config`](https://www.npmjs.com/package/@lokalise/config) (`createAppConfigSchema()`, `createRedisConfigSchema()` and `createRedisConfigSchema({ prefix: 'SCHEDULER' })`) instead of defining the env vars in [config.ts](src/infrastructure/config.ts). `JWT_PUBLIC_KEY` stays service-specific and is added next to the shared app schema
+- `config.redis` and `config.scheduler` are now ioredis `RedisOptions`: `REDIS_USE_TLS` is parsed into `tls: {}` or `undefined`, so the Redis clients in [CommonModule.ts](src/infrastructure/CommonModule.ts) pass the config to `new Redis()` instead of copying it field by field
+- `REDIS_PORT` defaults to `6379` and `REDIS_KEY_PREFIX` is optional (the same for `SCHEDULER_`), `REDIS_HOST` can't be empty, `REDIS_PASSWORD` is redacted from validation errors and `REDIS_DB` is new
+- BullMQ connections now honour `REDIS_USE_TLS`. `@lokalise/background-jobs-common` still takes node-core's `RedisConfig`, so its `redisConfig` gets `useTls` derived from `tls`, but the library hands the whole object to ioredis, which ignored `useTls`. Before this change BullMQ connected without TLS whatever `REDIS_USE_TLS` said; it now gets `tls: {}` like the other clients
+
 ## [1.26.0] - 2026-10-14
 
 - Replace `.env.default` + `copy:config` with one env file per mode, following the [Vite convention](https://vite.dev/guide/env-and-mode#env-files): [.env.development](.env.development) and [.env.test](.env.test), each with an optional, gitignored `.local` file on top (`.env.development.local`, `.env.test.local`). `.env.default` was used as the test config (via `copy:config` into `.env`) and as the starting point for local setup, and it wasn't a real default for either: a variable missing from `.env` never fell back to it, and production never read it. There is no `.env` or `.env.local` anymore, since Vite loads those in every mode, tests included

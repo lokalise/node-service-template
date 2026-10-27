@@ -114,19 +114,7 @@ export class CommonModule extends AbstractModule<unknown, ExternalDependencies> 
 
       redis: asSingletonFunction(
         ({ config }: { config: CommonDependencies['config'] }): Redis => {
-          const redisConfig = config.redis
-
-          return new Redis({
-            host: redisConfig.host,
-            keyPrefix: redisConfig.keyPrefix,
-            port: redisConfig.port,
-            username: redisConfig.username,
-            password: redisConfig.password,
-            connectTimeout: redisConfig.connectTimeout,
-            commandTimeout: redisConfig.commandTimeout,
-            maxRetriesPerRequest: null,
-            tls: redisConfig.useTls ? {} : undefined,
-          })
+          return new Redis({ ...config.redis, maxRetriesPerRequest: null })
         },
         {
           public: true,
@@ -142,18 +130,7 @@ export class CommonModule extends AbstractModule<unknown, ExternalDependencies> 
 
       redisPublisher: asSingletonFunction(
         ({ config }: { config: CommonDependencies['config'] }): Redis => {
-          const redisConfig = config.redis
-
-          return new Redis({
-            host: redisConfig.host,
-            keyPrefix: redisConfig.keyPrefix,
-            port: redisConfig.port,
-            username: redisConfig.username,
-            password: redisConfig.password,
-            connectTimeout: redisConfig.connectTimeout,
-            commandTimeout: redisConfig.commandTimeout,
-            tls: redisConfig.useTls ? {} : undefined,
-          })
+          return new Redis(config.redis)
         },
         {
           public: true,
@@ -169,18 +146,7 @@ export class CommonModule extends AbstractModule<unknown, ExternalDependencies> 
 
       redisConsumer: asSingletonFunction(
         ({ config }: { config: CommonDependencies['config'] }): Redis => {
-          const redisConfig = config.redis
-
-          return new Redis({
-            host: redisConfig.host,
-            keyPrefix: redisConfig.keyPrefix,
-            port: redisConfig.port,
-            username: redisConfig.username,
-            password: redisConfig.password,
-            connectTimeout: redisConfig.connectTimeout,
-            commandTimeout: redisConfig.commandTimeout,
-            tls: redisConfig.useTls ? {} : undefined,
-          })
+          return new Redis(config.redis)
         },
         {
           public: true,
@@ -218,7 +184,11 @@ export class CommonModule extends AbstractModule<unknown, ExternalDependencies> 
             SERVICE_NAME,
             new CommonBullmqFactoryNew(),
             bullmqSupportedQueues,
-            { redisConfig: config.redis, isTest: nodeEnv.isTest },
+            {
+              // background-jobs-common still takes node-core's RedisConfig, which wants useTls
+              redisConfig: { ...config.redis, useTls: config.redis.tls !== undefined },
+              isTest: nodeEnv.isTest,
+            },
           ),
         {
           public: true,
