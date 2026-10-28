@@ -113,9 +113,9 @@ are relevant for the technological stack of your organization, and replace `@lok
    This starts PostgreSQL, Redis, RabbitMQ, and [fauxqs](https://github.com/kibertoad/fauxqs) (local SQS/SNS emulator).
 
    - Database is initialized via [scripts/db/init-dbs.sh](./scripts/db/init-dbs.sh).
-   - SQS/SNS queues, topics, and subscriptions are initialized via [scripts/fauxqs-init.json](./scripts/fauxqs-init.json).
+   - SQS/SNS queues, topics, and subscriptions are seeded from [scripts/fauxqs-init.json](./scripts/fauxqs-init.json). The service only locates them, see [SNS/SQS resources](#snssqs-resources).
 
-   In tests, fauxqs runs as an embedded library (no Docker required) — see [test/FauxqsHelper.ts](./test/FauxqsHelper.ts).
+   In tests, fauxqs runs as an embedded library (no Docker required) and is seeded by [test/FauxqsHelper.ts](./test/FauxqsHelper.ts).
 
 6. Run migrations to synchronize your database schema with defined models:
    ```shell
@@ -178,6 +178,25 @@ and `.env.test`, so a missing value stops the service from starting instead of p
 All supported variables, with their defaults, are documented in [docs/environment-variables.md](./docs/environment-variables.md), generated from the config schema.
 
 `getConfig()` enables envase's `emptyStringAsUndefined`, so an empty value (`KEY=`) counts as unset: the schema default applies, optional variables stay `undefined` and required ones fail validation.
+
+### SNS/SQS resources
+
+The service never creates SNS/SQS resources. Consumers built on
+[AbstractSnsSqsConsumer](./src/infrastructure/AbstractSnsSqsConsumer.ts) only locate their topic,
+queue and subscription, and the service fails to start when one is missing. The one thing a
+consumer still writes is its subscription filter policy, derived from the message types its
+handlers accept.
+
+Every topic, queue and subscription must therefore exist before the service starts:
+
+- **Deployed environments:** topics, queues, DLQs, queue policies and subscriptions are declared in
+  Terraform in `infra/<env>/sns-sqs.tf`, using the
+  [`spacelift.io/lokalise/tf-mod-aws-sns-sqs/default`](https://github.com/lokalise/tf-mod-aws-sns-sqs)
+  module.
+- **Local development and PR environments:** the shared fauxqs is seeded from the `init.json` of
+  [`lokalise/dev-localstack`](https://github.com/lokalise/dev-localstack). This repository's
+  `docker compose` fauxqs is seeded from [scripts/fauxqs-init.json](./scripts/fauxqs-init.json).
+- **Tests:** the in-process fauxqs is seeded by [test/FauxqsHelper.ts](./test/FauxqsHelper.ts).
 
 ### OpenAPI specification
 

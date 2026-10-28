@@ -1,5 +1,8 @@
 import type { MessageHandlerConfig } from '@message-queue-toolkit/core'
-import { AbstractSnsSqsConsumer as AbstractSnsSqsConsumerBase } from '@message-queue-toolkit/sns'
+import {
+  AbstractSnsSqsConsumer as AbstractSnsSqsConsumerBase,
+  generateFilterAttributes,
+} from '@message-queue-toolkit/sns'
 import type { PublicDependencies } from 'opinionated-machine'
 import type { RequestContextPreHandlerOutput } from './prehandlers/requestContextPrehandler.ts'
 
@@ -53,16 +56,20 @@ export abstract class AbstractSnsSqsConsumer<
         messageMetricsManager: dependencies.messageProcessingMetricsManager,
       },
       {
-        creationConfig: {
-          queue: {
-            QueueName: options.queueConfig.queueName,
-          },
-          topic: {
-            Name: options.queueConfig.topicName,
-          },
+        // Terraform owns the topic, queue, DLQ, queue policy and subscription (infra/<env>/sns-sqs.tf),
+        // so they are only located, and startup fails if one is missing. The subscription filter
+        // policy is the one attribute the consumer still writes, derived from its handlers.
+        locatorConfig: {
+          topicName: options.queueConfig.topicName,
+          queueName: options.queueConfig.queueName,
         },
         subscriptionConfig: {
-          updateAttributesIfExists: false,
+          locateOnly: true,
+          managedAttributes: ['FilterPolicy', 'FilterPolicyScope'],
+          Attributes: generateFilterAttributes(
+            options.handlers.map((handler) => handler.schema),
+            'type',
+          ),
         },
         handlers: options.handlers,
         deletionConfig: {

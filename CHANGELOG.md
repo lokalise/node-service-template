@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.28.0] - 2026-10-28
+
+- [AbstractSnsSqsConsumer](src/infrastructure/AbstractSnsSqsConsumer.ts) no longer creates its topic, queue and subscription: it only locates them (`locatorConfig`), and the service fails to start when one is missing. The subscription filter policy is the one attribute it still writes (a locate-only `subscriptionConfig` managing `FilterPolicy` and `FilterPolicyScope`), derived from the handlers' message types. Services declare the resources in Terraform (`infra/<env>/sns-sqs.tf`, `tf-mod-aws-sns-sqs`) and seed local and PR environments through `lokalise/dev-localstack`, see [SNS/SQS resources](README.md#snssqs-resources)
+- Seed fauxqs in `eu-central-1` (`AWS_REGION`), both the test one ([test/FauxqsHelper.ts](test/FauxqsHelper.ts)) and the [docker-compose.yml](docker-compose.yml) one. They seeded `us-east-1`, so the service never found the seeded resources and created its own
+- [UserEventConsumer.spec.ts](src/modules/users/consumers/UserEventConsumer.spec.ts) checks that the consumer sets the filter policy on the seeded subscription and fails instead of creating a missing topic
+
 ## [1.27.0] - 2026-10-27
 
 - Build the `app`, `redis` and `scheduler` config sections from [`@lokalise/config`](https://www.npmjs.com/package/@lokalise/config) (`createAppConfigSchema()`, `createRedisConfigSchema()` and `createRedisConfigSchema({ prefix: 'SCHEDULER' })`) instead of defining the env vars in [config.ts](src/infrastructure/config.ts). `JWT_PUBLIC_KEY` stays service-specific and is added next to the shared app schema
