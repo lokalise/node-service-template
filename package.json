@@ -123,7 +123,7 @@
     "@types/node": "^26.6.5",
     "@vitest/coverage-v8": "^5.0.5",
     "cross-env": "^10.1.0",
-    "fast-jwt": "^6.3.4",
+    "fast-jwt": "^6.3.5",
     "fauxqs": "^2.12.2",
     "mockttp": "^4.6.3",
     "typescript": "7.0.2",
