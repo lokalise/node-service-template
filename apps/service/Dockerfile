@@ -1,5 +1,8 @@
 # syntax=docker/dockerfile:1
 
+# Build from the repository root so the whole workspace is in the context:
+#   docker build -f apps/service/Dockerfile .
+
 # ---- Base Node ----
 FROM node:26.7.0-trixie-slim AS base
 
@@ -9,15 +12,7 @@ RUN set -ex && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-# pnpm is installed directly from npm rather than via corepack (which is no
-# longer bundled with Node 26), so the image ships one explicit, pinned pnpm
-# version. Keep in sync with package.json#devEngines.packageManager.
-ARG PNPM_VERSION=11.25.0
-RUN set -ex && \
-    npm install -g pnpm@${PNPM_VERSION} && \
-    npm cache clean --force
-
-# /pnpm hosts the pnpm store via a BuildKit cache mount in the deps stages
+# /pnpm hosts the pnpm store via a BuildKit cache mount in the build stage
 # below; create it as node-owned so non-root installs can write to it.
 ENV PNPM_HOME="/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
@@ -27,47 +22,52 @@ RUN mkdir -p /pnpm/store /home/node/app && \
 
 WORKDIR /home/node/app
 
-# ---- Production dependencies ----
-FROM base AS production-deps
+# ---- Prune ----
+# Reduce the workspace to this app and the workspace packages it depends on.
+# out/json holds only their manifests and the pruned lockfile, so the install
+# layer below stays cached until a dependency changes.
+FROM base AS prune
 
-# Workspace manifests must all be present so pnpm can resolve `workspace:*` deps.
-COPY --chown=node:node ./package.json ./pnpm-lock.yaml ./pnpm-workspace.yaml ./
-COPY --chown=node:node ./packages/api-contracts/package.json ./packages/api-contracts/package.json
-
+COPY --chown=node:node . .
+# Installed from / because npm refuses to run next to a package.json whose
+# devEngines.packageManager names pnpm.
+RUN cd / && \
+    npm install -g --no-fund --no-audit turbo@$(node -p "require('/home/node/app/package.json').devDependencies.turbo") && \
+    npm cache clean --force
 USER node
-RUN --mount=type=cache,id=pnpm,target=/pnpm/store,uid=1000,gid=1000 \
-    set -ex; \
-    pnpm install --frozen-lockfile --ignore-scripts --prod;
+RUN turbo prune @node-service-template/service --docker
 
 # ---- Build ----
 FROM base AS build
 
-COPY --chown=node:node ./package.json ./pnpm-lock.yaml ./pnpm-workspace.yaml ./
-COPY --chown=node:node ./packages/api-contracts/package.json ./packages/api-contracts/package.json
+# pnpm is installed directly from npm rather than via corepack (which is no
+# longer bundled with Node 26), pinned to package.json#devEngines.packageManager.
+COPY --chown=node:node --from=prune /home/node/app/out/json/ .
+RUN cd / && \
+    npm install -g --no-fund --no-audit pnpm@$(node -p "require('/home/node/app/package.json').devEngines.packageManager.version") && \
+    npm cache clean --force
 
 USER node
-# Full install including devDependencies needed to build the service.
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store,uid=1000,gid=1000 \
-    set -ex; \
-    pnpm install --frozen-lockfile --ignore-scripts;
+    pnpm install --frozen-lockfile --ignore-scripts
 
-COPY --chown=node:node . .
-RUN pnpm run build
+COPY --chown=node:node --from=prune /home/node/app/out/full/ .
+RUN pnpm exec turbo run build --filter=@node-service-template/service...
+
+# Drop devDependencies now that everything is compiled.
+RUN --mount=type=cache,id=pnpm,target=/pnpm/store,uid=1000,gid=1000 \
+    CI=true pnpm install --frozen-lockfile --ignore-scripts --prod
 
 # ---- Release ----
 FROM base AS release
 
 # Stable runtime config first.
 ENV NODE_ENV=production
-ENV NODE_PATH=.
 ENV APP_PORT=3000
 
-# Production node_modules (with pnpm symlinks into workspace packages)
-COPY --chown=node:node --from=production-deps /home/node/app/node_modules ./node_modules
-# Workspace packages referenced via symlinks from node_modules
-COPY --chown=node:node --from=build /home/node/app/packages ./packages
-COPY --chown=node:node --from=build /home/node/app/src/db/migrations ./src/db/migrations
-COPY --chown=node:node --from=build /home/node/app/dist ./
+COPY --chown=node:node --from=build /home/node/app .
+
+WORKDIR /home/node/app/apps/service
 
 USER node
 
@@ -90,4 +90,4 @@ LABEL org.opencontainers.image.revision=${GIT_COMMIT_SHA} \
       org.opencontainers.image.version=${APP_VERSION} \
       org.opencontainers.image.source="https://github.com/lokalise/node-service-template"
 
-CMD ["dumb-init", "node", "--import=@opentelemetry/instrumentation/hook.mjs", "server.js"]
+CMD ["dumb-init", "node", "--import=@opentelemetry/instrumentation/hook.mjs", "dist/server.js"]
