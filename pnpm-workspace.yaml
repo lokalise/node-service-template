@@ -1,6 +1,9 @@
 packages:
   - apps/*
   - packages/*
+# Hoisted, so a workspace package's peer dependencies resolve from the app's
+# dependencies after the production-only install in the Dockerfile.
+nodeLinker: hoisted
 overrides:
   ioredis: 6.0.0
   # prom-client was renamed to @prometheus-io/client when it became a Prometheus subproject.
