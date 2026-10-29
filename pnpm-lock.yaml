@@ -409,7 +409,7 @@ importers:
         version: 5.0.0
       '@lokalise/universal-testing-utils':
         specifier: ^5.0.0
-        version: 5.0.0(@lokalise/api-contracts@9.0.1(zod@4.6.7))(mockttp@4.6.3(supports-color@7.2.0))(msw@2.15.0(@types/node@26.6.5)(typescript@7.0.2))(zod@4.6.7)
+        version: 5.0.0(@lokalise/api-contracts@9.0.1(zod@4.6.7))(mockttp@4.6.4(supports-color@7.2.0))(msw@2.15.0(@types/node@26.6.5)(typescript@7.0.2))(zod@4.6.7)
       '@opentelemetry/sdk-trace-base':
         specifier: ^2.12.0
         version: 2.12.0(@opentelemetry/api@1.9.1)
@@ -432,8 +432,8 @@ importers:
         specifier: ^2.12.2
         version: 2.12.2(typescript@7.0.2)
       mockttp:
-        specifier: ^4.6.3
-        version: 4.6.3(supports-color@7.2.0)
+        specifier: ^4.6.4
+        version: 4.6.4(supports-color@7.2.0)
       typescript:
         specifier: 7.0.2
         version: 7.0.2
@@ -1008,12 +1008,6 @@ packages:
 
   '@graphql-tools/schema@10.1.4':
     resolution: {integrity: sha512-talZuSrjeklX7RVYLgF7fxHgywZXSYWzFZf3NG5CNFgkeK3xTocYMvlC3FLAApMWUW59qkyuHN1/HIgaIGfjRA==}
-    engines: {node: '>=16.0.0'}
-    peerDependencies:
-      graphql: ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
-
-  '@graphql-tools/utils@11.2.2':
-    resolution: {integrity: sha512-Do2A/t6ayqOma8m7PvpYMsCBswL+NB35BQSng4GWSBqafL2/BnfAZy/NSENPwV721Rm2fG0BHETFC0+FJJZmLw==}
     engines: {node: '>=16.0.0'}
     peerDependencies:
       graphql: ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
@@ -2808,9 +2802,6 @@ packages:
   '@types/memcached@2.2.10':
     resolution: {integrity: sha512-AM9smvZN55Gzs2wRrqeMHVP7KE8KWgCJO/XL5yCly2xF6EKa4YlbpK+cLSAH4NG/Ah64HrlegmGqW8kYws7Vxg==}
 
-  '@types/node@26.6.4':
-    resolution: {integrity: sha512-ldVPDCzj7fsaGZrLB0NuHuTvJcsNasysBAqMolr/cgxrLd1xbqxIr3XJiPnHHJUCxj5sNF1vnRj9aWnrVh5Jcg==}
-
   '@types/node@26.6.5':
     resolution: {integrity: sha512-uMzsv9stDdofIZBx4UGh4Z9ZgXnGC9seRDscilBcTHAeOFk67MZg/k9bWVfO+bk4qZmG+l52hRnLwUiH2LnJTg==}
 
@@ -2988,10 +2979,6 @@ packages:
 
   '@vitest/spy@5.0.5':
     resolution: {integrity: sha512-lwJRExuH417257Q5wv9QYugN9IMJkoxcrKrYxGPQkBzl7wlNpTUxD/5yNX4ESKVUIShKPgkGchYPFMWOOk0wzw==}
-
-  '@whatwg-node/promise-helpers@1.3.2':
-    resolution: {integrity: sha512-Nst5JdK47VIl9UcGwtv2Rcgyn5lWtZ0/mhRQ4G8NN2isxpq2TO30iqHzmwoJycjWuyUfg3GFXqP/gFHXeV57IA==}
-    engines: {node: '>=16.0.0'}
 
   '@whatwg-node/promise-helpers@2.0.0':
     resolution: {integrity: sha512-/i9CS0Z96o+cPwaYoAyVxAThDiUX1wV3tDmNWPJbn+vtdR+JftuCDg1NGCXBrzIYVDGkJ8uT6ctwmrBOUzOpKQ==}
@@ -4177,8 +4164,8 @@ packages:
   mnemonist@0.40.5:
     resolution: {integrity: sha512-egXDkYJsKZCizjk8FydZ3g8TOigBwt+dIaehgKcQSAE3DCkCTWG4N94trvwR1ZYeAHo1exxE+ZhZOUuj01HdNw==}
 
-  mockttp@4.6.3:
-    resolution: {integrity: sha512-+TAk7hIytgnb67+2G4CV+I9kzCBmDDF0E0e2rFguMGCt0Vs4XHLcBgm35xbbY/QQIesup6TQSHGXFPWKKCNWiw==}
+  mockttp@4.6.4:
+    resolution: {integrity: sha512-MoQzWquV6V8B4hVgC8L2z+0Wt4pZC9l3HCvrG997eun5NJf5KUk5lIDQ/Px95HEG0DwqRy0SFVTB3lj2elYJ/Q==}
     engines: {node: '>=20.0.0'}
     hasBin: true
 
@@ -4787,8 +4774,8 @@ packages:
     resolution: {integrity: sha512-aBiNayCfTQxuIJBm06M+xR14cYaYlDlSXZbgsnKzKNxDKUVq7KFwTjwBSsb7m9Y5xO8WfPnBc63WaYFMTGlvqw==}
     hasBin: true
 
-  tls-impersonate@0.1.0:
-    resolution: {integrity: sha512-fV5LFIpVmJXkUJiDk1AT9qHMlwVXT7D8Nqs8hhMl9l6I4SgL+jPLRPtV95KNAT3A0ECzritAtUPShhXWwWzoUw==}
+  tls-impersonate@0.2.1:
+    resolution: {integrity: sha512-Co207w6PAoAf5lbCA3+G/unhjAkY594/W6dLbB5qlBYJdPmb3kB6tDbvPX3ejNRFr7Rtv7gGkc9ls+/hwh2acw==}
     engines: {node: '>=24.15.0'}
     os: [linux, darwin, win32]
 
@@ -5690,14 +5677,6 @@ snapshots:
       graphql: 16.14.2
       tslib: 2.8.1
 
-  '@graphql-tools/utils@11.2.2(graphql@16.14.2)':
-    dependencies:
-      '@graphql-typed-document-node/core': 3.2.0(graphql@16.14.2)
-      '@whatwg-node/promise-helpers': 1.3.2
-      cross-inspect: 1.0.1
-      graphql: 16.14.2
-      tslib: 2.8.1
-
   '@graphql-tools/utils@12.0.4(graphql@16.14.2)':
     dependencies:
       '@graphql-typed-document-node/core': 3.2.0(graphql@16.14.2)
@@ -5975,10 +5954,10 @@ snapshots:
 
   '@lokalise/tsconfig@5.0.0': {}
 
-  '@lokalise/universal-testing-utils@5.0.0(@lokalise/api-contracts@9.0.1(zod@4.6.7))(mockttp@4.6.3(supports-color@7.2.0))(msw@2.15.0(@types/node@26.6.5)(typescript@7.0.2))(zod@4.6.7)':
+  '@lokalise/universal-testing-utils@5.0.0(@lokalise/api-contracts@9.0.1(zod@4.6.7))(mockttp@4.6.4(supports-color@7.2.0))(msw@2.15.0(@types/node@26.6.5)(typescript@7.0.2))(zod@4.6.7)':
     dependencies:
       '@lokalise/api-contracts': 9.0.1(zod@4.6.7)
-      mockttp: 4.6.3(supports-color@7.2.0)
+      mockttp: 4.6.4(supports-color@7.2.0)
       msw: 2.15.0(@types/node@26.6.5)(typescript@7.0.2)
       zod: 4.6.7
 
@@ -7890,7 +7869,7 @@ snapshots:
 
   '@types/connect@3.4.38':
     dependencies:
-      '@types/node': 26.6.4
+      '@types/node': 26.6.5
 
   '@types/cors@2.8.19':
     dependencies:
@@ -7904,11 +7883,7 @@ snapshots:
 
   '@types/memcached@2.2.10':
     dependencies:
-      '@types/node': 26.6.4
-
-  '@types/node@26.6.4':
-    dependencies:
-      undici-types: 8.9.0
+      '@types/node': 26.6.5
 
   '@types/node@26.6.5':
     dependencies:
@@ -7920,7 +7895,7 @@ snapshots:
 
   '@types/pg@8.15.6':
     dependencies:
-      '@types/node': 26.6.4
+      '@types/node': 26.6.5
       pg-protocol: 1.16.1
       pg-types: 2.2.0
 
@@ -8033,10 +8008,6 @@ snapshots:
       vite: 8.2.2(@types/node@26.6.5)(jiti@2.7.0)(yaml@2.9.1)
 
   '@vitest/spy@5.0.5': {}
-
-  '@whatwg-node/promise-helpers@1.3.2':
-    dependencies:
-      tslib: 2.8.1
 
   '@whatwg-node/promise-helpers@2.0.0':
     dependencies:
@@ -9075,10 +9046,10 @@ snapshots:
     dependencies:
       obliterator: 2.0.5
 
-  mockttp@4.6.3(supports-color@7.2.0):
+  mockttp@4.6.4(supports-color@7.2.0):
     dependencies:
       '@graphql-tools/schema': 10.1.4(graphql@16.14.2)
-      '@graphql-tools/utils': 11.2.2(graphql@16.14.2)
+      '@graphql-tools/utils': 12.0.4(graphql@16.14.2)
       '@httptoolkit/httpolyglot': 3.1.0
       '@httptoolkit/subscriptions-transport-ws': 0.11.2(graphql@16.14.2)
       '@httptoolkit/util': 0.1.9
@@ -9115,10 +9086,11 @@ snapshots:
       read-tls-client-hello: 2.0.0
       semver: 7.8.5
       socks-proxy-agent: 8.0.5(supports-color@7.2.0)
+      tslib: 2.8.1
       urlpattern-polyfill: 10.1.0
       ws: 8.22.0
     optionalDependencies:
-      tls-impersonate: 0.1.0
+      tls-impersonate: 0.2.1
     transitivePeerDependencies:
       - bufferutil
       - supports-color
@@ -9772,7 +9744,7 @@ snapshots:
     dependencies:
       tldts-core: 7.4.11
 
-  tls-impersonate@0.1.0:
+  tls-impersonate@0.2.1:
     dependencies:
       node-gyp-build: 4.8.4
     optional: true

@@ -125,7 +125,7 @@
     "cross-env": "^10.1.0",
     "fast-jwt": "^6.3.5",
     "fauxqs": "^2.12.2",
-    "mockttp": "^4.6.3",
+    "mockttp": "^4.6.4",
     "typescript": "7.0.2",
     "vitest": "^5.0.5",
     "yaml": "^2.9.1"
