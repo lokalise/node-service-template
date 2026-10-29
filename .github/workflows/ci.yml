@@ -3,15 +3,14 @@ name: ci
 on:
   pull_request:
 
-# Least-privilege default for every job: `lint` and `test` only need to read the repo.
+# Least-privilege default for every job: `build` only needs to read the repo.
 # `automerge` opts into the write scopes it needs in its own `permissions` block.
 permissions:
   contents: read
 
 jobs:
-  lint:
+  build:
     runs-on: ubuntu-latest
-    name: Lint (Node ${{ matrix.node-version }})
 
     strategy:
       matrix:
@@ -30,39 +29,20 @@ jobs:
           cache: 'pnpm'
 
       - name: Install
-        run: pnpm install --frozen-lockfile --ignore-scripts
+        run: |
+          pnpm install --frozen-lockfile --ignore-scripts
+
+      - name: Run Tests
+        run: |
+          pnpm run test:ci
 
       - name: Run lint
-        run: pnpm run lint
+        run: |
+          pnpm run lint
 
-  test:
-    runs-on: ubuntu-latest
-    name: Test (Node ${{ matrix.node-version }})
-
-    strategy:
-      matrix:
-        node-version: [24.x, 26.x]
-
-    steps:
-      - uses: actions/checkout@v7
-
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v6.1.0
-
-      - name: Setup Node ${{ matrix.node-version }}
-        uses: actions/setup-node@v7.0.0
-        with:
-          node-version: ${{ matrix.node-version }}
-          cache: 'pnpm'
-
-      - name: Install
-        run: pnpm install --frozen-lockfile --ignore-scripts
-
-      - name: Run tests
-        run: pnpm run test:ci
 
   automerge:
-    needs: [lint, test]
+    needs: build
     runs-on: ubuntu-latest
     permissions:
       pull-requests: write

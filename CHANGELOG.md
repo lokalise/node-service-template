@@ -9,7 +9,7 @@
 - [apps/service/biome.jsonc](apps/service/biome.jsonc) extends the root config and holds the service-specific `perf/` ignores and k6 globals. The root `lint` checks the root JSON files and then runs `turbo run lint`
 - The [Dockerfile](apps/service/Dockerfile) uses `turbo prune --docker`: the install layer only sees the service's and its workspace dependencies' manifests, and the release image keeps the pruned workspace with production dependencies, starting from `apps/service`. Build it from the repository root: `docker build -f apps/service/Dockerfile .`. pnpm is installed at the version in `devEngines.packageManager` instead of a separate `PNPM_VERSION` build arg
 - The service's `test:ci` starts its Docker stack and applies test migrations in `pretest:ci`, and stops the stack in `posttest:ci`, so `pnpm run test:ci` at the root needs nothing started beforehand. The root runs it with `--concurrency=1`, so apps with their own stacks don't fight over ports
-- CI is split into `lint` and `test` jobs (both on Node 24 and 26) that each run one root script; the separate Docker, build and migration steps are gone. The Docker healthcheck workflow watches the new paths, and Dependabot also updates `apps/*`
+- The CI `build` job only installs and runs `pnpm run test:ci` and `pnpm run lint`; the separate Docker, build and migration steps are gone. The Docker healthcheck workflow watches the new paths, and Dependabot also updates `apps/*`
 
 ## [1.27.0] - 2026-10-27
 
