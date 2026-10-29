@@ -22,7 +22,7 @@
       "cache": false
     },
     "test:ci": {
-      "description": "Apply test migrations and run the test suites with coverage",
+      "description": "Start each app's Docker stack, apply test migrations, run the tests with coverage and stop the stack",
       "dependsOn": ["^build"],
       "cache": false
     }

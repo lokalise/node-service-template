@@ -18,7 +18,7 @@
   "scripts": {
     "build": "turbo run build",
     "dev": "turbo run dev",
-    "test:ci": "turbo run test:ci",
+    "test:ci": "turbo run test:ci --concurrency=1",
     "lint": "biome check *.json *.jsonc && turbo run lint",
     "lint:fix": "biome check --write *.json *.jsonc && turbo run lint:fix",
     "docker:start:dev": "pnpm --filter @node-service-template/service run docker:start:dev",
