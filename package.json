@@ -71,7 +71,7 @@
     "@lokalise/fastify-api-contracts": "^8.0.0",
     "@lokalise/fastify-extras": "^36.0.2",
     "@lokalise/healthcheck-utils": "^8.0.0",
-    "@lokalise/node-core": "^14.11.0",
+    "@lokalise/node-core": "^14.12.0",
     "@lokalise/opentelemetry-fastify-bootstrap": "^4.1.2",
     "@lokalise/pyroscope-profiling": "^1.1.1",
     "@lokalise/universal-ts-utils": "^4.12.0",
