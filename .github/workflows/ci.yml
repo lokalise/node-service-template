@@ -34,7 +34,7 @@ jobs:
 
       - name: Docker start
         run: |
-          docker compose up -d --quiet-pull --wait
+          pnpm run docker:start:dev
 
       - name: Build TS
         run: |
@@ -54,7 +54,7 @@ jobs:
 
       - name: DB stop
         run: |
-          docker compose down
+          pnpm run docker:stop:dev
 
 
   automerge:

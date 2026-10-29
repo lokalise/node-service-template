@@ -15,46 +15,46 @@ It comes with the following out-of-the-box:
 - [fastify](https://www.fastify.io/docs/latest/) as a basis for the general web application skeleton;
 - Modular, domain-driven structure that encourages separation of concerns;
 - Server/app separation, for convenient bootstrapping in e2e tests;
-- [Global error handler](./src/infrastructure/errors/errorHandler.ts);
-- JSON-based, single line standardized [logging](./src/infrastructure/logger.ts);
+- [Global error handler](./apps/service/src/infrastructure/errors/errorHandler.ts);
+- JSON-based, single line standardized [logging](./apps/service/src/infrastructure/logger.ts);
 - Automatic population of `req.id` for incoming requests based on `x-request-id` header, or generation of new UUID if none is set, for the purposes of distributed tracing.
 
 Mechanisms:
 
-- Type-safe [config management](./src/infrastructure/config.ts);
-- [Dependency injection](./docs/dependency-injection.md) (using [awilix](https://github.com/jeffijoe/awilix));
-- [Scheduling](./docs/scheduling.md) (using [toad-scheduler](https://github.com/kibertoad/toad-scheduler)
+- Type-safe [config management](./apps/service/src/infrastructure/config.ts);
+- [Dependency injection](./apps/service/docs/dependency-injection.md) (using [awilix](https://github.com/jeffijoe/awilix));
+- [Scheduling](./apps/service/docs/scheduling.md) (using [toad-scheduler](https://github.com/kibertoad/toad-scheduler)
   and [redis-semaphore](https://github.com/swarthy/redis-semaphore));
 - Type-safe message queue handling, using [message-queue-toolkit](https://github.com/kibertoad/message-queue-toolkit) framework;
-- Type-safe [dependency mocking](./src/app.mock.spec.ts) for tests;
+- Type-safe [dependency mocking](./apps/service/src/app.mock.spec.ts) for tests;
 
 Scaffolding:
 
-- [Periodic in-memory jobs](./src/infrastructure/jobs/AbstractPeriodicJob.ts);
-- [Durable enqueued Redis jobs](./src/infrastructure/jobs/AbstractEnqueuedJobProcessor.ts);
-- [API client](./src/integrations/FakeStoreApiClient.ts), using opinionated high-performance [backend client](https://www.npmjs.com/package/@lokalise/backend-http-client), based on [undici](https://www.npmjs.com/package/undici)
-- [AWS configuration loading](./src/infrastructure/aws/awsConfig.ts)
+- [Periodic in-memory jobs](./apps/service/src/infrastructure/jobs/AbstractPeriodicJob.ts);
+- [Durable enqueued Redis jobs](./apps/service/src/infrastructure/jobs/AbstractEnqueuedJobProcessor.ts);
+- [API client](./apps/service/src/integrations/FakeStoreApiClient.ts), using opinionated high-performance [backend client](https://www.npmjs.com/package/@lokalise/backend-http-client), based on [undici](https://www.npmjs.com/package/undici)
+- [AWS configuration loading](./apps/service/src/infrastructure/aws/awsConfig.ts)
 
 Basic building block examples:
 
-- [Repository](./src/modules/users/repositories/UserRepository.ts) (using [drizzle](https://orm.drizzle.team/));
-- [Domain service](./src/modules/users/services/UserService.ts);
-- [Controller](./src/modules/users/controllers/UserController.ts);
-- [Route](./src/modules/users/routes/userRoutes.ts);
+- [Repository](./apps/service/src/modules/users/repositories/UserRepository.ts) (using [drizzle](https://orm.drizzle.team/));
+- [Domain service](./apps/service/src/modules/users/services/UserService.ts);
+- [Controller](./apps/service/src/modules/users/controllers/UserController.ts);
+- [Route](./apps/service/src/modules/users/routes/userRoutes.ts);
 - [Schema](packages/api-contracts/src/userSchemas.ts) (published independently as [`@node-service-template/api-contracts`](packages/api-contracts));
-- [e2e test](./src/modules/users/controllers/UserController.e2e.spec.ts);
+- [e2e test](./apps/service/src/modules/users/controllers/UserController.e2e.spec.ts);
 
 Plugins:
 
-- [JWT](./src/plugins/jwtTokenPlugin.ts) plugin (using [@fastify/jwt](https://github.com/fastify/fastify-jwt));
+- [JWT](./apps/service/src/plugins/jwtTokenPlugin.ts) plugin (using [@fastify/jwt](https://github.com/fastify/fastify-jwt));
 
 Scripts:
 
-- [Generate](./scripts/generateOpenApi.ts) OpenAPI specification from your route definitions;
-- [Validate](./scripts/validateOpenApi.ts) your OpenAPI specification;
-- [GenerateJwt](./scripts/generateJwt.ts) generate jwt for dev usage.
+- [Generate](./apps/service/scripts/generateOpenApi.ts) OpenAPI specification from your route definitions;
+- [Validate](./apps/service/scripts/validateOpenApi.ts) your OpenAPI specification;
+- [GenerateJwt](./apps/service/scripts/generateJwt.ts) generate jwt for dev usage.
 
-Service template also comes with a curated set of plugins [installed](./src/app.ts):
+Service template also comes with a curated set of plugins [installed](./apps/service/src/app.ts):
 
 - `@fastify/helmet` (security headers)
 - `@fastify/swagger` (OpenAPI specification generation)
@@ -79,6 +79,32 @@ build the project.
 We recommend you to create your own `@your-org/fastify-extras` package and create your own mix of vendor plugins that
 are relevant for the technological stack of your organization, and replace `@lokalise/fastify-extras` with it.
 
+## Repository structure
+
+```
+apps/service/            the service: source, tests, scripts, Dockerfile, docker-compose.yml, env files
+packages/api-contracts/  API contracts, published to npm
+package.json             workspace-wide scripts and tooling (Turborepo, Biome)
+turbo.json               task graph: build, lint and test:ci build workspace dependencies first
+biome.jsonc              shared Biome config, extended by each app and package
+```
+
+Keeping the service in `apps/` the same way the contracts live in `packages/` means adding another
+app (a UI, a worker) needs no restructuring, and the root only holds repository-wide config.
+
+The root scripts run every app and package through Turborepo, building workspace dependencies first
+and caching the results:
+
+| Command | What it does |
+| --- | --- |
+| `pnpm run build` | Builds the contracts, then the service |
+| `pnpm run dev` | Builds the contracts, then starts the service in watch mode |
+| `pnpm run lint` | Lints every app and package against freshly built contracts |
+| `pnpm run test:ci` | Applies test migrations and runs every test suite with coverage |
+
+The rest of the commands in this README are service scripts. Run them from `apps/service`, or from
+the root with `pnpm --filter @node-service-template/service run <script>`.
+
 ## Getting Started
 
 1. Make sure your node version is compatible with the requirements in [package.json](package.json). We are working with `node >= 24` and recommend using a version manager, such as [nvm](https://github.com/nvm-sh/nvm), to manage multiple Node versions on your device if needed.
@@ -95,38 +121,42 @@ are relevant for the technological stack of your organization, and replace `@lok
    pnpm install
    ```
 
-   > This is a pnpm workspace. The service lives at the repository root and the
-   > publishable API contracts live under [`packages/api-contracts`](packages/api-contracts).
-   > The service consumes the contracts via `@node-service-template/api-contracts` (`workspace:*`).
+   > This is a pnpm workspace run with [Turborepo](https://turborepo.com). The service lives
+   > under [`apps/service`](apps/service) and the publishable API contracts under
+   > [`packages/api-contracts`](packages/api-contracts). The service consumes the contracts via
+   > `@node-service-template/api-contracts` (`workspace:*`). The repository root holds only
+   > workspace-wide config and tooling. See [Repository structure](#repository-structure).
 
-4. Optionally create a `.env.development.local` file for secrets and anything you want to change
-   locally. The start and db scripts load [.env.development](.env.development) first and
+4. Optionally create an `apps/service/.env.development.local` file for secrets and anything you want to change
+   locally. The start and db scripts load [.env.development](apps/service/.env.development) first and
    `.env.development.local` on top, so the service runs without it, and it only needs the values
    you override.
 
 5. Launch all the infrastructural dependencies locally:
 
    ```shell
-   docker compose up -d
+   pnpm run docker:start:dev
    ```
 
    This starts PostgreSQL, Redis, RabbitMQ, and [fauxqs](https://github.com/kibertoad/fauxqs) (local SQS/SNS emulator).
 
-   - Database is initialized via [scripts/db/init-dbs.sh](./scripts/db/init-dbs.sh).
-   - SQS/SNS queues, topics, and subscriptions are initialized via [scripts/fauxqs-init.json](./scripts/fauxqs-init.json).
+   - Database is initialized via [scripts/db/init-dbs.sh](./apps/service/scripts/db/init-dbs.sh).
+   - SQS/SNS queues, topics, and subscriptions are initialized via [scripts/fauxqs-init.json](./apps/service/scripts/fauxqs-init.json).
 
-   In tests, fauxqs runs as an embedded library (no Docker required) — see [test/FauxqsHelper.ts](./test/FauxqsHelper.ts).
+   In tests, fauxqs runs as an embedded library (no Docker required) — see [test/FauxqsHelper.ts](./apps/service/test/FauxqsHelper.ts).
 
 6. Run migrations to synchronize your database schema with defined models:
    ```shell
-   node --run db:apply-migrations
+   pnpm run db:apply-migrations
    ```
 
 7. To run application:
 
    ```shell
-   node --run start:dev
+   pnpm run dev
    ```
+
+   Turborepo builds the API contracts first, then starts the service in watch mode.
 
    > **_NOTE:_** By default all calls to the `node-template` app will require a valid JWT token, hence authentication errors when running the application are expected if you haven't yet followed the steps in [Create jwt for dev usage](#create-jwt-for-dev-usage).
 
@@ -136,7 +166,7 @@ We use [Drizzle](https://orm.drizzle.team/) as convenient mechanism for building
 
 In order to automatically generate a new migration,
 
-1. Edit an existing schema file or add a new one to [src/db/schema](./src/db/schema);
+1. Edit an existing schema file or add a new one to [src/db/schema](./apps/service/src/db/schema);
 2. Run `node --run db:generate-migrations -- --name {migrationName}`, where `customName` is a short message describing your change separated by underscores (`_`);
 3. Run `node --run db:apply-migrations` to apply your new migration.
 
@@ -158,16 +188,16 @@ To initialize your test database and/or apply your latest schema changes.
 
 The file names follow the [Vite convention](https://vite.dev/guide/env-and-mode#env-files): one file
 per mode, and a gitignored `.local` file on top of it for your own overrides. The schema defaults in
-[src/infrastructure/config.ts](./src/infrastructure/config.ts) take the place of Vite's generic
+[src/infrastructure/config.ts](./apps/service/src/infrastructure/config.ts) take the place of Vite's generic
 `.env`. There is no `.env` or `.env.local`, because Vite loads those in every mode, tests included.
 
 | File | Committed | Read by | Purpose |
 | --- | --- | --- | --- |
 | `.env.development` | yes | start, db and script commands | Local development values (localhost hosts, local credentials). Never read by tests or deployed environments. |
 | `.env.development.local` | no | start, db and script commands, on top of `.env.development` | Your secrets and personal overrides for local development. Optional. |
-| `.env.test` | yes | tests ([test/envSetupHook.ts](./test/envSetupHook.ts)), `test:migrate`, Docker healthcheck | Every variable the test suite runs with: test database, in-process fakes, vendors switched off. |
+| `.env.test` | yes | tests ([test/envSetupHook.ts](./apps/service/test/envSetupHook.ts)), `test:migrate`, Docker healthcheck | Every variable the test suite runs with: test database, in-process fakes, vendors switched off. |
 | `.env.test.local` | no | tests and `test:migrate`, on top of `.env.test` | Your personal overrides for test runs, for example a database on another port. Optional. |
-| `.env.docker-test` | yes | [scripts/docker-healthcheck-test.sh](./scripts/docker-healthcheck-test.sh) | Overrides on top of `.env.test` for the container healthcheck. |
+| `.env.docker-test` | yes | [scripts/docker-healthcheck-test.sh](./apps/service/scripts/docker-healthcheck-test.sh) | Overrides on top of `.env.test` for the container healthcheck. |
 
 A variable that needs a value in every environment gets a schema default, set to the production
 value. A variable that has a sensible local value but must be set explicitly in deployed
@@ -175,7 +205,7 @@ environments (a hostname, a connection URL) has no schema default and goes in `.
 and `.env.test`, so a missing value stops the service from starting instead of pointing it at
 `localhost`.
 
-All supported variables, with their defaults, are documented in [docs/environment-variables.md](./docs/environment-variables.md), generated from the config schema.
+All supported variables, with their defaults, are documented in [docs/environment-variables.md](./apps/service/docs/environment-variables.md), generated from the config schema.
 
 `getConfig()` enables envase's `emptyStringAsUndefined`, so an empty value (`KEY=`) counts as unset: the schema default applies, optional variables stay `undefined` and required ones fail validation.
 
@@ -212,9 +242,9 @@ carries a literal `code`, and public errors add an `ErrorType` that determines t
   reference them via `mergeErrorSchemasByStatusCode()`. The error payload is therefore part of the
   contract and generated OpenAPI spec, and clients can parse it with the same schema.
 - The owning module binds each definition to a class, e.g.
-  [UserNotFoundError.ts](./src/modules/users/errors/UserNotFoundError.ts), and throws it from its
+  [UserNotFoundError.ts](./apps/service/src/modules/users/errors/UserNotFoundError.ts), and throws it from its
   services. Match errors with the static `isInstance()` guard, not `instanceof`.
-- The [global error handler](./src/infrastructure/errors/errorHandler.ts) turns a `PublicError` into
+- The [global error handler](./apps/service/src/infrastructure/errors/errorHandler.ts) turns a `PublicError` into
   `error.httpStatusCode` plus `error.toPayload()`, and reports and logs anything mapped to a 5xx.
 
 ### OpenTelemetry instrumentation
@@ -225,9 +255,9 @@ It should work out-of-the-box for all incoming HTTP requests, as long as correct
 
 ### Profiling and local load testing
 
-Continuous CPU, wall-clock and heap profiling with [Grafana Pyroscope](https://grafana.com/docs/pyroscope/latest/) is wired in through [`@lokalise/pyroscope-profiling`](https://www.npmjs.com/package/@lokalise/pyroscope-profiling): the profiler starts in [serverInternal.ts](./src/serverInternal.ts) and `pyroscopeProfilingPlugin` labels every request's samples with its route. It is off unless `PYROSCOPE_ENABLED=true`, and never on under `NODE_ENV=test`.
+Continuous CPU, wall-clock and heap profiling with [Grafana Pyroscope](https://grafana.com/docs/pyroscope/latest/) is wired in through [`@lokalise/pyroscope-profiling`](https://www.npmjs.com/package/@lokalise/pyroscope-profiling): the profiler starts in [serverInternal.ts](./apps/service/src/serverInternal.ts) and `pyroscopeProfilingPlugin` labels every request's samples with its route. It is off unless `PYROSCOPE_ENABLED=true`, and never on under `NODE_ENV=test`.
 
-[`perf/`](./perf) holds a local load-test stack built on it: the service as a host process, its datastores in containers, [k6](https://grafana.com/docs/k6/latest/) driving it, a database probe counting what each run cost in statements, and Pyroscope profiling it on request.
+[`perf/`](./apps/service/perf) holds a local load-test stack built on it: the service as a host process, its datastores in containers, [k6](https://grafana.com/docs/k6/latest/) driving it, a database probe counting what each run cost in statements, and Pyroscope profiling it on request.
 
 ```shell
 node --run perf:run:smoke                  # up, one pass per journey, down
@@ -236,14 +266,14 @@ node --run perf:analyze                    # where the time went
 node --run perf:down
 ```
 
-See [perf/README.md](./perf/README.md) for the full guide.
+See [perf/README.md](./apps/service/perf/README.md) for the full guide.
 
 ### Create jwt for dev usage
 
 You have multiple options to ease your development:
 
-1. Comment `onRequest` hook for JWT verification [here](./src/plugins/jwtTokenPlugin.ts)
-2. Generate a valid JWT with provided [generateJwt](./scripts/generateJwt.ts) script
+1. Comment `onRequest` hook for JWT verification [here](./apps/service/src/plugins/jwtTokenPlugin.ts)
+2. Generate a valid JWT with provided [generateJwt](./apps/service/scripts/generateJwt.ts) script
 
 #### Generate JWT script
 
@@ -286,8 +316,8 @@ You have multiple options to ease your development:
 
 #### Validate env var doc script
 
-- Script will get all environment variables used in [config.ts](./src/infrastructure/config.ts) and validate that 
-all are documented in [docs](./docs/environment-variables.md)
+- Script will get all environment variables used in [config.ts](./apps/service/src/infrastructure/config.ts) and validate that 
+all are documented in [docs](./apps/service/docs/environment-variables.md)
 
   ```shell
   node --run docs:validate
@@ -308,11 +338,11 @@ If any variable is not documented you will see a list of undocumented ones:
 
 ## CLI Commands
 
-To create a new CLI command, create a new file in the [scripts/cmd](./scripts/cmd) directory. The file should be self-executable and wrap its logic with [cliCommandWrapper](./scripts/utils/cliCommandWrapper.ts), which boots the app, parses and validates arguments, and handles logging, graceful shutdown, and exit codes.
+To create a new CLI command, create a new file in the [scripts/cmd](./apps/service/scripts/cmd) directory. The file should be self-executable and wrap its logic with [cliCommandWrapper](./apps/service/scripts/utils/cliCommandWrapper.ts), which boots the app, parses and validates arguments, and handles logging, graceful shutdown, and exit codes.
 
-To use arguments in your command, provide a zod schema to `cliCommandWrapper()`. CLI flags are derived from the schema itself — string, boolean, repeatable (array) and optional flags are supported, and the schema may end in `.transform()`/`.pipe()` to reshape flat flags into a nested args object. See [docs/cli-commands.md](./docs/cli-commands.md) for the full description of what is supported.
+To use arguments in your command, provide a zod schema to `cliCommandWrapper()`. CLI flags are derived from the schema itself — string, boolean, repeatable (array) and optional flags are supported, and the schema may end in `.transform()`/`.pipe()` to reshape flat flags into a nested args object. See [docs/cli-commands.md](./apps/service/docs/cli-commands.md) for the full description of what is supported.
 
-Create a new command in the `scripts` section of `package.json`:
+Create a new command in the `scripts` section of [apps/service/package.json](apps/service/package.json):
 
 ```json
 "scripts": {

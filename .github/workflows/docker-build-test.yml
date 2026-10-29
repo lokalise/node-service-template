@@ -3,12 +3,12 @@ name: docker-build-test
 on:
   pull_request:
     paths:
-      - 'Dockerfile'
+      - 'apps/service/Dockerfile'
       - '.dockerignore'
-      - 'docker-compose.yml'
-      - '.env.docker-test'
-      - '.env.test'
-      - 'scripts/docker-healthcheck-test.sh'
+      - 'apps/service/docker-compose.yml'
+      - 'apps/service/.env.docker-test'
+      - 'apps/service/.env.test'
+      - 'apps/service/scripts/docker-healthcheck-test.sh'
       - '.github/workflows/docker-build-test.yml'
 
 jobs:
@@ -19,4 +19,4 @@ jobs:
       - uses: actions/checkout@v7
 
       - name: Run Docker healthcheck test
-        run: ./scripts/docker-healthcheck-test.sh
+        run: ./apps/service/scripts/docker-healthcheck-test.sh

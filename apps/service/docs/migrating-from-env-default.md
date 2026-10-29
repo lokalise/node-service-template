@@ -1,7 +1,7 @@
 # Migrating from `.env.default` to `.env.development` + `.env.test`
 
 How to move a service from the `.env.default` + `copy:config` setup to the one in this template
-(see [Environment files](../README.md#environment-files)).
+(see [Environment files](../../../README.md#environment-files)).
 
 ## Why
 

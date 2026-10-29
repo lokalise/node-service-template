@@ -1,0 +1,24 @@
+{
+  "$schema": "../../node_modules/@biomejs/biome/configuration_schema.json",
+  "extends": "//",
+  "files": {
+    "includes": [
+      "**",
+      // Repeated from the root config: extending it replaces this list rather than merging it
+      "!**/node_modules",
+      "!**/dist",
+      "!**/coverage",
+      // Load-test output and the key pair the runner generates, all gitignored
+      "!perf/.auth",
+      "!perf/k6/k6-summary.json",
+      "!perf/k6/seed-users.json"
+    ]
+  },
+  "overrides": [
+    {
+      // Globals the k6 runtime provides to a test script.
+      "includes": ["perf/k6/**"],
+      "javascript": { "globals": ["__ENV", "open"] }
+    }
+  ]
+}
