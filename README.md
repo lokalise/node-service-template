@@ -100,7 +100,7 @@ and caching the results:
 | `pnpm run build` | Builds the contracts, then the service |
 | `pnpm run dev` | Builds the contracts, then starts the service in watch mode |
 | `pnpm run lint` | Lints every app and package against freshly built contracts |
-| `pnpm run test:ci` | Applies test migrations and runs every test suite with coverage |
+| `pnpm run test:ci` | Starts each app's Docker stack, applies test migrations, runs the tests with coverage and stops the stack |
 
 The rest of the commands in this README are service scripts. Run them from `apps/service`, or from
 the root with `pnpm --filter @node-service-template/service run <script>`.
