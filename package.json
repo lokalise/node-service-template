@@ -69,7 +69,7 @@
     "@lokalise/config": "^1.0.1",
     "@lokalise/errors": "^2.1.0",
     "@lokalise/fastify-api-contracts": "^8.0.0",
-    "@lokalise/fastify-extras": "^36.0.1",
+    "@lokalise/fastify-extras": "^36.0.2",
     "@lokalise/healthcheck-utils": "^8.0.0",
     "@lokalise/node-core": "^14.11.0",
     "@lokalise/opentelemetry-fastify-bootstrap": "^4.1.2",
