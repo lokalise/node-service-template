@@ -1,6 +1,12 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+# Run from the app directory so compose and the env files resolve; the image
+# is built from the repository root, which holds the whole workspace.
+APP_DIR="$(cd "$(dirname "$0")/.." && pwd)"
+REPO_ROOT="$(cd "$APP_DIR/../.." && pwd)"
+cd "$APP_DIR"
+
 # Configuration
 IMAGE_NAME="node-service-template-test"
 IMAGE_TAG="healthcheck-test"
@@ -24,8 +30,9 @@ docker build \
   --no-cache \
   --build-arg GIT_COMMIT_SHA="$(git rev-parse HEAD 2>/dev/null || echo 'unknown')" \
   --build-arg APP_VERSION="test" \
+  -f "$APP_DIR/Dockerfile" \
   -t "${IMAGE_NAME}:${IMAGE_TAG}" \
-  .
+  "$REPO_ROOT"
 
 # Step 2: Start infrastructure dependencies
 echo "==> Starting infrastructure dependencies..."

@@ -1,5 +1,16 @@
 # Changelog
 
+## [2.0.0] - 2026-10-29
+
+- Move the service into [apps/service](apps/service), next to [packages/api-contracts](packages/api-contracts), following the [Turborepo repository structure](https://turborepo.com/docs/crafting-your-repository/structuring-a-repository). The root now holds only workspace-wide config and tooling; `src`, `test`, `scripts`, `perf`, `docs`, the env files, `docker-compose.yml`, the `Dockerfile` and the TypeScript and Vitest configs moved with the service. Adding another app (a UI, a worker) no longer needs a restructure
+- Run tasks through [Turborepo](https://turborepo.com). [turbo.json](turbo.json) makes `build`, `dev`, `lint` and `test:ci` build workspace dependencies first, so `lint` and `tsc` always see the current contracts instead of whatever was last built into `packages/api-contracts/dist`, and caches `build` and `lint`. The root `build`, `dev`, `lint`, `lint:fix` and `test:ci` scripts run `turbo`; `docker:start:dev`, `docker:stop:dev` and `db:apply-migrations` forward to the service. `build:service`, `build:contracts` and `prepublishOnly` are gone, and `start:dev` no longer builds the contracts (use `pnpm run dev` from the root)
+- pnpm uses `nodeLinker: hoisted`, as ragnarok and polyglot do. With the isolated linker, the production-only install in the Dockerfile drops `packages/api-contracts`'s link to its `@lokalise/api-contracts` peer, and the service fails to start. The `db:*` and `test:migrate` scripts call drizzle-kit from the root `node_modules`
+- The service's dependencies moved to [apps/service/package.json](apps/service/package.json) (`@node-service-template/service`). The root `package.json` is private and only keeps Biome and Turborepo
+- [apps/service/biome.jsonc](apps/service/biome.jsonc) extends the root config and holds the service-specific `perf/` ignores and k6 globals. The root `lint` checks the root JSON files and then runs `turbo run lint`
+- The [Dockerfile](apps/service/Dockerfile) uses `turbo prune --docker`: the install layer only sees the service's and its workspace dependencies' manifests, and the release image keeps the pruned workspace with production dependencies, starting from `apps/service`. Build it from the repository root: `docker build -f apps/service/Dockerfile .`. pnpm is installed at the version in `devEngines.packageManager` instead of a separate `PNPM_VERSION` build arg
+- The service's `test:ci` starts its Docker stack and applies test migrations in `pretest:ci`, and stops the stack in `posttest:ci`, so `pnpm run test:ci` at the root needs nothing started beforehand. The root runs it with `--concurrency=1`, so apps with their own stacks don't fight over ports
+- The CI `build` job only installs and runs `pnpm run test:ci` and `pnpm run lint`; the separate Docker, build and migration steps are gone. The Docker healthcheck workflow watches the new paths, and Dependabot also updates `apps/*`
+
 ## [1.27.0] - 2026-10-27
 
 - Build the `app`, `redis` and `scheduler` config sections from [`@lokalise/config`](https://www.npmjs.com/package/@lokalise/config) (`createAppConfigSchema()`, `createRedisConfigSchema()` and `createRedisConfigSchema({ prefix: 'SCHEDULER' })`) instead of defining the env vars in [config.ts](src/infrastructure/config.ts). `JWT_PUBLIC_KEY` stays service-specific and is added next to the shared app schema

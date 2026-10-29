@@ -62,11 +62,12 @@ typings/
 
 # next.js build output
 .next
-/dist/
+/apps/*/dist/
 /packages/*/dist/
+.turbo/
 /.idea/
 /.fleet/
-/serviceSpec.yaml
+/apps/*/serviceSpec.yaml
 
 # jwt key pair
-/scripts/keys/
+/apps/*/scripts/keys/
