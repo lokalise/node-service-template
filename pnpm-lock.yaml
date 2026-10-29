@@ -236,14 +236,14 @@ importers:
         specifier: ^13.2.0
         version: 13.2.0
       '@fastify/jwt':
-        specifier: ^10.2.4
-        version: 10.2.4
+        specifier: ^10.2.5
+        version: 10.2.5
       '@fastify/otel':
-        specifier: 0.21.2
-        version: 0.21.2(@opentelemetry/api@1.9.1)(supports-color@7.2.0)
+        specifier: 0.21.3
+        version: 0.21.3(@opentelemetry/api@1.9.1)(supports-color@7.2.0)
       '@fastify/schedule':
-        specifier: ^7.0.1
-        version: 7.0.1(toad-scheduler@4.2.0)
+        specifier: ^7.0.2
+        version: 7.0.2(toad-scheduler@4.2.0)
       '@fastify/swagger':
         specifier: ^9.9.2
         version: 9.9.2(supports-color@7.2.0)
@@ -252,7 +252,7 @@ importers:
         version: 9.0.1(zod@4.6.7)
       '@lokalise/aws-config':
         specifier: ^10.0.0
-        version: 10.0.0(@aws-sdk/client-sns@3.1152.0)(@aws-sdk/client-sqs@3.1152.0)(@aws-sdk/credential-providers@3.1152.0)(@lokalise/fastify-extras@36.0.1(1378c02a89785242f96dbac1a62837e3))(@lokalise/node-core@14.11.0(zod@4.6.7))(@lokalise/universal-ts-utils@4.12.0)(@message-queue-toolkit/core@27.2.0(zod@4.6.7))(@message-queue-toolkit/sns@27.2.0(@aws-sdk/client-sns@3.1152.0)(@aws-sdk/client-sqs@3.1152.0)(@aws-sdk/client-sts@3.1152.0)(@message-queue-toolkit/core@27.2.0(zod@4.6.7))(@message-queue-toolkit/schemas@8.1.0(zod@4.6.7))(@message-queue-toolkit/sqs@27.2.0(@aws-sdk/client-sqs@3.1152.0)(@message-queue-toolkit/core@27.2.0(zod@4.6.7))(supports-color@7.2.0)(zod@4.6.7))(supports-color@7.2.0)(zod@4.6.7))(@message-queue-toolkit/sqs@27.2.0(@aws-sdk/client-sqs@3.1152.0)(@message-queue-toolkit/core@27.2.0(zod@4.6.7))(supports-color@7.2.0)(zod@4.6.7))(envase@2.1.0)(zod@4.6.7)
+        version: 10.0.0(@aws-sdk/client-sns@3.1152.0)(@aws-sdk/client-sqs@3.1152.0)(@aws-sdk/credential-providers@3.1152.0)(@lokalise/fastify-extras@36.0.1(edc41337427b947612411b961d91ac6b))(@lokalise/node-core@14.11.0(zod@4.6.7))(@lokalise/universal-ts-utils@4.12.0)(@message-queue-toolkit/core@27.2.0(zod@4.6.7))(@message-queue-toolkit/sns@27.2.0(@aws-sdk/client-sns@3.1152.0)(@aws-sdk/client-sqs@3.1152.0)(@aws-sdk/client-sts@3.1152.0)(@message-queue-toolkit/core@27.2.0(zod@4.6.7))(@message-queue-toolkit/schemas@8.1.0(zod@4.6.7))(@message-queue-toolkit/sqs@27.2.0(@aws-sdk/client-sqs@3.1152.0)(@message-queue-toolkit/core@27.2.0(zod@4.6.7))(supports-color@7.2.0)(zod@4.6.7))(supports-color@7.2.0)(zod@4.6.7))(@message-queue-toolkit/sqs@27.2.0(@aws-sdk/client-sqs@3.1152.0)(@message-queue-toolkit/core@27.2.0(zod@4.6.7))(supports-color@7.2.0)(zod@4.6.7))(envase@2.1.0)(zod@4.6.7)
       '@lokalise/backend-http-client':
         specifier: ^13.0.0
         version: 13.0.0(@lokalise/api-contracts@9.0.1(zod@4.6.7))(@lokalise/node-core@14.11.0(zod@4.6.7))(zod@4.6.7)
@@ -270,7 +270,7 @@ importers:
         version: 8.0.0(@fastify/sse@0.6.1(fastify@5.12.7))(@lokalise/api-contracts@9.0.1(zod@4.6.7))(@lokalise/node-core@14.11.0(zod@4.6.7))(fastify-type-provider-zod@7.0.0(@fastify/swagger@9.9.2(supports-color@7.2.0))(fastify@5.12.7)(openapi-types@12.1.3)(zod@4.6.7))(fastify@5.12.7)(zod@4.6.7)
       '@lokalise/fastify-extras':
         specifier: ^36.0.1
-        version: 36.0.1(1378c02a89785242f96dbac1a62837e3)
+        version: 36.0.1(edc41337427b947612411b961d91ac6b)
       '@lokalise/healthcheck-utils':
         specifier: ^8.0.0
         version: 8.0.0(@lokalise/background-jobs-common@17.0.1(bullmq@6.3.15(ioredis@6.0.0(supports-color@7.2.0)))(ioredis@6.0.0(supports-color@7.2.0))(pino@10.4.0)(supports-color@7.2.0)(toad-scheduler@4.2.0)(zod@4.6.7))(@prometheus-io/client@0.16.1)(ioredis@6.0.0(supports-color@7.2.0))(supports-color@7.2.0)(toad-scheduler@4.2.0)(zod@4.6.7)
@@ -350,8 +350,8 @@ importers:
         specifier: ^5.0.0
         version: 5.0.0
       fastify-metrics:
-        specifier: ^14.1.0
-        version: 14.1.0(fastify@5.12.7)
+        specifier: ^14.1.1
+        version: 14.1.1(fastify@5.12.7)
       fastify-no-icon:
         specifier: ^7.0.0
         version: 7.0.0
@@ -967,8 +967,8 @@ packages:
   '@fastify/helmet@13.2.0':
     resolution: {integrity: sha512-2u41U5hR9o1u3HUHLT3Njp7vWuWw+XXw8qCBwVY17pRQAN179YYKiU9f7/qEn1ITabgNTkq/Yk6gmrYPSraagA==}
 
-  '@fastify/jwt@10.2.4':
-    resolution: {integrity: sha512-xaRULl7ZLLmmclAWc0gaNHCrK32A+uho8wMJkHfxQ+EXIXIBdCLnbe/89uTlNbQoR2w4i/p24DzOuldvM52ETA==}
+  '@fastify/jwt@10.2.5':
+    resolution: {integrity: sha512-pObTiMwxYNYdTZ2E/aoU3REIQAMCFXtXMBcUTP1r60nbPqxQEDbN9zh/SQUEefL7gn+KBOaXcoU/Qmza4NxANA==}
 
   '@fastify/merge-json-schemas@0.2.2':
     resolution: {integrity: sha512-d/gx9sRbUCVgGRGzma46wLcwiY8noTqO2Nmjg/vbTARxHRE5bdh5PIL8s97Lt1X7ScRWRW52eVYxwIoPwIdVUA==}
@@ -978,16 +978,16 @@ packages:
     peerDependencies:
       '@opentelemetry/api': ^1.9.0
 
-  '@fastify/otel@0.21.2':
-    resolution: {integrity: sha512-JWkxmIroQtJaVKGIzFTvAEI+J4elMmjgWGcQkRhvrcHYCf5xD3Q0sgQusQ2tMcCVewg7haoWSWIvub+KixKU3w==}
+  '@fastify/otel@0.21.3':
+    resolution: {integrity: sha512-qyEqVSEGdT1xu/BmaSDdOgivR3EC7mJcea2YpaAxg6D03qc9RfmuDBZAL5uWIE0Um7K8fBzAmUfbyA1CHrDo/Q==}
     peerDependencies:
       '@opentelemetry/api': ^1.9.0
 
   '@fastify/proxy-addr@5.1.2':
     resolution: {integrity: sha512-uqB4QsgVoro0XDC+DIftIMGXHdBPn+lK6Ek3xXAIxPMCJfqxnbtyEoMCm2KPUVOuIosd7Cyw9HawEqMFM/UA+g==}
 
-  '@fastify/schedule@7.0.1':
-    resolution: {integrity: sha512-D2pb8JPP7C2UroCu+7Q0XMiC0/yDyzIzMq2w5c8txZJ8130M441Wt43aIqfMGsL8MFq4tTEqCiFLgc2Wlyy8LQ==}
+  '@fastify/schedule@7.0.2':
+    resolution: {integrity: sha512-h45CK+76RZ2yUcnBNUyK9ZA4a+QZTdyIE36BYG871V1ie3v99W45Kra8IMZ5I6ItWk2YkVeTRfw4nZSBiDCfQA==}
     peerDependencies:
       toad-scheduler: '>=2.0.0'
 
@@ -3611,8 +3611,8 @@ packages:
     resolution: {integrity: sha512-s6yP6ZUwkGFhKwIdKzMaWgQeAneQHn3qizbfjSubF234xS0RZPMASCF1S9OU9OQqfAH3ebaewbADYPQrpso25A==}
     engines: {node: '>=20.0.0'}
 
-  fastify-metrics@14.1.0:
-    resolution: {integrity: sha512-jf9qVynXVd43XxAT4JHXRVTaVbryAdTsX09PgGVeGqTfrgd0qpw1YtRYyCato0armPPmzvNDPSR2xK5MRXZTXA==}
+  fastify-metrics@14.1.1:
+    resolution: {integrity: sha512-QFEq+b0c6CsjpSEM+kJlBu4ASaTjlH6LifY/+6Y2sX0aDIfRIkuQ/4d4EjAmZJFTQk0p9jPowr6t80E1XxtH0g==}
     engines: {node: '>=22.19.0', pnpm: '>=12'}
     peerDependencies:
       '@platformatic/prom-client': ^1.0.0
@@ -5565,7 +5565,7 @@ snapshots:
       fastify-plugin: 6.0.1
       helmet: 8.3.0
 
-  '@fastify/jwt@10.2.4':
+  '@fastify/jwt@10.2.5':
     dependencies:
       '@fastify/error': 4.2.1
       '@lukeed/ms': 2.0.2
@@ -5587,11 +5587,11 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@fastify/otel@0.21.2(@opentelemetry/api@1.9.1)(supports-color@7.2.0)':
+  '@fastify/otel@0.21.3(@opentelemetry/api@1.9.1)(supports-color@7.2.0)':
     dependencies:
       '@opentelemetry/api': 1.9.1
       '@opentelemetry/core': 2.12.0(@opentelemetry/api@1.9.1)
-      '@opentelemetry/instrumentation': 0.222.0(@opentelemetry/api@1.9.1)(supports-color@7.2.0)
+      '@opentelemetry/instrumentation': 0.223.0(@opentelemetry/api@1.9.1)(supports-color@7.2.0)
       '@opentelemetry/semantic-conventions': 1.43.0
       minimatch: 10.2.6
     transitivePeerDependencies:
@@ -5602,7 +5602,7 @@ snapshots:
       '@fastify/forwarded': 3.1.1
       ipaddr.js: 2.5.0
 
-  '@fastify/schedule@7.0.1(toad-scheduler@4.2.0)':
+  '@fastify/schedule@7.0.2(toad-scheduler@4.2.0)':
     dependencies:
       fastify-plugin: 6.0.1
       toad-scheduler: 4.2.0
@@ -5764,12 +5764,12 @@ snapshots:
     dependencies:
       zod: 4.6.7
 
-  '@lokalise/aws-config@10.0.0(@aws-sdk/client-sns@3.1152.0)(@aws-sdk/client-sqs@3.1152.0)(@aws-sdk/credential-providers@3.1152.0)(@lokalise/fastify-extras@36.0.1(1378c02a89785242f96dbac1a62837e3))(@lokalise/node-core@14.11.0(zod@4.6.7))(@lokalise/universal-ts-utils@4.12.0)(@message-queue-toolkit/core@27.2.0(zod@4.6.7))(@message-queue-toolkit/sns@27.2.0(@aws-sdk/client-sns@3.1152.0)(@aws-sdk/client-sqs@3.1152.0)(@aws-sdk/client-sts@3.1152.0)(@message-queue-toolkit/core@27.2.0(zod@4.6.7))(@message-queue-toolkit/schemas@8.1.0(zod@4.6.7))(@message-queue-toolkit/sqs@27.2.0(@aws-sdk/client-sqs@3.1152.0)(@message-queue-toolkit/core@27.2.0(zod@4.6.7))(supports-color@7.2.0)(zod@4.6.7))(supports-color@7.2.0)(zod@4.6.7))(@message-queue-toolkit/sqs@27.2.0(@aws-sdk/client-sqs@3.1152.0)(@message-queue-toolkit/core@27.2.0(zod@4.6.7))(supports-color@7.2.0)(zod@4.6.7))(envase@2.1.0)(zod@4.6.7)':
+  '@lokalise/aws-config@10.0.0(@aws-sdk/client-sns@3.1152.0)(@aws-sdk/client-sqs@3.1152.0)(@aws-sdk/credential-providers@3.1152.0)(@lokalise/fastify-extras@36.0.1(edc41337427b947612411b961d91ac6b))(@lokalise/node-core@14.11.0(zod@4.6.7))(@lokalise/universal-ts-utils@4.12.0)(@message-queue-toolkit/core@27.2.0(zod@4.6.7))(@message-queue-toolkit/sns@27.2.0(@aws-sdk/client-sns@3.1152.0)(@aws-sdk/client-sqs@3.1152.0)(@aws-sdk/client-sts@3.1152.0)(@message-queue-toolkit/core@27.2.0(zod@4.6.7))(@message-queue-toolkit/schemas@8.1.0(zod@4.6.7))(@message-queue-toolkit/sqs@27.2.0(@aws-sdk/client-sqs@3.1152.0)(@message-queue-toolkit/core@27.2.0(zod@4.6.7))(supports-color@7.2.0)(zod@4.6.7))(supports-color@7.2.0)(zod@4.6.7))(@message-queue-toolkit/sqs@27.2.0(@aws-sdk/client-sqs@3.1152.0)(@message-queue-toolkit/core@27.2.0(zod@4.6.7))(supports-color@7.2.0)(zod@4.6.7))(envase@2.1.0)(zod@4.6.7)':
     dependencies:
       '@aws-sdk/client-sns': 3.1152.0
       '@aws-sdk/client-sqs': 3.1152.0
       '@aws-sdk/credential-providers': 3.1152.0
-      '@lokalise/fastify-extras': 36.0.1(1378c02a89785242f96dbac1a62837e3)
+      '@lokalise/fastify-extras': 36.0.1(edc41337427b947612411b961d91ac6b)
       '@lokalise/node-core': 14.11.0(zod@4.6.7)
       '@lokalise/universal-ts-utils': 4.12.0
       '@message-queue-toolkit/core': 27.2.0(zod@4.6.7)
@@ -5829,13 +5829,13 @@ snapshots:
     optionalDependencies:
       '@fastify/sse': 0.6.1(fastify@5.12.7)
 
-  '@lokalise/fastify-extras@36.0.1(1378c02a89785242f96dbac1a62837e3)':
+  '@lokalise/fastify-extras@36.0.1(edc41337427b947612411b961d91ac6b)':
     dependencies:
       '@amplitude/analytics-node': 1.5.79
       '@bugsnag/js': 9.1.0
       '@bugsnag/node': 8.10.0
       '@fastify/error': 4.2.1
-      '@fastify/jwt': 10.2.4
+      '@fastify/jwt': 10.2.5
       '@fastify/swagger': 9.9.2(supports-color@7.2.0)
       '@lokalise/api-contracts': 9.0.1(zod@4.6.7)
       '@lokalise/background-jobs-common': 17.0.1(bullmq@6.3.15(ioredis@6.0.0(supports-color@7.2.0)))(ioredis@6.0.0(supports-color@7.2.0))(pino@10.4.0)(supports-color@7.2.0)(toad-scheduler@4.2.0)(zod@4.6.7)
@@ -5851,7 +5851,7 @@ snapshots:
       bullmq: 6.3.15(ioredis@6.0.0(supports-color@7.2.0))
       dd-trace: 6.13.0
       fastify: 5.12.7
-      fastify-metrics: 14.1.0(fastify@5.12.7)
+      fastify-metrics: 14.1.1(fastify@5.12.7)
       fastify-plugin: 6.0.1
       fastify-type-provider-zod: 7.0.0(@fastify/swagger@9.9.2(supports-color@7.2.0))(fastify@5.12.7)(openapi-types@12.1.3)(zod@4.6.7)
       ioredis: 6.0.0(supports-color@7.2.0)
@@ -8458,7 +8458,7 @@ snapshots:
     dependencies:
       fastify-plugin: 5.1.0
 
-  fastify-metrics@14.1.0(fastify@5.12.7):
+  fastify-metrics@14.1.1(fastify@5.12.7):
     dependencies:
       '@prometheus-io/client': 0.16.1
       fastify: 5.12.7
