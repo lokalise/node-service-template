@@ -63,7 +63,7 @@
     "@fastify/schedule": "^7.0.2",
     "@fastify/swagger": "^9.9.2",
     "@lokalise/api-contracts": "^9.0.1",
-    "@lokalise/aws-config": "^10.0.0",
+    "@lokalise/aws-config": "^11.0.0",
     "@lokalise/backend-http-client": "^13.0.0",
     "@lokalise/background-jobs-common": "^17.0.1",
     "@lokalise/config": "^1.0.1",
