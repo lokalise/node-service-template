@@ -50,6 +50,8 @@ services:
     ports:
       - '4566:4566'
     environment:
+      # Same as AWS_REGION, so the service finds the resources seeded from init.json
+      FAUXQS_DEFAULT_REGION: eu-central-1
       FAUXQS_INIT: /app/init.json
     volumes:
       - ./scripts/fauxqs-init.json:/app/init.json
