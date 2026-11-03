@@ -1,0 +1,30 @@
+{
+  "$schema": "./node_modules/turbo/schema.json",
+  "tasks": {
+    "build": {
+      "description": "Compile every app and package, building workspace dependencies first",
+      "dependsOn": ["^build"],
+      "outputs": ["dist/**"]
+    },
+    "dev": {
+      "description": "Run the apps locally in watch mode",
+      "dependsOn": ["^build"],
+      "cache": false,
+      "persistent": true
+    },
+    "lint": {
+      "description": "Run biome, tsc and docs validation against freshly built workspace dependencies",
+      "dependsOn": ["^build"]
+    },
+    "lint:fix": {
+      "description": "Apply biome fixes",
+      "dependsOn": ["^build"],
+      "cache": false
+    },
+    "test:ci": {
+      "description": "Start each app's Docker stack, apply test migrations, run the tests with coverage and stop the stack",
+      "dependsOn": ["^build"],
+      "cache": false
+    }
+  }
+}

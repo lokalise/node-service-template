@@ -32,18 +32,6 @@ jobs:
         run: |
           pnpm install --frozen-lockfile --ignore-scripts
 
-      - name: Docker start
-        run: |
-          docker compose up -d --quiet-pull --wait
-
-      - name: Build TS
-        run: |
-          pnpm run build
-
-      - name: Schema preparation
-        run: |
-          pnpm run db:apply-migrations
-
       - name: Run Tests
         run: |
           pnpm run test:ci
@@ -51,10 +39,6 @@ jobs:
       - name: Run lint
         run: |
           pnpm run lint
-
-      - name: DB stop
-        run: |
-          docker compose down
 
 
   automerge:
