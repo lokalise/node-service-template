@@ -4,7 +4,7 @@
 #   docker build -f apps/service/Dockerfile .
 
 # ---- Base Node ----
-FROM node:26.7.0-trixie-slim AS base
+FROM node:26.13.0-trixie-slim AS base
 
 RUN set -ex && \
     apt-get update && \
