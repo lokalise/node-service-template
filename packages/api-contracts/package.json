@@ -16,7 +16,7 @@
     "clean": "rm -rf dist",
     "lint": "biome check && tsc",
     "lint:fix": "biome check --write",
-    "prepublishOnly": "pnpm run clean && pnpm run build"
+    "prepublishOnly": "node --run clean && node --run build"
   },
   "peerDependencies": {
     "@lokalise/api-contracts": ">=9.0.0",
