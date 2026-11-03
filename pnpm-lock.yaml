@@ -238,8 +238,8 @@ importers:
         specifier: ^10.0.0
         version: 10.0.0(c844d81435e24e8d3494b2f169b6b8e2)
       '@lokalise/backend-http-client':
-        specifier: ^13.0.0
-        version: 13.0.0(@lokalise/api-contracts@9.0.1(zod@4.6.7))(@lokalise/node-core@14.12.0(zod@4.6.7))(zod@4.6.7)
+        specifier: ^13.0.1
+        version: 13.0.1(@lokalise/api-contracts@9.0.1(zod@4.6.7))(@lokalise/node-core@14.12.0(zod@4.6.7))(zod@4.6.7)
       '@lokalise/background-jobs-common':
         specifier: ^17.0.1
         version: 17.0.1(bullmq@6.4.0(ioredis@6.0.0(supports-color@7.2.0)))(ioredis@6.0.0(supports-color@7.2.0))(pino@10.4.0)(supports-color@7.2.0)(toad-scheduler@4.2.0)(zod@4.6.7)
@@ -1084,10 +1084,10 @@ packages:
       envase: '>=1.3.0'
       zod: '>=4.0.0'
 
-  '@lokalise/backend-http-client@13.0.0':
-    resolution: {integrity: sha512-lVrcikPLOex2aFBdYrjVbcOyiLPMGmqKA6RWgPiLrvxTF8SHuPShUMJAq+n7SWt4DeQlNazFjMtJYEDO7bloXg==}
+  '@lokalise/backend-http-client@13.0.1':
+    resolution: {integrity: sha512-uWfF+GT8shK0pFAwLCdcXLcztJFnAcuXc5csg5/3QYe23f5NB1BdVRMFMSvEYXAMqV9B/UDYNcF1e8d3ZqIaVg==}
     peerDependencies:
-      '@lokalise/api-contracts': '>=9.0.0'
+      '@lokalise/api-contracts': '>=9.0.0 <10.0.0'
       '@lokalise/node-core': '>=13.1.0'
       zod: '>=3.25.56'
 
@@ -5762,7 +5762,7 @@ snapshots:
       envase: 2.1.0
       zod: 4.6.7
 
-  '@lokalise/backend-http-client@13.0.0(@lokalise/api-contracts@9.0.1(zod@4.6.7))(@lokalise/node-core@14.12.0(zod@4.6.7))(zod@4.6.7)':
+  '@lokalise/backend-http-client@13.0.1(@lokalise/api-contracts@9.0.1(zod@4.6.7))(@lokalise/node-core@14.12.0(zod@4.6.7))(zod@4.6.7)':
     dependencies:
       '@lokalise/api-contracts': 9.0.1(zod@4.6.7)
       '@lokalise/node-core': 14.12.0(zod@4.6.7)
