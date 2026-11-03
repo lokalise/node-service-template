@@ -112,7 +112,7 @@ the root with `pnpm --filter @node-service-template/service run <script>`.
 2. Install [pnpm](https://pnpm.io/installation) (this project uses pnpm as its package manager — the exact version is pinned in the `devEngines.packageManager` field of [package.json](package.json), and a mismatch hard-fails). Corepack is deliberately not used; install pnpm directly:
 
    ```shell
-   npm install -g pnpm@11.25.0
+   npm install -g pnpm@12.16.1
    ```
 
 3. Install all project dependencies:
