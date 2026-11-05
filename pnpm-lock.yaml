@@ -386,8 +386,8 @@ importers:
         specifier: ^5.0.0
         version: 5.0.0
       '@lokalise/universal-testing-utils':
-        specifier: ^5.0.0
-        version: 5.0.0(@lokalise/api-contracts@9.0.1(zod@4.6.7))(mockttp@4.6.5(supports-color@7.2.0))(msw@2.15.0(@types/node@26.6.6)(typescript@7.0.2))(zod@4.6.7)
+        specifier: ^5.0.1
+        version: 5.0.1(@lokalise/api-contracts@9.0.1(zod@4.6.7))(mockttp@4.6.5(supports-color@7.2.0))(msw@2.15.0(@types/node@26.6.6)(typescript@7.0.2))(zod@4.6.7)
       '@opentelemetry/sdk-trace-base':
         specifier: ^2.12.0
         version: 2.12.0
@@ -1250,10 +1250,10 @@ packages:
   '@lokalise/tsconfig@5.0.0':
     resolution: {integrity: sha512-nAE106uzG1+6ldEdmbFVIwkFTszkOFIxzCPaZhwqoChcXizvcCPuPGTE+PrlPiE6GhfAzlspLvmVwvzdaNimdw==}
 
-  '@lokalise/universal-testing-utils@5.0.0':
-    resolution: {integrity: sha512-ENU28J24C3qThtyZ90/q5A96SzL4T6/ppo9jVYQXwtCjwzHBJ+8Gm83oEAIUZQnaVfRypMAEfrTSqcNmJzEjEQ==}
+  '@lokalise/universal-testing-utils@5.0.1':
+    resolution: {integrity: sha512-DMHqVM1U8cGtbUrvhgYFZ64QNH6+epfZr9ZWM+/tR0+L2e+AlZIz1Qq3DQ1i7l1Kkm3Kg665WgoD0XYtZEFZzQ==}
     peerDependencies:
-      '@lokalise/api-contracts': '>=9.0.0'
+      '@lokalise/api-contracts': '>=9.0.0 <10.0.0'
       mockttp: '>=4.2.1'
       msw: '>=2.7.0'
       zod: '>=3.25.56'
@@ -6070,7 +6070,7 @@ snapshots:
 
   '@lokalise/tsconfig@5.0.0': {}
 
-  '@lokalise/universal-testing-utils@5.0.0(@lokalise/api-contracts@9.0.1(zod@4.6.7))(mockttp@4.6.5(supports-color@7.2.0))(msw@2.15.0(@types/node@26.6.6)(typescript@7.0.2))(zod@4.6.7)':
+  '@lokalise/universal-testing-utils@5.0.1(@lokalise/api-contracts@9.0.1(zod@4.6.7))(mockttp@4.6.5(supports-color@7.2.0))(msw@2.15.0(@types/node@26.6.6)(typescript@7.0.2))(zod@4.6.7)':
     dependencies:
       '@lokalise/api-contracts': 9.0.1(zod@4.6.7)
       mockttp: 4.6.5(supports-color@7.2.0)
