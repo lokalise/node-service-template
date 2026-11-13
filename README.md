@@ -170,9 +170,8 @@ In order to automatically generate a new migration,
 2. Run `node --run db:generate-migrations -- --name {migrationName}`, where `customName` is a short message describing your change separated by underscores (`_`);
 3. Run `node --run db:apply-migrations` to apply your new migration.
 
-In case you need to remove a previously generated migration,
-
-- Run `node --run db:drop-migrations`. It is recommended to use this command instead of deleting files manually, as it could break `drizzle-kit` (see [here](https://orm.drizzle.team/kit-docs/commands#drop-migration)).
+To remove a migration that has not been applied anywhere, delete its directory under
+[src/db/migrations](./apps/service/src/db/migrations). drizzle-kit 1.0 removed the `drop` command.
 
 ### Tests
 
