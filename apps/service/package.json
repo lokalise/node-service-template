@@ -22,7 +22,6 @@
     "docker:stop:dev": "docker compose down",
     "db:generate-migrations": "node --env-file=.env.development --env-file-if-exists=.env.development.local ../../node_modules/drizzle-kit/bin.cjs generate --config=./src/db/drizzle.config.ts",
     "db:apply-migrations": "node --env-file=.env.development --env-file-if-exists=.env.development.local ../../node_modules/drizzle-kit/bin.cjs migrate --config=./src/db/drizzle.config.ts",
-    "db:drop-migrations": "node --env-file=.env.development --env-file-if-exists=.env.development.local ../../node_modules/drizzle-kit/bin.cjs drop --config=./src/db/drizzle.config.ts",
     "spec:generate": "node --env-file=.env.development --env-file-if-exists=.env.development.local scripts/generateOpenApi.ts",
     "docs:generate": "envase generate ./src/infrastructure/config.ts -o ./docs/environment-variables.md",
     "docs:validate": "envase validate ./src/infrastructure/config.ts ./docs/environment-variables.md",

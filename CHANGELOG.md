@@ -1,5 +1,9 @@
 # Changelog
 
+## [2.0.1] - 2026-11-13
+
+- Remove the `db:drop-migrations` script from [apps/service/package.json](apps/service/package.json). drizzle-kit 1.0 removed the `drop` command, and the script only printed a deprecation notice. To remove a migration that has not been applied anywhere, delete its directory under [apps/service/src/db/migrations](apps/service/src/db/migrations), as the [README](README.md#drizzle-migrations) says
+
 ## [2.0.0] - 2026-11-02
 
 - Move the service into [apps/service](apps/service), next to [packages/api-contracts](packages/api-contracts), following the [Turborepo repository structure](https://turborepo.com/docs/crafting-your-repository/structuring-a-repository). The root now holds only workspace-wide config and tooling; `src`, `test`, `scripts`, `perf`, `docs`, the env files, `docker-compose.yml`, the `Dockerfile` and the TypeScript and Vitest configs moved with the service. Adding another app (a UI, a worker) no longer needs a restructure
