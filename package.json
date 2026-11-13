@@ -26,14 +26,14 @@
     "db:apply-migrations": "pnpm --filter @node-service-template/service run db:apply-migrations"
   },
   "devDependencies": {
-    "@biomejs/biome": "2.5.15",
+    "@biomejs/biome": "2.6.5",
     "@lokalise/biome-config": "^4.0.0",
     "turbo": "^2.11.9"
   },
   "optionalDependencies": {
-    "@biomejs/cli-darwin-arm64": "^2.5.15",
-    "@biomejs/cli-linux-arm64": "^2.5.15",
-    "@biomejs/cli-linux-x64": "^2.5.15",
-    "@biomejs/cli-win32-x64": "^2.5.15"
+    "@biomejs/cli-darwin-arm64": "^2.6.5",
+    "@biomejs/cli-linux-arm64": "^2.6.5",
+    "@biomejs/cli-linux-x64": "^2.6.5",
+    "@biomejs/cli-win32-x64": "^2.6.5"
   }
 }
