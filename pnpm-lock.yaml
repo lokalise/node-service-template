@@ -214,8 +214,8 @@ importers:
         specifier: ^8.3.2
         version: 8.3.2(awilix@13.0.5)(fastify@5.12.8)
       '@fastify/cors':
-        specifier: ^11.4.0
-        version: 11.4.0
+        specifier: ^11.4.1
+        version: 11.4.1
       '@fastify/helmet':
         specifier: ^13.2.0
         version: 13.2.0
@@ -223,8 +223,8 @@ importers:
         specifier: ^10.2.7
         version: 10.2.7
       '@fastify/otel':
-        specifier: 0.21.4
-        version: 0.21.4(supports-color@7.2.0)
+        specifier: 1.0.1
+        version: 1.0.1(supports-color@7.2.0)
       '@fastify/schedule':
         specifier: ^7.0.2
         version: 7.0.2(toad-scheduler@4.2.0)
@@ -334,8 +334,8 @@ importers:
         specifier: ^5.0.0
         version: 5.0.0
       fastify-metrics:
-        specifier: ^15.0.0
-        version: 15.0.0(fastify@5.12.8)
+        specifier: ^15.0.1
+        version: 15.0.1(fastify@5.12.8)
       fastify-no-icon:
         specifier: ^7.0.0
         version: 7.0.0
@@ -955,8 +955,8 @@ packages:
       awilix: '>=9.0.0'
       fastify: ^5.0.0
 
-  '@fastify/cors@11.4.0':
-    resolution: {integrity: sha512-+P4+RIRx5I3rkC1QttZ9gqSJ3AHrsM4PrZF6bpgbElt86n7gOBiHL3J0H3moVSyfc+vvvNto+Ay1LmG7ZQ37pA==}
+  '@fastify/cors@11.4.1':
+    resolution: {integrity: sha512-WuPATGGyc3YzpOfumovBJ4xC2RPBBFyDFElwldFRBCgM2G27xH9DnXTho9+nc2Ho6gLD1hKTetdOntR+G38+7A==}
 
   '@fastify/deepmerge@3.2.2':
     resolution: {integrity: sha512-155eqA/WMQdN6gUD4RrhS2K0Pcz2Ou9pQ86L0sipOpP9ONbTA6oYw/hW4VdBjR4egcDHqmWUK9x80oUX7S1mDQ==}
@@ -984,10 +984,11 @@ packages:
     peerDependencies:
       '@opentelemetry/api': ^1.9.0
 
-  '@fastify/otel@0.21.4':
-    resolution: {integrity: sha512-NffBJPiU9T1APHug0ZS6ld56IGaUebV6d7N/ZI6JmmjS3bHcRQP1qPqXlvY2s47TvTR8OZO+0DlDNCV3h64a/A==}
+  '@fastify/otel@1.0.1':
+    resolution: {integrity: sha512-gTZ7YShjZfZ7ngTBUhKdnUsDxsQT8MnMuIFwDh5n0QykQwfe5h9wvcXAWZjg8RNHwW0xKxugyMun5ZsD7r88JQ==}
+    engines: {node: '>=22.15.0'}
     peerDependencies:
-      '@opentelemetry/api': ^1.9.0
+      '@opentelemetry/api': '>=1.10.0 <1.11.0'
 
   '@fastify/proxy-addr@5.1.2':
     resolution: {integrity: sha512-uqB4QsgVoro0XDC+DIftIMGXHdBPn+lK6Ek3xXAIxPMCJfqxnbtyEoMCm2KPUVOuIosd7Cyw9HawEqMFM/UA+g==}
@@ -1098,6 +1099,9 @@ packages:
   '@isaacs/cliui@8.0.2':
     resolution: {integrity: sha512-O8jcjabXaleOG9DQ0+ARXWZBTfnP4WNAqzuiJK7ll44AmxGKv/J2M4TPjxjY3znBCfvBXFzucm1twdyFybFqEA==}
     engines: {node: '>=12'}
+
+  '@isaacs/nonrecursive-glob-match@1.1.0':
+    resolution: {integrity: sha512-GPm/Dbvk5RLmhRnxXIa7nTpK0xtl4E0wj0MslsuNiJ1FIROU+2+9lgUC/dgF7Ey4QCWhfEsgxilMRMCdHPfDfw==}
 
   '@jridgewell/resolve-uri@3.1.2':
     resolution: {integrity: sha512-bRISgCIjP20/tbWSPWMEi54QVPRZExkuD9lJL+UIxUKtwVJA8wW1Trb1jMs1RFXo1CBTNZ/5hpC9QvmKWdopKw==}
@@ -2082,12 +2086,6 @@ packages:
 
   '@opentelemetry/instrumentation@0.222.0':
     resolution: {integrity: sha512-fhbRDuAgzPKpq1k5+hX3uS+3QAYNca0on0Ngot/R8dDsQtuFaADeZnG2uSgxABuvcI7S2phAaRhbct9jieeKZw==}
-    engines: {node: ^18.19.0 || >=20.6.0}
-    peerDependencies:
-      '@opentelemetry/api': ^1.3.0
-
-  '@opentelemetry/instrumentation@0.223.0':
-    resolution: {integrity: sha512-tttBo88TbwK1zpsH6VeJoxLQopxOjW3cnrP50fsQJRZftkSKDDwjolXXBvow2jy0LKXlNRkDQh0NT6yI/q+BEQ==}
     engines: {node: ^18.19.0 || >=20.6.0}
     peerDependencies:
       '@opentelemetry/api': ^1.3.0
@@ -3691,8 +3689,8 @@ packages:
       '@platformatic/prom-client':
         optional: true
 
-  fastify-metrics@15.0.0:
-    resolution: {integrity: sha512-YQSKMFM8Z71VLuTDQOqxpHStcu3ncPRE1MG+4ZF0p8JH2ueTYdrZTv86oBPs9pcx5zi3Zefz/OsKZYaOJ6vJMQ==}
+  fastify-metrics@15.0.1:
+    resolution: {integrity: sha512-qPqvuF5DyKVz8JgDujZDAjiNDk8ZgDXK8xFtcbg+wDqpmMbWPDo8OwRAgtAhN8/XLuVMLdakP8Ru36IHM0eWOQ==}
     engines: {node: '>=22.19.0', pnpm: '>=12'}
     peerDependencies:
       '@platformatic/prom-client': ^1.0.0
@@ -4188,6 +4186,10 @@ packages:
   minimatch@10.2.6:
     resolution: {integrity: sha512-vpLQEs+VLCr1nU0BXS07maYoFwlDAH0gngQuuttxIwutDFEMHq2blX+8vpgxDdK3J1PwjCJiep77OitTZ4Ll1A==}
     engines: {node: 18 || 20 || >=22}
+
+  minimatch@11.0.8:
+    resolution: {integrity: sha512-nFQuYSTVrGvysVBps5Ih+0BdnYFN/Cj3C816r6+p7yK+FHrVLGE4O4N9AFwykrlNlvM2HYt+Rad1Uiro6h88Ig==}
+    engines: {node: 20 || >=22}
 
   minimatch@9.0.9:
     resolution: {integrity: sha512-OBwBN9AL4dqmETlpS2zasx+vTeWclWzkblfZk7KTA5j3jeOONz/tRCnZomUyvNg83wL5Zv9Ss6HMJXAgL8R2Yg==}
@@ -5734,7 +5736,7 @@ snapshots:
       fastify: 5.12.8
       fastify-plugin: 6.0.1
 
-  '@fastify/cors@11.4.0':
+  '@fastify/cors@11.4.1':
     dependencies:
       fastify-plugin: 6.0.1
       toad-cache: 3.7.4
@@ -5775,12 +5777,12 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@fastify/otel@0.21.4(supports-color@7.2.0)':
+  '@fastify/otel@1.0.1(supports-color@7.2.0)':
     dependencies:
-      '@opentelemetry/core': 2.12.0
-      '@opentelemetry/instrumentation': 0.223.0(supports-color@7.2.0)
+      '@opentelemetry/core': 3.0.0
+      '@opentelemetry/instrumentation': 0.300.0(supports-color@7.2.0)
       '@opentelemetry/semantic-conventions': 1.43.0
-      minimatch: 10.2.6
+      minimatch: 11.0.8
     transitivePeerDependencies:
       - supports-color
 
@@ -5918,6 +5920,8 @@ snapshots:
       strip-ansi-cjs: strip-ansi@6.0.1
       wrap-ansi: 8.1.0
       wrap-ansi-cjs: wrap-ansi@7.0.0
+
+  '@isaacs/nonrecursive-glob-match@1.1.0': {}
 
   '@jridgewell/resolve-uri@3.1.2': {}
 
@@ -6229,6 +6233,7 @@ snapshots:
   '@opentelemetry/api-logs@0.223.0':
     dependencies:
       '@opentelemetry/api': 1.9.1
+    optional: true
 
   '@opentelemetry/api@1.9.1': {}
 
@@ -7132,14 +7137,6 @@ snapshots:
   '@opentelemetry/instrumentation@0.222.0(supports-color@7.2.0)':
     dependencies:
       '@opentelemetry/api-logs': 0.222.0
-      import-in-the-middle: 3.5.2
-      require-in-the-middle: 8.0.1(supports-color@7.2.0)
-    transitivePeerDependencies:
-      - supports-color
-
-  '@opentelemetry/instrumentation@0.223.0(supports-color@7.2.0)':
-    dependencies:
-      '@opentelemetry/api-logs': 0.223.0
       import-in-the-middle: 3.5.2
       require-in-the-middle: 8.0.1(supports-color@7.2.0)
     transitivePeerDependencies:
@@ -8522,7 +8519,7 @@ snapshots:
       fastify: 5.12.8
       fastify-plugin: 6.0.1
 
-  fastify-metrics@15.0.0(fastify@5.12.8):
+  fastify-metrics@15.0.1(fastify@5.12.8):
     dependencies:
       '@prometheus-io/client': 0.16.1
       fastify: 5.12.8
@@ -8583,7 +8580,7 @@ snapshots:
       '@aws-sdk/client-s3': 3.1150.0
       '@aws-sdk/client-sns': 3.1162.0
       '@aws-sdk/client-sqs': 3.1162.0
-      '@fastify/cors': 11.4.0
+      '@fastify/cors': 11.4.1
       '@smithy/node-http-handler': 4.12.1
       fastify: 5.12.8
       toad-cache: 3.7.4
@@ -9009,6 +9006,11 @@ snapshots:
 
   minimatch@10.2.6:
     dependencies:
+      brace-expansion: 5.0.12
+
+  minimatch@11.0.8:
+    dependencies:
+      '@isaacs/nonrecursive-glob-match': 1.1.0
       brace-expansion: 5.0.12
 
   minimatch@9.0.9:
