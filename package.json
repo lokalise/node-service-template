@@ -28,7 +28,7 @@
   "devDependencies": {
     "@biomejs/biome": "2.5.15",
     "@lokalise/biome-config": "^4.0.0",
-    "turbo": "^2.11.9"
+    "turbo": "^2.11.11"
   },
   "optionalDependencies": {
     "@biomejs/cli-darwin-arm64": "^2.5.15",
