@@ -185,8 +185,7 @@ export class CommonModule extends AbstractModule<unknown, ExternalDependencies> 
             new CommonBullmqFactoryNew(),
             bullmqSupportedQueues,
             {
-              // background-jobs-common still takes node-core's RedisConfig, which wants useTls
-              redisConfig: { ...config.redis, useTls: config.redis.tls !== undefined },
+              redisConfig: config.redis,
               isTest: nodeEnv.isTest,
             },
           ),
