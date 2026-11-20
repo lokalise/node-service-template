@@ -1,5 +1,9 @@
 # Changelog
 
+## [2.0.3] - 2026-11-20
+
+- Bump `@lokalise/config` to 1.0.3. `APP_PORT` now accepts `0`, so the OS can pick a free port (e.g. in tests); `REDIS_PORT` still requires 1-65535. [environment-variables.md](apps/service/docs/environment-variables.md) is regenerated (`pnpm run docs:generate` in `apps/service`), since `docs:validate` in `lint` fails until it is. 1.0.2 also requires `envase` 2.1.0 or later as a peer dependency; the template already uses 2.1.0
+
 ## [2.0.2] - 2026-11-20
 
 - Bump `@lokalise/background-jobs-common` to 17.0.2. Its `redisConfig` is now ioredis `RedisOptions` instead of node-core's `RedisConfig`, so [CommonModule.ts](apps/service/src/infrastructure/CommonModule.ts) passes `config.redis` to the BullMQ queue manager as-is. The `useTls` key added in 1.27.0 no longer typechecks: delete it when you bump the library. TLS still comes from `tls`, so connections are unchanged
