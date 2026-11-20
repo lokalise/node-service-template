@@ -1,5 +1,9 @@
 # Changelog
 
+## [2.0.2] - 2026-11-20
+
+- Bump `@lokalise/background-jobs-common` to 17.0.2. Its `redisConfig` is now ioredis `RedisOptions` instead of node-core's `RedisConfig`, so [CommonModule.ts](apps/service/src/infrastructure/CommonModule.ts) passes `config.redis` to the BullMQ queue manager as-is. The `useTls` key added in 1.27.0 no longer typechecks: delete it when you bump the library. TLS still comes from `tls`, so connections are unchanged
+
 ## [2.0.1] - 2026-11-13
 
 - Remove the `db:drop-migrations` script from [apps/service/package.json](apps/service/package.json). drizzle-kit 1.0 removed the `drop` command, and the script only printed a deprecation notice. To remove a migration that has not been applied anywhere, delete its directory under [apps/service/src/db/migrations](apps/service/src/db/migrations), as the [README](README.md#drizzle-migrations) says
