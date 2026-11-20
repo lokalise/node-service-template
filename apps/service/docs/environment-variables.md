@@ -28,7 +28,7 @@
 - `APP_PORT` (optional)  
   Type: `integer`  
   Description: HTTP server listening port  
-  Min value: `1`  
+  Min value: `0`  
   Max value: `65535`  
   Default: `3000`
 
