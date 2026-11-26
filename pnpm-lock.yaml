@@ -212,7 +212,7 @@ importers:
         version: 5.1.2
       '@fastify/awilix':
         specifier: ^8.3.2
-        version: 8.3.2(awilix@13.0.5)(fastify@5.12.8)
+        version: 8.3.2(awilix@13.0.7)(fastify@5.12.8)
       '@fastify/cors':
         specifier: ^11.4.1
         version: 11.4.1
@@ -310,11 +310,11 @@ importers:
         specifier: ^2.2.1
         version: 2.2.1
       awilix:
-        specifier: ^13.0.5
-        version: 13.0.5
+        specifier: ^13.0.7
+        version: 13.0.7
       awilix-manager:
         specifier: ^7.2.0
-        version: 7.2.0(awilix@13.0.5)
+        version: 7.2.0(awilix@13.0.7)
       bullmq:
         specifier: ^6.7.5
         version: 6.7.5(ioredis@6.0.0(supports-color@7.2.0))
@@ -353,7 +353,7 @@ importers:
         version: 17.0.0(ioredis@6.0.0(supports-color@7.2.0))
       opinionated-machine:
         specifier: ^13.0.0
-        version: 13.0.0(@lokalise/api-contracts@9.0.1(zod@4.6.7))(@lokalise/fastify-api-contracts@8.0.1(@fastify/sse@0.6.1(fastify@5.12.8))(@lokalise/api-contracts@9.0.1(zod@4.6.7))(@lokalise/node-core@14.12.0(zod@4.6.7))(fastify-type-provider-zod@7.0.0(@fastify/swagger@9.9.3(supports-color@7.2.0))(fastify@5.12.8)(openapi-types@12.1.3)(zod@4.6.7))(fastify@5.12.8)(zod@4.6.7))(@lokalise/node-core@14.12.0(zod@4.6.7))(awilix-manager@7.2.0(awilix@13.0.5))(awilix@13.0.5)(fastify-type-provider-zod@7.0.0(@fastify/swagger@9.9.3(supports-color@7.2.0))(fastify@5.12.8)(openapi-types@12.1.3)(zod@4.6.7))(fastify@5.12.8)(zod@4.6.7)
+        version: 13.0.0(@lokalise/api-contracts@9.0.1(zod@4.6.7))(@lokalise/fastify-api-contracts@8.0.1(@fastify/sse@0.6.1(fastify@5.12.8))(@lokalise/api-contracts@9.0.1(zod@4.6.7))(@lokalise/node-core@14.12.0(zod@4.6.7))(fastify-type-provider-zod@7.0.0(@fastify/swagger@9.9.3(supports-color@7.2.0))(fastify@5.12.8)(openapi-types@12.1.3)(zod@4.6.7))(fastify@5.12.8)(zod@4.6.7))(@lokalise/node-core@14.12.0(zod@4.6.7))(awilix-manager@7.2.0(awilix@13.0.7))(awilix@13.0.7)(fastify-type-provider-zod@7.0.0(@fastify/swagger@9.9.3(supports-color@7.2.0))(fastify@5.12.8)(openapi-types@12.1.3)(zod@4.6.7))(fastify@5.12.8)(zod@4.6.7)
       pino:
         specifier: ^10.4.0
         version: 10.4.0
@@ -3110,8 +3110,8 @@ packages:
     peerDependencies:
       awilix: '>=9.0.0'
 
-  awilix@13.0.5:
-    resolution: {integrity: sha512-ORtca6suBdYA1FyTzqHEZDvEuUwo3lPDDBRm7GrzHgi6STESzJKdBtpqfTzObdMj1NGQUWX6k26E3EbQaGJX5Q==}
+  awilix@13.0.7:
+    resolution: {integrity: sha512-M7B1oVIyWrkY7RmQgczsdqpCI+j0+t0UjL5h1G/qqr4fRFo+zxI5E/0QUuOc5zdPg740BpUv4V+QSXNNBQlonQ==}
     engines: {node: '>=20.0.0'}
 
   backo2@1.0.2:
@@ -5751,10 +5751,10 @@ snapshots:
       fastify-plugin: 6.0.1
       reusify: 1.1.0
 
-  '@fastify/awilix@8.3.2(awilix@13.0.5)(fastify@5.12.8)':
+  '@fastify/awilix@8.3.2(awilix@13.0.7)(fastify@5.12.8)':
     dependencies:
-      awilix: 13.0.5
-      awilix-manager: 7.2.0(awilix@13.0.5)
+      awilix: 13.0.7
+      awilix-manager: 7.2.0(awilix@13.0.7)
       fastify: 5.12.8
       fastify-plugin: 6.0.1
 
@@ -8089,11 +8089,11 @@ snapshots:
       '@fastify/error': 4.2.1
       fastq: 1.20.3
 
-  awilix-manager@7.2.0(awilix@13.0.5):
+  awilix-manager@7.2.0(awilix@13.0.7):
     dependencies:
-      awilix: 13.0.5
+      awilix: 13.0.7
 
-  awilix@13.0.5:
+  awilix@13.0.7:
     dependencies:
       fast-glob: 3.3.3
 
@@ -9222,15 +9222,15 @@ snapshots:
 
   opentracing@0.14.7: {}
 
-  opinionated-machine@13.0.0(@lokalise/api-contracts@9.0.1(zod@4.6.7))(@lokalise/fastify-api-contracts@8.0.1(@fastify/sse@0.6.1(fastify@5.12.8))(@lokalise/api-contracts@9.0.1(zod@4.6.7))(@lokalise/node-core@14.12.0(zod@4.6.7))(fastify-type-provider-zod@7.0.0(@fastify/swagger@9.9.3(supports-color@7.2.0))(fastify@5.12.8)(openapi-types@12.1.3)(zod@4.6.7))(fastify@5.12.8)(zod@4.6.7))(@lokalise/node-core@14.12.0(zod@4.6.7))(awilix-manager@7.2.0(awilix@13.0.5))(awilix@13.0.5)(fastify-type-provider-zod@7.0.0(@fastify/swagger@9.9.3(supports-color@7.2.0))(fastify@5.12.8)(openapi-types@12.1.3)(zod@4.6.7))(fastify@5.12.8)(zod@4.6.7):
+  opinionated-machine@13.0.0(@lokalise/api-contracts@9.0.1(zod@4.6.7))(@lokalise/fastify-api-contracts@8.0.1(@fastify/sse@0.6.1(fastify@5.12.8))(@lokalise/api-contracts@9.0.1(zod@4.6.7))(@lokalise/node-core@14.12.0(zod@4.6.7))(fastify-type-provider-zod@7.0.0(@fastify/swagger@9.9.3(supports-color@7.2.0))(fastify@5.12.8)(openapi-types@12.1.3)(zod@4.6.7))(fastify@5.12.8)(zod@4.6.7))(@lokalise/node-core@14.12.0(zod@4.6.7))(awilix-manager@7.2.0(awilix@13.0.7))(awilix@13.0.7)(fastify-type-provider-zod@7.0.0(@fastify/swagger@9.9.3(supports-color@7.2.0))(fastify@5.12.8)(openapi-types@12.1.3)(zod@4.6.7))(fastify@5.12.8)(zod@4.6.7):
     dependencies:
       '@fastify/sse': 0.6.1(fastify@5.12.8)
       '@lokalise/api-contracts': 9.0.1(zod@4.6.7)
       '@lokalise/fastify-api-contracts': 8.0.1(@fastify/sse@0.6.1(fastify@5.12.8))(@lokalise/api-contracts@9.0.1(zod@4.6.7))(@lokalise/node-core@14.12.0(zod@4.6.7))(fastify-type-provider-zod@7.0.0(@fastify/swagger@9.9.3(supports-color@7.2.0))(fastify@5.12.8)(openapi-types@12.1.3)(zod@4.6.7))(fastify@5.12.8)(zod@4.6.7)
       '@lokalise/node-core': 14.12.0(zod@4.6.7)
       '@opinionated-machine/sse-parser': 0.1.0
-      awilix: 13.0.5
-      awilix-manager: 7.2.0(awilix@13.0.5)
+      awilix: 13.0.7
+      awilix-manager: 7.2.0(awilix@13.0.7)
       fast-querystring: 1.1.2
       fastify: 5.12.8
       fastify-plugin: 6.0.1
