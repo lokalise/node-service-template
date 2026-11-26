@@ -323,7 +323,7 @@ importers:
         version: 1.0.0-rc.5-5935859
       drizzle-orm:
         specifier: 1.0.0-rc.5-5935859
-        version: 1.0.0-rc.5-5935859(@types/pg@8.15.6)(postgres@4.0.0)(valibot@1.5.0(typescript@7.0.2))(zod@4.6.7)
+        version: 1.0.0-rc.5-5935859(@types/pg@8.15.6)(postgres@4.1.1)(valibot@1.5.0(typescript@7.0.2))(zod@4.6.7)
       envase:
         specifier: ^2.1.0
         version: 2.1.0
@@ -361,8 +361,8 @@ importers:
         specifier: ^13.2.0
         version: 13.2.0
       postgres:
-        specifier: ^4.0.0
-        version: 4.0.0
+        specifier: ^4.1.1
+        version: 4.1.1
       redis-semaphore:
         specifier: ^6.0.0
         version: 6.0.0(ioredis@6.0.0(supports-color@7.2.0))(supports-color@7.2.0)
@@ -381,7 +381,7 @@ importers:
         version: 2.11.1
       '@lokalise/load-testing-utils':
         specifier: ^2.0.0
-        version: 2.0.0(postgres@4.0.0)
+        version: 2.0.0(postgres@4.1.1)
       '@lokalise/tsconfig':
         specifier: ^5.0.0
         version: 5.0.0
@@ -4469,9 +4469,9 @@ packages:
     resolution: {integrity: sha512-9ZhXKM/rw350N1ovuWHbGxnGh/SNJ4cnxHiM0rxE4VN41wsg8P8zWn9hv/buK00RP4WvlOyr/RBDiptyxVbkZQ==}
     engines: {node: '>=0.10.0'}
 
-  postgres@4.0.0:
-    resolution: {integrity: sha512-kBh8qXtcvvIAc00DftQyOxz7M/3Zxww1tRMXZPLzipNXXl5PIzHml+9zB3Mrge2U8ldc0WF1ZdLp1iYQi7Kh3A==}
-    engines: {node: '>=20'}
+  postgres@4.1.1:
+    resolution: {integrity: sha512-1kJDojqNZC+iTHHXh6eif0J98LUtyLAePe/qkW1GK35eh2JixlsAiIKq3FGI+xqI+SUGTNodzf7TScVeIIyUug==}
+    engines: {node: '>=18'}
 
   pprof-format@2.3.2:
     resolution: {integrity: sha512-fcMM+sgKMOveSurz7i0BMHfy1hHNnI9+VWjd4kdclqQjSTuiHWaP69DGwvkw3zcLkM/F76LhVIKvPyrxmp6iiw==}
@@ -6080,9 +6080,9 @@ snapshots:
       ulidx: 2.4.1
       uuidv7: 1.2.1
 
-  '@lokalise/load-testing-utils@2.0.0(postgres@4.0.0)':
+  '@lokalise/load-testing-utils@2.0.0(postgres@4.1.1)':
     optionalDependencies:
-      postgres: 4.0.0
+      postgres: 4.1.1
 
   '@lokalise/node-core@14.12.0(zod@4.6.7)':
     dependencies:
@@ -8329,10 +8329,10 @@ snapshots:
       get-tsconfig: 4.14.3
       jiti: 2.7.0
 
-  drizzle-orm@1.0.0-rc.5-5935859(@types/pg@8.15.6)(postgres@4.0.0)(valibot@1.5.0(typescript@7.0.2))(zod@4.6.7):
+  drizzle-orm@1.0.0-rc.5-5935859(@types/pg@8.15.6)(postgres@4.1.1)(valibot@1.5.0(typescript@7.0.2))(zod@4.6.7):
     optionalDependencies:
       '@types/pg': 8.15.6
-      postgres: 4.0.0
+      postgres: 4.1.1
       valibot: 1.5.0(typescript@7.0.2)
       zod: 4.6.7
 
@@ -9381,7 +9381,7 @@ snapshots:
     dependencies:
       xtend: 4.0.2
 
-  postgres@4.0.0: {}
+  postgres@4.1.1: {}
 
   pprof-format@2.3.2: {}
 
